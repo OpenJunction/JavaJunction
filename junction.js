@@ -13,9 +13,12 @@ var JunctionManager = function()
     return {
         create: function()
         {    
+	    var id = 'client_'+Math.floor(Math.random()*10000)
 	    if (arguments.length == 2) {
 		id = arguments[0];
 		cometURL = arguments[1];
+	    } else if (arguments.length == 1) {
+		cometURL = arguments[0];
 	    }
             _clientID = id;
 	    _clientChannel = '/junction/client/'+_clientID
