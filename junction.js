@@ -8,7 +8,7 @@ var JunctionManager = function()
     var _cometd;
     var _clientID;
     var _clientChannel;
-
+    var _sessionChannel;
 
     return {
         create: function()
@@ -19,7 +19,7 @@ var JunctionManager = function()
 	    }
             _clientID = id;
 	    _clientChannel = '/junction/client/'+_clientID
-
+	    _sessionChannel = '/junction/session/mysessID';
             //_cometd = new $.Cometd(); // Creates a new Comet object
             _cometd = $.cometd; // Uses the default Comet object
        	    // Subscribe for meta channels immediately so that the chat knows about meta channel events
@@ -36,11 +36,33 @@ var JunctionManager = function()
 				leave:'leave' // maybe these are pseudo-channels?
 			  },
 
-			  addListener: function(chan, func) {
+			  addListener: function() {
+				var chan = null;
+				var func = null;
+				if (arguments.length == 2) {
+					chan = arguments[0];
+					func = arguments[1];
+				} else if (arguments.length == 1) {
+					chan = _sessionChannel;
+					func = arguments[0];
+				} else {
+					return;
+				}
 				_cometd.subscribe(chan, this, func);
 			  },
 
-			  publish: function(chan, msg) {
+			  publish: function() {
+				var chan = null;
+				var msg = null;
+				if (arguments.length == 2) {
+					chan = arguments[0];
+					msg = arguments[1];
+				} else if (arguments.length == 1) {
+					chan = _sessionChannel;
+					msg = arguments[0];
+				} else {
+					return;
+				}
 				_cometd.publish(chan,msg);
 			  }
 		};
