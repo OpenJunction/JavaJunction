@@ -15,14 +15,11 @@ var JunctionManager = function()
 			join:'/junction/events/join',
 			leave:'/junction/events/leave', // maybe these are pseudo-channels?
 			client: null,
-			session: null
+			session: null,
+			messages: null, // client+session
+			membership: null // join+leave
 			
 		     }
-
-// joint channels: 
-// membership: ['/junction/events/join','/junction/events/leave']
-// messages: ['/junction/client/'+_clientID','/junction/session/'+mysessID]
-
 
     return {
         create: function()
@@ -39,6 +36,9 @@ var JunctionManager = function()
  
 	    _channels.client = '/junction/client/'+_clientID
 	    _channels.session = '/junction/session/mysessID';
+	    _channels.messages = ['/junction/client/'+_clientID,'/junction/session/mysessID'];
+	    _channels.membership = ['/junction/events/join','/junction/events/leave'];
+
             //_cometd = new $.Cometd(); // Creates a new Comet object
             _cometd = $.cometd; // Uses the default Comet object
        	    // Subscribe for meta channels immediately so that the chat knows about meta channel events
@@ -60,12 +60,21 @@ var JunctionManager = function()
 					chan = arguments[0];
 					func = arguments[1];
 				} else if (arguments.length == 1) {
-					chan = _channels.session;
+					chan = _channels.messages;
 					func = arguments[0];
 				} else {
 					return;
 				}
-				_subscriptions.push(_cometd.subscribe(chan, this, func));
+
+				if (chan instanceof Array) {
+					_cometd.startBatch();
+					for (var i=0; i<chan.length;i++){
+						_subscriptions.push(_cometd.subscribe(chan[i], this, func));
+					}
+					_cometd.endBatch();
+				} else {
+					_subscriptions.push(_cometd.subscribe(chan, this, func));
+				}
 			  },
 
 			  publish: function() {
