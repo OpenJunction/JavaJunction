@@ -67,6 +67,11 @@ var JunctionManager = function()
 					return;
 				}
 				_cometd.publish(chan,msg);
+			  },
+
+			  query: function(query) {
+				var chan = "/junction/query/response";
+				//_cometd.subscribe(chan, this, function() { return
 			  }
 		};
         },
