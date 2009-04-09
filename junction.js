@@ -1,43 +1,57 @@
 var JunctionManager = function()
 {
+// todo: publish takes 3 params. The last 2 merge to form 1 message.
+// use this to maintain certain data (client, etc)
+// think about what server should inject and what client should.
+
     var _lastUser;
-    var _chatSubscription;
+    var _subscriptions = [];
     var _metaSubscriptions = [];
     var _handshook = false;
     var _connected = false;
     var _cometd;
     var _clientID;
-    var _clientChannel;
-    var _sessionChannel;
+    var _channels = {
+			join:'/junction/events/join',
+			leave:'/junction/events/leave', // maybe these are pseudo-channels?
+			client: null,
+			session: null
+			
+		     }
+
+// joint channels: 
+// membership: ['/junction/events/join','/junction/events/leave']
+// messages: ['/junction/client/'+_clientID','/junction/session/'+mysessID]
+
 
     return {
         create: function()
         {    
-	    var id = 'client_'+Math.floor(Math.random()*10000)
+	    _clientID = 'client_'+Math.floor(Math.random()*10000)
 	    if (arguments.length == 2) {
-		id = arguments[0];
+		_clientID = arguments[0];
 		cometURL = arguments[1];
 	    } else if (arguments.length == 1) {
 		cometURL = arguments[0];
+	    } else if (arguments.length == 0) {
+		cometURL = document.location.protocol + '//' + document.location.hostname + ':' + document.location.port + '/cometd/cometd';
 	    }
-            _clientID = id;
-	    _clientChannel = '/junction/client/'+_clientID
-	    _sessionChannel = '/junction/session/mysessID';
+ 
+	    _channels.client = '/junction/client/'+_clientID
+	    _channels.session = '/junction/session/mysessID';
             //_cometd = new $.Cometd(); // Creates a new Comet object
             _cometd = $.cometd; // Uses the default Comet object
        	    // Subscribe for meta channels immediately so that the chat knows about meta channel events
    	    _metaSubscribe();
             _cometd.init(cometURL);
-
             $(window).unload(leave);
 
+		// todo: server should publish this message
+	    _cometd.publish(_channels.join,this,{ clientID: _clientID });
+
     	    return { 
-			  chan: 
-			  {
-				client:_clientChannel,
-				join:'join',
-				leave:'leave' // maybe these are pseudo-channels?
-			  },
+			  chan: _channels,
+			  
 
 			  addListener: function() {
 				var chan = null;
@@ -46,12 +60,12 @@ var JunctionManager = function()
 					chan = arguments[0];
 					func = arguments[1];
 				} else if (arguments.length == 1) {
-					chan = _sessionChannel;
+					chan = _channels.session;
 					func = arguments[0];
 				} else {
 					return;
 				}
-				_cometd.subscribe(chan, this, func);
+				_subscriptions.push(_cometd.subscribe(chan, this, func));
 			  },
 
 			  publish: function() {
@@ -61,7 +75,7 @@ var JunctionManager = function()
 					chan = arguments[0];
 					msg = arguments[1];
 				} else if (arguments.length == 1) {
-					chan = _sessionChannel;
+					chan = _channels.session
 					msg = arguments[0];
 				} else {
 					return;
@@ -79,21 +93,9 @@ var JunctionManager = function()
 	destroy: function() { leave(); },
     }
 
-    function _chatUnsubscribe()
+    function _unsubscribe(subscriptions)
     {
-        if (_chatSubscription) _cometd.unsubscribe(_chatSubscription);
-        _chatSubscription = null;
-    }
-
-    function _chatSubscribe()
-    {
-        _chatUnsubscribe();
-        _chatSubscription = _cometd.subscribe(_clientChannel, this, receive);
-    }
-
-    function _metaUnsubscribe()
-    {
-        $.each(_metaSubscriptions, function(index, subscription)
+        $.each(subscriptions, function(index, subscription)
         {
             _cometd.removeListener(subscription);
         });
@@ -102,7 +104,7 @@ var JunctionManager = function()
 
     function _metaSubscribe()
     {
-        _metaUnsubscribe();
+        _unsubscribe(_metaSubscriptions);
         _metaSubscriptions.push(_cometd.addListener('/meta/handshake', this, _metaHandshake));
         _metaSubscriptions.push(_cometd.addListener('/meta/connect', this, _metaConnect));
     }
@@ -132,16 +134,18 @@ var JunctionManager = function()
         {
             if (_connected)
             {
+/*
                 _cometd.startBatch();
                 _chatSubscribe();
-/*
+
                 _cometd.publish(_clientChannel, {
                     clientID: _clientID,
                     join: true,
                     chat: _clientID + ' has joined'
                 });
-*/
+
                 _cometd.endBatch();
+*/
             }
             else
             {
@@ -153,12 +157,18 @@ var JunctionManager = function()
 
     function leave()
     {
-        _cometd.startBatch();
-        _chatUnsubscribe();
-        _cometd.endBatch();
+        if (!_clientID) return;
 
-        _metaUnsubscribe();
+        _cometd.startBatch();
+	_unsubscribe(_subscriptions);
+        _cometd.publish(_channels.leave,{ clientID: _clientID });
+	_cometd.endBatch();
+
+        _unsubscribe(_metaSubscriptions);
+
+        _clientID = null;
         _cometd.disconnect();
+
     }
 
 }();
