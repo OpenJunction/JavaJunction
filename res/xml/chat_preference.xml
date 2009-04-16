@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+            android:defaultValue="true" android:title="@string/pref_receive_private_message" android:key="@string/pref_receive_private_message_key"/>
+
+    <EditTextPreference
+            android:defaultValue="@string/pref_host_default" android:dialogTitle="@string/pref_host" android:title="@string/pref_host_title" android:key="@string/pref_host_key" android:dialogIcon="@drawable/cog"/>
+            
+    
+
+<EditTextPreference android:defaultValue="@string/pref_port_default" android:dialogTitle="@string/pref_port" android:title="@string/pref_port_title" android:key="@string/pref_port_key" android:dialogIcon="@drawable/cog"></EditTextPreference>
+<EditTextPreference android:dialogTitle="@string/pref_cometd_uri" android:title="@string/pref_cometd_uri_title" android:defaultValue="@string/pref_cometd_uri_default" android:key="@string/pref_cometd_uri_key" android:dialogIcon="@drawable/cog"></EditTextPreference>
+<EditTextPreference android:dialogTitle="@string/pref_username" android:title="@string/pref_username_title" android:key="@string/pref_username_key" android:dialogIcon="@drawable/cog"></EditTextPreference>
+</PreferenceScreen>
