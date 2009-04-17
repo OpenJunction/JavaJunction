@@ -17,7 +17,8 @@ var JunctionManager = function()
 			client: null,
 			session: null,
 			messages: null, // client+session
-			membership: null // join+leave
+			membership: null, // join+leave
+
 			
 		     }
 
@@ -52,6 +53,8 @@ var JunctionManager = function()
     	    return { 
 			  chan: _channels,
 			  
+			  client: function(a) { return '/junction/client/'+a; },
+
 
 			  addListener: function() {
 				var chan = null;
@@ -95,6 +98,19 @@ var JunctionManager = function()
 			  query: function(query) {
 				var chan = "/junction/query/response";
 				//_cometd.subscribe(chan, this, function() { return
+			  },
+
+			  queries: function(queries, settings) {
+/*
+				function cb(result, callback) {
+					if(settings.mode=="FIRST_RESPONSE"){
+
+					}
+				}
+				for (var i=0;i<queries.length;i++) {
+					setTimeout(_query(queries[i].query, queries[i].callback, cb),0);
+				}
+*/
 			  }
 		};
         },
