@@ -11,34 +11,45 @@ var JunctionManager = function()
     var _connected = false;
     var _cometd;
     var _clientID;
-    var _channels = {
-			join:'/junction/events/join',
-			leave:'/junction/events/leave', // maybe these are pseudo-channels?
-			client: null,
-			session: null,
-			messages: null, // client+session
-			membership: null, // join+leave
 
-			
-		     }
+    var _sessionID;
+    var _channels = function(ch) {
+			return '/'+_sessionID+'/'+ch;			
+		     };
+	_channels.join='/junction/events/join';
+        _channels.leave='/junction/events/leave'; // maybe these are virtual-channels?
+	_channels.client=null;
+	_channels.session=null;
+	_channels.messages=null; // client+session
+	_channels.membership=null; // join+leave
 
     return {
         create: function()
         {    
 	    _clientID = 'client_'+Math.floor(Math.random()*10000)
-	    if (arguments.length == 2) {
-		_clientID = arguments[0];
-		cometURL = arguments[1];
-	    } else if (arguments.length == 1) {
-		cometURL = arguments[0];
-	    } else if (arguments.length == 0) {
-		cometURL = document.location.protocol + '//' + document.location.hostname + ':' + document.location.port + '/cometd/cometd';
-	    }
- 
-	    _channels.client = '/junction/client/'+_clientID
-	    _channels.session = '/junction/session/mysessID';
-	    _channels.messages = ['/junction/client/'+_clientID,'/junction/session/mysessID'];
-	    _channels.membership = ['/junction/events/join','/junction/events/leave'];
+	    _sessionID = 'session_'+Math.floor(Math.random()*10000)
+
+	    if (arguments[0] !== null && typeof(arguments[0]) == 'object'){
+		obj = arguments[0];
+		cometURL=obj.host;
+		if (obj.channels){
+			// todo: add channels
+		}
+	    }else{
+	    	if (arguments.length == 2) {
+			_clientID = arguments[0];
+			cometURL = arguments[1];
+	    	} else if (arguments.length == 1) {
+			cometURL = arguments[0];
+	    	} else if (arguments.length == 0) {
+			cometURL = document.location.protocol + '//' + document.location.hostname + ':' + document.location.port + '/cometd/cometd';
+	    	}
+ 	    }
+
+	    _channels.session = '/'+_sessionID;
+	    _channels.client = _channels.session+'/client/'+_clientID
+	    _channels.messages = [_channels.session,_channels.client];
+	    _channels.membership = [_channels.session+'/events/join',_channels.session+'/events/leave'];
 
             //_cometd = new $.Cometd(); // Creates a new Comet object
             _cometd = $.cometd; // Uses the default Comet object
