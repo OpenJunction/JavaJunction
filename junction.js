@@ -46,7 +46,7 @@ var JunctionManager = function()
 	    	}
  	    }
 
-	    _channels.session = '/'+_sessionID;
+	    _channels.session = '/junction/'+_sessionID;
 	    _channels.client = _channels.session+'/client/'+_clientID
 	    _channels.messages = [_channels.session,_channels.client];
 	    _channels.membership = [_channels.session+'/events/join',_channels.session+'/events/leave'];
