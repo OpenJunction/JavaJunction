@@ -20,7 +20,7 @@ public class DatalogActor {
 			jm.registerQueryHandler(
 				new DatalogQueryHandler()
 			);
-		
+			// sleep?
 		} catch (Exception e) {
 			System.err.println("fail.");
 			e.printStackTrace();
