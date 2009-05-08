@@ -22,6 +22,13 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 			return;
 		}
 		*/
+		
+		// obligations:
+		// if !authenticated {
+		//   results = getJunctionManager().query(new ObligationsQuery("AUTHENTICATE")) // or whatever
+		//   if (!authenticate(results)) { result.close(); return; }
+		// }
+		
 		String queryText = query.getQueryText();
 		
 		// get results
