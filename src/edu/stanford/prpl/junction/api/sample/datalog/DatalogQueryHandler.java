@@ -23,6 +23,7 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 		}
 		*/
 		
+		// either do it here or in supportsQuery ? or somewhere else?
 		// obligations:
 		// if !authenticated {
 		//   results = getJunctionManager().query(new ObligationsQuery("AUTHENTICATE")) // or whatever
