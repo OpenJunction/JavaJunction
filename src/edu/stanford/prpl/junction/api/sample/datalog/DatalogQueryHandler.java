@@ -1,6 +1,7 @@
 package edu.stanford.prpl.junction.api.sample.datalog;
 
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
+import edu.stanford.prpl.junction.api.query.JunctionProcessedQuery;
 import edu.stanford.prpl.junction.api.query.JunctionQuery;
 import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
 
@@ -13,7 +14,7 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 	
 	
 	@Override
-	public void handleQuery(JunctionQuery query, OutboundObjectStream result) {
+	public void handleQuery(JunctionProcessedQuery query, OutboundObjectStream result) {
 		// query text:
 		/*
 		if (!(query instanceof StoredQuery)) {

@@ -7,5 +7,10 @@ public abstract class JunctionQueryHandler {
 		return true;
 	}
 	
-	public abstract void handleQuery(JunctionQuery query, OutboundObjectStream result);
+	/*
+	 * supportsQuery(JunctionQuery query, JunctionEnvironment env)
+	 */
+	
+	
+	public abstract void handleQuery(JunctionProcessedQuery query, OutboundObjectStream result);
 }

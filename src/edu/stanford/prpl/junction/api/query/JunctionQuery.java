@@ -36,4 +36,12 @@ mJuntionManager = new JunctionManager(...);
 JunctionQuery query = JxActor_DatalogServer.queries.GET_PHOTOS;
 mJunctionManager.query(query, mJunctionManager.getClientChannel());
 
+
+----------------
+-- JAVASCRIPT --
+----------------
+
+jm.query("SELECT * FROM photos", "/my/channel");
+results = jm.query("..."); // differentiate by arg count
+
 */
