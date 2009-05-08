@@ -22,7 +22,8 @@ public class DatalogActor {
 			  new JunctionQueryHandler() {
   
 				  public boolean supportsQuery(JunctionQuery query) {
-				  	return true; //return DatalogStoredQuery.supports(query);
+				  	//return DatalogStoredQuery.supports(query);
+					  return DatalogQuery.supports(query);
 				  }
 				  
 				  public void handleQuery(JunctionQuery query, OutboundObjectStream results) {
