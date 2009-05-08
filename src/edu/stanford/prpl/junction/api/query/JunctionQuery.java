@@ -3,6 +3,17 @@ package edu.stanford.prpl.junction.api.query;
 public interface JunctionQuery {
 	public String getQueryText(); // for evaluator
 	public String getTypeID(); // for querier
+
+	/*
+	 * TODO: I need work!
+	 * Things to consider:
+	 * * query type
+	 * * query ID
+	 * * query text
+	 * * query parameters
+	 * 
+	 */
+	
 	
 }
 
