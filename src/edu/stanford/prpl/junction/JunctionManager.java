@@ -28,6 +28,8 @@ import org.mortbay.component.AbstractLifeCycle;
 import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.thread.QueuedThreadPool;
 
+import edu.stanford.prpl.junction.api.JunctionAPI;
+
 /**
  * this project doesn't work.
  * Tried the following combinations:
@@ -41,7 +43,7 @@ import org.mortbay.thread.QueuedThreadPool;
  */
 
 
-public class JunctionManager extends AbstractLifeCycle
+public class JunctionManager extends AbstractLifeCycle /*implements JunctionAPI*/
 {
 	public static void main(String[] argv) {
 		JunctionManager jm = new JunctionManager("http://prpl.stanford.edu/cometd/cometd");
@@ -81,7 +83,7 @@ public class JunctionManager extends AbstractLifeCycle
     
     private Map<String,JunctionListener>_listeners;
 
-    public JunctionManager(/*String clientID,*/ String cometServer) // todo: optional sessionID? clientID?
+    public JunctionManager(String cometServer) // todo: optional sessionID? clientID?
     {
     	_sessionID="mysessID";
     	_publicChannel = "/junction/session/"+_sessionID;

@@ -1,9 +1,12 @@
 package edu.stanford.prpl.junction.api.query;
 
+import java.util.Map;
+
 public interface JunctionQuery {
 	public String getQueryText(); // for evaluator
 	public String getTypeID(); // for querier
-
+	public Map<String, Object> getParameterMap();
+	
 	/*
 	 * TODO: I need work!
 	 * Things to consider:
@@ -32,56 +35,5 @@ mJuntionManager = new JunctionManager(...);
 // a JSON activity (or actor) description
 JunctionQuery query = JxActor_DatalogServer.queries.GET_PHOTOS;
 mJunctionManager.query(query, mJunctionManager.getClientChannel());
-
-
-----------------
--- IN DATALOG --
-----------------
-
-// actor type ~ datalogServer
-JunctionManager mJunctionManager = new JunctionManager(...);
-Resource handlerID = 
-  mJunctionManager.registerQueryHandler(
-  	
-  	new JunctionQueryHandler() {
-
-  
-  public boolean supportsQuery(JunctionQuery query) {
-  	return DatalogStoredQuery.supports(query);
-  }
-  
-  public void handleQuery(JunctionQuery query, JSONOutputStream results) {
-	// query text:
-	if (!(query instanceof StoredQuery)) {
-		results.close(); // todo: set error message
-		return;
-	}
-	String queryText = query.getQueryText();
-	
-	// get results
-	// when result comes in:
-	results.write(jsonObject.getBytes());
-	
-	// no more results
-	results.close();
-}
-
--- OR: --
-
-class DatalogActor extends Junction.Actor {
-	public List<JunctionQueryHandler> getQueryHandlers() { ...
-}
-
-JunctionManager.registerActor(DatalogActor.getInstance());
-
-
-abstract class Junction.Actor {
-	public JSONObject getDescriptor();
-	// queries: use QueryHandler.supportID() to populate
-
-
-	public Junction.Actor getInstance();
-}
-
 
 */

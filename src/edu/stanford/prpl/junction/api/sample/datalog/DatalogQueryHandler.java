@@ -14,7 +14,20 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 	
 	@Override
 	public void handleQuery(JunctionQuery query, OutboundObjectStream result) {
+		// query text:
+		/*
+		if (!(query instanceof StoredQuery)) {
+			results.close(); // todo: set error message
+			return;
+		}
+		*/
+		String queryText = query.getQueryText();
 		
-	}
-
+		// get results
+		// when result comes in:
+		//results.write(jsonObject.getBytes());
+		
+		// no more results
+		//results.close();
+	  }
 }
