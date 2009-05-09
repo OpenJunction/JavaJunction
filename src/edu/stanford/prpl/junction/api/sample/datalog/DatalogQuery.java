@@ -5,16 +5,23 @@ import java.util.Map;
 import edu.stanford.prpl.junction.api.query.JunctionQuery;
 
 public class DatalogQuery implements JunctionQuery {
-	protected  final String mType = "DATALOG";
+	protected  final static String TYPE = "Datalog";
+	
+	
+	private String mQuery;
+	private boolean mPersist=false;
+	
+	public DatalogQuery(String query) {
+		mQuery=query;
+	}
 	
 	public String getQueryText() {
-		// TODO Auto-generated method stub
-		return null;
+		return mQuery;
 	}
 
 	public String getType() {
 		// TODO Auto-generated method stub
-		return mType;
+		return TYPE;
 	}
 	
 	public static boolean supports(JunctionQuery query) {
@@ -23,6 +30,14 @@ public class DatalogQuery implements JunctionQuery {
 
 	public Map<String, Object> getParameterMap() {
 		return null;
+	}
+	
+	public boolean isPersistent() {
+		return mPersist;
+	}
+	
+	public void persist(boolean shouldI) {
+		mPersist=shouldI;
 	}
 
 }

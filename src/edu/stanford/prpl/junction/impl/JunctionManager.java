@@ -13,9 +13,14 @@ import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
 
 public class JunctionManager implements JunctionAPI  {
 
+	/**
+	 * Query API
+	 */
+	
+	// Send
+	
 	public void query(JunctionQuery query, JunctionCallback callback) {
-		// TODO Auto-generated method stub
-
+		// if query.source supports 
 	}
 
 	public void query(JunctionQuery query, String channelName) {
@@ -28,6 +33,8 @@ public class JunctionManager implements JunctionAPI  {
 		return null;
 	}
 
+	// Respond
+	
 	public void registerQueryHandler(JunctionQueryHandler handler) {
 		// TODO Auto-generated method stub
 		

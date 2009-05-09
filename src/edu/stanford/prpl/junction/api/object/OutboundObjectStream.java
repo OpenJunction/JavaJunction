@@ -1,6 +1,7 @@
 package edu.stanford.prpl.junction.api.object;
 
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -22,6 +23,14 @@ public interface OutboundObjectStream {
 	 * @throws IOException on serialization or reception error
 	 */
 	public void send(Object outbound) throws IOException;
+	
+	/**
+	 * Note the difference between send(List<Object>) and sendList(List<Object>).
+	 * 
+	 * @param outboundList
+	 * @throws IOException
+	 */
+	public void sendList(List<Object> outboundList) throws IOException;
 	
 	/**
 	 * This function closes the PrPl object sender

@@ -9,12 +9,14 @@ import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
 import edu.stanford.prpl.junction.impl.JunctionManager;
 import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
 
-public class DatalogActor {
+public class DatalogActorDB {
 	// JunctionManager extends/implements JunctionAPI
 	
 	
 	public static void main(String[] argv) {
 		try {
+			System.out.println("Starting the database actor");
+			
 			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
 		
 			jm.registerQueryHandler(
@@ -22,7 +24,7 @@ public class DatalogActor {
 			);
 			
 			
-			Thread.sleep(60*60*1000);
+			Thread.sleep(10*60*1000);
 			
 		} catch (Exception e) {
 			System.err.println("fail.");

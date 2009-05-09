@@ -1,5 +1,7 @@
 package edu.stanford.prpl.junction.api.sample.datalog;
 
+import java.io.IOException;
+
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 import edu.stanford.prpl.junction.api.query.JunctionQuery;
 import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
@@ -30,6 +32,14 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 		// }
 		
 		String queryText = query.getQueryText();
+		try {
+			Thread.sleep(1000);
+			result.send("got message: " + queryText);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		// get results
 		// when result comes in:

@@ -6,6 +6,8 @@ public interface JunctionQuery {
 	public String getQueryText();
 	public String getType();
 	public Map<String, Object> getParameterMap();
+	public boolean isPersistent();
+	public void persist(boolean shouldI);
 }
 
 /*
