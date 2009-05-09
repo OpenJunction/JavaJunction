@@ -15,12 +15,15 @@ public class DatalogActor {
 	
 	public static void main(String[] argv) {
 		try {
-			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://your.com/mine"));
+			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
 		
 			jm.registerQueryHandler(
 				new DatalogQueryHandler()
 			);
-			// sleep?
+			
+			
+			Thread.sleep(60*60*1000);
+			
 		} catch (Exception e) {
 			System.err.println("fail.");
 			e.printStackTrace();

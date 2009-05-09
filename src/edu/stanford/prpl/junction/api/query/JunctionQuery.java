@@ -3,21 +3,9 @@ package edu.stanford.prpl.junction.api.query;
 import java.util.Map;
 
 public interface JunctionQuery {
-	public String getQueryText(); // for evaluator
-	public String getTypeID(); // for querier
+	public String getQueryText();
+	public String getType();
 	public Map<String, Object> getParameterMap();
-	
-	/*
-	 * TODO: I need work!
-	 * Things to consider:
-	 * * query type
-	 * * query ID
-	 * * query text
-	 * * query parameters
-	 * 
-	 */
-	
-	
 }
 
 /*

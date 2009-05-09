@@ -5,15 +5,16 @@ import java.util.Map;
 import edu.stanford.prpl.junction.api.query.JunctionQuery;
 
 public class DatalogQuery implements JunctionQuery {
-
+	protected  final String mType = "DATALOG";
+	
 	public String getQueryText() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String getTypeID() {
+	public String getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return mType;
 	}
 	
 	public static boolean supports(JunctionQuery query) {

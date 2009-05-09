@@ -12,5 +12,5 @@ public abstract class JunctionQueryHandler {
 	 */
 	
 	
-	public abstract void handleQuery(JunctionProcessedQuery query, OutboundObjectStream result);
+	public abstract void handleQuery(JunctionQuery query, OutboundObjectStream result /*, JunctionEvent event */);
 }
