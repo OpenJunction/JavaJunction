@@ -43,6 +43,47 @@ public interface JunctionAPI
 		// 
 		// queryBuilder
 		// generic query abstraction
+	
+	// todo: need reference to query target in query methods
+	// need reference to query event in handler
+	
+	
+	
+
+	
+	/**************************************8
+	 * 
+	 * 
+
+
+question: how to specify query target? A few options:
+
+1.
+jm.query(query, target, callback);
+
+2.
+query.setTarget(...);
+
+3.
+JunctionActor actor = jm.getActor("DatalogDB");
+actor.query(query, callback);
+
+could do multiple targets here, but for now that's best handled 
+by letting the underlying DB engine handle it (EG distributed datalog)
+
+
+	 * 
+	 * 
+	 * 
+	 */
+	
+	
+	
+	
+	
+	
+	
+	
 	public void query(JunctionQuery query, JunctionCallback callback);
 	public void query(JunctionQuery query, String channelName);
 	public InboundObjectStream query(JunctionQuery query);
@@ -54,7 +95,6 @@ public interface JunctionAPI
 	// resources to finish loading, and then proceed.
 	// eg, get genres, get random albums, then build GUI once they're all ready
 	// or once certain pieces are ready
-	//public void handleQuery(JunctionQuery query, OutboundObjectStream results);
 	public void registerQueryHandler(JunctionQueryHandler handler);
 	
 	
