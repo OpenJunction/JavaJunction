@@ -10,18 +10,15 @@ public class DatalogActorQuerier {
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the querier actor");
-			
 			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
 			
 			DatalogQuery query = new DatalogQuery("SELECT name FROM jz_nodes WHERE ptype='genre'");
-			
 			JunctionCallback callback = new DatalogCallback();
 			
 			System.out.println("Sending query: " + query.getQueryText());
-			jm.query(query, callback);
+			jm.query(jm.channelForRole(DatalogConstants.actor.DATALOG_SERVER), query, callback);
 			
 			Thread.sleep(10*1000);
-			
 			callback.terminate();
 			
 		} catch (Exception e) {

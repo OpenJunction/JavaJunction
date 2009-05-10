@@ -2,6 +2,8 @@ package edu.stanford.prpl.junction.api.sample.datalog;
 
 import java.net.URL;
 
+import org.json.JSONObject;
+
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 import edu.stanford.prpl.junction.api.query.JunctionQuery;
@@ -16,8 +18,11 @@ public class DatalogActorDB {
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the database actor");
+			JSONObject role = new JSONObject();
+			role.put("host", "http://prpl.stanford.edu/cometd/cometd");
+			role.put("role", "datalog-server");
 			
-			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
+			JunctionAPI jm = new JunctionManagerFactory().create(role);
 		
 			jm.registerQueryHandler(
 				new DatalogQueryHandler()

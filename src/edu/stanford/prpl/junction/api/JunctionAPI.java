@@ -35,6 +35,13 @@ import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
 
 public interface JunctionAPI
 {
+	// session management
+	public JSONObject getActivityDescriptor();
+	
+	// channels
+	public String channelForRole(String role);
+	public String channelForSession();
+	
 	
 	// query
 		// stored query
@@ -59,7 +66,7 @@ public interface JunctionAPI
 question: how to specify query target? A few options:
 
 1.
-jm.query(query, target, callback);
+jm.query(target, query, callback);
 
 2.
 query.setTarget(...);
@@ -84,9 +91,9 @@ by letting the underlying DB engine handle it (EG distributed datalog)
 	
 	
 	
-	public void query(JunctionQuery query, JunctionCallback callback);
-	public void query(JunctionQuery query, String channelName);
-	public InboundObjectStream query(JunctionQuery query);
+	public void query(String target, JunctionQuery query, JunctionCallback callback);
+	public void query(String target, JunctionQuery query, String channelName);
+	public InboundObjectStream query(String target, JunctionQuery query);
 	
 		// supports persistent and one-off ?????
 	// public void query(JunctionStoredQuery query, JunctionCallback callback);
