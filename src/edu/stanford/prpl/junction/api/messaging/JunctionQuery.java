@@ -1,4 +1,4 @@
-package edu.stanford.prpl.junction.api.query;
+package edu.stanford.prpl.junction.api.messaging;
 
 import java.util.Map;
 

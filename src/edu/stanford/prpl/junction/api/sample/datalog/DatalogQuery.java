@@ -2,7 +2,7 @@ package edu.stanford.prpl.junction.api.sample.datalog;
 
 import java.util.Map;
 
-import edu.stanford.prpl.junction.api.query.JunctionQuery;
+import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 
 public class DatalogQuery implements JunctionQuery {
 	protected  final static String TYPE = "Datalog";

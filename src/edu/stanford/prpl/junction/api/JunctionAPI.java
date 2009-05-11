@@ -18,10 +18,10 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
+import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
+import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
-import edu.stanford.prpl.junction.api.query.JunctionQuery;
-import edu.stanford.prpl.junction.api.query.JunctionQueryHandler;
 
 
 /**

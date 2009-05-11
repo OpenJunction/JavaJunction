@@ -43,7 +43,7 @@ import edu.stanford.prpl.junction.api.JunctionAPI;
  */
 
 
-public class JunctionManager extends AbstractLifeCycle /*implements JunctionAPI*/
+public class JunctionManager extends AbstractLifeCycle
 {
 	public static void main(String[] argv) {
 		JunctionManager jm = new JunctionManager("http://prpl.stanford.edu/cometd/cometd");
@@ -109,14 +109,6 @@ public class JunctionManager extends AbstractLifeCycle /*implements JunctionAPI*
     		//Log.e(APP_NAME,"could not start bayeux",e);	
     	}
     	
-    	/*
-        this(System.getProperty("chatroom.host", "localhost"), 
-                Integer.parseInt(System.getProperty("chatroom.port", "8080")), 
-                System.getProperty("chatroom.uri", "/cometd/cometd"), 
-                System.getProperty("chatroom.publicChannel", "/chat/demo"),
-                System.getProperty("chatroom.privateChannel", "/service/privatechat"),
-                System.getProperty("chatroom.metaChannel", "/cometd/meta"));
-         */
     }
     
     public String getMetaChannel()

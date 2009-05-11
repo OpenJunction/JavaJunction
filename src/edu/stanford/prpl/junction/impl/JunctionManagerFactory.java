@@ -13,28 +13,39 @@ public class JunctionManagerFactory implements JunctionFactory {
 	// So if the JSONObject activity is the same, return the same object.
 	
 	// For testing, use the same JM.
-	static JunctionManager mInstance;
-
-	public JunctionAPI create(JSONObject activity) {
-		if (mInstance == null) {
-			mInstance = new JunctionManager(activity);
+	static JunctionManager mJunctionInstance;
+	static JunctionManagerFactory mFactoryInstance;
+	
+	
+	
+	public JunctionManagerFactory getInstance() {
+		if (null == mFactoryInstance) {
+			mFactoryInstance = new JunctionManagerFactory();
 		}
 		
-		return mInstance;
+		return mFactoryInstance;
+	}
+	
+	public JunctionAPI create(JSONObject activity) {
+		if (mJunctionInstance == null) {
+			mJunctionInstance = new JunctionManager(activity);
+		}
+		
+		return mJunctionInstance;
 	}
 
 	public JunctionAPI create(URL url) {
-		if (mInstance == null) {
+		if (mJunctionInstance == null) {
 			JSONObject desc = new JSONObject();
 			try {
 				desc.put("host",url.toExternalForm());
 			} catch (JSONException e) {
 				throw new IllegalArgumentException("Malformed host URL");
 			}
-			mInstance = new JunctionManager(desc);
+			mJunctionInstance = new JunctionManager(desc);
 		}
 		
-		return mInstance;
+		return mJunctionInstance;
 	}
 
 }

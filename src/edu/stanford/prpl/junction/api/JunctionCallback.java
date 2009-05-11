@@ -1,7 +1,7 @@
 package edu.stanford.prpl.junction.api;
 
+import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
-import edu.stanford.prpl.junction.api.query.JunctionQuery;
 
 public abstract class JunctionCallback {
 	protected JunctionQuery mQuery;
