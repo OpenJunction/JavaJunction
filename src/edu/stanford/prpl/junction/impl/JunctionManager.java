@@ -25,7 +25,6 @@ import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
-import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 
 public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	protected JSONObject mDescriptor; // Activity descriptor

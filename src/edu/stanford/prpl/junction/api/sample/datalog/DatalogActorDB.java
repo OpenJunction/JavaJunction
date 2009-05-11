@@ -14,7 +14,7 @@ public class DatalogActorDB {
 			System.out.println("Starting the database actor");
 			JSONObject role = new JSONObject();
 			role.put("host", "http://prpl.stanford.edu/cometd/cometd");
-			role.put("role", "datalog-server");
+			role.put("role", DatalogConstants.actor.DATALOG_SERVER);
 			
 			JunctionAPI jm = new JunctionManagerFactory().create(role);
 		
