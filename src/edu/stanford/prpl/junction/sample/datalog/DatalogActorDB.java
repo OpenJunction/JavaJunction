@@ -23,7 +23,7 @@ public class DatalogActorDB {
 			);
 			
 			
-			Thread.sleep(10*60*1000);
+			Thread.sleep(1*60*1000);
 			
 		} catch (Exception e) {
 			System.err.println("fail.");

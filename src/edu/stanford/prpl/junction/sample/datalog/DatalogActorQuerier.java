@@ -9,6 +9,7 @@ import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
 public class DatalogActorQuerier {
 	public static void main(String[] argv) {
 		try {
+			// todo: same session for client/server
 			System.out.println("Starting the querier actor");
 			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
 			
@@ -16,7 +17,9 @@ public class DatalogActorQuerier {
 			JunctionCallback callback = new DatalogCallback();
 			
 			System.out.println("Sending query: " + query.getQueryText());
-			jm.query(jm.channelForRole(DatalogConstants.actor.DATALOG_SERVER), query, callback);
+			//jm.query(jm.channelForRole(DatalogConstants.actor.DATALOG_SERVER), query, callback);
+			jm.query(jm.channelForSession(), query, callback);
+			
 			
 			Thread.sleep(10*1000);
 			callback.terminate();

@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.cometd.Bayeux;
 import org.cometd.Client;
 import org.cometd.Message;
 import org.cometd.MessageListener;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mortbay.cometd.MessageImpl;
 import org.mortbay.cometd.client.BayeuxClient;
 import org.mortbay.component.AbstractLifeCycle;
 import org.mortbay.jetty.client.HttpClient;
@@ -126,6 +128,14 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 		return mSessionID;
 	}
 	
+	public String channelForClient() {
+		return "/client"+mClientID;
+	}
+	
+	public String channelForClient(String client) {
+		return "/client"+client;
+	}
+	
 	
 	/**
 	 * Query API
@@ -134,7 +144,10 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	// Send
 	
 	public void query(String target, JunctionQuery query, JunctionCallback callback) {
-		// if query.source supports 
+		// the bayeux publish() message sets the channel etc.
+		String msg = "please deliver me kthxbai";
+		publish(target,msg);
+		System.out.println("message should have sent");
 	}
 
 	public void query(String target, JunctionQuery query, String channelName) {
@@ -150,14 +163,23 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	// Respond
 	
 	public void registerQueryHandler(JunctionQueryHandler handler) {
+		JunctionListener listener = new JunctionListener() {
+			public void onMessageReceived(Client from, Object data) {
+				System.out.println("got message");
+			}
+		};
+		
+		
 		List<String> channels = handler.acceptedChannels();
 		if (null == channels) {
 			String chan = channelForSession();
+			addListener(chan,listener);
 			
-			
+			//chan = channelForClient();
+			//addListener(chan,listener);
 		} else {
 			for (String chan : channels) {
-				
+				addListener(chan,listener);
 			}
 		}
 	}
@@ -223,7 +245,8 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	
 	
 	public boolean publish(Object message) {
-    	return publish(channelForSession(),message);
+		 _bayeuxClient.publish(channelForSession(), message, String.valueOf(System.currentTimeMillis()));
+		 return true;
     }
     
     public boolean publish(String channel, Object message)
