@@ -1,4 +1,4 @@
-package edu.stanford.prpl.junction.api.sample.datalog;
+package edu.stanford.prpl.junction.sample.datalog;
 
 import org.json.JSONObject;
 
