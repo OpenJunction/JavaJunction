@@ -2,12 +2,16 @@ package edu.stanford.prpl.junction.api.messaging;
 
 import java.util.Map;
 
-public interface JunctionQuery {
-	public String getQueryText();
-	public String getType();
-	public Map<String, Object> getParameterMap();
-	public boolean isPersistent();
-	public void persist(boolean shouldI);
+public abstract class JunctionQuery extends JunctionMessage {
+	public abstract String getQueryText();
+	public abstract String getQueryType();
+	public abstract Map<String, Object> getParameterMap();
+	public abstract boolean isPersistent();
+	public abstract void persist(boolean shouldI);
+	
+	public String getJxMessageType() {
+		return "jxquery";
+	}
 }
 
 /*
