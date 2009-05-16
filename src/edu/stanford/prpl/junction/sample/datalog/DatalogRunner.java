@@ -1,6 +1,6 @@
 package edu.stanford.prpl.junction.sample.datalog;
 
-public class SampleRunner {
+public class DatalogRunner {
 	public static void main(final String[] argv) {
 		try {
 			

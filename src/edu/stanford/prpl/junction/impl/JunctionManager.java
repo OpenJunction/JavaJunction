@@ -125,7 +125,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	}
 	
 	public String channelForSession() {
-		return mSessionID;
+		return "/session/"+mSessionID;
 	}
 	
 	public String channelForClient() {
@@ -162,10 +162,17 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 
 	// Respond
 	
-	public void registerQueryHandler(JunctionQueryHandler handler) {
+	public void registerQueryHandler(final JunctionQueryHandler handler) {
 		JunctionListener listener = new JunctionListener() {
 			public void onMessageReceived(Client from, Object data) {
-				System.out.println("got message");
+				
+				JunctionQuery query = null;
+				
+				if (handler.supportsQuery(query)) {
+					System.out.println("got query from " + from + " of " + data.toString());
+				} else {
+					System.out.println("does not support query");
+				}
 			}
 		};
 		
