@@ -16,14 +16,13 @@ public interface InboundObjectStream {
 	 * This function reads an object from the stream.
 	 * The method blocks while waiting for objects.
 	 * 
-	 * @return the object received. Returns an object for which EOF.equals(obj)
-	 * is true if there are no more objects to be read.
-	 * This happens when the sender has no more objects to send, for example.
+	 * @return the object received. 
 	 *  
 	 * @throws IOException on serialization or reception error
 	 */
 	public Object receive() throws IOException;
 	
+
 	
 	/**
 	 * Waits for an object to become available,

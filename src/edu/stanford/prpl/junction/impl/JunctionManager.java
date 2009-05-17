@@ -1,5 +1,6 @@
 package edu.stanford.prpl.junction.impl;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,12 +23,14 @@ import org.mortbay.jetty.client.HttpClient;
 import org.mortbay.thread.QueuedThreadPool;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
-import edu.stanford.prpl.junction.api.JunctionCallback;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
+import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
+import edu.stanford.prpl.junction.impl.object.BayeuxInboundObjectStream;
+import edu.stanford.prpl.junction.impl.object.BayeuxOutboundObjectStream;
 
 public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	protected JSONObject mDescriptor; // Activity descriptor
@@ -157,8 +160,14 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 		try {
 			String responseChannel = "/private/"+UUID.randomUUID().toString();
 			outbound.put("responseChannel", responseChannel);
+			
+			InboundObjectStream stream = new BayeuxInboundObjectStream(this, responseChannel);
+			callback.bind(stream);
+			System.out.println("done binding");
 		} catch (JSONException e) {
 			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		publish(target,outbound);
@@ -178,9 +187,10 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	
 	public void registerQueryHandler(final JunctionQueryHandler handler) {
 		JunctionListener listener = new JunctionListener() {
+			
 			public void onMessageReceived(Client from, Message message) {
 				Object data = message.getData();
-				
+
 				if (data == null) {
 					// System.out.println("null data");
 					return;
@@ -195,22 +205,21 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 				}
 				
 				if (handler.supportsQuery(query)) {
-					// TODO:
-					// * Create output stream for the handler to put results
-					// * Create input stream for querier to get results
-					// * bridge them together
+					String responseChannel;
+					try {
+						JSONObject json = new JSONObject((String)data);
+						responseChannel = json.getString("responseChannel");
+					} catch (JSONException e) {
+						e.printStackTrace();
+						return;
+					}
 					
-					// This involves work in the query() method; by default,
-					// create a channel that the OutputStream publishes results to
-					// and the InputStream reads results from.
-					// The channel can be 'created' in the query() method and sent as
-					// part of the query.
+					OutboundObjectStream outStream
+						= new BayeuxOutboundObjectStream(JunctionManager.this,responseChannel);
 					
-					// Probably have something like a createObjectStream(in, out) method
-					// both for direct connections and bayeux; pipe the streams as needed.
-					// eh, I don't know, you'll figure it out.
-					System.out.println(message);
-					handler.handleQuery(query, null /*result*/);
+					System.out.println("handling query: " + message);
+					handler.handleQuery(query, outStream);
+					
 				} else {
 					//System.out.println("does not support query");
 				}
@@ -326,7 +335,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
     }
     
     public void addListener(String channel, JunctionListener listener) {
-    	HashSet<JunctionListener>list = mListeners.get(channelForSession());
+    	HashSet<JunctionListener>list = mListeners.get(channel);
     	if (list == null) {
     		list = new HashSet<JunctionListener>();
     		mListeners.put(channel, list);

@@ -3,8 +3,8 @@ package edu.stanford.prpl.junction.sample.datalog;
 import java.net.URL;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
-import edu.stanford.prpl.junction.api.JunctionCallback;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
+import edu.stanford.prpl.junction.impl.JunctionCallback;
 import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
 
 public class DatalogActorQuerier {

@@ -2,12 +2,12 @@ package edu.stanford.prpl.junction.sample.datalog;
 
 import java.io.IOException;
 
-import edu.stanford.prpl.junction.api.JunctionCallback;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
+import edu.stanford.prpl.junction.impl.JunctionCallback;
 
 public class DatalogCallback extends JunctionCallback {
 
-	public void onMessageReceived(InboundObjectStream stream) {
+	public void onObjectReceived(InboundObjectStream stream) {
 		try {
 			Object obj;
 			while (stream.waitForObject()) {
