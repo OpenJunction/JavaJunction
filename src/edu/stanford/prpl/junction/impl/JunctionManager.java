@@ -154,7 +154,6 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 				// send direct query
 		// etc.
 		
-		
 		// default query mechanism:
 		JSONObject outbound = query.toJSON();
 		try {
@@ -173,13 +172,32 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	}
 
 	public void query(String target, JunctionQuery query, String channelName) {
-		// TODO Auto-generated method stub
+		JSONObject outbound = query.toJSON();
+		try {
+			outbound.put("responseChannel", channelName);
+		} catch (JSONException e) {
+			
+		}
+		publish(target,outbound);
 
 	}
 
 	public InboundObjectStream query(String target, JunctionQuery query) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject outbound = query.toJSON();
+		InboundObjectStream inStream = null;
+		
+		try {
+			String responseChannel = "/private/"+UUID.randomUUID().toString();
+			outbound.put("responseChannel", responseChannel);
+			
+			inStream = new BayeuxInboundObjectStream(this, responseChannel);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		publish(target,outbound);
+		return inStream;
 	}
 
 	// Respond
