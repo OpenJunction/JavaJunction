@@ -163,7 +163,6 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 			
 			InboundObjectStream stream = new BayeuxInboundObjectStream(this, responseChannel);
 			callback.bind(stream);
-			System.out.println("done binding");
 		} catch (JSONException e) {
 			
 		} catch (IOException e) {
@@ -188,41 +187,52 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	public void registerQueryHandler(final JunctionQueryHandler handler) {
 		JunctionListener listener = new JunctionListener() {
 			
-			public void onMessageReceived(Client from, Message message) {
-				Object data = message.getData();
-
-				if (data == null) {
-					// System.out.println("null data");
-					return;
-				}
+			public void onMessageReceived(final Client from, final Message message) {
 				
-				JunctionQuery query = null;
-				try {
-					query = (JunctionQuery)JunctionMessage.load((String)data);
-				} catch (Exception e) {
-					System.out.println("Message is not a query.");
-					return;
-				}
 				
-				if (handler.supportsQuery(query)) {
-					String responseChannel;
-					try {
-						JSONObject json = new JSONObject((String)data);
-						responseChannel = json.getString("responseChannel");
-					} catch (JSONException e) {
-						e.printStackTrace();
-						return;
+				// Not entirely sure why this needs a new thread,
+				// since everything else is asynchronous..
+				// but this fixes an issue with the query handler blocking.
+				new Thread() {
+					public void run() {
+				
+						Object data = message.getData();
+						if (data == null) {
+							// System.out.println("null data");
+							return;
+						}
+						
+						JunctionQuery query = null;
+						try {
+							query = (JunctionQuery)JunctionMessage.load((String)data);
+						} catch (Exception e) {
+							System.out.println("Message is not a query.");
+							return;
+						}
+						
+						if (handler.supportsQuery(query)) {
+							String responseChannel;
+							try {
+								JSONObject json = new JSONObject((String)data);
+								responseChannel = json.getString("responseChannel");
+							} catch (JSONException e) {
+								e.printStackTrace();
+								return;
+							}
+							
+							OutboundObjectStream outStream
+								= new BayeuxOutboundObjectStream(JunctionManager.this,responseChannel);
+							
+							
+							handler.handleQuery(query, outStream);
+							
+							
+						} else {
+							//System.out.println("does not support query");
+						}
+						
 					}
-					
-					OutboundObjectStream outStream
-						= new BayeuxOutboundObjectStream(JunctionManager.this,responseChannel);
-					
-					System.out.println("handling query: " + message);
-					handler.handleQuery(query, outStream);
-					
-				} else {
-					//System.out.println("does not support query");
-				}
+				}.start();
 			}
 		};
 		
@@ -372,7 +382,6 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 
         public void deliver(Client from, Client to, Message message)
         {
-
             if(!_connected)
             {
                 _connected = true;

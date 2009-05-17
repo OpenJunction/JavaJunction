@@ -27,7 +27,6 @@ public class BayeuxOutboundObjectStream implements OutboundObjectStream {
 
 	public void send(Object outbound) throws IOException {
 		mJunctionManager.publish(mChannel, outbound);
-
 	}
 
 	public void sendList(List<Object> outboundList) throws IOException {

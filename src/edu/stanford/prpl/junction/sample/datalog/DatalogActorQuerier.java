@@ -22,7 +22,7 @@ public class DatalogActorQuerier {
 			jm.query(jm.channelForSession(), query, callback);
 			
 			
-			Thread.sleep(10*1000);
+			Thread.sleep(20*1000);
 			callback.terminate();
 			
 		} catch (Exception e) {

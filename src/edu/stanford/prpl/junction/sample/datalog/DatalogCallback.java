@@ -12,7 +12,7 @@ public class DatalogCallback extends JunctionCallback {
 			Object obj;
 			while (stream.waitForObject()) {
 				obj = stream.receive();
-				System.out.println("Callback got result: " + obj.toString());
+				System.out.println("Callback got result!!!!!  " + obj.toString());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

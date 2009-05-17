@@ -5,7 +5,9 @@ import java.io.IOException;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
 
 
-public abstract class JunctionCallback {
+public abstract class JunctionCallback implements 
+		edu.stanford.prpl.junction.api.JunctionCallback {
+	
 	private boolean isBound=false;
 	private InboundObjectStream mStream;
 	private Thread mThread;

@@ -25,14 +25,12 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 			public void onMessageReceived(Client from, Message message) {
 				if (message.getData() == null) return;
 				synchronized(mQueue) {
-					System.out.println("stream got a message: " + message);
 					mQueue.add(message);
 					mQueue.notify();
 				}
 			}
 		};
 		
-		System.out.println("binding stream to channel " + channel);
 		jm.addListener(channel, mListener);
 	}
 	
