@@ -153,7 +153,15 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 		
 		
 		// default query mechanism:
-		publish(target,query);
+		JSONObject outbound = query.toJSON();
+		try {
+			String responseChannel = "/private/"+UUID.randomUUID().toString();
+			outbound.put("responseChannel", responseChannel);
+		} catch (JSONException e) {
+			
+		}
+		
+		publish(target,outbound);
 	}
 
 	public void query(String target, JunctionQuery query, String channelName) {

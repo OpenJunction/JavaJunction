@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface OutboundObjectStream {        
 	/**
-	 * This function sends a PrPl object to the stream
+	 * This function sends an object to the stream
 	 * @return the object to be sent
 	 * @throws IOException on serialization or reception error
 	 */

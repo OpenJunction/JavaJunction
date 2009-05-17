@@ -13,11 +13,35 @@ import java.io.IOException;
 
 public interface InboundObjectStream {        
 	/**
-	 * This function sends a PrPl object to the stream
-	 * @return the object to be sent
+	 * This function reads an object from the stream.
+	 * The method blocks while waiting for objects.
+	 * 
+	 * @return the object received. Returns an object for which EOF.equals(obj)
+	 * is true if there are no more objects to be read.
+	 * This happens when the sender has no more objects to send, for example.
+	 *  
 	 * @throws IOException on serialization or reception error
 	 */
 	public Object receive() throws IOException;
+	
+	
+	/**
+	 * Waits for an object to become available,
+	 * blocking the thread from executing.
+	 * 
+	 * @return true if an object is available and
+	 * false otherwise (if the stream has been closed
+	 * by the sender)
+	 */
+	public boolean waitForObject();
+	
+	/**
+	 * Returns true if there is an object ready to be read,
+	 * in which case a call to receive() will return immediately.
+	 * 
+	 * @return true if an object can be immediately read.
+	 */
+	public boolean hasObject();
 	
 	/**
 	 * This function closes the PrPl object sender

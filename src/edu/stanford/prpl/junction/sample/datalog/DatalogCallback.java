@@ -10,7 +10,8 @@ public class DatalogCallback extends JunctionCallback {
 	public void onMessageReceived(InboundObjectStream stream) {
 		try {
 			Object obj;
-			while (null != (obj = stream.receive())) {
+			while (stream.waitForObject()) {
+				obj = stream.receive();
 				System.out.println("Callback got result: " + obj.toString());
 			}
 		} catch (IOException e) {

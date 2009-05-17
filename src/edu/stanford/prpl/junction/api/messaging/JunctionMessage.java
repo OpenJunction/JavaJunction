@@ -11,8 +11,6 @@ public abstract class JunctionMessage {
 		try {
 			// Puts all bean properties in a JSON object.
 			JSONObject obj = new JSONObject(this);
-			//obj.put("jxMessageType",getJxMessageType());
-			
 			return obj;
 		} catch (Exception e) {
 			// Exception caught here; JunctionMessages
@@ -27,10 +25,7 @@ public abstract class JunctionMessage {
 	public abstract void loadJSON(JSONObject data) throws JSONException;
 	
 	// Required for deserialization
-	public String getJxMessageType() {
-		System.out.println("got " + this.getClass().getGenericSuperclass().toString());
-		return this.getClass().getSimpleName();
-	}
+	public abstract String getJxMessageType();
 	
 	public static JunctionMessage load(String data) {
 		try {
