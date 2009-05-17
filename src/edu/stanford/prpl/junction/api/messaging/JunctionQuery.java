@@ -1,16 +1,78 @@
 package edu.stanford.prpl.junction.api.messaging;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public abstract class JunctionQuery extends JunctionMessage {
-	public abstract String getQueryText();
-	public abstract String getQueryType();
-	public abstract Map<String, Object> getParameterMap();
-	public abstract boolean isPersistent();
-	public abstract void persist(boolean shouldI);
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class JunctionQuery extends JunctionMessage {
+
+	private String mQuery;
+	private String mType;
+	private Map<String,Object>mParams = null;
+	
+	private boolean mPersist=false;
+	
+	public JunctionQuery() {
+		
+	}
+	
+	public JunctionQuery(String type, String query) {
+		mType=type;
+		mQuery=query;
+	}
+	
+	public JunctionQuery(String query) {
+		mQuery=query;
+	}
+	
+	public String getQueryText() {
+		return mQuery;
+	}
+
+	public String getQueryType() {
+		return mType;
+	}
+
+	public void setQueryType(String type) {
+		mType=type;
+	}
+
+	public Map<String, Object> getParameterMap() {
+		return mParams;
+	}
+	
+	public void setParameterMap(Map<String,Object>map) {
+		mParams=map;
+	}
+	
+	public boolean isPersistent() {
+		return mPersist;
+	}
+	
+	public void persist(boolean shouldI) {
+		mPersist=shouldI;
+	}	
 	
 	public String getJxMessageType() {
 		return "jxquery";
+	}
+	
+	@Override
+	public void loadJSON(JSONObject data) throws JSONException {
+		mQuery = data.getString("queryText");
+		mType = data.getString("queryType");
+		JSONObject params = data.optJSONObject("queryParams");
+		
+		if (params != null) {
+			mParams = new HashMap<String, Object>();
+			JSONArray arr = params.names();
+			for (int i=0; i < arr.length(); i++) {
+				mParams.put(arr.getString(i), params.get(arr.getString(i)));
+			}
+		}
 	}
 }
 
