@@ -187,6 +187,21 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 				}
 				
 				if (handler.supportsQuery(query)) {
+					// TODO:
+					// * Create output stream for the handler to put results
+					// * Create input stream for querier to get results
+					// * bridge them together
+					
+					// This involves work in the query() method; by default,
+					// create a channel that the OutputStream publishes results to
+					// and the InputStream reads results from.
+					// The channel can be 'created' in the query() method and sent as
+					// part of the query.
+					
+					// Probably have something like a createObjectStream(in, out) method
+					// both for direct connections and bayeux; pipe the streams as needed.
+					// eh, I don't know, you'll figure it out.
+					System.out.println(message);
 					handler.handleQuery(query, null /*result*/);
 				} else {
 					//System.out.println("does not support query");

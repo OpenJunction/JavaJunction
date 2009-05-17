@@ -9,11 +9,12 @@ public abstract class JunctionMessage {
 	// Bayeux fundamentals
 	public JSONObject toJSON() {
 		try {
+			// Puts all bean properties in a JSON object.
 			JSONObject obj = new JSONObject(this);
-			obj.put("jxMessageType",getJxMessageType());
+			//obj.put("jxMessageType",getJxMessageType());
 			
 			return obj;
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// Exception caught here; JunctionMessages
 			// need to create clean JSON.
 			e.printStackTrace();
