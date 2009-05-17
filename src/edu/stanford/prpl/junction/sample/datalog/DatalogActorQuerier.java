@@ -4,6 +4,7 @@ import java.net.URL;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.JunctionCallback;
+import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
 
 public class DatalogActorQuerier {
@@ -13,7 +14,7 @@ public class DatalogActorQuerier {
 			System.out.println("Starting the querier actor");
 			JunctionAPI jm = new JunctionManagerFactory().create(new URL("http://prpl.stanford.edu/cometd/cometd"));
 			
-			DatalogQuery query = new DatalogQuery("SELECT name FROM jz_nodes WHERE ptype='genre'");
+			JunctionQuery query = new JunctionQuery("Datalog","SELECT name FROM jz_nodes WHERE ptype='genre'");
 			JunctionCallback callback = new DatalogCallback();
 			
 			System.out.println("Sending query: " + query.getQueryText());

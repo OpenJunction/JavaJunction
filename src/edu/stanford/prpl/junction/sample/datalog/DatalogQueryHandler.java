@@ -10,19 +10,12 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 
 	@Override
 	public boolean supportsQuery(JunctionQuery query) {
-		return DatalogQuery.supports(query);
+		return query.getQueryType().equals("Datalog");
 	}
 	
 	
 	@Override
 	public void handleQuery(JunctionQuery query, OutboundObjectStream result) {
-		// query text:
-		/*
-		if (!(query instanceof StoredQuery)) {
-			results.close(); // todo: set error message
-			return;
-		}
-		*/
 		
 		// either do it here or in supportsQuery ? or somewhere else?
 		// obligations:
@@ -32,6 +25,7 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 		// }
 		
 		String queryText = query.getQueryText();
+		System.out.println("Handling query " + queryText);
 		try {
 			Thread.sleep(1000);
 			result.send("got message: " + queryText);

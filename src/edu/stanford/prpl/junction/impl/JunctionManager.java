@@ -24,6 +24,7 @@ import org.mortbay.thread.QueuedThreadPool;
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.JunctionCallback;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;
+import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
@@ -144,10 +145,15 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	// Send
 	
 	public void query(String target, JunctionQuery query, JunctionCallback callback) {
-		// the bayeux publish() message sets the channel etc.
-		String msg = "please deliver me kthxbai";
-		publish(target,msg);
-		System.out.println("message should have sent");
+		
+		// If target is single client,
+			// if that client is JAVA
+				// send direct query
+		// etc.
+		
+		
+		// default query mechanism:
+		publish(target,query);
 	}
 
 	public void query(String target, JunctionQuery query, String channelName) {
@@ -164,14 +170,26 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	
 	public void registerQueryHandler(final JunctionQueryHandler handler) {
 		JunctionListener listener = new JunctionListener() {
-			public void onMessageReceived(Client from, Object data) {
+			public void onMessageReceived(Client from, Message message) {
+				Object data = message.getData();
+				
+				if (data == null) {
+					// System.out.println("null data");
+					return;
+				}
 				
 				JunctionQuery query = null;
+				try {
+					query = (JunctionQuery)JunctionMessage.load((String)data);
+				} catch (Exception e) {
+					System.out.println("Message is not a query.");
+					return;
+				}
 				
 				if (handler.supportsQuery(query)) {
-					System.out.println("got query from " + from + " of " + data.toString());
+					handler.handleQuery(query, null /*result*/);
 				} else {
-					System.out.println("does not support query");
+					//System.out.println("does not support query");
 				}
 			}
 		};
@@ -252,12 +270,18 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	
 	
 	public boolean publish(Object message) {
+		if (message instanceof JunctionMessage) {
+			message = ((JunctionMessage)message).toJSON();
+		}
 		 _bayeuxClient.publish(channelForSession(), message, String.valueOf(System.currentTimeMillis()));
 		 return true;
     }
     
     public boolean publish(String channel, Object message)
     {
+    	if (message instanceof JunctionMessage) {
+    		message = ((JunctionMessage)message).toJSON();
+		}
         _bayeuxClient.publish(channel, message, String.valueOf(System.currentTimeMillis()));
         return true;
     }
@@ -314,7 +338,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	class MessageRouter implements MessageListener
     {
 
-        public synchronized void deliver(Client from, Client to, Message message)
+        public void deliver(Client from, Client to, Message message)
         {
 
             if(!_connected)

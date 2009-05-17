@@ -13,6 +13,10 @@ public class HttpBridge extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	
+	public static void main(String[] argv) {
+
+	}
+	
 	// static makes the same hashmap available
 	// to all connecting threads.
 	
