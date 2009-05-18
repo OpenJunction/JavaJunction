@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
@@ -64,9 +67,17 @@ public class QueryHandler extends JunctionQueryHandler {
 	    	Statement stmt = connection.createStatement();
 	    	ResultSet rs = stmt.executeQuery(query);
 	    	
+	        ResultSetMetaData rsMetaData = rs.getMetaData();
+	        int cols = rsMetaData.getColumnCount();
+	        
 	    	while (rs.next()) {
-	    		System.out.println("got " + rs.getString(1));
-	    		results.send(rs.getString(1));
+	    		
+	    		Map<String,Object>row = new HashMap<String,Object>();
+	    		for (int i = 1; i <= cols; i++) { // stupid indexing
+	    			row.put(rsMetaData.getColumnName(i), rs.getObject(i));
+	    		}
+	    		System.out.println("got " + row);
+	    		results.send(row);
 	    	}
 	    } catch (SQLException e) {
 	    	e.printStackTrace();

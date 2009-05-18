@@ -23,8 +23,10 @@ public class SQLActor {
 				new QueryHandler()
 			);
 			
-			
-			Thread.sleep(1*60*1000);
+			Object dud = new Object();
+			synchronized(dud){
+				dud.wait();
+			}
 			
 		} catch (Exception e) {
 			System.err.println("fail.");
