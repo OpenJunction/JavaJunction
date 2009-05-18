@@ -42,7 +42,7 @@ public interface JunctionAPI
 	// channels
 	public String channelForRole(String role);
 	public String channelForSession();
-	
+	public String channelForClient(String client);
 	
 	// query
 		// stored query

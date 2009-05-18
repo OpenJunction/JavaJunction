@@ -262,8 +262,8 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 			String chan = channelForSession();
 			addListener(chan,listener);
 			
-			//chan = channelForClient();
-			//addListener(chan,listener);
+			chan = channelForClient();
+			addListener(chan,listener);
 		} else {
 			for (String chan : channels) {
 				addListener(chan,listener);
