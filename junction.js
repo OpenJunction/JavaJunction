@@ -11,7 +11,7 @@ var JunctionManager = function()
     var _connected = false;
     var _cometd;
     var _clientID;
-
+    var _agentType;
     var _sessionID;
     var _channels = function(ch) {
 			return '/'+_sessionID+'/'+ch;			
@@ -30,11 +30,41 @@ var JunctionManager = function()
 	    _sessionID = 'session_'+Math.floor(Math.random()*10000)
 
 	    if (arguments[0] !== null && typeof(arguments[0]) == 'object'){
-		obj = arguments[0];
-		cometURL=obj.host;
-		if (obj.channels){
+		act = arguments[0];
+		cometURL=act.host;
+		if (act.channels){
 			// todo: add channels
 		}
+
+		var _agents = [];
+		if (act.agents) {
+			for (i=0;i<act.agents.length;i++){
+				if (typeof(act.agents[i])=='string') {
+					_agents.push(act.agents[i]);
+				} else {
+					_agents.push(act.agents[i].name);
+				}
+			}
+		}
+
+		if (act.sessionID) {
+		  _sessionID = act.sessionID;
+		}
+		if (act.clientID) {
+		  _clientID = act.clientID;
+		}
+		if (act.agentType) {
+		  _agentType = act.agentType;
+		}
+
+		if (arguments.length >= 2 && typeof(arguments[1]) == 'string') {
+		  if (undefined == act.agents || undefined == act.agents[arguments[1]]) {
+		    return false;
+		  }
+		  _agentType = arguments[1];
+		}
+
+
 	    }else{
 	    	if (arguments.length == 2) {
 			_clientID = arguments[0];
@@ -46,7 +76,7 @@ var JunctionManager = function()
 	    	}
  	    }
 
-	    _channels.session = '/junction/'+_sessionID;
+	    _channels.session = '/session/'+_sessionID;
 	    _channels.client = _channels.session+'/client/'+_clientID
 	    _channels.messages = [_channels.session,_channels.client];
 	    _channels.membership = [_channels.session+'/events/join',_channels.session+'/events/leave'];
@@ -106,22 +136,20 @@ var JunctionManager = function()
 				_cometd.publish(chan,msg);
 			  },
 
-			  query: function(query) {
-				var chan = "/junction/query/response";
-				//_cometd.subscribe(chan, this, function() { return
-			  },
-
-			  queries: function(queries, settings) {
-/*
-				function cb(result, callback) {
-					if(settings.mode=="FIRST_RESPONSE"){
-
-					}
+			  query: function(target,query,callback) {
+				if (typeof(query) == 'string') {
+					var q = Object();
+					q.queryText = query;
+					q.queryType='Unknown';
+				} else {
+					var q = query;
 				}
-				for (var i=0;i<queries.length;i++) {
-					setTimeout(_query(queries[i].query, queries[i].callback, cb),0);
-				}
-*/
+				var rand= Math.floor(Math.random()*100000);
+				var chan = "/private/query_"+rand;
+				q.jxMessageType='jxquery';
+				q.responseChannel=chan;
+				_cometd.subscribe(chan, this, callback);
+				_cometd.publish(target,q);
 			  }
 		};
         },
