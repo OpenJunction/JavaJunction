@@ -13,8 +13,6 @@ public class JunctionQuery extends JunctionMessage {
 	private String mType;
 	private Map<String,Object>mParams = null;
 	
-	private boolean mPersist=false;
-	
 	public JunctionQuery() {
 		
 	}
@@ -47,15 +45,7 @@ public class JunctionQuery extends JunctionMessage {
 	public void setParameterMap(Map<String,Object>map) {
 		mParams=map;
 	}
-	
-	public boolean isPersistent() {
-		return mPersist;
-	}
-	
-	public void persist(boolean shouldI) {
-		mPersist=shouldI;
-	}	
-	
+
 	public String getJxMessageType() {
 		return "jxquery";
 	}
@@ -64,13 +54,18 @@ public class JunctionQuery extends JunctionMessage {
 	public void loadMap(Map<String,Object> data) {
 		mQuery = (String)data.get("queryText");
 		mType = (String)data.get("queryType");
-		//mParams = (HashMap<String,Object>)data.get("queryParams");
+		if (data.containsKey("queryParams")) {
+			mParams = (HashMap<String,Object>)data.get("queryParams");
+		}
 	}
 	
 	public Map<String,Object> getMap() {
 		Map<String,Object>map = super.getMap();
 		map.put("queryText", mQuery);
 		map.put("queryType",mType);
+		if (null != mParams) {
+			map.put("queryParams",mParams);
+		}
 		
 		return map;
 	}

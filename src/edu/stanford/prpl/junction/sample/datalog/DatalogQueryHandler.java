@@ -25,7 +25,7 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 		// }
 		
 		String queryText = query.getQueryText();
-		System.out.println("Handling query " + queryText);
+		System.out.println("Handling query " + query.getMap());
 		
 		int MAX_SEND=11;
 		int numSent=0;
