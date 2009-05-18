@@ -93,9 +93,14 @@ var JunctionManager = function()
 
     	    return { 
 			  chan: _channels,
-			  
-			  client: function(a) { return '/junction/client/'+a; },
+			  channelForSession: function() { return _channels.session; },
+			  channelForClient: 
+				function(c) {
+					if (arguments.length == 0)
+					  return _channels.client;
 
+					return _channels.session+'/client/'+c;
+				},
 
 			  addListener: function() {
 				var chan = null;
