@@ -1,7 +1,8 @@
 package edu.stanford.prpl.junction.api.messaging;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Map;
+
+
 
 public class JunctionResource extends JunctionMessage {
 
@@ -11,8 +12,13 @@ public class JunctionResource extends JunctionMessage {
 	}
 
 	@Override
-	public void loadJSON(JSONObject data) throws JSONException {
+	public void loadMap(Map<String,Object>data) {
 	
 	}
 
+	@Override
+	public Map<String, Object> getMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

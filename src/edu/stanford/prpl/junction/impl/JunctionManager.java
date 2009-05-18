@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.cometd.Bayeux;
 import org.cometd.Client;
 import org.cometd.Message;
 import org.cometd.MessageListener;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.cometd.MessageImpl;
 import org.mortbay.cometd.client.BayeuxClient;
 import org.mortbay.component.AbstractLifeCycle;
 import org.mortbay.jetty.client.HttpClient;
@@ -125,7 +123,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	 * Channel reference API
 	 */
 	public String channelForRole(String role) {
-		return "/role/"+role;
+		return "/session/"+mSessionID+"/role/"+role;
 	}
 	
 	public String channelForSession() {
@@ -133,11 +131,11 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	}
 	
 	public String channelForClient() {
-		return "/client"+mClientID;
+		return "/session/"+mSessionID+"/client/"+mClientID;
 	}
 	
 	public String channelForClient(String client) {
-		return "/client"+client;
+		return "/session/"+mSessionID+"/client/"+client;
 	}
 	
 	
@@ -155,48 +153,51 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 		// etc.
 		
 		// default query mechanism:
-		JSONObject outbound = query.toJSON();
+		Map<String,Object>map=null;
 		try {
+			map = query.getMap();
 			String responseChannel = "/private/"+UUID.randomUUID().toString();
-			outbound.put("responseChannel", responseChannel);
+			map.put("responseChannel", responseChannel);
 			
 			InboundObjectStream stream = new BayeuxInboundObjectStream(this, responseChannel);
 			callback.bind(stream);
-		} catch (JSONException e) {
-			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
 		
-		publish(target,outbound);
+		publish(target,map);
 	}
 
 	public void query(String target, JunctionQuery query, String channelName) {
-		JSONObject outbound = query.toJSON();
+		Map<String,Object>map=null;
 		try {
-			outbound.put("responseChannel", channelName);
-		} catch (JSONException e) {
-			
+			map = query.getMap();
+			map.put("responseChannel", channelName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
 		}
-		publish(target,outbound);
+		publish(target,map);
 
 	}
 
 	public InboundObjectStream query(String target, JunctionQuery query) {
-		JSONObject outbound = query.toJSON();
 		InboundObjectStream inStream = null;
 		
+		Map<String,Object>map=null;
 		try {
+			map=query.getMap();
 			String responseChannel = "/private/"+UUID.randomUUID().toString();
-			outbound.put("responseChannel", responseChannel);
+			map.put("responseChannel", responseChannel);
 			
 			inStream = new BayeuxInboundObjectStream(this, responseChannel);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 		
-		publish(target,outbound);
+		publish(target,map);
 		return inStream;
 	}
 
@@ -222,18 +223,19 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 						
 						JunctionQuery query = null;
 						try {
-							query = (JunctionQuery)JunctionMessage.load((String)data);
+							query = (JunctionQuery)JunctionMessage.load((Map)data);
 						} catch (Exception e) {
 							System.out.println("Message is not a query.");
+							e.printStackTrace();
 							return;
 						}
 						
 						if (handler.supportsQuery(query)) {
 							String responseChannel;
 							try {
-								JSONObject json = new JSONObject((String)data);
-								responseChannel = json.getString("responseChannel");
-							} catch (JSONException e) {
+								Map<String,Object> map = (Map<String,Object>)data;
+								responseChannel = (String)map.get("responseChannel");
+							} catch (Exception e) {
 								e.printStackTrace();
 								return;
 							}
@@ -330,19 +332,14 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 	
 	
 	public boolean publish(Object message) {
-		if (message instanceof JunctionMessage) {
-			message = ((JunctionMessage)message).toJSON();
-		}
-		 _bayeuxClient.publish(channelForSession(), message, String.valueOf(System.currentTimeMillis()));
-		 return true;
+		
+		_bayeuxClient.publish(channelForSession(), message, String.valueOf(System.currentTimeMillis()));
+		return true;
     }
     
     public boolean publish(String channel, Object message)
     {
-    	if (message instanceof JunctionMessage) {
-    		message = ((JunctionMessage)message).toJSON();
-		}
-        _bayeuxClient.publish(channel, message, String.valueOf(System.currentTimeMillis()));
+    	_bayeuxClient.publish(channel, message, String.valueOf(System.currentTimeMillis()));
         return true;
     }
 

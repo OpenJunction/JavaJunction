@@ -61,18 +61,18 @@ public class JunctionQuery extends JunctionMessage {
 	}
 	
 	@Override
-	public void loadJSON(JSONObject data) throws JSONException {
-		mQuery = data.getString("queryText");
-		mType = data.getString("queryType");
-		JSONObject params = data.optJSONObject("queryParams");
+	public void loadMap(Map<String,Object> data) {
+		mQuery = (String)data.get("queryText");
+		mType = (String)data.get("queryType");
+		//mParams = (HashMap<String,Object>)data.get("queryParams");
+	}
+	
+	public Map<String,Object> getMap() {
+		Map<String,Object>map = super.getMap();
+		map.put("queryText", mQuery);
+		map.put("queryType",mType);
 		
-		if (params != null) {
-			mParams = new HashMap<String, Object>();
-			JSONArray arr = params.names();
-			for (int i=0; i < arr.length(); i++) {
-				mParams.put(arr.getString(i), params.get(arr.getString(i)));
-			}
-		}
+		return map;
 	}
 }
 

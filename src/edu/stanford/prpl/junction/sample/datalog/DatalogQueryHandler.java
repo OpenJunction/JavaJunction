@@ -10,7 +10,7 @@ public class DatalogQueryHandler extends JunctionQueryHandler {
 
 	@Override
 	public boolean supportsQuery(JunctionQuery query) {
-		return query.getQueryType().equals("Datalog");
+		return "Datalog".equals(query.getQueryType());
 	}
 	
 	

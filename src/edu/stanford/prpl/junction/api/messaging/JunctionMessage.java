@@ -1,47 +1,41 @@
 package edu.stanford.prpl.junction.api.messaging;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class JunctionMessage {
-	
-	// Bayeux fundamentals
-	public JSONObject toJSON() {
-		try {
-			// Puts all bean properties in a JSON object.
-			JSONObject obj = new JSONObject(this);
-			return obj;
-		} catch (Exception e) {
-			// Exception caught here; JunctionMessages
-			// need to create clean JSON.
-			e.printStackTrace();
-			
-			return null;
-		}
-		
-	}
-	
-	public abstract void loadJSON(JSONObject data) throws JSONException;
+	public static final String JX_MESSAGE_TYPE = "jxMessageType";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	
 	// Required for deserialization
-	public abstract String getJxMessageType();
+	public abstract String getJxMessageType();	
 	
-	public static JunctionMessage load(String data) {
+	public Map<String,Object> getMap() {
+		Map<String,Object>map = new HashMap<String,Object>();
+		map.put("jxMessageType",getJxMessageType());
+		return map;
+	}
+	
+	public abstract void loadMap(Map<String,Object>map);
+	
+	public static JunctionMessage load(Map<String, Object> data) {
 		try {
 			JunctionMessage message = null;
-			
-			JSONObject json = new JSONObject(data);
-			
-			if ("jxquery".equals(json.get("jxMessageType"))) {
+
+			if ("jxquery".equals(data.get("jxMessageType"))) {
 				message = new JunctionQuery();
-				message.loadJSON(json);
+				message.loadMap(data);
 			}
 			
 			return message;
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+	
 }
