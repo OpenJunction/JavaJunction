@@ -258,7 +258,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
 		
 		
 		List<String> channels = handler.acceptedChannels();
-		if (null == channels) {
+		if (null == channels || channels.size() == 0) {
 			String chan = channelForSession();
 			addListener(chan,listener);
 			
