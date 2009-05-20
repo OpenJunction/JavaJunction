@@ -30,7 +30,12 @@ public class BayeuxOutboundObjectStream implements OutboundObjectStream {
 	}
 
 	public void sendList(List<Object> outboundList) throws IOException {
-		// TODO Auto-generated method stub
+		if (outboundList == null) {
+		     return;
+		}
+		for (Object o : outboundList) {
+		    mJunctionManager.publish(mChannel, o);
+		}
 
 	}
 
