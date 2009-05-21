@@ -49,7 +49,8 @@ public class QueryHandler extends JunctionQueryHandler {
 	        Class.forName(driverName);
 	    
 	        // Create a connection to the database
-	        String serverName = "192.168.1.122";
+	        //String serverName = "192.168.1.122";
+	        String serverName = "127.0.0.1";
 	        String mydatabase = "jinzora3";
 	        String url = "jdbc:mysql://" + serverName +  "/" + mydatabase; // a JDBC url
 	        String username = "jinzora";
