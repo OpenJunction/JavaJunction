@@ -23,9 +23,13 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 		
 		mListener = new JunctionListener() {
 			public void onMessageReceived(Client from, Message message) {
-				if (message.getData() == null) return;
+				
+				// Required to fix aggressive message pooling in bayeux
+				Object data = message.getData();
+				
+				if (data == null) return;
 				synchronized(mQueue) {
-					mQueue.add(message);
+					mQueue.add(data); // should add message here, but pooling is breaking this
 					mQueue.notify();
 				}
 			}

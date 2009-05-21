@@ -13,9 +13,9 @@ public class SQLActor {
 		try {
 			System.out.println("Starting the database actor");
 			JSONObject activity = new JSONObject();
-			activity.put("host", "http://prpl.stanford.edu/cometd/cometd");
+			activity.put("host", "http://prpl.stanford.edu:8181/cometd/cometd");
 			activity.put("role", "sql-server");
-			activity.put("sessionID","querySession");
+			activity.put("sessionID","sqlQuerySession");
 			
 			JunctionAPI jm = new JunctionManagerFactory().create(activity);
 		

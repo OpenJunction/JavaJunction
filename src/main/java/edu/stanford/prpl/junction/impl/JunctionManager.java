@@ -1,7 +1,6 @@
 package edu.stanford.prpl.junction.impl;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -13,12 +12,12 @@ import java.util.UUID;
 import org.cometd.Client;
 import org.cometd.Message;
 import org.cometd.MessageListener;
+import org.cometd.client.BayeuxClient;
+import org.eclipse.jetty.client.Address;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.cometd.client.BayeuxClient;
-import org.mortbay.component.AbstractLifeCycle;
-import org.mortbay.jetty.client.HttpClient;
-import org.mortbay.thread.QueuedThreadPool;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;
@@ -30,7 +29,7 @@ import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 import edu.stanford.prpl.junction.impl.object.BayeuxInboundObjectStream;
 import edu.stanford.prpl.junction.impl.object.BayeuxOutboundObjectStream;
 
-public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
+public class JunctionManager implements JunctionAPI  {
 	protected JSONObject mDescriptor; // Activity descriptor
 	
 	protected String mSessionID;
@@ -104,7 +103,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
     	}
     	
     	try {
-    		start();
+    		doStart();
     	} catch (Exception e) {
     		//Log.e(APP_NAME,"could not start bayeux",e);	
     	}
@@ -309,7 +308,7 @@ public class JunctionManager extends AbstractLifeCycle implements JunctionAPI  {
         if(_bayeuxClient==null)
         {
         	
-            _bayeuxClient = new BayeuxClient(_httpClient, new InetSocketAddress(_host, _port), _uri);
+            _bayeuxClient = new BayeuxClient(_httpClient, new Address(_host, _port), _uri);
             _bayeuxClient.addListener(new MessageRouter());
         }
         
