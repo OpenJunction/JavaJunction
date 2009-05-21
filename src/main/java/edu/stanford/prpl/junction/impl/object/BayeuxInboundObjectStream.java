@@ -39,9 +39,13 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 	}
 	
 	public void close() {
-		mQueue.clear();
-		mQueue = null;
-		isClosed = true;
+		synchronized(mQueue){
+			mQueue.clear();
+			isClosed = true;
+			mQueue.notify();
+			
+			// todo: send notice to connected OutboundObjectStream.
+		}
 	}
 
 	public boolean hasObject() {
