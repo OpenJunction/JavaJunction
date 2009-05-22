@@ -73,6 +73,7 @@ public class HttpBridge extends HttpServlet {
 }
 
 class HttpBridgePair {
+	final private int BUFFER_SIZE = 2048; // bytes
 	private HTTPClientConnection mPoster;
 	private HTTPClientConnection mGetter;
 	
@@ -164,10 +165,10 @@ class HttpBridgePair {
 
 			if(postType.indexOf("multipart/form-data") == -1){
 				//mGetter.response.setContentType("application/pdf");
-				int i = in.read();
-				while(i != -1){
-					out.write((char) i);
-					i = in.read();
+				int i;
+				byte[] buf = new byte[BUFFER_SIZE];
+				while(-1 != (i = in.read(buf))) {
+					out.write(buf,0,i);
 				}
 			}
 			else{
@@ -193,21 +194,15 @@ class HttpBridgePair {
 					i = in.read();
 				}
 				out.print(preamble.toString());
-				i = in.read();
-				while(i != -1){
-					out.write((char)i);
-					i = in.read();
+				
+				byte[] buf = new byte[BUFFER_SIZE];
+				while(-1 != (i = in.read(buf))) {
+					out.write(buf,0,i);
 				}
 			}
 			
-			//StringBuffer s = new StringBuffer();
-			/*int i = inStream.read();
-			while(i != -1){
-				outStream.print((char)i);
-				//s.append((char)i);
-				i = inStream.read();
-			}*/
-
+			
+			
 			in.close();
 			out.close();
 
