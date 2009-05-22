@@ -41,13 +41,19 @@ public class SendQuery {
 						
 					}
 				}
+				
+				@Override
+				public void onTermination(boolean wasRemote) {
+					String whodoneit = (wasRemote) ? "remotely" : "locally";
+					System.out.println("Query thread terminated " + whodoneit + ".");
+				}
 			};
 			
 			jm.query(jm.channelForSession(), query, callback);
 			
+			//Thread.sleep(5000);
+			//callback.terminate();
 			
-			Thread.sleep(5*1000);
-			callback.terminate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

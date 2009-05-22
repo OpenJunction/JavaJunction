@@ -13,6 +13,7 @@ import org.cometd.Client;
 import org.cometd.Message;
 import org.cometd.MessageListener;
 import org.cometd.client.BayeuxClient;
+import org.cometd.server.MessageImpl;
 import org.eclipse.jetty.client.Address;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
@@ -213,13 +214,13 @@ public class JunctionManager implements JunctionAPI  {
 				// but this fixes an issue with the query handler blocking.
 				new Thread() {
 					public void run() {
-				
 						Object data = message.getData();
 						if (data == null) {
 							// System.out.println("null data");
 							return;
 						}
 						
+						/*
 						JunctionQuery query = null;
 						try {
 							query = (JunctionQuery)JunctionMessage.load((Map)data);
@@ -227,8 +228,14 @@ public class JunctionManager implements JunctionAPI  {
 							System.out.println("Message is not a query.");
 							e.printStackTrace();
 							return;
-						}
+						}*/
 						
+						if (!(message instanceof JunctionMessage)) {
+							System.out.println("Message is not a query.");
+							return;
+						}
+							JunctionQuery query = (JunctionQuery)message;
+							
 						if (handler.supportsQuery(query)) {
 							String responseChannel;
 							try {
@@ -331,6 +338,9 @@ public class JunctionManager implements JunctionAPI  {
 	
 	
 	public boolean publish(Object message) {
+		if (message instanceof JunctionMessage) {
+			message = ((JunctionMessage)message).getMap();
+		}
 		
 		_bayeuxClient.publish(channelForSession(), message, String.valueOf(System.currentTimeMillis()));
 		return true;
@@ -338,6 +348,10 @@ public class JunctionManager implements JunctionAPI  {
     
     public boolean publish(String channel, Object message)
     {
+    	if (message instanceof JunctionMessage) {
+			message = ((JunctionMessage)message).getMap();
+		}
+    	
     	_bayeuxClient.publish(channel, message, String.valueOf(System.currentTimeMillis()));
         return true;
     }
@@ -403,6 +417,10 @@ public class JunctionManager implements JunctionAPI  {
                 {
                     this.notify();
                 }
+            }
+            
+            if (JunctionMessage.isJunctionMessage(message)) {
+            	message = JunctionMessage.load(message);
             }
             
             if (mListeners.containsKey(message.getChannel())) {

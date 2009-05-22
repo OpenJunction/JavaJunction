@@ -9,6 +9,7 @@ public abstract class JunctionCallback implements
 		edu.stanford.prpl.junction.api.JunctionCallback {
 	
 	private boolean isBound=false;
+	private boolean remoteClose=true;
 	private InboundObjectStream mStream;
 	private Thread mThread;
 	
@@ -26,14 +27,20 @@ public abstract class JunctionCallback implements
 				while (mStream.waitForObject()) {
 					onObjectReceived(mStream);
 				}
+				
+				onTermination(remoteClose); // trigger termination handler
+									 // true == caused by remote party.
 			}
 		};
 		mThread.start();
 	}
 	
 	public abstract void onObjectReceived(InboundObjectStream stream);
-
+	public void onTermination(boolean wasRemote) {}
+	
+	
 	public void terminate() {
+		remoteClose=false;
 		if (mStream != null) {
 			mStream.close();
 		}

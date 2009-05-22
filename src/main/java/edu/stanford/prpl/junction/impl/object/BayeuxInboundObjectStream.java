@@ -7,6 +7,7 @@ import java.util.Queue;
 import org.cometd.Client;
 import org.cometd.Message;
 
+import edu.stanford.prpl.junction.api.messaging.JunctionEndOfStream;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
 import edu.stanford.prpl.junction.impl.JunctionManager;
@@ -24,12 +25,9 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 		mListener = new JunctionListener() {
 			public void onMessageReceived(Client from, Message message) {
 				
-				// Required to fix aggressive message pooling in bayeux
-				Object data = message.getData();
-				
-				if (data == null) return;
+				if (message == null) return;
 				synchronized(mQueue) {
-					mQueue.add(data); // should add message here, but pooling is breaking this
+					mQueue.add(message); // should add message here, but pooling is breaking this
 					mQueue.notify();
 				}
 			}
@@ -49,15 +47,24 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 	}
 
 	public boolean hasObject() {
-		return (mQueue.size() > 0);
+		return (mQueue.size() > 0 && !(mQueue.peek() instanceof JunctionEndOfStream));
 	}
 
 	public Object receive() throws IOException {
-		if (!waitForObject()) {
-			return null;
+		synchronized (mQueue) {
+			if (!waitForObject()) {
+				return null;
+			}
+			
+			Object obj = mQueue.remove();
+			if (obj instanceof JunctionEndOfStream) {
+				this.close();
+				return null;
+			}
+			
+			return obj;
 		}
 		
-		return mQueue.remove();
 	}
 
 	public boolean waitForObject() {
@@ -71,7 +78,7 @@ public class BayeuxInboundObjectStream implements InboundObjectStream {
 			}
 		}
 		
-		return (mQueue.size() > 0);
+		return (mQueue.size() > 0 && !(mQueue.peek() instanceof JunctionEndOfStream));
 	}
 
 }

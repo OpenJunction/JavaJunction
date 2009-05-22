@@ -3,6 +3,7 @@ package edu.stanford.prpl.junction.impl.object;
 import java.io.IOException;
 import java.util.List;
 
+import edu.stanford.prpl.junction.api.messaging.JunctionEndOfStream;
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 import edu.stanford.prpl.junction.impl.JunctionManager;
 
@@ -16,8 +17,7 @@ public class BayeuxOutboundObjectStream implements OutboundObjectStream {
 	}
 	
 	public void close() {
-		// TODO Auto-generated method stub
-
+		mJunctionManager.publish(mChannel, new JunctionEndOfStream());
 	}
 
 	public void flush() {

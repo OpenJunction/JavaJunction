@@ -77,7 +77,7 @@ public class QueryHandler extends JunctionQueryHandler {
 	    		for (int i = 1; i <= cols; i++) { // stupid indexing
 	    			row.put(rsMetaData.getColumnName(i), rs.getObject(i));
 	    		}
-	    		System.out.println("got " + row);
+	    		System.out.println("sending " + row);
 	    		results.send(row);
 	    	}
 	    } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class QueryHandler extends JunctionQueryHandler {
 	    }
 		
 		
-		
+		System.out.println("closing stream.");
 		results.close();
 	  }
 }
