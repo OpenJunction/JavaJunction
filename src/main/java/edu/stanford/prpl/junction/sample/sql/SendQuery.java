@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
@@ -19,7 +18,8 @@ public class SendQuery {
 			// todo: same session for client/server
 			System.out.println("Starting the query actor");
 			
-			JSONObject activity = new JSONObject();
+			Map<String,Object> activity = new HashMap<String,Object>();
+			
 			activity.put("host", "http://prpl.stanford.edu:8181/cometd/cometd");
 			activity.put("role", "sql-client");
 			activity.put("sessionID","sqlQuerySession");

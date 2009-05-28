@@ -1,6 +1,7 @@
 package edu.stanford.prpl.junction.sample.sql;
 
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
@@ -12,7 +13,7 @@ public class SQLActor {
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the database actor");
-			JSONObject activity = new JSONObject();
+			Map<String,Object> activity = new HashMap<String,Object>();
 			activity.put("host", "http://prpl.stanford.edu:8181/cometd/cometd");
 			activity.put("role", "sql-server");
 			activity.put("sessionID","sqlQuerySession");

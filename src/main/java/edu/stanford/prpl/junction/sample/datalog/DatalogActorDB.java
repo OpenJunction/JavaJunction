@@ -1,6 +1,8 @@
 package edu.stanford.prpl.junction.sample.datalog;
 
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
@@ -12,7 +14,7 @@ public class DatalogActorDB {
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the database actor");
-			JSONObject role = new JSONObject();
+			Map<String,Object> role = new HashMap<String,Object>();
 			role.put("host", "http://prpl.stanford.edu/cometd/cometd");
 			role.put("role", DatalogConstants.actor.DATALOG_SERVER);
 			

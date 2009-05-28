@@ -4,9 +4,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.JunctionFactory;
 
@@ -41,7 +38,7 @@ public class JunctionManagerFactory implements JunctionFactory {
 			Map<String,Object> desc = new HashMap<String,Object>();
 			try {
 				desc.put("host",url.toExternalForm());
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				throw new IllegalArgumentException("Malformed host URL");
 			}
 			mJunctionInstance = new JunctionManager(desc);

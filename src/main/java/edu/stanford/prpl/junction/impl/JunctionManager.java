@@ -17,8 +17,6 @@ import org.cometd.server.MessageImpl;
 import org.eclipse.jetty.client.Address;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;

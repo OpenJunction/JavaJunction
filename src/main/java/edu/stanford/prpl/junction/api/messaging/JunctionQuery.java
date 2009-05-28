@@ -3,10 +3,6 @@ package edu.stanford.prpl.junction.api.messaging;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class JunctionQuery extends JunctionMessage {
 
 	private String mQuery;
