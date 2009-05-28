@@ -26,7 +26,7 @@ public class JunctionManagerFactory implements JunctionFactory {
 		return mFactoryInstance;
 	}
 	
-	public JunctionAPI create(JSONObject activity) {
+	public JunctionManager create(JSONObject activity) {
 		if (mJunctionInstance == null) {
 			mJunctionInstance = new JunctionManager(activity);
 		}
@@ -34,7 +34,7 @@ public class JunctionManagerFactory implements JunctionFactory {
 		return mJunctionInstance;
 	}
 
-	public JunctionAPI create(URL url) {
+	public JunctionManager create(URL url) {
 		if (mJunctionInstance == null) {
 			JSONObject desc = new JSONObject();
 			try {
