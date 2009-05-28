@@ -14,9 +14,8 @@
 
 package edu.stanford.prpl.junction.api;
 
-import java.net.URL;
+import java.util.Map;
 
-import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
@@ -37,7 +36,7 @@ import edu.stanford.prpl.junction.impl.JunctionCallback;
 public interface JunctionAPI
 {
 	// session management
-	public JSONObject getActivityDescriptor();
+	public Map<String,Object> getActivityDescriptor();
 	
 	// channels
 	public String channelForRole(String role);

@@ -31,7 +31,7 @@ import edu.stanford.prpl.junction.impl.object.BayeuxInboundObjectStream;
 import edu.stanford.prpl.junction.impl.object.BayeuxOutboundObjectStream;
 
 public class JunctionManager implements JunctionAPI  {
-	protected JSONObject mDescriptor; // Activity descriptor
+	protected Map<String,Object> mDescriptor; // Activity descriptor
 	
 	protected String mSessionID;
 	protected String mClientID;
@@ -49,19 +49,19 @@ public class JunctionManager implements JunctionAPI  {
 	/**
 	 * Constructor
 	 */
-	public JunctionManager(JSONObject desc) {
+	public JunctionManager(Map<String,Object> desc) {
 		mDescriptor=desc;
 		
 		
 		// Host 
 		
-		if (!desc.has("host")) {
+		if (!desc.containsKey("host")) {
 			throw new IllegalArgumentException("The 'host' field is required for a Junction session.");
 		}
 		
 		try {
 			URL bayeuxServer = null;
-			bayeuxServer = new URL(desc.getString("host"));
+			bayeuxServer = new URL((String)desc.get("host"));
 			
 			_port = bayeuxServer.getPort();
     		if (_port < 0) {
@@ -72,11 +72,11 @@ public class JunctionManager implements JunctionAPI  {
     		
 		} catch (MalformedURLException e) {
 			try {
-				throw new IllegalArgumentException("Bad host URL (" + desc.getString("host") + ")");
-			} catch (JSONException e1) {
-				throw new IllegalArgumentException("Host URL not found in JSON descriptor.");
+				throw new IllegalArgumentException("Bad host URL (" + (String)desc.get("host") + ")");
+			} catch (Exception e1) {
+				throw new IllegalArgumentException("Host URL not found in descriptor.");
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			throw new IllegalArgumentException("Key not found in JSON descriptor.");
 		}
 		
@@ -84,15 +84,15 @@ public class JunctionManager implements JunctionAPI  {
 		// Client, Role and Session 
 		
     	try {
-    		if (desc.has("sessionID")) {
-    			mSessionID=desc.getString("sessionID");
+    		if (desc.containsKey("sessionID")) {
+    			mSessionID=(String)desc.get("sessionID");
     		} else {
     			mSessionID = UUID.randomUUID().toString();
     		}
     		
     		
-    		if (desc.has("clientID")) {
-    			mClientID = desc.getString("clientID");
+    		if (desc.containsKey("clientID")) {
+    			mClientID = (String)desc.get("clientID");
     		} else {
     			mClientID = UUID.randomUUID().toString();
     		}
@@ -114,7 +114,7 @@ public class JunctionManager implements JunctionAPI  {
 	/**
 	 * Session Management
 	 */
-	public JSONObject getActivityDescriptor() {
+	public Map<String,Object> getActivityDescriptor() {
 		return mDescriptor;
 	}
 	

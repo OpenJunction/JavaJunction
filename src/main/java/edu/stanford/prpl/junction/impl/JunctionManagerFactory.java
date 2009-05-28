@@ -1,6 +1,8 @@
 package edu.stanford.prpl.junction.impl;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,7 @@ public class JunctionManagerFactory implements JunctionFactory {
 		return mFactoryInstance;
 	}
 	
-	public JunctionManager create(JSONObject activity) {
+	public JunctionManager create(Map<String,Object> activity) {
 		if (mJunctionInstance == null) {
 			mJunctionInstance = new JunctionManager(activity);
 		}
@@ -36,7 +38,7 @@ public class JunctionManagerFactory implements JunctionFactory {
 
 	public JunctionManager create(URL url) {
 		if (mJunctionInstance == null) {
-			JSONObject desc = new JSONObject();
+			Map<String,Object> desc = new HashMap<String,Object>();
 			try {
 				desc.put("host",url.toExternalForm());
 			} catch (JSONException e) {
