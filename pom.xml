@@ -12,7 +12,7 @@
     <dependency>
     	<groupId>org.cometd.java</groupId>
     	<artifactId>cometd-java-client</artifactId>
-    	<version>1.0.beta8</version>
+    	<version>1.0.beta9</version>
     </dependency>    
   </dependencies>
   <build>
@@ -25,7 +25,9 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-1</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -34,4 +36,31 @@
       </plugin>
     </plugins>
   </build>
+
+  <repositories>
+    <repository>
+      <id>dojo</id>
+      <name>Dojo Maven2 Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/dojo-releases</url>
+      <releases> <enabled>true</enabled> </releases>
+      <snapshots> <enabled>false</enabled> </snapshots>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <id>dojoSnapshots</id>
+      <name>Dojo Maven2 Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/dojo-snapshots</url>
+      <releases> <enabled>false</enabled> </releases>
+      <snapshots> <enabled>true</enabled> </snapshots>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <id>jettySnapshots</id>
+      <name>Jetty Maven2 Snapshot Repository</name>
+      <url>http://oss.sonatype.org/content/repositories/jetty-snapshots</url>
+      <releases> <enabled>false</enabled> </releases>
+      <snapshots> <enabled>true</enabled> </snapshots>
+      <layout>default</layout>
+    </repository>
+  </repositories>
 </project>
