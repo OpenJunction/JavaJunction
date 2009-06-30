@@ -1,11 +1,11 @@
 package edu.stanford.prpl.junction.impl;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import edu.stanford.prpl.junction.api.activity.JunctionActivity;
 import edu.stanford.prpl.junction.api.activity.JunctionRole;
 
 public class JunctionMaker {
@@ -22,28 +22,29 @@ public class JunctionMaker {
 		 * should be merged into this class.
 		 */
 		Map<String,Object>params = new HashMap<String,Object>();
-		params.put("host", url.toExternalForm());
+		params.put("host", mHostURL.toExternalForm());
 		mManager = new JunctionManager(params);
 		
 	}
 	
+	// TODO: add 0-arg constructor for activities w/ given junction hosts
+	// or allow static call for newJunction?
 	
-	public JunctionActivity newActivity(String friendlyName) {
-		JunctionActivity activity = new JunctionActivity();
-		
-		// creating an activity is an activity.
+	public Junction newJunction(String friendlyName) {
+		return null;
+	}
+	
+	public Junction newJunction(URL url) {
+		return null;
+	}
+	
+	public Junction newJunction(Map<String,Object>desc) {
+		Junction activity = new Junction(mManager);
+
+		// creating an activity is an activity using a JunctionService.
 		// Invite the JunctionMaker service to the session.
-		// This service will be bundled with the Junction server.
-		
-		
+		// This service will be bundled with all Junction servers.
+		activity.inviteActor("JunctionMaker", mHostURL, "JunctionMaker");		
 		return activity;
-	}
-	
-	public JunctionActivity newActivity(URL url) {
-		return null;
-	}
-	
-	public JunctionActivity newActivity(Map<String,Object>activity) {
-		return null;
 	}
 }

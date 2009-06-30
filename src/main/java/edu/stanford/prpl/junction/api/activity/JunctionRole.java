@@ -1,11 +1,13 @@
 package edu.stanford.prpl.junction.api.activity;
 
+
+/**
+ * Might want to remove this class and just use Strings.
+ *
+ */
+
+
 public abstract class JunctionRole {
-	protected JunctionActivity mActivity;
-	
-	public void onActivityJoin(JunctionActivity activity) {
-		mActivity=activity;
-	}
-	
-	public abstract void onActivityStart(); 
+	public abstract String getRoleID();
+	public String toString() { return getRoleID(); }
 }

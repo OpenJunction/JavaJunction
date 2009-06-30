@@ -44,6 +44,8 @@ public class JunctionManager implements JunctionAPI  {
     private BayeuxClient _bayeuxClient;
     private QueuedThreadPool _threadPool;
 	
+    private URL bayeuxServer = null;
+    
 	/**
 	 * Constructor
 	 */
@@ -58,8 +60,11 @@ public class JunctionManager implements JunctionAPI  {
 		}
 		
 		try {
-			URL bayeuxServer = null;
-			bayeuxServer = new URL((String)desc.get("host"));
+			if (desc.get("host") instanceof URL) {
+				bayeuxServer = (URL)desc.get("host");
+			} else {
+				bayeuxServer = new URL((String)desc.get("host"));
+			}
 			
 			_port = bayeuxServer.getPort();
     		if (_port < 0) {
@@ -75,7 +80,7 @@ public class JunctionManager implements JunctionAPI  {
 				throw new IllegalArgumentException("Host URL not found in descriptor.");
 			}
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Key not found in JSON descriptor.");
+			throw new IllegalArgumentException("Key not found in descriptor.",e);
 		}
 		
 		
@@ -107,6 +112,10 @@ public class JunctionManager implements JunctionAPI  {
     		//Log.e(APP_NAME,"could not start bayeux",e);	
     	}
 		
+	}
+	
+	public URL getHostURL() {
+		return bayeuxServer;
 	}
 	
 	/**
