@@ -1,3 +1,145 @@
+var JunctionMaker = function()
+{
+	var _hostURL;
+
+	function Junction(arg) {
+		var _activityDesc = arg;
+		var _sessionID = randomUUID(); // TODO: get from activity
+		var _hostURL = "http://prpl.stanford.edu:8181/cometd/cometd"; // TODO: get from activity
+		var _jm = JunctionManager.create(_hostURL);
+
+		return  {
+			  activityDesc : _activityDesc,
+			  getSessionID : function() { return _sessionID },
+
+			  sendMessageToChannel: function (channel, msg) {
+				_jm.publish(channel,msg);
+			  },
+			  sendMessageToActor: function (actorID, msg) {
+				_jm.publish(_jm.channelForClient(actorID),msg);
+			  },
+			  sendMessageToRole: function (role, msg) {
+				_jm.publish(_jm.channelForRole(role),msg);
+			  },
+			  sendMessageToSession: function (msg) {
+				_jm.publish(_jm.channelForSession(),msg);
+			  },
+
+			  getInvitationURL : function () {
+				var url = '';
+				if (arguments.length == 0) {
+					url = _hostURL + "?session="+_sessionID;
+				} else if (arguments[0] != false) {
+					url = _hostURL + "?session="+_sessionID+"&requestedRole="+arguments[0];
+				}
+				return url;
+			  },
+			  getInvitationQR : function () {
+				var url;
+				var size;
+				if (arguments.length == 0) {
+					url = _hostURL + "?session="+_sessionID;
+				} else if (arguments[0] != false) {
+					url = _hostURL + "?session="+_sessionID+"&requestedRole="+arguments[0];
+				}
+				if (arguments.length == 2) {
+					size = arguments[1]+'x'+arguments[1];
+				} else {
+					size = '250x250';
+				}
+
+				return 'http://chart.apis.google.com/chart?cht=qr&chs='+size+'&chl='+encodeURIComponent('{jxref:"'+url+'"}');
+				
+			  },
+
+			  getActorsForRole : function() { },
+			  getRoles : function() { },
+
+			};
+
+	}
+
+	return {
+		create: function()
+		{
+			if (arguments.length != 1) {
+				return false;
+			}
+			_hostURL = arguments[0];
+
+			return {
+				newJunction: function()
+				{
+					if (arguments.length != 1) {
+						return false;
+					}
+					
+					return Junction(arguments[0]);
+				}
+			};
+		}
+	}
+}();
+
+
+// TODO: Use JQuery to load this script from another file
+
+/* randomUUID.js - Version 1.0
+ * 
+ * Copyright 2008, Robert Kieffer
+ * 
+ * This software is made available under the terms of the Open Software License
+ * v3.0 (available here: http://www.opensource.org/licenses/osl-3.0.php )
+ *
+ * The latest version of this file can be found at:
+ * http://www.broofa.com/Tools/randomUUID.js
+ *
+ * For more information, or to comment on this, please go to:
+ * http://www.broofa.com/blog/?p=151
+ */
+
+/**
+ * Create and return a "version 4" RFC-4122 UUID string.
+ */
+
+function randomUUID() {
+  var s = [], itoh = '0123456789ABCDEF';
+  // Make array of random hex digits. The UUID only has 32 digits in it, but we
+  // allocate an extra items to make room for the '-'s we'll be inserting.
+  for (var i = 0; i <36; i++) s[i] = Math.floor(Math.random()*0x10);
+
+  // Conform to RFC-4122, section 4.4
+  s[14] = 4;  // Set 4 high bits of time_high field to version
+  s[19] = (s[19] & 0x3) | 0x8;  // Specify 2 high bits of clock sequence
+
+  // Convert to hex chars
+  for (var i = 0; i <36; i++) s[i] = itoh[s[i]];
+
+  // Insert '-'s
+  s[8] = s[13] = s[18] = s[23] = '-';
+
+  return s.join('');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TODO: remove this legacy object
 var JunctionManager = function()
 {
 // todo: publish takes 3 params. The last 2 merge to form 1 message.
