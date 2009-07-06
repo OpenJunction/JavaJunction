@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.cometd.Client;
@@ -18,10 +19,11 @@ import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 public class Junction implements edu.stanford.prpl.junction.api.activity.Junction {
 	private String mActivityID;
 	private String mSessionID;
-	private List<JunctionActor>mActors;
+	private JunctionActor mOwner;
 	private JunctionManager mManager;
 	private URL mHostURL;
 	private String sessionChannel;
+	private Map<String,String>mPeers; // actorID to Role
 	
 	/**
 	 * Creates an activity from a given activity URL
@@ -77,9 +79,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	}
 	
 	private void init() {
-		mActors = new ArrayList<JunctionActor>();
 		sessionChannel = "/session/"+mSessionID;
 		mManager.addListener(sessionChannel, new OnStartListener());
+		mPeers = new HashMap<String,String>();
 	}
 	
 	public String getActivityID() {
@@ -89,7 +91,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	
 	public void registerActor(final JunctionActor actor) {
 		System.out.println("adding actor for role " + actor.getRole());
-		mActors.add(actor);
+		mOwner = actor;
 		
 		// TODO: formalize this and pair w/ JunctionMaker; 
 		// keep mActors synched better w/ JunctionManager using a stateful proxy?
@@ -101,16 +103,17 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 					if (data == null) return;
 					if (data.containsKey("action") && data.get("action").equals("join")) {
 						if (!data.get("actorID").equals(actor.getActorID())) {
-							Map<String,Object>resp = new HashMap<String, Object>();
-							resp.put("action","join");
-							resp.put("status","responding"); // new member; strangers should introduce themselves
-							resp.put("role",actor.getRole());
-							resp.put("actorID",actor.getActorID());
-							sendMessageToSystem(message);
+							if (data.get("status").equals("new")) {  // new member; strangers should introduce themselves
+								Map<String,Object>resp = new HashMap<String, Object>();
+								resp.put("action","join");
+								resp.put("status","responding");
+								resp.put("role",actor.getRole());
+								resp.put("actorID",actor.getActorID());
+								sendMessageToSystem(message);
+							}
 							
 							
-							
-							System.out.println("JOINED: " + data.get("role"));
+							mPeers.put((String)data.get("actorID"), (String)data.get("role"));
 						}
 					}
 				}
@@ -154,9 +157,10 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		public void onMessageReceived(Client from, Message message) {
 			if (message.getData() == null || started) return;
 			
-			for (JunctionActor actor : mActors) {
+			/*for (JunctionActor actor : mActors) {
 					actor.onActivityStart();
-			}
+			}*/
+			mOwner.onActivityStart();
 			started=true;
 			// mManager.removeListener(this);
 		}
@@ -165,8 +169,15 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 
 
 	public List<String> getActorsForRole(String role) {
-		// TODO Auto-generated method stub
-		return null;
+		// inefficient but who cares. small map.
+		List<String>results = new ArrayList<String>();
+		Set<String>keys = mPeers.keySet();
+		for (String key : keys) {
+			if (mPeers.get(key).equals(role)) {
+				results.add(key);
+			}
+		}
+		return results;
 	}
 
 	public List<String> getRoles() {

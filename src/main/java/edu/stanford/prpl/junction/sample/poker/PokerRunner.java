@@ -36,6 +36,7 @@ public class PokerRunner {
 		
 		JunctionMaker jm = new JunctionMaker(url);
 		Junction activity = jm.newJunction(desc);
+		
 		new PokerDealer().join(activity);
 		
 		try {
