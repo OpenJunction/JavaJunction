@@ -1,24 +1,30 @@
 package edu.stanford.prpl.junction.sample.poker;
 
-import edu.stanford.prpl.junction.api.activity.JunctionActivity;
-import edu.stanford.prpl.junction.api.activity.JunctionRole;
+import edu.stanford.prpl.junction.api.activity.JunctionActor;
+import edu.stanford.prpl.junction.impl.Junction;
 
-public class PokerDealer extends JunctionRole {
+public class PokerDealer extends JunctionActor {
+	
+	public PokerDealer() {
+		super("dealer");
+	}
+	
 	@Override
 	public void onActivityStart() {
-		System.out.println("activity has been started!");
+		System.out.println("Dealer: activity has been started!");
 		
 		dealCards();
 		
 	}
 	
 	@Override
-	public void onActivityJoin(JunctionActivity activity) { // ActivityInstance, really
+	public void onActivityJoin(Junction activity) { // ActivityInstance, really
 		super.onActivityJoin(activity);
 		
-		System.out.println("Connected to activity; sending start request.");
-		activity.start();
+		System.out.println("Dealer connected to activity.");
+		//activity.start();
 	}
+	
 	
 	public void dealCards() {
 		

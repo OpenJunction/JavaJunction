@@ -137,6 +137,10 @@ public class JunctionManager implements JunctionAPI  {
 		return "/session/"+mSessionID;
 	}
 	
+	public String channelForSystem() {
+		return "/session/"+mSessionID+"/junction";
+	}
+	
 	public String channelForClient() {
 		return "/session/"+mSessionID+"/client/"+mClientID;
 	}
@@ -366,14 +370,14 @@ public class JunctionManager implements JunctionAPI  {
     
     // TODO: support multiple channel subscriptions
     public void addListener(JunctionListener listener) {
-    	String channel = channelForSession();
-    	HashSet<JunctionListener>list = mListeners.get(channelForSession());
+    	String channel = "JX_ANY_CHANNEL";
+    	HashSet<JunctionListener>list = mListeners.get(channel);
     	if (list == null) {
     		list = new HashSet<JunctionListener>();
     		mListeners.put(channel, list);
     	}
     	if (list.size() == 0) {
-    		_bayeuxClient.subscribe(channel);
+    		_bayeuxClient.subscribe(channelForSession()+"/**");
     	}
     	
     	list.add(listener);
@@ -432,6 +436,11 @@ public class JunctionManager implements JunctionAPI  {
             
             if (mListeners.containsKey(message.getChannel())) {
             	for (JunctionListener listener : mListeners.get(message.getChannel())) {
+            		listener.onMessageReceived(from, message);
+            	}
+            }
+            if (mListeners.containsKey("JX_ANY_CHANNEL")) {
+            	for (JunctionListener listener : mListeners.get("JX_ANY_CHANNEL")) {
             		listener.onMessageReceived(from, message);
             	}
             }

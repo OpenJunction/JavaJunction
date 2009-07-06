@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.cometd.Message;
 
-public abstract class MessageHandler {
+public abstract class MessageHandler implements JunctionListener { //TODO: temporary
 	/**
 	 * Stream-selecting filters;
 	 * These filters allow Junction to route messages
@@ -36,7 +36,7 @@ public abstract class MessageHandler {
 	/**
 	 * Message handling
 	 */
-	public abstract void onMessageReceived(MessageHeader header, Message message);
+	//public abstract void onMessageReceived(MessageHeader header, Message message);
 	
 	/**
 	 * How to add response capabilities?

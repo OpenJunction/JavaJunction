@@ -2,6 +2,7 @@ package edu.stanford.prpl.junction.api.activity;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.cometd.Message;
 
@@ -27,7 +28,7 @@ public interface Junction {
 	 * Actor Management
 	 */
 	
-	public void registerActor(String role, JunctionActor actor);
+	public void registerActor(JunctionActor actor);
 	public List<String> getActorsForRole(String role);
 	// getActorsForHuman(String id); // some way of getting actor(s) associated with a person
 	//public void onActorJoin(JunctionActor actor); // or do we want registerActorJoinHandler()
@@ -35,10 +36,9 @@ public interface Junction {
 	/**
 	 * Actor Invitation
 	 */
-	public void inviteActor(String role, URL host, String waiter);
+	public void requestService(String role, URL host, String serviceName);
 	public URL getInvitationURL();
 	public URL getInvitationURL(String requestedRole);
-	//public URL getInvitationURL(String role);
 	// there will also be device-specific methods, EG QR codes / contact list on Android
 	
 	/**
@@ -46,10 +46,10 @@ public interface Junction {
 	 */
 	
 	// send
-	public void sendMessageToChannel(String channel, Message message);
-	public void sendMessageToRole(String role, Message message);
-	public void sendMessageToActor(String actorID, Message message);
-	public void sendMessageToSession(Message message);
+	public void sendMessageToChannel(String channel, Map<String,Object> message);
+	public void sendMessageToRole(String role, Map<String,Object> message);
+	public void sendMessageToActor(String actorID, Map<String,Object> message);
+	public void sendMessageToSession(Map<String,Object> message);
 	
 	// receive
 	public void registerMessageHandler(MessageHandler handler);

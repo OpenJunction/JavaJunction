@@ -1,10 +1,13 @@
 package edu.stanford.prpl.junction.sample.poker;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
-import edu.stanford.prpl.junction.api.activity.JunctionActivity;
-import edu.stanford.prpl.junction.api.activity.JunctionRole;
+import edu.stanford.prpl.junction.api.activity.JunctionService;
+import edu.stanford.prpl.junction.impl.Junction;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
+import edu.stanford.prpl.junction.impl.JunctionMakerService;
 
 public class PokerRunner {
 	
@@ -18,8 +21,25 @@ public class PokerRunner {
 			return;
 		}
 		
+		
+		// register the JunctionMakerService
+		// This will already be available when
+		// we have a true Junction Server
+		JunctionService waiter = JunctionMakerService.newInstance();
+		waiter.register(url);
+		
+
+		////////////////////////////////////////////////////
+		Map<String,Object>desc = new HashMap<String, Object>();
+		desc.put("ad","poker");
+		
+		
 		JunctionMaker jm = new JunctionMaker(url);
-		JunctionActivity activity = jm.newActivity("poker");
-		activity.registerActor("dealer", new PokerDealer());
+		Junction activity = jm.newJunction(desc);
+		new PokerDealer().join(activity);
+		
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {}
 	}
 }

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import edu.stanford.prpl.junction.api.activity.JunctionRole;
 
 public class JunctionMaker {
 	private URL mHostURL;
@@ -44,7 +43,7 @@ public class JunctionMaker {
 		// creating an activity is an activity using a JunctionService.
 		// Invite the JunctionMaker service to the session.
 		// This service will be bundled with all Junction servers.
-		activity.inviteActor("JunctionMaker", mHostURL, "JunctionMaker");		
+		activity.requestService("JunctionMaker", mHostURL, "edu.stanford.prpl.junction.impl.JunctionMakerService");		
 		return activity;
 	}
 }

@@ -55,7 +55,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		
 		Map<String,Object>params = new HashMap<String, Object>();
 		params.put("host",mHostURL);
+		params.put("sessionID", mSessionID);
 		mManager = new JunctionManager(params);
+		
 		// set activity ID
 		// instantiate mManager
 		init();
@@ -85,29 +87,57 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	}
 	
 	
-	public void registerActor(String role, JunctionActor actor) {
-		System.out.println("adding actor for role " + role);
+	public void registerActor(final JunctionActor actor) {
+		System.out.println("adding actor for role " + actor.getRole());
 		mActors.add(actor);
 		
 		// TODO: formalize this and pair w/ JunctionMaker; 
 		// keep mActors synched better w/ JunctionManager using a stateful proxy?
-		Map<String,Object>message = new HashMap<String, Object>();
-		message.put("role",role);
-		message.put("actorID",actor.getActorID());
+		registerMessageHandler(new MessageHandler() {
+
+			public void onMessageReceived(Client from, Message message) {
+				if (message.getChannel().equals(mManager.channelForSystem())) {
+					Map<String,Object>data = (Map<String,Object>)message.getData();
+					if (data == null) return;
+					if (data.containsKey("action") && data.get("action").equals("join")) {
+						if (!data.get("actorID").equals(actor.getActorID())) {
+							Map<String,Object>resp = new HashMap<String, Object>();
+							resp.put("action","join");
+							resp.put("status","responding"); // new member; strangers should introduce themselves
+							resp.put("role",actor.getRole());
+							resp.put("actorID",actor.getActorID());
+							sendMessageToSystem(message);
+							
+							
+							
+							System.out.println("JOINED: " + data.get("role"));
+						}
+					}
+				}
+			}
+			
+		});
 		
-		mManager.publish(sessionChannel + "/junction", message);
+		
+		Map<String,Object>message = new HashMap<String, Object>();
+		message.put("action","join");
+		message.put("status","new"); // new member; strangers should introduce themselves
+		message.put("role",actor.getRole());
+		message.put("actorID",actor.getActorID());
+		sendMessageToSystem(message);
 	}
 	
 	
 	// TODO: use a URL for the service endpoint? (query == service)
-	public void inviteActor(String role, URL host, String serviceName) {
+	public void requestService(String role, URL host, String serviceName) {
 		System.out.println("inviting actor for role " + role);
 		
 		Map<String,Object>message = new HashMap<String, Object>();
 		//message.put("sessionID",getSessionID());
 		//message.put("activityHost",mHostURL);
 		message.put("activityURL", getInvitationURL(role));
-		mManager.publish("/srv/"+serviceName, message);
+		message.put("serviceName", serviceName);
+		mManager.publish("/srv/ServiceFactory", message);
 	}
 	
 	
@@ -120,12 +150,15 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	
 	
 	class OnStartListener implements JunctionListener {
+		private boolean started=false;
 		public void onMessageReceived(Client from, Message message) {
-			if (message.getData() == null) return;
+			if (message.getData() == null || started) return;
 			
 			for (JunctionActor actor : mActors) {
 					actor.onActivityStart();
 			}
+			started=true;
+			// mManager.removeListener(this);
 		}
 	}
 
@@ -146,25 +179,30 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	}
 
 	public void registerMessageHandler(MessageHandler handler) {
-		// TODO Auto-generated method stub
-		
+		// TODO: reconcile channel w/ handler
+		// will have to rewrite the handling stuff down to the bayeux layer
+		mManager.addListener(handler);
 	}
 
-	public void sendMessageToActor(String actorID, Message message) {
+	public void sendMessageToActor(String actorID, Map<String,Object> message) {
 		mManager.publish(mManager.channelForClient(actorID), message);
 		
 	}
 
-	public void sendMessageToChannel(String channel, Message message) {
+	public void sendMessageToChannel(String channel, Map<String,Object> message) {
 		mManager.publish(channel, message);
 		
 	}
+	
+	protected void sendMessageToSystem(Map<String,Object>message) {
+		mManager.publish(mManager.channelForSystem(), message);
+	}
 
-	public void sendMessageToRole(String role, Message message) {
+	public void sendMessageToRole(String role, Map<String,Object> message) {
 		mManager.publish(mManager.channelForRole(role), message);
 	}
 
-	public void sendMessageToSession(Message message) {
+	public void sendMessageToSession(Map<String,Object> message) {
 		mManager.publish(mManager.channelForSession(), message);
 		
 	}
