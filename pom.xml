@@ -13,7 +13,7 @@
   <artifactId>Junction</artifactId>
   <version>0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>junction</name>
+  <name>Junction</name>
   <description>JAVA Junction Manager</description>
   <dependencies>
     <dependency>
