@@ -18,9 +18,7 @@ public class PokerDealer extends JunctionActor {
 	}
 	
 	@Override
-	public void onActivityJoin(Junction activity) { // ActivityInstance, really
-		super.onActivityJoin(activity);
-		
+	public void onActivityJoin() { // ActivityInstance, really
 		System.out.println("Dealer connected to activity.");
 		//activity.start();
 	}

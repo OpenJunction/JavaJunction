@@ -7,11 +7,19 @@ import edu.stanford.prpl.junction.api.activity.JunctionService;
 import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 
-public class JunctionMakerService extends JunctionService {
+/**
+ * This class allows a remote client to subscribe to a channel without having
+ * to open a new connection for it. It may be useful for a singleton service 
+ * expecting to connect to many activities.
+ * @author bdodson
+ *
+ */
+public class ForwardingService extends JunctionService {
+	private String mChannel; // TODO: this needs to be on another server
 	
-	private JunctionMakerService() {}
+	private ForwardingService() {}
 	public static JunctionService newInstance() {
-		return new JunctionMakerService();
+		return new ForwardingService();
 	}
 	
 	@Override
@@ -21,20 +29,20 @@ public class JunctionMakerService extends JunctionService {
 
 	@Override
 	public void onActivityStart() {
-		System.out.println("JunctionMaker: activity has started!");
 	}
 	
 	@Override
 	public void onActivityJoin() {
-		System.out.println("JunctionMaker joined activity w/ session id " + getJunction().getSessionID());
-		getJunction().start();
 	}
 
 	@Override
 	public MessageHandler getMessageHandler() {
 		return new MessageHandler() {
 			public void onMessageReceived(Client from, Message message) {
-				System.out.println("maker got message: " + message);
+				// TODO: get a new Junction for remote server
+				// Figure out how to preserve sender info
+				// ('originator' field or something?)
+				getJunction().sendMessageToChannel(mChannel, message);
 			}
 		};
 	}

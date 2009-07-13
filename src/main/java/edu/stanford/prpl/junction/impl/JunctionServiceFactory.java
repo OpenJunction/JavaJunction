@@ -27,7 +27,6 @@ public class JunctionServiceFactory extends JunctionService {
 				try {
 					Map<String,Object> data = (Map<String,Object>)message.get("data");
 					URL activityURL = new URL((String)((String)data.get("activityURL")));
-					Junction activity = new Junction(activityURL);
 					
 					// TODO: support a factory mapping from serviceName => class
 					String className = (String)data.get("serviceName");
@@ -59,7 +58,11 @@ public class JunctionServiceFactory extends JunctionService {
 					}
 					
 					service.setRole(localRole);
-					service.join(activity);
+					
+					
+					JunctionMaker.getInstance().newJunction(activityURL,service);
+					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

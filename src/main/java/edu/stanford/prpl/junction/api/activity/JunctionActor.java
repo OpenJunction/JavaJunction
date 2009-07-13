@@ -6,6 +6,8 @@ import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 import edu.stanford.prpl.junction.impl.Junction;
 
+// TODO: Make interface along with abstract class, for those who really need it.
+
 public abstract class JunctionActor {
 	protected Junction mJunction;
 	private String actorID;
@@ -20,19 +22,12 @@ public abstract class JunctionActor {
 		mRole = role;
 	}
 	
-	public final void join(Junction junction) {
-		mJunction = junction;
-		MessageHandler handler = getMessageHandler();
-		if (handler != null) {
-			junction.registerMessageHandler(handler);
-		}
-
-		junction.registerActor(this);
-		onActivityJoin(junction);
+	public void onActivityJoin() {
+		
 	}
 	
-	public void onActivityJoin(Junction activity) {
-		
+	public void setJunction(Junction j) {
+		mJunction=j;
 	}
 	
 	public Junction getJunction() {

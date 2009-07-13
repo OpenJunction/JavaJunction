@@ -34,10 +34,10 @@ public class PokerRunner {
 		desc.put("ad","poker");
 		
 		
-		JunctionMaker jm = new JunctionMaker(url);
-		Junction activity = jm.newJunction(desc);
+		JunctionMaker jm = JunctionMaker.getInstance(url);
+		jm.newJunction(desc, new PokerDealer());
 		
-		new PokerDealer().join(activity);
+		
 		
 		try {
 			Thread.sleep(5000);

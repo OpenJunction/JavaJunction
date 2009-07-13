@@ -92,6 +92,12 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	public void registerActor(final JunctionActor actor) {
 		System.out.println("adding actor for role " + actor.getRole());
 		mOwner = actor;
+		mOwner.setJunction(this);
+		
+		MessageHandler handler = actor.getMessageHandler();
+		if (handler != null) {
+			registerMessageHandler(handler);
+		}
 		
 		// TODO: formalize this and pair w/ JunctionMaker; 
 		// keep mActors synched better w/ JunctionManager using a stateful proxy?
@@ -114,6 +120,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 							
 							
 							mPeers.put((String)data.get("actorID"), (String)data.get("role"));
+						} else {
+							// actor's own join event. TODO: launch this for any join event?
+							mOwner.onActivityJoin();
 						}
 					}
 				}
@@ -128,6 +137,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		message.put("role",actor.getRole());
 		message.put("actorID",actor.getActorID());
 		sendMessageToSystem(message);
+
 	}
 	
 	
