@@ -1,1973 +1,0 @@
-+ Error stacktraces are turned on.
-Maven version: 2.0.9
-Java version: 1.6.0_13
-OS name: "linux" version: "2.6.28-11-generic" arch: "i386" Family: "unix"
-[DEBUG] Building Maven user-level plugin registry from: '/home/bdodson/.m2/plugin-registry.xml'
-[DEBUG] Building Maven global-level plugin registry from: '/usr/share/maven2/conf/plugin-registry.xml'
-[INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'assembly'.
-[DEBUG] Loading plugin prefixes from group: org.apache.maven.plugins
-[DEBUG] Loading plugin prefixes from group: org.codehaus.mojo
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-1/maven-assembly-plugin-2.2-beta-1.pom
-4/12K4/12K5/12K6/12K9/12K12/12K12/12K12K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Retrieving parent-POM: org.apache.maven.plugins:maven-plugins::8 for project: null:maven-assembly-plugin:maven-plugin:2.2-beta-1 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven-parent::5 for project: org.apache.maven.plugins:maven-plugins:pom:8 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache:apache::3 for project: org.apache.maven:maven-parent:pom:5 from the repository.
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-1/maven-assembly-plugin-2.2-beta-1.jar
-1/150K2/150K4/150K5/150K6/150K8/150K9/150K11/150K12/150K13/150K15/150K16/150K18/150K19/150K20/150K22/150K23/150K25/150K26/150K28/150K29/150K30/150K32/150K33/150K35/150K36/150K37/150K39/150K40/150K42/150K43/150K45/150K47/150K49/150K52/150K53/150K54/150K56/150K57/150K59/150K60/150K61/150K63/150K64/150K66/150K67/150K69/150K73/150K77/150K81/150K85/150K89/150K93/150K97/150K101/150K105/150K109/150K111/150K112/150K114/150K115/150K117/150K118/150K119/150K121/150K122/150K125/150K127/150K128/150K129/150K131/150K132/150K134/150K136/150K138/150K139/150K142/150K144/150K145/150K148/150K150/150K150K downloaded
-[DEBUG]   Artifact resolved
-[INFO] ------------------------------------------------------------------------
-[INFO] Building junctionmanager
-[INFO]    task-segment: [assembly:assembly] (aggregator-style)
-[INFO] ------------------------------------------------------------------------
-[INFO] Preparing assembly:assembly
-[INFO] ------------------------------------------------------------------------
-[INFO] Building junctionmanager
-[INFO] ------------------------------------------------------------------------
-[DEBUG] Retrieving parent-POM: org.apache.maven.plugins:maven-plugins::1 for project: null:maven-resources-plugin:maven-plugin:2.2 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven-parent::1 for project: org.apache.maven.plugins:maven-plugins:pom:1 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache:apache::1 for project: org.apache.maven:maven-parent:pom:1 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache.maven.surefire:surefire::2.4.2 for project: org.apache.maven.plugins:maven-surefire-plugin:maven-plugin:null from the repository.
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven-parent::7 for project: org.apache.maven.surefire:surefire:pom:2.4.2 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache:apache::4 for project: org.apache.maven:maven-parent:pom:7 from the repository.
-[DEBUG] Adding managed dependencies for org.apache.maven.plugins:maven-surefire-plugin
-[DEBUG]   org.apache.maven.surefire:surefire-api:jar:2.4.2
-[DEBUG]   org.apache.maven.surefire:surefire-booter:jar:2.4.2
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.9
-[DEBUG] Retrieving parent-POM: org.apache.maven.plugins:maven-plugins::10 for project: null:maven-jar-plugin:maven-plugin:2.2 from the repository.
-[DEBUG] Plugin dependencies for:
-
-org.apache.maven.plugins:maven-resources-plugin:2.2
-
-are:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.apache.maven:maven-project:jar:2.0:runtime
-org.apache.maven:maven-model:jar:2.0:runtime
-org.codehaus.plexus:plexus-utils:jar:1.1:runtime
-
-
-[DEBUG] org.apache.maven.plugins:maven-resources-plugin:maven-plugin:2.2:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0 for project: org.apache.maven:maven-plugin-api:jar:2.0 from the repository.
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-api
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-project
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven:maven-project:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-profile
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-profile:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-model
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]       org.apache.maven:maven-model:jar:2.0:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]         junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]         classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-model:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact-manager
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-repository-metadata
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]       org.apache.maven:maven-repository-metadata:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]       org.apache.maven:maven-artifact:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]       junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]       classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-model:jar:2.0:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.4 for project: null:plexus-utils:jar:1.1 from the repository.
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.1)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1:runtime (selected for runtime)
-[DEBUG]  The following artifacts were filtered out for plugin: org.apache.maven.plugins:maven-resources-plugin:2.2 because they're already in the core of Maven:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.apache.maven:maven-project:jar:2.0:runtime
-org.apache.maven:maven-model:jar:2.0:runtime
-
-These will use the artifact files already in the core ClassRealm instead, to allow them to be included in PluginDescriptor.getArtifacts().
-
-
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-resources-plugin:2.2:resources' -->
-[DEBUG]   (f) filters = []
-[DEBUG]   (f) outputDirectory = /home/bdodson/Desktop/junctionmanager/target/classes
-[DEBUG]   (f) project = MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml
-[DEBUG]   (f) resources = [Resource {targetPath: null, filtering: false, FileSet {directory: /home/bdodson/Desktop/junctionmanager/src/main/resources, PatternSet [includes: {}, excludes: {}]}}]
-[DEBUG] -- end configuration --
-[INFO] [resources:resources]
-[INFO] Using default encoding to copy filtered resources.
-[DEBUG] edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT (selected for null)
-[DEBUG] Retrieving parent-POM: org.cometd.java:cometd-java-project::1.0.beta8 for project: org.cometd.java:cometd-java-client:jar:null from the repository.
-[DEBUG] Retrieving parent-POM: org.cometd:cometd-project::1.0.beta8 for project: org.cometd.java:cometd-java-project:pom:null from the repository.
-[DEBUG] Adding managed dependencies for org.cometd.java:cometd-java-client
-[DEBUG]   org.cometd.java:cometd-api:jar:1.0.beta8
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   javax.servlet:servlet-api:jar:2.5:provided
-[DEBUG]   org.cometd.java:cometd-java-client:jar:1.0.beta8:compile (selected for compile)
-[DEBUG] Adding managed dependencies for org.cometd.java:cometd-java-server
-[DEBUG]   org.cometd.java:cometd-api:jar:1.0.beta8
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   javax.servlet:servlet-api:jar:2.5:provided
-[DEBUG]     org.cometd.java:cometd-java-server:jar:1.0.beta8:compile (selected for compile)
-[DEBUG] Adding managed dependencies for org.cometd.java:cometd-api
-[DEBUG]   org.cometd.java:cometd-api:jar:1.0.beta8
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   javax.servlet:servlet-api:jar:2.5:provided
-[DEBUG]       org.cometd.java:cometd-api:jar:1.0.beta8:compile (selected for compile)
-[DEBUG] Retrieving parent-POM: org.eclipse.jetty:jetty-project::7.0.0.M1 for project: null:jetty-util:jar:null from the repository.
-[DEBUG] Retrieving parent-POM: org.eclipse.jetty:jetty-parent::9 for project: org.eclipse.jetty:jetty-project:pom:7.0.0.M1 from the repository.
-[DEBUG] Adding managed dependencies for unknown:jetty-util
-[DEBUG]   javax.servlet:servlet-api:jar:2.5
-[DEBUG]   org.apache.maven:maven-plugin-tools-api:jar:2.0
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   org.slf4j:jcl104-over-slf4j:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-simple:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-api:jar:1.5.6
-[DEBUG]   ant:ant:jar:1.6.5
-[DEBUG]   org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
-[DEBUG]   javax.mail:mail:jar:1.4
-[DEBUG]   javax.activation:activation:jar:1.1
-[DEBUG]       org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Adding managed dependencies for unknown:jetty-continuation
-[DEBUG]   javax.servlet:servlet-api:jar:2.5
-[DEBUG]   org.apache.maven:maven-plugin-tools-api:jar:2.0
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   org.slf4j:jcl104-over-slf4j:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-simple:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-api:jar:1.5.6
-[DEBUG]   ant:ant:jar:1.6.5
-[DEBUG]   org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
-[DEBUG]   javax.mail:mail:jar:1.4
-[DEBUG]   javax.activation:activation:jar:1.1
-[DEBUG]       org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         javax.servlet:servlet-api:jar:2.5:compile (selected for compile)
-[DEBUG] Adding managed dependencies for unknown:jetty-client
-[DEBUG]   javax.servlet:servlet-api:jar:2.5
-[DEBUG]   org.apache.maven:maven-plugin-tools-api:jar:2.0
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   org.slf4j:jcl104-over-slf4j:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-simple:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-api:jar:1.5.6
-[DEBUG]   ant:ant:jar:1.6.5
-[DEBUG]   org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
-[DEBUG]   javax.mail:mail:jar:1.4
-[DEBUG]   javax.activation:activation:jar:1.1
-[DEBUG]     org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Adding managed dependencies for org.eclipse.jetty:jetty-http
-[DEBUG]   javax.servlet:servlet-api:jar:2.5
-[DEBUG]   org.apache.maven:maven-plugin-tools-api:jar:2.0
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   org.slf4j:jcl104-over-slf4j:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-simple:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-api:jar:1.5.6
-[DEBUG]   ant:ant:jar:1.6.5
-[DEBUG]   org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
-[DEBUG]   javax.mail:mail:jar:1.4
-[DEBUG]   javax.activation:activation:jar:1.1
-[DEBUG]       org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Adding managed dependencies for org.eclipse.jetty:jetty-io
-[DEBUG]   javax.servlet:servlet-api:jar:2.5
-[DEBUG]   org.apache.maven:maven-plugin-tools-api:jar:2.0
-[DEBUG]   junit:junit:jar:3.8.2
-[DEBUG]   org.slf4j:jcl104-over-slf4j:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-simple:jar:1.5.6
-[DEBUG]   org.slf4j:slf4j-api:jar:1.5.6
-[DEBUG]   ant:ant:jar:1.6.5
-[DEBUG]   org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1.1
-[DEBUG]   javax.mail:mail:jar:1.4
-[DEBUG]   javax.activation:activation:jar:1.1
-[DEBUG]         org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Plugin dependencies for:
-
-org.apache.maven.plugins:maven-compiler-plugin:2.0.2
-
-are:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime
-org.codehaus.plexus:plexus-compiler-api:jar:1.5.3:runtime
-org.codehaus.plexus:plexus-compiler-manager:jar:1.5.3:runtime
-org.codehaus.plexus:plexus-compiler-javac:jar:1.5.3:runtime
-org.apache.maven:maven-artifact:jar:2.0:runtime
-
-
-[DEBUG] org.apache.maven.plugins:maven-compiler-plugin:maven-plugin:2.0.2:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0:runtime (selected for runtime)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-compiler::1.5.3 for project: null:plexus-compiler-api:jar:1.5.3 from the repository.
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-components::1.1.6 for project: null:plexus-compiler:pom:1.5.3 from the repository.
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.8 for project: org.codehaus.plexus:plexus-components:pom:1.1.6 from the repository.
-[DEBUG]   org.codehaus.plexus:plexus-compiler-api:jar:1.5.3:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]       junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]       classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG]   org.codehaus.plexus:plexus-compiler-manager:jar:1.5.3:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-compilers::1.5.3 for project: null:plexus-compiler-javac:jar:1.5.3 from the repository.
-[DEBUG]   org.codehaus.plexus:plexus-compiler-javac:jar:1.5.3:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.5:runtime (removed - nearer found: 1.0.4)
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0:runtime (selected for runtime)
-[DEBUG]  The following artifacts were filtered out for plugin: org.apache.maven.plugins:maven-compiler-plugin:2.0.2 because they're already in the core of Maven:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.apache.maven:maven-artifact:jar:2.0:runtime
-
-These will use the artifact files already in the core ClassRealm instead, to allow them to be included in PluginDescriptor.getArtifacts().
-
-
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-compiler-plugin:2.0.2:compile' -->
-[DEBUG]   (f) basedir = /home/bdodson/Desktop/junctionmanager
-[DEBUG]   (f) buildDirectory = /home/bdodson/Desktop/junctionmanager/target
-[DEBUG]   (f) classpathElements = [/home/bdodson/Desktop/junctionmanager/target/classes, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-client/1.0.beta8/cometd-java-client-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-server/1.0.beta8/cometd-java-server-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-api/1.0.beta8/cometd-api-1.0.beta8.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-util/7.0.0.M1/jetty-util-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-continuation/7.0.0.M1/jetty-continuation-7.0.0.M1.jar, /home/bdodson/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-client/7.0.0.M1/jetty-client-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-http/7.0.0.M1/jetty-http-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-io/7.0.0.M1/jetty-io-7.0.0.M1.jar]
-[DEBUG]   (f) compileSourceRoots = [/home/bdodson/Desktop/junctionmanager/src/main/java]
-[DEBUG]   (f) compilerId = javac
-[DEBUG]   (f) debug = true
-[DEBUG]   (f) failOnError = true
-[DEBUG]   (f) fork = false
-[DEBUG]   (f) optimize = false
-[DEBUG]   (f) outputDirectory = /home/bdodson/Desktop/junctionmanager/target/classes
-[DEBUG]   (f) outputFileName = junctionmanager-1.0-SNAPSHOT
-[DEBUG]   (f) projectArtifact = edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT
-[DEBUG]   (f) showDeprecation = false
-[DEBUG]   (f) showWarnings = false
-[DEBUG]   (f) source = 1.5
-[DEBUG]   (f) staleMillis = 0
-[DEBUG]   (f) target = 1.5
-[DEBUG]   (f) verbose = false
-[DEBUG] -- end configuration --
-[INFO] [compiler:compile]
-[DEBUG] Using compiler 'javac'.
-[DEBUG] Source directories: [/home/bdodson/Desktop/junctionmanager/src/main/java]
-[DEBUG] Classpath: [/home/bdodson/Desktop/junctionmanager/target/classes
- /home/bdodson/.m2/repository/org/cometd/java/cometd-java-client/1.0.beta8/cometd-java-client-1.0.beta8.jar
- /home/bdodson/.m2/repository/org/cometd/java/cometd-java-server/1.0.beta8/cometd-java-server-1.0.beta8.jar
- /home/bdodson/.m2/repository/org/cometd/java/cometd-api/1.0.beta8/cometd-api-1.0.beta8.jar
- /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-util/7.0.0.M1/jetty-util-7.0.0.M1.jar
- /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-continuation/7.0.0.M1/jetty-continuation-7.0.0.M1.jar
- /home/bdodson/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar
- /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-client/7.0.0.M1/jetty-client-7.0.0.M1.jar
- /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-http/7.0.0.M1/jetty-http-7.0.0.M1.jar
- /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-io/7.0.0.M1/jetty-io-7.0.0.M1.jar]
-[DEBUG] Output directory: /home/bdodson/Desktop/junctionmanager/target/classes
-[INFO] Nothing to compile - all classes are up to date
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-resources-plugin:2.2:testResources' -->
-[DEBUG]   (f) filters = []
-[DEBUG]   (f) outputDirectory = /home/bdodson/Desktop/junctionmanager/target/test-classes
-[DEBUG]   (f) project = MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml
-[DEBUG]   (f) resources = [Resource {targetPath: null, filtering: false, FileSet {directory: /home/bdodson/Desktop/junctionmanager/src/test/resources, PatternSet [includes: {}, excludes: {}]}}]
-[DEBUG] -- end configuration --
-[INFO] [resources:testResources]
-[INFO] Using default encoding to copy filtered resources.
-[DEBUG] edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT (selected for null)
-[DEBUG]   org.cometd.java:cometd-java-client:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]     org.cometd.java:cometd-java-server:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.cometd.java:cometd-api:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         javax.servlet:servlet-api:jar:2.5:compile (selected for compile)
-[DEBUG]     org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-compiler-plugin:2.0.2:testCompile' -->
-[DEBUG]   (f) basedir = /home/bdodson/Desktop/junctionmanager
-[DEBUG]   (f) buildDirectory = /home/bdodson/Desktop/junctionmanager/target
-[DEBUG]   (f) classpathElements = [/home/bdodson/Desktop/junctionmanager/target/test-classes, /home/bdodson/Desktop/junctionmanager/target/classes, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-client/1.0.beta8/cometd-java-client-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-server/1.0.beta8/cometd-java-server-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-api/1.0.beta8/cometd-api-1.0.beta8.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-util/7.0.0.M1/jetty-util-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-continuation/7.0.0.M1/jetty-continuation-7.0.0.M1.jar, /home/bdodson/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-client/7.0.0.M1/jetty-client-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-http/7.0.0.M1/jetty-http-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-io/7.0.0.M1/jetty-io-7.0.0.M1.jar]
-[DEBUG]   (f) compileSourceRoots = [/home/bdodson/Desktop/junctionmanager/src/test/java]
-[DEBUG]   (f) compilerId = javac
-[DEBUG]   (f) debug = true
-[DEBUG]   (f) failOnError = true
-[DEBUG]   (f) fork = false
-[DEBUG]   (f) optimize = false
-[DEBUG]   (f) outputDirectory = /home/bdodson/Desktop/junctionmanager/target/test-classes
-[DEBUG]   (f) outputFileName = junctionmanager-1.0-SNAPSHOT
-[DEBUG]   (f) showDeprecation = false
-[DEBUG]   (f) showWarnings = false
-[DEBUG]   (f) source = 1.5
-[DEBUG]   (f) staleMillis = 0
-[DEBUG]   (f) target = 1.5
-[DEBUG]   (f) verbose = false
-[DEBUG] -- end configuration --
-[INFO] [compiler:testCompile]
-[DEBUG] Using compiler 'javac'.
-[INFO] No sources to compile
-[DEBUG] edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT (selected for null)
-[DEBUG]   org.cometd.java:cometd-java-client:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]     org.cometd.java:cometd-java-server:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.cometd.java:cometd-api:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         javax.servlet:servlet-api:jar:2.5:compile (selected for compile)
-[DEBUG]     org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Plugin dependencies for:
-
-org.apache.maven.plugins:maven-surefire-plugin:2.4.2
-
-are:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.apache.maven.surefire:surefire-booter:jar:2.4.2:runtime
-org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime
-org.apache.maven:maven-artifact:jar:2.0:runtime
-org.apache.maven:maven-project:jar:2.0:runtime
-org.apache.maven:maven-core:jar:2.0:runtime
-
-
-[DEBUG] org.apache.maven.plugins:maven-surefire-plugin:maven-plugin:2.4.2:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:surefire-booter
-[DEBUG]   org.apache.maven.surefire:surefire-api:jar:2.4.2
-[DEBUG]   org.apache.maven.surefire:surefire-booter:jar:2.4.2
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.9
-[DEBUG]   org.apache.maven.surefire:surefire-booter:jar:2.4.2:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:surefire-api
-[DEBUG]   org.apache.maven.surefire:surefire-api:jar:2.4.2
-[DEBUG]   org.apache.maven.surefire:surefire-booter:jar:2.4.2
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.9
-[DEBUG]     org.apache.maven.surefire:surefire-api:jar:2.4.2:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.11 for project: null:plexus-utils:jar:1.4.9 from the repository.
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]   org.apache.maven:maven-project:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-profile:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.apache.maven:maven-model:jar:2.0:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]         junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]         classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-model:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.apache.maven:maven-repository-metadata:jar:2.0:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]       org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]       junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]       classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-core
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven:maven-core:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-settings
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-settings:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG] Adding managed dependencies for unknown:maven-plugin-parameter-documenter
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-plugin-parameter-documenter:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG] Retrieving parent-POM: org.apache.maven.reporting:maven-reporting::2.0 for project: null:maven-reporting-api:jar:2.0 from the repository.
-[DEBUG] Adding managed dependencies for unknown:maven-reporting-api
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven.reporting:maven-reporting-api:jar:2.0:runtime (selected for runtime)
-[DEBUG]       doxia:doxia-sink-api:jar:1.0-alpha-4:runtime (selected for runtime)
-[DEBUG]     org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.apache.maven:maven-repository-metadata:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG] Adding managed dependencies for unknown:maven-error-diagnostics
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-error-diagnostics:jar:2.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-registry
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-plugin-registry:jar:2.0:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     commons-cli:commons-cli:jar:1.0:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-descriptor
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-plugin-descriptor:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-monitor
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-5
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-5
-[DEBUG]     org.apache.maven:maven-monitor:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-5:runtime (selected for runtime)
-[DEBUG]       com.jcraft:jsch:jar:0.1.23:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (applying version: 1.4.9)
-[DEBUG]  The following artifacts were filtered out for plugin: org.apache.maven.plugins:maven-surefire-plugin:2.4.2 because they're already in the core of Maven:
-
-org.apache.maven:maven-plugin-api:jar:2.0:runtime
-org.apache.maven:maven-artifact:jar:2.0:runtime
-org.apache.maven:maven-project:jar:2.0:runtime
-org.apache.maven:maven-core:jar:2.0:runtime
-
-These will use the artifact files already in the core ClassRealm instead, to allow them to be included in PluginDescriptor.getArtifacts().
-
-
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-surefire-plugin:2.4.2:test' -->
-[DEBUG]   (f) basedir = /home/bdodson/Desktop/junctionmanager
-[DEBUG]   (f) childDelegation = false
-[DEBUG]   (f) classesDirectory = /home/bdodson/Desktop/junctionmanager/target/classes
-[DEBUG]   (f) classpathElements = [/home/bdodson/Desktop/junctionmanager/target/test-classes, /home/bdodson/Desktop/junctionmanager/target/classes, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-client/1.0.beta8/cometd-java-client-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-java-server/1.0.beta8/cometd-java-server-1.0.beta8.jar, /home/bdodson/.m2/repository/org/cometd/java/cometd-api/1.0.beta8/cometd-api-1.0.beta8.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-util/7.0.0.M1/jetty-util-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-continuation/7.0.0.M1/jetty-continuation-7.0.0.M1.jar, /home/bdodson/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-client/7.0.0.M1/jetty-client-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-http/7.0.0.M1/jetty-http-7.0.0.M1.jar, /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-io/7.0.0.M1/jetty-io-7.0.0.M1.jar]
-[DEBUG]   (f) disableXmlReport = false
-[DEBUG]   (f) enableAssertions = true
-[DEBUG]   (f) forkMode = once
-[DEBUG]   (f) junitArtifactName = junit:junit
-[DEBUG]   (f) localRepository = [local] -> file:///home/bdodson/.m2/repository
-[DEBUG]   (f) pluginArtifactMap = {org.codehaus.plexus:plexus-utils=org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime, org.apache.maven.surefire:surefire-api=org.apache.maven.surefire:surefire-api:jar:2.4.2:runtime, org.apache.maven:maven-project=org.apache.maven:maven-project:jar:2.0:runtime, org.apache.maven:maven-artifact=org.apache.maven:maven-artifact:jar:2.0:runtime, org.apache.maven:maven-plugin-api=org.apache.maven:maven-plugin-api:jar:2.0:runtime, org.apache.maven.surefire:surefire-booter=org.apache.maven.surefire:surefire-booter:jar:2.4.2:runtime, org.apache.maven:maven-core=org.apache.maven:maven-core:jar:2.0:runtime}
-[DEBUG]   (f) printSummary = true
-[DEBUG]   (f) project = MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml
-[DEBUG]   (f) projectArtifactMap = {org.eclipse.jetty:jetty-util=org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile, org.eclipse.jetty:jetty-continuation=org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile, org.eclipse.jetty:jetty-io=org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile, org.eclipse.jetty:jetty-http=org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile, javax.servlet:servlet-api=javax.servlet:servlet-api:jar:2.5:compile, org.eclipse.jetty:jetty-client=org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile, org.cometd.java:cometd-api=org.cometd.java:cometd-api:jar:1.0.beta8:compile, org.cometd.java:cometd-java-server=org.cometd.java:cometd-java-server:jar:1.0.beta8:compile, org.cometd.java:cometd-java-client=org.cometd.java:cometd-java-client:jar:1.0.beta8:compile}
-[DEBUG]   (f) redirectTestOutputToFile = false
-[DEBUG]   (f) remoteRepositories = [[central] -> http://repo1.maven.org/maven2]
-[DEBUG]   (f) reportFormat = brief
-[DEBUG]   (f) reportsDirectory = /home/bdodson/Desktop/junctionmanager/target/surefire-reports
-[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@f102d3
-[DEBUG]   (f) testClassesDirectory = /home/bdodson/Desktop/junctionmanager/target/test-classes
-[DEBUG]   (f) testNGArtifactName = org.testng:testng
-[DEBUG]   (f) testSourceDirectory = /home/bdodson/Desktop/junctionmanager/src/test/java
-[DEBUG]   (f) trimStackTrace = true
-[DEBUG]   (f) useFile = true
-[DEBUG]   (f) workingDirectory = /home/bdodson/Desktop/junctionmanager
-[DEBUG] -- end configuration --
-[INFO] [surefire:test]
-[INFO] No tests to run.
-[DEBUG] edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT (selected for null)
-[DEBUG]   org.cometd.java:cometd-java-client:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]     org.cometd.java:cometd-java-server:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.cometd.java:cometd-api:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         javax.servlet:servlet-api:jar:2.5:compile (selected for compile)
-[DEBUG]     org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] Plugin dependencies for:
-
-org.apache.maven.plugins:maven-jar-plugin:2.2
-
-are:
-
-org.apache.maven:maven-plugin-api:jar:2.0.6:runtime
-org.apache.maven:maven-project:jar:2.0.7:runtime
-org.apache.maven:maven-archiver:jar:2.3:runtime
-org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-9:runtime
-org.codehaus.plexus:plexus-io:jar:1.0-alpha-1:runtime
-commons-lang:commons-lang:jar:2.1:runtime
-org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime
-
-
-[DEBUG] org.apache.maven.plugins:maven-jar-plugin:maven-plugin:2.2:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0.6 for project: null:maven-plugin-api:jar:null from the repository.
-[DEBUG] Adding managed dependencies for unknown:maven-plugin-api
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.6
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.6
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.6
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.6:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0.7 for project: null:maven-project:jar:null from the repository.
-[DEBUG] Adding managed dependencies for unknown:maven-project
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-settings
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]     org.apache.maven:maven-settings:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-model
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]       org.apache.maven:maven-model:jar:2.0.7:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.4.1:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.4.1:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-containers::1.0.3 for project: null:plexus-container-default:jar:1.0-alpha-9-stable-1 from the repository.
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1:runtime (selected for runtime)
-[DEBUG]         junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.4.1)
-[DEBUG]         classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-profile
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]     org.apache.maven:maven-profile:jar:2.0.7:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-model:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-artifact-manager
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-repository-metadata
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]       org.apache.maven:maven-repository-metadata:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-artifact
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]       org.apache.maven:maven-artifact:jar:2.0.7:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.wagon:wagon::1.0-beta-2 for project: null:wagon-provider-api:jar:1.0-beta-2 from the repository.
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven-parent::4 for project: org.apache.maven.wagon:wagon:pom:1.0-beta-2 from the repository.
-[DEBUG] Adding managed dependencies for unknown:wagon-provider-api
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-common-test:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-common:jar:1.0-beta-2
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]       org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.4.1)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-registry
-[DEBUG]   org.apache.maven:maven-plugin-descriptor:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-error-diagnostics:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-model:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.7
-[DEBUG]   org.apache.maven.reporting:maven-reporting-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-repository-metadata:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-artifact-test:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-settings:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-profile:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-registry:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.7
-[DEBUG]   org.apache.maven:maven-monitor:jar:2.0.7
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-beta-2
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-beta-2
-[DEBUG]   easymock:easymock:jar:1.2_Java1.3:test
-[DEBUG]   classworlds:classworlds:jar:1.1
-[DEBUG]     org.apache.maven:maven-plugin-registry:jar:2.0.7:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.4.1:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0.7:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1:runtime (selected for runtime)
-[DEBUG]       junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.4.1)
-[DEBUG]       classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.shared:maven-shared-components::8 for project: org.apache.maven:maven-archiver:jar:2.3 from the repository.
-[DEBUG]   org.apache.maven:maven-archiver:jar:2.3:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0:runtime (removed - nearer found: 2.0.7)
-[DEBUG]     org.apache.maven:maven-model:jar:2.0:runtime (removed - nearer found: 2.0.7)
-[DEBUG]     org.apache.maven:maven-project:jar:2.0:runtime (removed - nearer found: 2.0.7)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-components::1.1.9 for project: null:plexus-archiver:jar:1.0-alpha-9 from the repository.
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.10 for project: org.codehaus.plexus:plexus-components:pom:1.1.9 from the repository.
-[DEBUG]     org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-9:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-containers::1.0-alpha-15 for project: null:plexus-container-default:jar:1.0-alpha-15 from the repository.
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.9 for project: org.codehaus.plexus:plexus-containers:pom:1.0-alpha-15 from the repository.
-[DEBUG] Adding managed dependencies for unknown:plexus-container-default
-[DEBUG]   org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-6
-[DEBUG]   org.codehaus.plexus:plexus-component-api:jar:1.0-alpha-15
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.3
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-15:runtime (removed - nearer found: 1.0-alpha-9-stable-1)
-[DEBUG] Adding managed dependencies for unknown:plexus-component-api
-[DEBUG]   org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-6
-[DEBUG]   org.codehaus.plexus:plexus-component-api:jar:1.0-alpha-15
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.3
-[DEBUG]       org.codehaus.plexus:plexus-component-api:jar:1.0-alpha-15:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-6:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-io:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-9-stable-1)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-containers::1.0-alpha-16 for project: null:plexus-component-api:jar:1.0-alpha-16 from the repository.
-[DEBUG] Adding managed dependencies for unknown:plexus-component-api
-[DEBUG]   org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-7
-[DEBUG]   org.codehaus.plexus:plexus-component-api:jar:1.0-alpha-16
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.3
-[DEBUG]         org.codehaus.plexus:plexus-component-api:jar:1.0-alpha-16:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime (removed - nearer found: 1.4.1)
-[DEBUG]   org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-9:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-io:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG]   org.codehaus.plexus:plexus-io:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG]   commons-lang:commons-lang:jar:2.1:runtime (selected for runtime)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.1:runtime (removed - nearer found: 1.4.9)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.4.9:runtime (selected for runtime)
-[DEBUG]  The following artifacts were filtered out for plugin: org.apache.maven.plugins:maven-jar-plugin:2.2 because they're already in the core of Maven:
-
-org.apache.maven:maven-plugin-api:jar:2.0.6:runtime
-org.apache.maven:maven-project:jar:2.0.7:runtime
-
-These will use the artifact files already in the core ClassRealm instead, to allow them to be included in PluginDescriptor.getArtifacts().
-
-
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-jar-plugin:2.2:jar' -->
-[DEBUG]   (f) classesDirectory = /home/bdodson/Desktop/junctionmanager/target/classes
-[DEBUG]   (f) defaultManifestFile = /home/bdodson/Desktop/junctionmanager/target/classes/META-INF/MANIFEST.MF
-[DEBUG]   (f) finalName = junctionmanager-1.0-SNAPSHOT
-[DEBUG]   (f) forceCreation = false
-[DEBUG]   (f) outputDirectory = /home/bdodson/Desktop/junctionmanager/target
-[DEBUG]   (f) project = MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml
-[DEBUG]   (f) useDefaultManifestFile = false
-[DEBUG] -- end configuration --
-[INFO] [jar:jar]
-[DEBUG] isUp2date: false (Input file /home/bdodson/Desktop/junctionmanager/pom.xml is newer.)
-[INFO] Building jar: /home/bdodson/Desktop/junctionmanager/target/junctionmanager-1.0-SNAPSHOT.jar
-[DEBUG] adding directory META-INF/
-[DEBUG] adding entry META-INF/MANIFEST.MF
-[DEBUG] adding directory edu/
-[DEBUG] adding directory edu/stanford/
-[DEBUG] adding directory edu/stanford/prpl/
-[DEBUG] adding directory edu/stanford/prpl/junction/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/sql/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/datalog/
-[DEBUG] adding directory edu/stanford/prpl/junction/impl/
-[DEBUG] adding directory edu/stanford/prpl/junction/impl/object/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/object/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/messaging/
-[DEBUG] adding directory edu/stanford/prpl/junction/extra/
-[DEBUG] adding directory org/
-[DEBUG] adding directory org/json/
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/QueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SQLActor.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SendQuery.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SendQuery$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogActorQuerier.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogConstants$actor.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogQueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogConstants.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner$2.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogActorDB.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxInboundObjectStream$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxOutboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxInboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$1$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionCallback$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManagerFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$MessageRouter.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/ObjectStreamFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/InboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/OutboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionAPI.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionMessage.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionQuery.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionListener.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionQueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionResource.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionEndOfStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridgePair$HTTPClientConnection.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridgePair.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridge.class
-[DEBUG] adding entry org/json/JSONException.class
-[DEBUG] adding entry org/json/XML.class
-[DEBUG] adding entry org/json/JSONArray.class
-[DEBUG] adding entry org/json/JSONStringer.class
-[DEBUG] adding entry org/json/JSONObject$1.class
-[DEBUG] adding entry org/json/CookieList.class
-[DEBUG] adding entry org/json/JSONString.class
-[DEBUG] adding entry org/json/JSONWriter.class
-[DEBUG] adding entry org/json/Test.class
-[DEBUG] adding entry org/json/JSONTokener.class
-[DEBUG] adding entry org/json/HTTPTokener.class
-[DEBUG] adding entry org/json/Test$1Obj.class
-[DEBUG] adding entry org/json/Cookie.class
-[DEBUG] adding entry org/json/JSONObject$Null.class
-[DEBUG] adding entry org/json/CDL.class
-[DEBUG] adding entry org/json/HTTP.class
-[DEBUG] adding entry org/json/JSONML.class
-[DEBUG] adding entry org/json/XMLTokener.class
-[DEBUG] adding entry org/json/JSONObject.class
-[DEBUG] adding directory META-INF/maven/
-[DEBUG] adding directory META-INF/maven/edu.stanford.prpl.junction/
-[DEBUG] adding directory META-INF/maven/edu.stanford.prpl.junction/junctionmanager/
-[DEBUG] adding entry META-INF/maven/edu.stanford.prpl.junction/junctionmanager/pom.xml
-[DEBUG] adding entry META-INF/maven/edu.stanford.prpl.junction/junctionmanager/pom.properties
-[DEBUG] Plugin dependencies for:
-
-org.apache.maven.plugins:maven-assembly-plugin:2.2-beta-1
-
-are:
-
-org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-8:runtime
-org.apache.maven.shared:file-management:jar:1.1:runtime
-org.apache.maven:maven-plugin-api:jar:2.0.4:runtime
-org.apache.maven:maven-project:jar:2.0.4:runtime
-org.apache.maven:maven-core:jar:2.0.4:runtime
-org.apache.maven:maven-archiver:jar:2.2:runtime
-org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime
-org.codehaus.plexus:plexus-utils:jar:1.1:runtime
-org.apache.maven:maven-artifact:jar:2.0.4:runtime
-org.apache.maven:maven-artifact-manager:jar:2.0.4:runtime
-org.apache.maven.shared:maven-repository-builder:jar:1.0-alpha-1:runtime
-org.apache.maven.shared:maven-common-artifact-filters:jar:1.0-alpha-1:runtime
-
-
-[DEBUG] org.apache.maven.plugins:maven-assembly-plugin:maven-plugin:2.2-beta-1:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-8/plexus-archiver-1.0-alpha-8.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus-components::1.1.8 for project: null:plexus-archiver:jar:1.0-alpha-8 from the repository.
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/codehaus/plexus/plexus-components/1.1.8/plexus-components-1.1.8.pom
-2/2K2K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG]   org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-8:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.3:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-15:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-6:runtime (selected for runtime)
-[DEBUG]         junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]       junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.shared:maven-shared-components::4 for project: null:file-management:jar:1.1 from the repository.
-[DEBUG]   org.apache.maven.shared:file-management:jar:1.1:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-plugin-api:jar:2.0:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.apache.maven.shared:maven-shared-io:jar:1.0:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0.2 for project: org.apache.maven:maven-artifact:jar:2.0.2 from the repository.
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]       org.apache.maven:maven-artifact:jar:2.0.2:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact-manager
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]       org.apache.maven:maven-artifact-manager:jar:2.0.2:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-repository-metadata
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]         org.apache.maven:maven-repository-metadata:jar:2.0.2:runtime (selected for runtime)
-[DEBUG]           org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]         org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Retrieving parent-POM: org.apache.maven.wagon:wagon::1.0-alpha-6 for project: null:wagon-provider-api:jar:1.0-alpha-6 from the repository.
-[DEBUG] Adding managed dependencies for unknown:wagon-provider-api
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-alpha-6
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]         org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6:runtime (selected for runtime)
-[DEBUG]           org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG] Retrieving parent-POM: org.codehaus.plexus:plexus::1.0.5 for project: null:plexus-utils:jar:1.2 from the repository.
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.2:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0.4 for project: org.apache.maven:maven-plugin-api:jar:2.0.4 from the repository.
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-api
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0:runtime (removed - nearer found: 2.0.4)
-[DEBUG]   org.apache.maven:maven-plugin-api:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-project
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven:maven-project:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for unknown:maven-settings
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-settings:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-model
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]       org.apache.maven:maven-model:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Adding managed dependencies for unknown:maven-profile
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-profile:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     org.apache.maven:maven-model:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact-manager
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0.2:runtime (removed - nearer found: 2.0.4)
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-repository-metadata
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]       org.apache.maven:maven-repository-metadata:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]         org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]       org.apache.maven:maven-artifact:jar:2.0.4:runtime (removed - nearer found: 2.0.2)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0.2:runtime (removed - nearer found: 2.0.4)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-core/2.0.4/maven-core-2.0.4.pom
-1/5K2/5K4/5K5/5K5K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-core
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven:maven-core:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-file/1.0-alpha-7/wagon-file-1.0-alpha-7.pom
-441/441b441b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Retrieving parent-POM: org.apache.maven.wagon:wagon-providers::1.0-alpha-6 for project: null:wagon-file:jar:1.0-alpha-7 from the repository.
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-providers/1.0-alpha-6/wagon-providers-1.0-alpha-6.pom
-1/1K1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:wagon-file
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-alpha-6
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]     org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-plugin-parameter-documenter/2.0.4/maven-plugin-parameter-documenter-2.0.4.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:maven-plugin-parameter-documenter
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-plugin-parameter-documenter:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-http-lightweight/1.0-alpha-6/wagon-http-lightweight-1.0-alpha-6.pom
-855/855b855b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:wagon-http-lightweight
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-alpha-6
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]     org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.reporting:maven-reporting::2.0.4 for project: null:maven-reporting-api:jar:2.0.4 from the repository.
-[DEBUG] Adding managed dependencies for unknown:maven-reporting-api
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven.reporting:maven-reporting-api:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.doxia:doxia::1.0-alpha-7 for project: null:doxia-sink-api:jar:1.0-alpha-7 from the repository.
-[DEBUG]       org.apache.maven.doxia:doxia-sink-api:jar:1.0-alpha-7:runtime (selected for runtime)
-[DEBUG]     org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     org.apache.maven:maven-repository-metadata:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-error-diagnostics/2.0.4/maven-error-diagnostics-2.0.4.pom
-854/854b854b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:maven-error-diagnostics
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-error-diagnostics:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-plugin-registry/2.0.4/maven-plugin-registry-2.0.4.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-registry
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-plugin-registry:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     commons-cli:commons-cli:jar:1.0:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-ssh-external/1.0-alpha-6/wagon-ssh-external-1.0-alpha-6.pom
-961/961b961b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:wagon-ssh-external
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-alpha-6
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]     org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-plugin-descriptor/2.0.4/maven-plugin-descriptor-2.0.4.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-plugin-descriptor
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-plugin-descriptor:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (removed - nearer found: 1.0-alpha-15)
-[DEBUG]     org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4:runtime (selected for runtime)
-[DEBUG]       classworlds:classworlds:jar:1.1-alpha-2:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-monitor/2.0.4/maven-monitor-2.0.4.pom
-442/442b442b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-monitor
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-monitor:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/wagon/wagon-ssh/1.0-alpha-7/wagon-ssh-1.0-alpha-7.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:wagon-ssh
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-provider-test:jar:1.0-alpha-6
-[DEBUG]   junit:junit:jar:3.8.1
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.0.4
-[DEBUG]     org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/com/jcraft/jsch/0.1.24/jsch-0.1.24.pom
-485/485b485b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG]       com.jcraft:jsch:jar:0.1.24:runtime (selected for runtime)
-[DEBUG]       org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.1:runtime (removed - nearer found: 1.3)
-[DEBUG]     classworlds:classworlds:jar:1.1-alpha-2:runtime (removed - nearer found: 1.1)
-[DEBUG]     classworlds:classworlds:jar:1.1:runtime (selected for runtime)
-[DEBUG] Retrieving parent-POM: org.apache.maven.shared:maven-shared-components::3 for project: org.apache.maven:maven-archiver:jar:2.2 from the repository.
-[DEBUG]   org.apache.maven:maven-archiver:jar:2.2:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-project:jar:2.0:runtime (removed - nearer found: 2.0.4)
-[DEBUG]     org.codehaus.plexus:plexus-archiver:jar:1.0-alpha-7:runtime (removed - nearer found: 1.0-alpha-8)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0:runtime (removed - nearer found: 2.0.4)
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-15:runtime (removed - nearer found: 1.0-alpha-9)
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime (selected for runtime)
-[DEBUG]     junit:junit:jar:3.8.1:runtime (selected for runtime)
-[DEBUG]     org.codehaus.plexus:plexus-utils:jar:1.0.4:runtime (removed - nearer found: 1.3)
-[DEBUG]     classworlds:classworlds:jar:1.1-alpha-2:runtime (removed - nearer found: 1.1)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.3:runtime (removed - nearer found: 1.1)
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-artifact:jar:2.0.4:runtime (selected for runtime)
-[DEBUG]   org.apache.maven:maven-artifact-manager:jar:2.0.4:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-1/maven-repository-builder-1.0-alpha-1.pom
-2/2K2K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Retrieving parent-POM: org.apache.maven.shared:maven-shared-components::6 for project: null:maven-repository-builder:jar:1.0-alpha-1 from the repository.
-[DEBUG]   org.apache.maven.shared:maven-repository-builder:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-artifact/2.0.3/maven-artifact-2.0.3.pom
-765/765b765b downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Retrieving parent-POM: org.apache.maven:maven::2.0.3 for project: org.apache.maven:maven-artifact:jar:2.0.3 from the repository.
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven/2.0.3/maven-2.0.3.pom
-1/14K4/14K5/14K6/14K8/14K9/14K11/14K12/14K14/14K14K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0.3:runtime (removed - nearer found: 2.0.4)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-artifact-manager/2.0.3/maven-artifact-manager-2.0.3.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for org.apache.maven:maven-artifact-manager
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-artifact-manager:jar:2.0.3:runtime (removed - nearer found: 2.0.4)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-project/2.0.3/maven-project-2.0.3.pom
-1/1K1K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Adding managed dependencies for unknown:maven-project
-[DEBUG]   org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9
-[DEBUG]   org.codehaus.plexus:plexus-utils:jar:1.1
-[DEBUG]   org.apache.maven.wagon:wagon-provider-api:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-ssh:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-ssh-external:jar:1.0-alpha-6
-[DEBUG]   org.apache.maven.wagon:wagon-file:jar:1.0-alpha-7
-[DEBUG]   org.apache.maven.wagon:wagon-http-lightweight:jar:1.0-alpha-6
-[DEBUG]     org.apache.maven:maven-project:jar:2.0.3:runtime (removed - nearer found: 2.0.4)
-[DEBUG]     org.apache.maven.shared:maven-common-artifact-filters:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG]       org.apache.maven:maven-artifact:jar:2.0.2:runtime (removed - nearer found: 2.0.4)
-[DEBUG]   org.apache.maven.shared:maven-common-artifact-filters:jar:1.0-alpha-1:runtime (selected for runtime)
-[DEBUG]     org.apache.maven:maven-artifact:jar:2.0.2:runtime (removed - nearer found: 2.0.4)
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-8/plexus-archiver-1.0-alpha-8.jar
-1/146K2/146K4/146K5/146K6/146K8/146K9/146K11/146K12/146K13/146K15/146K16/146K18/146K19/146K20/146K22/146K23/146K25/146K26/146K28/146K29/146K30/146K32/146K33/146K35/146K36/146K37/146K39/146K40/146K42/146K43/146K45/146K46/146K47/146K49/146K50/146K52/146K53/146K54/146K56/146K57/146K59/146K60/146K61/146K63/146K64/146K66/146K67/146K69/146K70/146K71/146K73/146K74/146K76/146K77/146K78/146K80/146K81/146K83/146K84/146K86/146K87/146K88/146K90/146K91/146K93/146K94/146K95/146K97/146K98/146K100/146K101/146K102/146K104/146K108/146K108/146K110/146K111/146K112/146K114/146K115/146K117/146K118/146K119/146K121/146K122/146K124/146K125/146K127/146K128/146K129/146K131/146K132/146K134/146K135/146K136/146K138/146K139/146K141/146K142/146K144/146K145/146K146/146K146K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-1/maven-repository-builder-1.0-alpha-1.jar
-2/19K6/19K10/19K13/19K15/19K16/19K18/19K19/19K19/19K19K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG] Skipping disabled repository codehaus.org
-[DEBUG] Skipping disabled repository apache.snapshots
-[DEBUG] Trying repository central
-Downloading: http://repo1.maven.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0-alpha-1/maven-common-artifact-filters-1.0-alpha-1.jar
-2/13K4/13K5/13K6/13K8/13K9/13K11/13K12/13K13/13K13K downloaded
-[DEBUG]   Artifact resolved
-[DEBUG]  The following artifacts were filtered out for plugin: org.apache.maven.plugins:maven-assembly-plugin:2.2-beta-1 because they're already in the core of Maven:
-
-org.apache.maven:maven-plugin-api:jar:2.0.4:runtime
-org.apache.maven:maven-project:jar:2.0.4:runtime
-org.apache.maven:maven-core:jar:2.0.4:runtime
-org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9:runtime
-org.apache.maven:maven-artifact:jar:2.0.4:runtime
-org.apache.maven:maven-artifact-manager:jar:2.0.4:runtime
-
-These will use the artifact files already in the core ClassRealm instead, to allow them to be included in PluginDescriptor.getArtifacts().
-
-
-[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-assembly-plugin:2.2-beta-1:assembly' -->
-[DEBUG]   (s) appendAssemblyId = true
-[DEBUG]   (f) attach = true
-[DEBUG]   (s) basedir = /home/bdodson/Desktop/junctionmanager
-[DEBUG]   (s) descriptorRefs = [Ljava.lang.String;@9fdee
-[DEBUG]   (f) executedProject = MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml
-[DEBUG]   (s) filters = []
-[DEBUG]   (s) finalName = junctionmanager-1.0-SNAPSHOT
-[DEBUG]   (s) includeSite = false
-[DEBUG]   (s) localRepository = [local] -> file:///home/bdodson/.m2/repository
-[DEBUG]   (s) outputDirectory = /home/bdodson/Desktop/junctionmanager/target
-[DEBUG]   (s) reactorProjects = [MavenProject: edu.stanford.prpl.junction:junctionmanager:1.0-SNAPSHOT @ /home/bdodson/Desktop/junctionmanager/pom.xml]
-[DEBUG]   (f) remoteRepositories = [[central] -> http://repo1.maven.org/maven2]
-[DEBUG]   (s) siteDirectory = /home/bdodson/Desktop/junctionmanager/target/site
-[DEBUG]   (s) tarLongFileMode = warn
-[DEBUG]   (s) tempRoot = /home/bdodson/Desktop/junctionmanager/target/archive-tmp
-[DEBUG]   (s) workDirectory = /home/bdodson/Desktop/junctionmanager/target/assembly/work
-[DEBUG] -- end configuration --
-[INFO] [assembly:assembly]
-[DEBUG] FileSet[] dir perms: 40755 file perms: 100644
-[DEBUG] The archive base directory is 'null'
-[DEBUG] file-set directory: '/home/bdodson/Desktop/junctionmanager/target/classes'
-[DEBUG] output directory: ''
-[INFO] Processing DependencySet (output=)
-[DEBUG] edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT (selected for null)
-[DEBUG]   org.cometd.java:cometd-java-client:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]     org.cometd.java:cometd-java-server:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.cometd.java:cometd-api:jar:1.0.beta8:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-util:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-continuation:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         javax.servlet:servlet-api:jar:2.5:compile (selected for compile)
-[DEBUG]     org.eclipse.jetty:jetty-client:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]       org.eclipse.jetty:jetty-http:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG]         org.eclipse.jetty:jetty-io:jar:7.0.0.M1:compile (selected for compile)
-[DEBUG] While resolving dependencies of edu.stanford.prpl.junction:junctionmanager:jar:1.0-SNAPSHOT:
-[DEBUG] Statistics for Scope filter [compile=true, runtime=true, test=false, provided=false, system=false]
-
-[DEBUG] The following scope filters were not used: 
-o Runtime
-o Test
-o Provided
-o System
-[INFO] Expanding: /home/bdodson/.m2/repository/org/cometd/java/cometd-java-client/1.0.beta8/cometd-java-client-1.0.beta8.jar into /tmp/archived-file-set.1464948899.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/cometd/java/cometd-java-server/1.0.beta8/cometd-java-server-1.0.beta8.jar into /tmp/archived-file-set.1476106617.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/cometd/java/cometd-api/1.0.beta8/cometd-api-1.0.beta8.jar into /tmp/archived-file-set.752623934.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-util/7.0.0.M1/jetty-util-7.0.0.M1.jar into /tmp/archived-file-set.734155986.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-continuation/7.0.0.M1/jetty-continuation-7.0.0.M1.jar into /tmp/archived-file-set.1751027460.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar into /tmp/archived-file-set.1666767451.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-client/7.0.0.M1/jetty-client-7.0.0.M1.jar into /tmp/archived-file-set.391134588.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-http/7.0.0.M1/jetty-http-7.0.0.M1.jar into /tmp/archived-file-set.826324988.tmp
-[DEBUG] expand complete
-[INFO] Expanding: /home/bdodson/.m2/repository/org/eclipse/jetty/jetty-io/7.0.0.M1/jetty-io-7.0.0.M1.jar into /tmp/archived-file-set.1373804375.tmp
-[DEBUG] expand complete
-[INFO] Building jar: /home/bdodson/Desktop/junctionmanager/target/junctionmanager-1.0-SNAPSHOT-jar-with-dependencies.jar
-[DEBUG] adding directory META-INF/
-[DEBUG] adding entry META-INF/MANIFEST.MF
-[DEBUG] adding directory edu/
-[DEBUG] adding directory edu/stanford/
-[DEBUG] adding directory edu/stanford/prpl/
-[DEBUG] adding directory edu/stanford/prpl/junction/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/sql/
-[DEBUG] adding directory edu/stanford/prpl/junction/sample/datalog/
-[DEBUG] adding directory edu/stanford/prpl/junction/impl/
-[DEBUG] adding directory edu/stanford/prpl/junction/impl/object/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/object/
-[DEBUG] adding directory edu/stanford/prpl/junction/api/messaging/
-[DEBUG] adding directory edu/stanford/prpl/junction/extra/
-[DEBUG] adding directory org/
-[DEBUG] adding directory org/json/
-[DEBUG] adding directory META-INF/maven/
-[DEBUG] adding directory META-INF/maven/org.cometd.java/
-[DEBUG] adding directory META-INF/maven/org.cometd.java/cometd-java-client/
-[DEBUG] adding directory org/cometd/
-[DEBUG] adding directory org/cometd/client/
-[DEBUG] adding directory org/cometd/client/ext/
-[DEBUG] adding directory META-INF/maven/org.cometd.java/cometd-java-server/
-[DEBUG] adding directory org/cometd/server/
-[DEBUG] adding directory org/cometd/server/ext/
-[DEBUG] adding directory org/cometd/server/continuation/
-[DEBUG] adding directory org/cometd/server/filter/
-[DEBUG] adding directory META-INF/maven/org.cometd.java/cometd-api/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/jetty-util/
-[DEBUG] adding directory org/eclipse/
-[DEBUG] adding directory org/eclipse/jetty/
-[DEBUG] adding directory org/eclipse/jetty/util/
-[DEBUG] adding directory org/eclipse/jetty/util/resource/
-[DEBUG] adding directory org/eclipse/jetty/util/log/
-[DEBUG] adding directory org/eclipse/jetty/util/thread/
-[DEBUG] adding directory org/eclipse/jetty/util/ajax/
-[DEBUG] adding directory org/eclipse/jetty/util/component/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/jetty-continuation/
-[DEBUG] adding directory org/eclipse/jetty/continuation/
-[DEBUG] adding directory javax/
-[DEBUG] adding directory javax/servlet/
-[DEBUG] adding directory javax/servlet/resources/
-[DEBUG] adding directory javax/servlet/http/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/jetty-client/
-[DEBUG] adding directory org/eclipse/jetty/client/
-[DEBUG] adding directory org/eclipse/jetty/client/webdav/
-[DEBUG] adding directory org/eclipse/jetty/client/security/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/jetty-http/
-[DEBUG] adding directory org/eclipse/jetty/http/
-[DEBUG] adding directory org/eclipse/jetty/http/ssl/
-[DEBUG] adding directory org/eclipse/jetty/http/security/
-[DEBUG] adding directory META-INF/maven/org.eclipse.jetty/jetty-io/
-[DEBUG] adding directory org/eclipse/jetty/io/
-[DEBUG] adding directory org/eclipse/jetty/io/nio/
-[DEBUG] adding directory org/eclipse/jetty/io/bio/
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/QueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SQLActor.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SendQuery.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/sql/SendQuery$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogActorQuerier.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogConstants$actor.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogQueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogConstants.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner$2.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogActorDB.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner.class
-[DEBUG] adding entry edu/stanford/prpl/junction/sample/datalog/DatalogRunner$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxInboundObjectStream$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxOutboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/object/BayeuxInboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$1$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionCallback$1.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManagerFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionManager$MessageRouter.class
-[DEBUG] adding entry edu/stanford/prpl/junction/impl/JunctionCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/ObjectStreamFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/InboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/object/OutboundObjectStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionAPI.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionFactory.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/JunctionCallback.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionMessage.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionQuery.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionListener.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionQueryHandler.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionResource.class
-[DEBUG] adding entry edu/stanford/prpl/junction/api/messaging/JunctionEndOfStream.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridgePair$HTTPClientConnection.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridgePair.class
-[DEBUG] adding entry edu/stanford/prpl/junction/extra/HttpBridge.class
-[DEBUG] adding entry org/json/JSONException.class
-[DEBUG] adding entry org/json/XML.class
-[DEBUG] adding entry org/json/JSONArray.class
-[DEBUG] adding entry org/json/JSONStringer.class
-[DEBUG] adding entry org/json/JSONObject$1.class
-[DEBUG] adding entry org/json/CookieList.class
-[DEBUG] adding entry org/json/JSONString.class
-[DEBUG] adding entry org/json/JSONWriter.class
-[DEBUG] adding entry org/json/Test.class
-[DEBUG] adding entry org/json/JSONTokener.class
-[DEBUG] adding entry org/json/HTTPTokener.class
-[DEBUG] adding entry org/json/Test$1Obj.class
-[DEBUG] adding entry org/json/Cookie.class
-[DEBUG] adding entry org/json/JSONObject$Null.class
-[DEBUG] adding entry org/json/CDL.class
-[DEBUG] adding entry org/json/HTTP.class
-[DEBUG] adding entry org/json/JSONML.class
-[DEBUG] adding entry org/json/XMLTokener.class
-[DEBUG] adding entry org/json/JSONObject.class
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-java-client/pom.properties
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-java-client/pom.xml
-[DEBUG] adding entry org/cometd/client/BayeuxClient$1.class
-[DEBUG] adding entry org/cometd/client/BayeuxClient.class
-[DEBUG] adding entry org/cometd/client/ext/TimesyncClientExtension.class
-[DEBUG] adding entry org/cometd/client/BayeuxClient$Publish.class
-[DEBUG] adding entry org/cometd/client/BayeuxClient$Exchange.class
-[DEBUG] adding entry org/cometd/client/BayeuxClient$Connect.class
-[DEBUG] adding entry org/cometd/client/BayeuxClient$Handshake.class
-[DEBUG] adding entry org/cometd/client/Advice.class
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-java-server/pom.properties
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-java-server/pom.xml
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$DisconnectHandler.class
-[DEBUG] adding entry org/cometd/server/JSONPTransport.class
-[DEBUG] adding entry org/cometd/server/BayeuxService$AsyncWildListen.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$DefaultPolicy.class
-[DEBUG] adding entry org/cometd/server/Transport.class
-[DEBUG] adding entry org/cometd/server/MessagePool$2.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$MetaPublishHandler.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$ConnectHandler.class
-[DEBUG] adding entry org/cometd/server/BayeuxService$AsyncListen.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$Handler.class
-[DEBUG] adding entry org/cometd/server/ChannelImpl.class
-[DEBUG] adding entry org/cometd/server/ext/ArrayIdQueue.class
-[DEBUG] adding entry org/cometd/server/ext/TimestampExtension.class
-[DEBUG] adding entry org/cometd/server/ext/AcknowledgedMessagesExtension.class
-[DEBUG] adding entry org/cometd/server/ext/TimesyncExtension.class
-[DEBUG] adding entry org/cometd/server/ext/AcknowledgedMessagesClientExtension.class
-[DEBUG] adding entry org/cometd/server/ChannelId.class
-[DEBUG] adding entry org/cometd/server/ClientImpl.class
-[DEBUG] adding entry org/cometd/server/MessageImpl.class
-[DEBUG] adding entry org/cometd/server/BayeuxService$SyncWildListen.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$ServiceChannel.class
-[DEBUG] adding entry org/cometd/server/MessagePool$3.class
-[DEBUG] adding entry org/cometd/server/AbstractTransport.class
-[DEBUG] adding entry org/cometd/server/BayeuxService$1.class
-[DEBUG] adding entry org/cometd/server/JSONTransport.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$UnsubscribeHandler.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux.class
-[DEBUG] adding entry org/cometd/server/BayeuxService.class
-[DEBUG] adding entry org/cometd/server/AbstractCometdServlet.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$HandshakeHandler.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$PublishHandler.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$SubscribeHandler.class
-[DEBUG] adding entry org/cometd/server/MessagePool$1.class
-[DEBUG] adding entry org/cometd/server/continuation/ContinuationCometdServlet.class
-[DEBUG] adding entry org/cometd/server/continuation/ContinuationBayeux.class
-[DEBUG] adding entry org/cometd/server/continuation/ContinuationClient.class
-[DEBUG] adding entry org/cometd/server/continuation/ContinuationBayeux$1.class
-[DEBUG] adding entry org/cometd/server/continuation/ContinuationClient$1.class
-[DEBUG] adding entry org/cometd/server/AbstractBayeux$PingHandler.class
-[DEBUG] adding entry org/cometd/server/BayeuxService$SyncListen.class
-[DEBUG] adding entry org/cometd/server/filter/JSONDataFilter.class
-[DEBUG] adding entry org/cometd/server/filter/RegexFilter.class
-[DEBUG] adding entry org/cometd/server/filter/NoMarkupFilter.class
-[DEBUG] adding entry org/cometd/server/filter/NoScriptsFilter.class
-[DEBUG] adding entry org/cometd/server/MessagePool.class
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-api/pom.properties
-[DEBUG] adding entry META-INF/maven/org.cometd.java/cometd-api/pom.xml
-[DEBUG] adding entry org/cometd/Channel.class
-[DEBUG] adding entry org/cometd/Extension.class
-[DEBUG] adding entry org/cometd/Client.class
-[DEBUG] adding entry org/cometd/QueueListener.class
-[DEBUG] adding entry org/cometd/ChannelBayeuxListener.class
-[DEBUG] adding entry org/cometd/SubscriptionListener.class
-[DEBUG] adding entry org/cometd/Bayeux.class
-[DEBUG] adding entry org/cometd/ChannelListener.class
-[DEBUG] adding entry org/cometd/DataFilter.class
-[DEBUG] adding entry org/cometd/DeliverListener.class
-[DEBUG] adding entry org/cometd/ClientBayeuxListener.class
-[DEBUG] adding entry org/cometd/SecurityPolicy.class
-[DEBUG] adding entry org/cometd/Message.class
-[DEBUG] adding entry org/cometd/BayeuxListener.class
-[DEBUG] adding entry org/cometd/MessageListener.class
-[DEBUG] adding entry org/cometd/MessageListener$Asynchronous.class
-[DEBUG] adding entry org/cometd/ClientListener.class
-[DEBUG] adding entry org/cometd/MessageListener$Synchronous.class
-[DEBUG] adding entry org/cometd/Listener.class
-[DEBUG] adding entry org/cometd/RemoveListener.class
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-util/pom.properties
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-util/pom.xml
-[DEBUG] adding entry org/eclipse/jetty/util/IntrospectionUtil.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/BadResource.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/ResourceCollection.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/URLResource.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/JarResource$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/JarResource.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/Resource.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/JarFileResource.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/ResourceFactory.class
-[DEBUG] adding entry org/eclipse/jetty/util/resource/FileResource.class
-[DEBUG] adding entry org/eclipse/jetty/util/MultiMap.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$Singleton.class
-[DEBUG] adding entry org/eclipse/jetty/util/StringMap$NullEntry.class
-[DEBUG] adding entry org/eclipse/jetty/util/SingletonList.class
-[DEBUG] adding entry org/eclipse/jetty/util/UrlEncoded.class
-[DEBUG] adding entry org/eclipse/jetty/util/Scanner$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/RolloverFileOutputStream$RollTask.class
-[DEBUG] adding entry org/eclipse/jetty/util/AttributesMap.class
-[DEBUG] adding entry org/eclipse/jetty/util/Scanner$Listener.class
-[DEBUG] adding entry org/eclipse/jetty/util/MultiPartWriter.class
-[DEBUG] adding entry org/eclipse/jetty/util/ByteArrayOutputStream2.class
-[DEBUG] adding entry org/eclipse/jetty/util/QuotedStringTokenizer.class
-[DEBUG] adding entry org/eclipse/jetty/util/Scanner$DiscreteListener.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/Log.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/StdErrLog.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/Logger.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/LoggerLog.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/Slf4jLog.class
-[DEBUG] adding entry org/eclipse/jetty/util/log/Log$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/Utf8StringBuilder.class
-[DEBUG] adding entry org/eclipse/jetty/util/Scanner$BulkListener.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/StringMap$Node.class
-[DEBUG] adding entry org/eclipse/jetty/util/Utf8StringBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/util/Scanner.class
-[DEBUG] adding entry org/eclipse/jetty/util/LazyList.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO.class
-[DEBUG] adding entry org/eclipse/jetty/util/BlockingArrayQueue.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/ExecutorThreadPool.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/ThreadPool.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/OldQueuedThreadPool$Lock.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/QueuedThreadPool$2.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/Timeout.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/OldQueuedThreadPool.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/QueuedThreadPool.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/Timeout$Task.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/OldQueuedThreadPool$PoolThread.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/QueuedThreadPool$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/thread/OldQueuedThreadPool$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/ByteArrayISO8859Writer.class
-[DEBUG] adding entry org/eclipse/jetty/util/ArrayQueue.class
-[DEBUG] adding entry org/eclipse/jetty/util/URIUtil.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$NullWrite.class
-[DEBUG] adding entry org/eclipse/jetty/util/DateCache.class
-[DEBUG] adding entry org/eclipse/jetty/util/StringUtil.class
-[DEBUG] adding entry org/eclipse/jetty/util/SingletonList$SIterator.class
-[DEBUG] adding entry org/eclipse/jetty/util/RolloverFileOutputStream.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONDateConvertor.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Literal.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$StringSource.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Generator.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONEnumConvertor.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$NumberType.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$2.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Source.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONObjectConvertor.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$ReaderSource.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$5.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Convertible.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Output.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$3.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$Convertor.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$2.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$4.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSONPojoConvertor$Setter.class
-[DEBUG] adding entry org/eclipse/jetty/util/ajax/JSON$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$NullOS.class
-[DEBUG] adding entry org/eclipse/jetty/util/RolloverFileOutputStream$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/MultiException.class
-[DEBUG] adding entry org/eclipse/jetty/util/Loader.class
-[DEBUG] adding entry org/eclipse/jetty/util/TypeUtil.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/Container$Listener.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/LifeCycle$Listener.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/Container$Relationship.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/Container$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/LifeCycle.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/AbstractLifeCycle.class
-[DEBUG] adding entry org/eclipse/jetty/util/component/Container.class
-[DEBUG] adding entry org/eclipse/jetty/util/Attributes.class
-[DEBUG] adding entry org/eclipse/jetty/util/StringMap$1.class
-[DEBUG] adding entry org/eclipse/jetty/util/StringMap.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$ClosedIS.class
-[DEBUG] adding entry org/eclipse/jetty/util/IO$Job.class
-[DEBUG] adding entry org/eclipse/jetty/util/MultiPartOutputStream.class
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-continuation/pom.properties
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-continuation/pom.xml
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationSupport.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationFilter$FauxContinuation.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/Continuation.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationFilter.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationListener.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationEvent.class
-[DEBUG] adding entry org/eclipse/jetty/continuation/ContinuationFilter$1.class
-[DEBUG] adding entry javax/servlet/Filter.class
-[DEBUG] adding entry javax/servlet/ServletContextAttributeEvent.class
-[DEBUG] adding entry javax/servlet/ServletRequest.class
-[DEBUG] adding entry javax/servlet/ServletOutputStream.class
-[DEBUG] adding entry javax/servlet/ServletRequestAttributeEvent.class
-[DEBUG] adding entry javax/servlet/ServletRequestListener.class
-[DEBUG] adding entry javax/servlet/LocalStrings_ja.properties
-[DEBUG] adding entry javax/servlet/LocalStrings_fr.properties
-[DEBUG] adding entry javax/servlet/SingleThreadModel.class
-[DEBUG] adding entry javax/servlet/Servlet.class
-[DEBUG] adding entry javax/servlet/ServletException.class
-[DEBUG] adding entry javax/servlet/GenericServlet.class
-[DEBUG] adding entry javax/servlet/FilterChain.class
-[DEBUG] adding entry javax/servlet/FilterConfig.class
-[DEBUG] adding entry javax/servlet/ServletRequestEvent.class
-[DEBUG] adding entry javax/servlet/resources/j2ee_web_services_client_1_1.xsd
-[DEBUG] adding entry javax/servlet/resources/javaee_5.xsd
-[DEBUG] adding entry javax/servlet/resources/jsp_2_1.xsd
-[DEBUG] adding entry javax/servlet/resources/javaee_web_services_client_1_2.xsd
-[DEBUG] adding entry javax/servlet/resources/datatypes.dtd
-[DEBUG] adding entry javax/servlet/resources/XMLSchema.dtd
-[DEBUG] adding entry javax/servlet/resources/web-app_2_3.dtd
-[DEBUG] adding entry javax/servlet/resources/web-app_2_5.xsd
-[DEBUG] adding entry javax/servlet/resources/xml.xsd
-[DEBUG] adding entry javax/servlet/resources/j2ee_1_4.xsd
-[DEBUG] adding entry javax/servlet/resources/web-app_2_2.dtd
-[DEBUG] adding entry javax/servlet/resources/web-app_2_4.xsd
-[DEBUG] adding entry javax/servlet/resources/jsp_2_0.xsd
-[DEBUG] adding entry javax/servlet/ServletResponse.class
-[DEBUG] adding entry javax/servlet/LocalStrings.properties
-[DEBUG] adding entry javax/servlet/ServletConfig.class
-[DEBUG] adding entry javax/servlet/ServletContextEvent.class
-[DEBUG] adding entry javax/servlet/RequestDispatcher.class
-[DEBUG] adding entry javax/servlet/UnavailableException.class
-[DEBUG] adding entry javax/servlet/ServletResponseWrapper.class
-[DEBUG] adding entry javax/servlet/ServletRequestAttributeListener.class
-[DEBUG] adding entry javax/servlet/ServletContextListener.class
-[DEBUG] adding entry javax/servlet/ServletRequestWrapper.class
-[DEBUG] adding entry javax/servlet/ServletInputStream.class
-[DEBUG] adding entry javax/servlet/ServletContextAttributeListener.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionContext.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionActivationListener.class
-[DEBUG] adding entry javax/servlet/http/LocalStrings_es.properties
-[DEBUG] adding entry javax/servlet/http/LocalStrings_ja.properties
-[DEBUG] adding entry javax/servlet/http/LocalStrings_fr.properties
-[DEBUG] adding entry javax/servlet/http/HttpSessionEvent.class
-[DEBUG] adding entry javax/servlet/http/HttpServletResponse.class
-[DEBUG] adding entry javax/servlet/http/HttpServletRequest.class
-[DEBUG] adding entry javax/servlet/http/HttpUtils.class
-[DEBUG] adding entry javax/servlet/http/HttpServletResponseWrapper.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionAttributeListener.class
-[DEBUG] adding entry javax/servlet/http/NoBodyResponse.class
-[DEBUG] adding entry javax/servlet/http/LocalStrings.properties
-[DEBUG] adding entry javax/servlet/http/Cookie.class
-[DEBUG] adding entry javax/servlet/http/HttpServlet.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionBindingListener.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionListener.class
-[DEBUG] adding entry javax/servlet/http/HttpServletRequestWrapper.class
-[DEBUG] adding entry javax/servlet/http/NoBodyOutputStream.class
-[DEBUG] adding entry javax/servlet/http/HttpSession.class
-[DEBUG] adding entry javax/servlet/http/HttpSessionBindingEvent.class
-[DEBUG] adding entry javax/servlet/ServletContext.class
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-client/pom.properties
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-client/pom.xml
-[DEBUG] adding entry org/eclipse/jetty/client/HttpClient$3.class
-[DEBUG] adding entry org/eclipse/jetty/client/SocketConnector.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpEventListener.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpConnection$1.class
-[DEBUG] adding entry org/eclipse/jetty/client/SelectConnector$Manager$1.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpClient$2.class
-[DEBUG] adding entry org/eclipse/jetty/client/webdav/MkcolExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/webdav/WebdavListener.class
-[DEBUG] adding entry org/eclipse/jetty/client/webdav/WebdavSupportedExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/webdav/PropfindExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpExchange$1.class
-[DEBUG] adding entry org/eclipse/jetty/client/ContentExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpClient$Connector.class
-[DEBUG] adding entry org/eclipse/jetty/client/SelectConnector.class
-[DEBUG] adding entry org/eclipse/jetty/client/SocketConnector$1.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpExchange$Listener.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpClient$1.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpConnection$Handler.class
-[DEBUG] adding entry org/eclipse/jetty/client/SelectConnector$Manager.class
-[DEBUG] adding entry org/eclipse/jetty/client/CachedExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpConnection.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpExchange$ContentExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpDestination.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpEventListenerWrapper.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpExchange$CachedExchange.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpClient.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/SimpleRealmResolver.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/RealmResolver.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/DigestAuthorization.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/Authorization.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/SecurityListener.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/ProxyAuthorization.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/Realm.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/BasicAuthorization.class
-[DEBUG] adding entry org/eclipse/jetty/client/security/HashRealmResolver.class
-[DEBUG] adding entry org/eclipse/jetty/client/Address.class
-[DEBUG] adding entry org/eclipse/jetty/client/HttpExchange.class
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-http/pom.properties
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-http/pom.xml
-[DEBUG] adding entry org/eclipse/jetty/http/mime.properties
-[DEBUG] adding entry org/eclipse/jetty/http/HttpSchemes.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpContent.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpHeaders.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpGenerator$1.class
-[DEBUG] adding entry org/eclipse/jetty/http/AbstractGenerator.class
-[DEBUG] adding entry org/eclipse/jetty/http/PathMap$Entry.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$2.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$1.class
-[DEBUG] adding entry org/eclipse/jetty/http/ssl/SslSelectChannelEndPoint$1.class
-[DEBUG] adding entry org/eclipse/jetty/http/ssl/SslSelectChannelEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/http/ssl/SslSelectChannelEndPoint$2.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpCookie.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$3.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpVersions.class
-[DEBUG] adding entry org/eclipse/jetty/http/encoding.properties
-[DEBUG] adding entry org/eclipse/jetty/http/HttpParser$EventHandler.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpParser.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$5.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$4.class
-[DEBUG] adding entry org/eclipse/jetty/http/useragents
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$DateParser.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields.class
-[DEBUG] adding entry org/eclipse/jetty/http/Generator.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpGenerator.class
-[DEBUG] adding entry org/eclipse/jetty/http/MimeTypes.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpStatus$Code.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpGenerator$Status.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$Field.class
-[DEBUG] adding entry org/eclipse/jetty/http/Parser.class
-[DEBUG] adding entry org/eclipse/jetty/http/EncodedHttpURI.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpURI.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$6.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpHeaderValues.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpFields$DateGenerator.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpTokens.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/Credential.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/Constraint.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/Password.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/Credential$Crypt.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/UnixCrypt.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/Credential$MD5.class
-[DEBUG] adding entry org/eclipse/jetty/http/security/B64Code.class
-[DEBUG] adding entry org/eclipse/jetty/http/PathMap.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpMethods.class
-[DEBUG] adding entry org/eclipse/jetty/http/HttpStatus.class
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-io/pom.properties
-[DEBUG] adding entry META-INF/maven/org.eclipse.jetty/jetty-io/pom.xml
-[DEBUG] adding entry org/eclipse/jetty/io/AbstractBuffers$1.class
-[DEBUG] adding entry org/eclipse/jetty/io/WriterOutputStream.class
-[DEBUG] adding entry org/eclipse/jetty/io/Buffers.class
-[DEBUG] adding entry org/eclipse/jetty/io/View$CaseInsensitive.class
-[DEBUG] adding entry org/eclipse/jetty/io/Buffer$CaseInsensitve.class
-[DEBUG] adding entry org/eclipse/jetty/io/BufferUtil.class
-[DEBUG] adding entry org/eclipse/jetty/io/ByteArrayEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/BufferCache.class
-[DEBUG] adding entry org/eclipse/jetty/io/View.class
-[DEBUG] adding entry org/eclipse/jetty/io/EofException.class
-[DEBUG] adding entry org/eclipse/jetty/io/Connection.class
-[DEBUG] adding entry org/eclipse/jetty/io/Buffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/BufferDateCache.class
-[DEBUG] adding entry org/eclipse/jetty/io/HttpException.class
-[DEBUG] adding entry org/eclipse/jetty/io/SimpleBuffers.class
-[DEBUG] adding entry org/eclipse/jetty/io/AbstractBuffers$ThreadBuffers.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/SelectChannelEndPoint$IdleTask.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/SelectorManager.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/SelectorManager$AttachedSocketChannel.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/SelectChannelEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/ChannelEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/IndirectNIOBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/DirectNIOBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/RandomAccessFileBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/NIOBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/nio/SelectorManager$SelectSet.class
-[DEBUG] adding entry org/eclipse/jetty/io/ByteArrayBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/ByteArrayBuffer$CaseInsensitive.class
-[DEBUG] adding entry org/eclipse/jetty/io/AbstractBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/bio/SocketEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/bio/StreamEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/bio/StringEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/AsyncEndPoint.class
-[DEBUG] adding entry org/eclipse/jetty/io/AbstractBuffers.class
-[DEBUG] adding entry org/eclipse/jetty/io/BufferCache$CachedBuffer.class
-[DEBUG] adding entry org/eclipse/jetty/io/EndPoint.class
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 12 seconds
-[INFO] Finished at: Mon May 25 09:45:32 PDT 2009
-[INFO] Final Memory: 13M/82M
-[INFO] ------------------------------------------------------------------------
