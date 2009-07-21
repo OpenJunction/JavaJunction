@@ -35,26 +35,10 @@
 
   <repositories>
     <repository>
-      <id>dojo</id>
-      <name>Dojo Maven2 Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/dojo-releases</url>
+      <id>prpl-public</id>
+      <name>PrPl Public Repository</name>
+      <url>http://prpl.stanford.edu:8081/nexus/content/groups/public</url>
       <releases> <enabled>true</enabled> </releases>
-      <snapshots> <enabled>false</enabled> </snapshots>
-      <layout>default</layout>
-    </repository>
-    <repository>
-      <id>dojoSnapshots</id>
-      <name>Dojo Maven2 Snapshot Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/dojo-snapshots</url>
-      <releases> <enabled>false</enabled> </releases>
-      <snapshots> <enabled>true</enabled> </snapshots>
-      <layout>default</layout>
-    </repository>
-    <repository>
-      <id>jettySnapshots</id>
-      <name>Jetty Maven2 Snapshot Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/jetty-snapshots</url>
-      <releases> <enabled>false</enabled> </releases>
       <snapshots> <enabled>true</enabled> </snapshots>
       <layout>default</layout>
     </repository>
