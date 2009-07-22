@@ -2,9 +2,10 @@ package edu.stanford.prpl.junction.api.messaging;
 
 import java.util.List;
 
-import org.cometd.Message;
+import org.json.JSONObject;
 
-public abstract class MessageHandler implements JunctionListener { //TODO: temporary
+
+public abstract class MessageHandler {
 	/**
 	 * Stream-selecting filters;
 	 * These filters allow Junction to route messages
@@ -28,7 +29,7 @@ public abstract class MessageHandler implements JunctionListener { //TODO: tempo
 	 * May be useful to support RPC, for example
 	 * 
 	 */
-	public boolean supportsMessage(Message message) { return true; }
+	public boolean supportsMessage(JSONObject message) { return true; }
 	// TODO: have a dynamic filter and a static one.
 	// the static one defines a message template, and this template can be
 	// shared (like an XML XSD document)
@@ -36,7 +37,7 @@ public abstract class MessageHandler implements JunctionListener { //TODO: tempo
 	/**
 	 * Message handling
 	 */
-	//public abstract void onMessageReceived(MessageHeader header, Message message);
+	public abstract void onMessageReceived(MessageHeader header, JSONObject message);
 	
 	/**
 	 * How to add response capabilities?

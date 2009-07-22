@@ -3,26 +3,30 @@ package edu.stanford.prpl.junction.sample.sql;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.stanford.prpl.junction.api.JunctionAPI;
-import edu.stanford.prpl.junction.impl.JunctionManagerFactory;
+import edu.stanford.prpl.junction.api.activity.Junction;
+import edu.stanford.prpl.junction.api.activity.JunctionActor;
+import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.impl.JunctionMaker;
 
-public class SQLActor {
+public class SQLActor extends JunctionActor {
 	// JunctionManager extends/implements JunctionAPI
-	
+
+	public SQLActor() {
+		super("database");
+	}
 	
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the database actor");
 			Map<String,Object> activity = new HashMap<String,Object>();
-			activity.put("host", "http://prpl.stanford.edu:8181/cometd/cometd");
+			activity.put("host", "prpl.stanford.edu");
 			activity.put("role", "sql-server");
 			activity.put("sessionID","sqlQuerySession");
+			activity.put("owner",true);
 			
-			JunctionAPI jm = new JunctionManagerFactory().create(activity);
-		
-			jm.registerQueryHandler(
-				new QueryHandler()
-			);
+			JunctionMaker jm = JunctionMaker.getInstance();
+			jm.newJunction(activity, new SQLActor());
+
 			
 			Object dud = new Object();
 			synchronized(dud){
@@ -33,6 +37,17 @@ public class SQLActor {
 			System.err.println("fail.");
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onActivityStart() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public MessageHandler getMessageHandler() {
+		return new QueryHandler(this);
 	}
 	
 	

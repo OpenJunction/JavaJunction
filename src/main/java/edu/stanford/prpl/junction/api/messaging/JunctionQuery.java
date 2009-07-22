@@ -1,7 +1,9 @@
 package edu.stanford.prpl.junction.api.messaging;
 
-import java.util.HashMap;
+
 import java.util.Map;
+
+import org.json.JSONException;
 
 public class JunctionQuery extends JunctionMessage {
 
@@ -9,16 +11,14 @@ public class JunctionQuery extends JunctionMessage {
 	private String mType;
 	private Map<String,Object>mParams = null;
 	
-	public JunctionQuery() {
-		
-	}
-	
-	public JunctionQuery(String type, String query) {
+	public JunctionQuery(String type, String query) throws JSONException {
+		super("{type:\""+type+"\",query:\""+query+"\"}");
 		mType=type;
 		mQuery=query;
 	}
 	
-	public JunctionQuery(String query) {
+	public JunctionQuery(String query) throws JSONException {
+		super("{query:\""+query+"\"}");
 		mQuery=query;
 	}
 	
@@ -44,26 +44,6 @@ public class JunctionQuery extends JunctionMessage {
 
 	public String getJxMessageType() {
 		return "jxquery";
-	}
-	
-	@Override
-	public void loadMap(Map<String,Object> data) {
-		mQuery = (String)data.get("queryText");
-		mType = (String)data.get("queryType");
-		if (data.containsKey("queryParams")) {
-			mParams = (HashMap<String,Object>)data.get("queryParams");
-		}
-	}
-	
-	public Map<String,Object> getMap() {
-		Map<String,Object>map = super.getMap();
-		map.put("queryText", mQuery);
-		map.put("queryType",mType);
-		if (null != mParams) {
-			map.put("queryParams",mParams);
-		}
-		
-		return map;
 	}
 }
 

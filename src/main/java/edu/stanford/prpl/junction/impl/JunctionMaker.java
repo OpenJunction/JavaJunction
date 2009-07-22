@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.jivesoftware.smack.XMPPConnection;
+
+import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 
 
 public class JunctionMaker {
 	private URL mHostURL;
-	private JunctionManager mManager;
 	
 	public static JunctionMaker getInstance(URL url) {
 		// todo: singleton per-URL?
@@ -29,16 +31,6 @@ public class JunctionMaker {
 	private JunctionMaker(URL url) {
 		mHostURL=url;
 		
-		/*
-		 * This is temporary until we know what
-		 * the pieces will look like.
-		 * The relevant JunctionManager pieces
-		 * should be merged into this class.
-		 */
-		Map<String,Object>params = new HashMap<String,Object>();
-		params.put("host", mHostURL.toExternalForm());
-		mManager = new JunctionManager(params);
-		
 	}
 	
 	// TODO: add 0-arg constructor for activities w/ given junction hosts
@@ -53,12 +45,21 @@ public class JunctionMaker {
 	}
 	
 	public Junction newJunction(Map<String,Object>desc, JunctionActor actor) {
-		Junction activity = new Junction(mManager);
-		activity.registerActor(actor);
+		if (desc.get("host") == null && mHostURL == null) {
+			return null;
+		}
+		
+		if (desc.get("host") == null) {
+			desc.put("host", mHostURL.toExternalForm());
+		}
+		
+		ActivityDescription activityDesc = new ActivityDescription(desc);
+		Junction jx = new Junction(activityDesc);
+		jx.registerActor(actor);
 		// creating an activity is an activity using a JunctionService.
 		// Invite the JunctionMaker service to the session.
 		// This service will be bundled with all Junction servers.
 		//activity.requestService("JunctionMaker", mHostURL, "edu.stanford.prpl.junction.impl.JunctionMakerService");		
-		return activity;
+		return jx;
 	}
 }

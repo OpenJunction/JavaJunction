@@ -4,66 +4,43 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.cometd.Client;
-import org.cometd.Message;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smackx.Form;
+import org.jivesoftware.smackx.FormField;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.json.JSONObject;
 
+import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
-import edu.stanford.prpl.junction.api.messaging.JunctionListener;
+import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 
 public class Junction implements edu.stanford.prpl.junction.api.activity.Junction {
-	private String mActivityID;
-	private String mSessionID;
+	private ActivityDescription mActivityDescription;
 	private JunctionActor mOwner;
-	private JunctionManager mManager;
+	private XMPPConnection xmppConnection;
 	private URL mHostURL;
-	private String sessionChannel;
 	private Map<String,String>mPeers; // actorID to Role
-	
-	/**
-	 * Creates an activity from a given activity URL
-	 */
-	public Junction(URL activityURL) {
-		// http://prpl.stanford.edu:8181/cometd/cometd?session=XYZ
-		try {
-			mHostURL = new URL(activityURL.getProtocol() 
-								+ "://" 
-								+ activityURL.getHost() 
-								+ ":"
-								+ activityURL.getPort()
-								+ activityURL.getPath());
-			
-			String query = activityURL.getQuery();
-			int i = query.indexOf("session=");
-			if (i < 0) {
-				throw new IllegalArgumentException("No activity session ID found in activity URL " + activityURL);
-			}
-			i+=8;
-			int j = query.indexOf("&",i);
-			if (j > 0) {
-				mSessionID = query.substring(i, j);
-			} else {
-				mSessionID = query.substring(i);
-			}
 
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Could not get Junction server from URL " + activityURL.toExternalForm());
-		}
-		
-		Map<String,Object>params = new HashMap<String, Object>();
-		params.put("host",mHostURL);
-		params.put("sessionID", mSessionID);
-		mManager = new JunctionManager(params);
-		
-		// set activity ID
-		// instantiate mManager
-		init();
-	}
+	private String mXMPPServer;
+	private XMPPConnection mXMPPConnection;
+	private MultiUserChat mSessionChat;
 	
 	/**
 	 * Creates a new activity and registers it
@@ -71,21 +48,53 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	 * 
 	 * TODO: add constructor w/ activity descriptor; keep this one for nonconstrained activity.
 	 */
-	protected Junction(JunctionManager manager) {
-		mManager = manager;
-		mHostURL = manager.getHostURL();
-		mSessionID = UUID.randomUUID().toString();
+	protected Junction(ActivityDescription desc) {
+		mActivityDescription=desc;
+		mXMPPServer=mActivityDescription.getHost();
 		init();
 	}
 	
 	private void init() {
-		sessionChannel = "/session/"+mSessionID;
-		mManager.addListener(sessionChannel, new OnStartListener());
-		mPeers = new HashMap<String,String>();
+		mXMPPConnection= new XMPPConnection(mActivityDescription.getHost());
+		try {
+			mXMPPConnection.connect();
+			mXMPPConnection.loginAnonymously();
+			
+			String mSessionChatString = mActivityDescription.getSessionID()+"@conference."+mXMPPServer;
+			mSessionChat = new MultiUserChat(mXMPPConnection, mSessionChatString);
+
+			System.out.println("Joining " + mSessionChatString);
+			if (mActivityDescription.isActivityOwner()) {
+				try {
+					// TODO: is this an error? is there really a notion of ownership?
+					mSessionChat.create(mActivityDescription.getActorID());
+					mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
+				} catch (XMPPException e) {
+					try {
+						mSessionChat.join(mActivityDescription.getActorID());
+					} catch (XMPPException e2) {
+						System.err.println("could not join or create room. ");
+						e2.printStackTrace();
+					}
+				}
+			} else {
+				mSessionChat.join(mActivityDescription.getActorID());
+			}
+			
+			mSessionChat.addMessageListener(new PacketListener() {
+				@Override
+				public void processPacket(Packet packet) {
+					System.out.println("got packet: " + packet.toXML());
+				}
+			});
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getActivityID() {
-		return mActivityID;
+		return mActivityDescription.getActivityID();
 	}
 	
 	
@@ -99,45 +108,6 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			registerMessageHandler(handler);
 		}
 		
-		// TODO: formalize this and pair w/ JunctionMaker; 
-		// keep mActors synched better w/ JunctionManager using a stateful proxy?
-		registerMessageHandler(new MessageHandler() {
-
-			public void onMessageReceived(Client from, Message message) {
-				if (message.getChannel().equals(mManager.channelForSystem())) {
-					Map<String,Object>data = (Map<String,Object>)message.getData();
-					if (data == null) return;
-					if (data.containsKey("action") && data.get("action").equals("join")) {
-						if (!data.get("actorID").equals(actor.getActorID())) {
-							if (data.get("status").equals("new")) {  // new member; strangers should introduce themselves
-								Map<String,Object>resp = new HashMap<String, Object>();
-								resp.put("action","join");
-								resp.put("status","responding");
-								resp.put("role",actor.getRole());
-								resp.put("actorID",actor.getActorID());
-								sendMessageToSystem(message);
-							}
-							
-							
-							mPeers.put((String)data.get("actorID"), (String)data.get("role"));
-						} else {
-							// actor's own join event. TODO: launch this for any join event?
-							mOwner.onActivityJoin();
-						}
-					}
-				}
-			}
-			
-		});
-		
-		
-		Map<String,Object>message = new HashMap<String, Object>();
-		message.put("action","join");
-		message.put("status","new"); // new member; strangers should introduce themselves
-		message.put("role",actor.getRole());
-		message.put("actorID",actor.getActorID());
-		sendMessageToSystem(message);
-
 	}
 	
 	
@@ -150,22 +120,27 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		//message.put("activityHost",mHostURL);
 		message.put("activityURL", getInvitationURL(role));
 		message.put("serviceName", serviceName);
-		mManager.publish("/srv/ServiceFactory", message);
+		//mManager.publish("/srv/ServiceFactory", message);
 	}
+	
 	
 	
 	public void start() {
 		Map<String,String>go = new HashMap<String,String>();
-		go.put("command","run");
-		mManager.publish(sessionChannel, go);
+		try {
+			mSessionChat.sendMessage(go.toString());
+		} catch (XMPPException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 
 	
 	
-	class OnStartListener implements JunctionListener {
+	class OnStartListener extends MessageHandler {
 		private boolean started=false;
-		public void onMessageReceived(Client from, Message message) {
-			if (message.getData() == null || started) return;
+		public void onMessageReceived(MessageHeader header, JSONObject message) {
 			
 			/*for (JunctionActor actor : mActors) {
 					actor.onActivityStart();
@@ -196,37 +171,66 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	}
 
 	public String getSessionID() {
-		return mSessionID;
+		return mActivityDescription.getSessionID();
 	}
 
-	public void registerMessageHandler(MessageHandler handler) {
-		// TODO: reconcile channel w/ handler
-		// will have to rewrite the handling stuff down to the bayeux layer
-		mManager.addListener(handler);
+	public void registerMessageHandler(final MessageHandler handler) {
+		PacketListener packetListener = new PacketListener() {
+			@Override
+			public void processPacket(Packet packet) {
+				Message message = (Message)packet;
+				System.out.println("got message " + message.toXML());
+				
+				JSONObject obj = null;
+				try {
+					obj = new JSONObject(message.getBody());
+				} catch (Exception e) {
+					System.out.println("Could not convert to json: " + message.getBody());
+					//e.printStackTrace();
+					return;
+				}
+				handler.onMessageReceived(null, obj);
+			}
+		};
+		mXMPPConnection.addPacketListener(packetListener, new PacketTypeFilter(Message.class));
 	}
 
-	public void sendMessageToActor(String actorID, Map<String,Object> message) {
-		mManager.publish(mManager.channelForClient(actorID), message);
+	public void sendMessageToActor(String actorID, JSONObject message) {
+	
+		try {
+			Chat chat = mSessionChat.createPrivateChat(mSessionChat.getRoom()+"/"+actorID,
+					null);
 		
+			chat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendMessageToRole(String role, JSONObject message) {
+		//mManager.publish(mManager.channelForRole(role), message);
 	}
 
-	public void sendMessageToChannel(String channel, Map<String,Object> message) {
-		mManager.publish(channel, message);
+	public void sendMessageToSession(JSONObject message) {
+		try {
+			mSessionChat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
-	protected void sendMessageToSystem(Map<String,Object>message) {
-		mManager.publish(mManager.channelForSystem(), message);
-	}
-
-	public void sendMessageToRole(String role, Map<String,Object> message) {
-		mManager.publish(mManager.channelForRole(role), message);
-	}
-
-	public void sendMessageToSession(Map<String,Object> message) {
-		mManager.publish(mManager.channelForSession(), message);
+	
+/*
+	public void sendMessageToChannel(String channel, JunctionMessage message) {
+		mManager.publish(channel, message);
 		
 	}
+*/
+	/*
+	protected void sendMessageToSystem(JunctionMessage message) {
+		mManager.publish(mManager.channelForSystem(), message);
+	}*/
 
 	public URL getInvitationURL() {
 		URL invitation = null;

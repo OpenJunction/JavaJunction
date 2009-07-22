@@ -4,11 +4,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.stanford.prpl.junction.api.messaging.JunctionListener;
-import edu.stanford.prpl.junction.impl.JunctionManager;
+import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 
 public abstract class JunctionService extends JunctionActor {
-	JunctionManager mManager;
 	String mRole;
 	
 	public abstract String getServiceName();
@@ -29,13 +27,13 @@ public abstract class JunctionService extends JunctionActor {
 		
 		Map<String,Object>params = new HashMap<String,Object>();
 		params.put("host", url.toExternalForm());
-		mManager = new JunctionManager(params);
+		//mManager = new JunctionManager(params);
 		
 		String serviceChannel = "/srv/"+getServiceName();
 		
-		JunctionListener handler = getMessageHandler();
+		MessageHandler handler = getMessageHandler();
 		if (handler != null) {
-			mManager.addListener(serviceChannel, getMessageHandler());
+			//mManager.addListener(serviceChannel, getMessageHandler());
 		}
 	}
 	

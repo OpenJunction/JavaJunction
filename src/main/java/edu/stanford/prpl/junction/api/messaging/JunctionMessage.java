@@ -1,12 +1,10 @@
 package edu.stanford.prpl.junction.api.messaging;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import org.cometd.Message;
-import org.cometd.server.MessageImpl;
 
-public abstract class JunctionMessage extends MessageImpl {
+public abstract class JunctionMessage extends JSONObject {
 	public static final String JX_MESSAGE_TYPE = "jxMessageType";
 	/**
 	 * 
@@ -14,33 +12,27 @@ public abstract class JunctionMessage extends MessageImpl {
 	private static final long serialVersionUID = 1L;
 
 	
-	// Required for deserialization
-	public abstract String getJxMessageType();	
-	
-	public Map<String,Object> getMap() {
-		Map<String,Object>map = new HashMap<String,Object>();
-		map.put("jxMessageType",getJxMessageType());
-		return map;
+	public JunctionMessage(String json) throws JSONException {
+		super(json);
+		put("jxMessageType",getJxMessageType());
 	}
 	
-	public abstract void loadMap(Map<String,Object>map);
+	// Required for deserialization
+	public abstract String getJxMessageType();
 	
+	/*
 	public static boolean isJunctionMessage(Message message) {
-		// hack for aggressive pooling
-        ((MessageImpl)message).incRef();
+
 		if (message.getData() == null) {
 			return false;
 		}
 		
-        ((MessageImpl)message).incRef();
-
 		return ((HashMap<String,Object>)(message.getData())).containsKey("jxMessageType");
-	}
-	
+	}*/
+	/*
 	public static JunctionMessage load(Message message) {
 		try {
-			// hack for aggressive pooling
-	        ((MessageImpl)message).incRef();
+
 			HashMap<String,Object>data = (HashMap<String,Object>)message.getData();
 			JunctionMessage jMsg = null;
 
@@ -62,5 +54,6 @@ public abstract class JunctionMessage extends MessageImpl {
 			return null;
 		}
 	}
+	*/
 	
 }

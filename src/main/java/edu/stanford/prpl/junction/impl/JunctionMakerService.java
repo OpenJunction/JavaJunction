@@ -1,11 +1,11 @@
 package edu.stanford.prpl.junction.impl;
 
-import org.cometd.Client;
-import org.cometd.Message;
+import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.activity.JunctionService;
-import edu.stanford.prpl.junction.api.messaging.JunctionListener;
+import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 
 public class JunctionMakerService extends JunctionService {
 	
@@ -33,7 +33,7 @@ public class JunctionMakerService extends JunctionService {
 	@Override
 	public MessageHandler getMessageHandler() {
 		return new MessageHandler() {
-			public void onMessageReceived(Client from, Message message) {
+			public void onMessageReceived(MessageHeader header, JSONObject message) {
 				System.out.println("maker got message: " + message);
 			}
 		};

@@ -10,38 +10,44 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
+
+import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.messaging.JunctionQueryHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 import edu.stanford.prpl.junction.api.object.OutboundObjectStream;
 
-public class QueryHandler extends JunctionQueryHandler {
+public class QueryHandler extends MessageHandler {
 
-	public static void main(String[] argv) {
-		JunctionQuery q = new JunctionQuery("sql","SELECT name FROM jz_nodes WHERE ptype='genre'");
-		new QueryHandler().handleQuery(q,null);
-		
+	JunctionActor mActor;
+	
+	public QueryHandler(JunctionActor actor) {
+		mActor=actor;
 	}
 	
-	@Override
-	public boolean supportsQuery(JunctionQuery query) {
-		if (!query.getQueryType().equals("sql")) return false;
+	public static void main(String[] argv) throws JSONException {
+		JunctionQuery q = new JunctionQuery("sql","SELECT name,playcount FROM jz_nodes WHERE ptype='genre'");
+		new QueryHandler(null).onMessageReceived(null,q);
 		
-		if (query.getQueryText().toLowerCase().contains("drop")) return false;
-		if (query.getQueryText().toLowerCase().contains("delete")) return false;
-		if (query.getQueryText().toLowerCase().contains("insert")) return false;
-		
-		return true;
 	}
 	
 	
 	@Override
-	public void handleQuery(JunctionQuery q, OutboundObjectStream results) {
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+				
+		//String query = q.getQueryText();
+		String query = message.optString("query");
 		
-		String query = q.getQueryText();
+		query = query.toLowerCase();
 		
+		if (!query.contains("select")) return;
+		if (query.contains("drop") || query.contains("delete")) return;
 		System.out.println("Got query: " + query);
-
+		
 		Connection connection = null;
 	    try {
 	        // Load the JDBC driver
@@ -73,21 +79,25 @@ public class QueryHandler extends JunctionQueryHandler {
 	        
 	    	while (rs.next()) {
 	    		
-	    		Map<String,Object>row = new HashMap<String,Object>();
-	    		for (int i = 1; i <= cols; i++) { // stupid indexing
-	    			row.put(rsMetaData.getColumnName(i), rs.getObject(i));
+	    		JSONObject row = new JSONObject();
+	    		try {
+		    		for (int i = 1; i <= cols; i++) { // stupid indexing
+		    			row.put(rsMetaData.getColumnName(i), rs.getObject(i));
+		    		}
+	    		} catch (JSONException e) {
+	    			e.printStackTrace();
 	    		}
 	    		System.out.println("sending " + row);
-	    		results.send(row);
+	    		if (mActor != null) {
+	    			mActor.getJunction().sendMessageToSession(row);
+	    		}
 	    	}
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
-	    } catch (IOException e) {
 	    	e.printStackTrace();
 	    }
 		
 		
 		System.out.println("closing stream.");
-		results.close();
+		//results.close();
 	  }
 }

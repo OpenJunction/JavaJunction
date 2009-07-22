@@ -1,6 +1,6 @@
 package edu.stanford.prpl.junction.api.messaging;
 
-import java.util.Map;
+import org.json.JSONException;
 
 
 public class JunctionEndOfStream extends JunctionMessage {
@@ -10,17 +10,12 @@ public class JunctionEndOfStream extends JunctionMessage {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public JunctionEndOfStream() {
-		
+	public JunctionEndOfStream() throws JSONException {
+		super("{}");
 	}
 	
 	public String getJxMessageType() {
 		return "jxEOS";
-	}
-	
-	@Override
-	public void loadMap(Map<String,Object> data) {
-		
 	}
 }
 

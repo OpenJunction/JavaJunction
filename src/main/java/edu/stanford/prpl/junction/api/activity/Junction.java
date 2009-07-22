@@ -4,8 +4,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.cometd.Message;
+import org.json.JSONObject;
 
+import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 
 public interface Junction {
@@ -46,10 +47,10 @@ public interface Junction {
 	 */
 	
 	// send
-	public void sendMessageToChannel(String channel, Map<String,Object> message);
-	public void sendMessageToRole(String role, Map<String,Object> message);
-	public void sendMessageToActor(String actorID, Map<String,Object> message);
-	public void sendMessageToSession(Map<String,Object> message);
+	//public void sendMessageToChannel(String channel, JunctionMessage message);
+	public void sendMessageToRole(String role, JSONObject message);
+	public void sendMessageToActor(String actorID, JSONObject message);
+	public void sendMessageToSession(JSONObject message);
 	
 	// receive
 	public void registerMessageHandler(MessageHandler handler);

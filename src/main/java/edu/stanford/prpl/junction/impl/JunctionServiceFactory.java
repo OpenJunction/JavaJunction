@@ -3,20 +3,21 @@ package edu.stanford.prpl.junction.impl;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Map;
-import org.cometd.Client;
-import org.cometd.Message;
+
+import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.activity.JunctionService;
-import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
+import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 
 public class JunctionServiceFactory extends JunctionService {
-	
+
 	@Override
 	public MessageHandler getMessageHandler() {
 		return new MessageHandler() {
 
-			public void onMessageReceived(Client from, Message message) {
+			public void onMessageReceived(MessageHeader header, JSONObject message) {
 				// TODO: verify you got an activity request
 				// somehow get the Activity object
 				// that means the request needs
@@ -25,11 +26,11 @@ public class JunctionServiceFactory extends JunctionService {
 				
 				
 				try {
-					Map<String,Object> data = (Map<String,Object>)message.get("data");
-					URL activityURL = new URL((String)((String)data.get("activityURL")));
+					
+					URL activityURL = new URL((String)(message.getString("activityURL")));
 					
 					// TODO: support a factory mapping from serviceName => class
-					String className = (String)data.get("serviceName");
+					String className = message.getString("serviceName");
 					
 					Class c = null;
 					try {

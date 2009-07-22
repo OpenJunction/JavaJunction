@@ -2,7 +2,6 @@ package edu.stanford.prpl.junction.api.activity;
 
 import java.util.UUID;
 
-import edu.stanford.prpl.junction.api.messaging.JunctionListener;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 import edu.stanford.prpl.junction.impl.Junction;
 
