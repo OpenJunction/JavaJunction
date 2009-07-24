@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>edu.stanford.prpl.junction</groupId>
-  <artifactId>Junction</artifactId>
+  <artifactId>JAVAJunction</artifactId>
   <version>0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Junction</name>
