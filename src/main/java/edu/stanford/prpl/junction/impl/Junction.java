@@ -11,30 +11,28 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
-import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
+import org.jivesoftware.smackx.muc.DiscussionHistory;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
-import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
 import edu.stanford.prpl.junction.api.messaging.MessageHeader;
+import edu.stanford.prpl.junction.api.messaging.target.MessageTarget;
 
 public class Junction implements edu.stanford.prpl.junction.api.activity.Junction {
+	public static String NS_JX = "jx";
 	private ActivityDescription mActivityDescription;
 	private JunctionActor mOwner;
-	private XMPPConnection xmppConnection;
 	private URL mHostURL;
 	private Map<String,String>mPeers; // actorID to Role
 
@@ -60,34 +58,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			mXMPPConnection.connect();
 			mXMPPConnection.loginAnonymously();
 			
-			String mSessionChatString = mActivityDescription.getSessionID()+"@conference."+mXMPPServer;
-			mSessionChat = new MultiUserChat(mXMPPConnection, mSessionChatString);
-
-			System.out.println("Joining " + mSessionChatString);
-			if (mActivityDescription.isActivityOwner()) {
-				try {
-					// TODO: is this an error? is there really a notion of ownership?
-					mSessionChat.create(mActivityDescription.getActorID());
-					mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
-				} catch (XMPPException e) {
-					try {
-						mSessionChat.join(mActivityDescription.getActorID());
-					} catch (XMPPException e2) {
-						System.err.println("could not join or create room. ");
-						e2.printStackTrace();
-					}
-				}
-			} else {
-				mSessionChat.join(mActivityDescription.getActorID());
-			}
-			
-			mSessionChat.addMessageListener(new PacketListener() {
-				@Override
-				public void processPacket(Packet packet) {
-					System.out.println("got packet: " + packet.toXML());
-				}
-			});
-			
+			mSessionChat = joinSessionChat();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -189,12 +160,32 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 					//e.printStackTrace();
 					return;
 				}
-				handler.onMessageReceived(null, obj);
+				if (obj.has(NS_JX)) {
+					JSONObject header = obj.optJSONObject(NS_JX);
+					if (header.has("targetRole")) {
+						String target = header.optString("targetRole");
+						String[] roles = mActivityDescription.getActorRoles();
+						boolean forMe=false;
+						for (int i=0;i<roles.length;i++) {
+							if (roles[i].equals(target)) {
+								forMe=true;
+								break;
+							}
+							if (!forMe) return;
+						}
+					}
+				}
+				handler.onMessageReceived(new MessageHeader(Junction.this,obj), obj);
 			}
 		};
 		mXMPPConnection.addPacketListener(packetListener, new PacketTypeFilter(Message.class));
 	}
 
+	
+	public void sendMessageToTarget(MessageTarget target, JSONObject message) {
+		target.sendMessage(message);
+	}
+	
 	public void sendMessageToActor(String actorID, JSONObject message) {
 	
 		try {
@@ -208,7 +199,21 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	}
 	
 	public void sendMessageToRole(String role, JSONObject message) {
-		//mManager.publish(mManager.channelForRole(role), message);
+		try {
+			JSONObject jx;
+			if (message.has(NS_JX)) {
+				jx = message.optJSONObject(NS_JX);
+			} else {
+				jx = new JSONObject();
+			}
+			try {
+				jx.put("targetRole", role);
+			} catch (Exception e) {}
+			mSessionChat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void sendMessageToSession(JSONObject message) {
@@ -255,6 +260,66 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 
 		return invitation;
 	}
+	
+	
+	private MultiUserChat joinSessionChat() throws XMPPException {
+		String room = mActivityDescription.getSessionID()+"@conference."+mXMPPServer;
+		
+		DiscussionHistory history = new DiscussionHistory();
+		history.setMaxChars(0);
+		MultiUserChat chat = new MultiUserChat(mXMPPConnection, room);
+
+		System.out.println("Joining " + room);
+		//if (mActivityDescription.isActivityOwner()) {
+			try {
+				try {
+					MultiUserChat.getRoomInfo(mXMPPConnection, room);
+					chat.join(mActivityDescription.getActorID(),null,history,10000);
+					return chat;
+				} catch (Exception e) {}
+				
+				System.out.println("Trying to create room");
+				// TODO: is this an error? is there really a notion of ownership?
+				chat.create(mActivityDescription.getActorID());
+				//mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
+				
+				System.out.println("sending config form");
+				 Form form = chat.getConfigurationForm();
+			      // Create a new form to submit based on the original form
+			      Form submitForm = form.createAnswerForm();
+			      // Add default answers to the form to submit
+			      for (Iterator<FormField> fields = form.getFields(); fields.hasNext();) {
+			          FormField field = (FormField) fields.next();
+			          //System.out.println(field.toXML());
+			          if (!FormField.TYPE_HIDDEN.equals(field.getType()) && field.getVariable() != null) {
+			              // Sets the default value as the answer
+			              submitForm.setDefaultAnswer(field.getVariable());
+			          }
+			      }
+			      
+			    List<String>whois = new ArrayList<String>();
+			    whois.add("moderators");
+			    submitForm.setAnswer("muc#roomconfig_whois", whois);
+			    chat.sendConfigurationForm(submitForm);
+				
+				
+			} catch (XMPPException e) {
+				System.out.println("Could not create room");
+				e.printStackTrace();
+				try {
+					chat.join(mActivityDescription.getActorID(),null,history,10000);
+				} catch (XMPPException e2) {
+					System.err.println("could not join or create room. ");
+					e2.printStackTrace();
+				}
+			}
+		/*} else {
+			chat.join(mActivityDescription.getActorID(),null,history,10000);
+		}*/
+		
+		return chat;
+	}
+	
 	
 }
 

@@ -13,7 +13,6 @@ import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
-import edu.stanford.prpl.junction.impl.JunctionCallback;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
 
 public class SendQuery extends JunctionActor {
@@ -57,28 +56,5 @@ public class SendQuery extends JunctionActor {
 		}
 		
 		System.out.println("Sending query: " + query.getQueryText());
-		
-		JunctionCallback callback =  new JunctionCallback() {
-			@Override
-			public void onObjectReceived(InboundObjectStream stream) {
-				try {
-					while (stream.hasObject()) {
-						Object o = stream.receive();
-						System.out.println("result: " + o);
-					}
-				} catch (IOException e) {
-					
-				}
-			}
-			
-			@Override
-			public void onTermination(boolean wasRemote) {
-				String whodoneit = (wasRemote) ? "remotely" : "locally";
-				System.out.println("Query thread terminated " + whodoneit + ".");
-			}
-		};
-		
-		
-		
 	}
 }

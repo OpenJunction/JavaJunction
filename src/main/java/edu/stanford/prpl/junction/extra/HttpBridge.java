@@ -2,15 +2,63 @@ package edu.stanford.prpl.junction.extra;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
-
+/*
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
+*/
+
+// temporary to avoid errors, without including HttpServlet as dependency
+class ServletInputStream extends InputStream {
+
+	@Override
+	public int read() throws IOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}
+
+class ServletOutputStream extends OutputStream {
+
+	@Override
+	public void write(int b) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void print(String s) {}
+	
+}
+
+class HttpServletRequest {
+	public String getRequestURI() { return null; }
+	public String getContentType() { return null; }
+	public ServletInputStream getInputStream () { return null; }
+}
+
+class HttpServletResponse {
+	public void setContentType(String type) {}
+	
+	
+	public ServletOutputStream getOutputStream () { return null; }
+}
+
+class HttpServlet {
+	protected void doPost(HttpServletRequest req,
+			HttpServletResponse resp) {}
+	
+	protected void doGet(HttpServletRequest req,
+			HttpServletResponse resp) {}
+	
+}
 
 public class HttpBridge extends HttpServlet {
 	/**

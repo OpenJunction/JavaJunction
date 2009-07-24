@@ -89,7 +89,8 @@ public class QueryHandler extends MessageHandler {
 	    		}
 	    		System.out.println("sending " + row);
 	    		if (mActor != null) {
-	    			mActor.getJunction().sendMessageToSession(row);
+	    			//mActor.getJunction().sendMessageToTarget(header.getReplyTarget(),row);
+	    			header.getReplyTarget().sendMessage(row);
 	    		}
 	    	}
 	    } catch (SQLException e) {

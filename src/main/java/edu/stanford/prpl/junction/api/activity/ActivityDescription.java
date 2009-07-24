@@ -12,7 +12,7 @@ public class ActivityDescription {
 	// member tokens
 	private boolean isActivityOwner;
 	private String actorID;
-	private String[] actorRoles;
+	private String[] actorRoles = {};
 	
 	public ActivityDescription(Map<String,Object>desc) {
 		if (desc.containsKey("host")) {
@@ -74,11 +74,11 @@ public class ActivityDescription {
 		this.activityID = activityID;
 	}
 	
-	public void setRoles(String[] roles) {
+	public void setActorRoles(String[] roles) {
 		actorRoles=roles;
 	}
 	
-	public String[] getRoles() {
+	public String[] getActorRoles() {
 		return actorRoles;
 	}
 	
