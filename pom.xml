@@ -28,11 +28,16 @@
       <!-- <version>3.1.0</version>  -->
    	  <version>3.0.4-patch</version>
     </dependency>
+    
+    <!-- This artifact is bundled with 3.0.4-patch
     <dependency>
     	<groupId>org.jivesoftware</groupId>
     	<artifactId>smackx</artifactId>
     	<version>3.1.0</version>
     </dependency>
+     -->
+    
+    
     <dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
