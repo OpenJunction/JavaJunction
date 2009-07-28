@@ -16,28 +16,18 @@
   <name>Junction</name>
   <description>JAVA Junction Manager</description>
   <dependencies>
-  <!--  for patched smack; used in android. -->
-  <dependency>
-      <groupId>kxml</groupId>
-      <artifactId>kxml2</artifactId>
-      <version>2.1.8</version>
-    </dependency>
     <dependency>
       <groupId>org.jivesoftware</groupId>
       <artifactId>smack</artifactId>
-      <!-- <version>3.1.0</version>  -->
-   	  <version>3.0.4-patch</version>
+      <!--<version>3.1.0</version>-->
+      <version>3.0.4-android</version>
     </dependency>
-    
-    <!-- This artifact is bundled with 3.0.4-patch
     <dependency>
     	<groupId>org.jivesoftware</groupId>
     	<artifactId>smackx</artifactId>
-    	<version>3.1.0</version>
+    	<!--<version>3.1.0</version>-->
+        <version>3.0.4-android</version>
     </dependency>
-     -->
-    
-    
     <dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
