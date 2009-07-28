@@ -24,13 +24,12 @@ public class JunctionMaker {
 		return new JunctionMaker();
 	}
 	
-	private JunctionMaker() {
+	protected JunctionMaker() {
 		
 	}
 	
-	private JunctionMaker(URL url) {
+	protected JunctionMaker(URL url) {
 		mHostURL=url;
-		
 	}
 	
 	// TODO: add 0-arg constructor for activities w/ given junction hosts
