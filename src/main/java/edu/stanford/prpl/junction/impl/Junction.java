@@ -79,6 +79,8 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			registerMessageHandler(handler);
 		}
 		
+		mOwner.onActivityJoin();
+		
 	}
 	
 	
