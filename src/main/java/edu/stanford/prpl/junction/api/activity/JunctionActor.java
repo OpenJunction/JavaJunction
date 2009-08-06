@@ -37,7 +37,9 @@ public abstract class JunctionActor {
 		return actorID;
 	}
 	
-	public abstract void onActivityStart(); 
+	public void onActivityStart() {
+		
+	}
 	
 	// TODO: yes, this should be a MessageHandler
 	public MessageHandler getMessageHandler() { return null; }
