@@ -172,7 +172,12 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 						}
 					}
 				}
-				handler.onMessageReceived(new MessageHeader(Junction.this,obj), obj);
+				int i;
+				String from = message.getFrom();
+				if ((i =from.lastIndexOf('/')) >= 0) {
+					from = from.substring(i);
+				}
+				handler.onMessageReceived(new MessageHeader(Junction.this,obj,from), obj);
 			}
 		};
 		mXMPPConnection.addPacketListener(packetListener, new PacketTypeFilter(Message.class));
