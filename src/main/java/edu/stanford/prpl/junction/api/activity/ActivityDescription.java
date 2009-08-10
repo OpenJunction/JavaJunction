@@ -16,7 +16,10 @@ public class ActivityDescription {
 	private String actorID;
 	private String[] actorRoles = {};
 	
-	public ActivityDescription() {}
+	public ActivityDescription() {
+		sessionID 	= UUID.randomUUID().toString();
+		actorID	 	= UUID.randomUUID().toString();
+	}
 	
 	public ActivityDescription(JSONObject json) {
 		if (json.has("host")) {
