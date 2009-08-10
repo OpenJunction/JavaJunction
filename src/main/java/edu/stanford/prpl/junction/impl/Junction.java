@@ -34,7 +34,6 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	private ActivityDescription mActivityDescription;
 	private JunctionActor mOwner;
 	private URL mHostURL;
-	private Map<String,String>mPeers; // actorID to Role
 
 	private String mXMPPServer;
 	private XMPPConnection mXMPPConnection;
@@ -100,6 +99,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	
 	public void start() {
 		Map<String,String>go = new HashMap<String,String>();
+		
 		try {
 			mSessionChat.sendMessage(go.toString());
 		} catch (XMPPException e) {
@@ -129,12 +129,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	public List<String> getActorsForRole(String role) {
 		// inefficient but who cares. small map.
 		List<String>results = new ArrayList<String>();
-		Set<String>keys = mPeers.keySet();
-		for (String key : keys) {
-			if (mPeers.get(key).equals(role)) {
-				results.add(key);
-			}
-		}
+		
 		return results;
 	}
 

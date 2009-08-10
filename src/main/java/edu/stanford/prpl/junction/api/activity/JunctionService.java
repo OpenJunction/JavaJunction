@@ -1,12 +1,37 @@
 package edu.stanford.prpl.junction.api.activity;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smackx.Form;
+import org.jivesoftware.smackx.FormField;
+import org.jivesoftware.smackx.muc.DiscussionHistory;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.json.JSONObject;
+
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
+import edu.stanford.prpl.junction.impl.Junction;
+import edu.stanford.prpl.junction.impl.JunctionMaker;
 
 public abstract class JunctionService extends JunctionActor {
+	public static String SERVICE_CHANNEL="jxservices";
+	
+	private static Map<String,Junction>mJunctionMap;
+	{
+		mJunctionMap = new HashMap<String,Junction>();
+	}
+	
 	String mRole;
 	
 	public abstract String getServiceName();
@@ -25,20 +50,20 @@ public abstract class JunctionService extends JunctionActor {
 	
 	public final void register(URL url) {
 		
-		Map<String,Object>params = new HashMap<String,Object>();
-		params.put("host", url.toExternalForm());
-		//mManager = new JunctionManager(params);
+		if (mJunctionMap.containsKey(url.getHost())) return;
 		
-		String serviceChannel = "/srv/"+getServiceName();
+		ActivityDescription desc = new ActivityDescription();
+		desc.setHost(url.getHost());
+		desc.setSessionID(SERVICE_CHANNEL);
+		desc.setActorID(getServiceName());
+		desc.setActivityID("junction.service");
 		
-		MessageHandler handler = getMessageHandler();
-		if (handler != null) {
-			//mManager.addListener(serviceChannel, getMessageHandler());
-		}
+		Junction jx = JunctionMaker.getInstance().newJunction(desc, this);
+		mJunctionMap.put(url.getHost(), jx);
+
 	}
 	
 	public void setRole(String role) {
 		mRole=role;
 	}
-	
 }

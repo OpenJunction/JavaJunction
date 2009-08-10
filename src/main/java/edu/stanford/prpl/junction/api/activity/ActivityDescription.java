@@ -3,6 +3,8 @@ package edu.stanford.prpl.junction.api.activity;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 public class ActivityDescription {
 	// session tokens
 	private String sessionID;
@@ -13,6 +15,26 @@ public class ActivityDescription {
 	private boolean isActivityOwner;
 	private String actorID;
 	private String[] actorRoles = {};
+	
+	public ActivityDescription() {}
+	
+	public ActivityDescription(JSONObject json) {
+		if (json.has("host")) {
+			host = json.optString("host");
+		}
+		if (json.has("sessionID")) {
+			sessionID = json.optString("sessionID");
+		} else {
+			isActivityOwner=true;
+			sessionID = UUID.randomUUID().toString();
+		}
+		
+		if (json.has("actorID")) {
+			actorID = json.optString("actorID");
+		} else {
+			actorID = UUID.randomUUID().toString();
+		}
+	}
 	
 	public ActivityDescription(Map<String,Object>desc) {
 		if (desc.containsKey("host")) {

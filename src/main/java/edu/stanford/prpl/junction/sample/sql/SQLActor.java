@@ -3,6 +3,8 @@ package edu.stanford.prpl.junction.sample.sql;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
@@ -22,11 +24,21 @@ public class SQLActor extends JunctionActor {
 			activity.put("host", "prpl.stanford.edu");
 			activity.put("role", "sql-server");
 			activity.put("sessionID","sqlQuerySession");
-			activity.put("owner",true);
+			//activity.put("owner",true);
 			
 			JunctionMaker jm = JunctionMaker.getInstance();
-			jm.newJunction(activity, new SQLActor());
+			Junction jx = jm.newJunction(activity, new SQLActor());
 
+			/*
+			try {
+				Thread.sleep(3000);
+				JSONObject msg = new JSONObject();
+				msg.put("query","select count(*) from jz_nodes");
+				jx.sendMessageToSession(msg);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			*/
 			
 			Object dud = new Object();
 			synchronized(dud){

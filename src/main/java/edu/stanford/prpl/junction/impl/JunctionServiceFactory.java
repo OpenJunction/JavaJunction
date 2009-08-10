@@ -49,21 +49,21 @@ public class JunctionServiceFactory extends JunctionService {
 					service = (JunctionService)method.invoke(null);
 					
 					String queryPart = activityURL.getQuery(); 
+					System.out.println("query part is " + queryPart);
 					String localRole = "Unknown";
 					int i;
-					if ((i = queryPart.indexOf("requestedRole=")) > 0) {
+					if ((i = queryPart.indexOf("requestedRole=")) >= 0) {
 						localRole = queryPart.substring(i+14);
 						if ((i = localRole.indexOf("&"))>0) {
 							localRole = localRole.substring(0,i);
 						}
 					}
 					
+					System.out.println("Setting service role to " + localRole);
 					service.setRole(localRole);
 					
-					
-					JunctionMaker.getInstance().newJunction(activityURL,service);
-					
-					
+					System.out.println("service actorID is " + service.getActorID());
+					JunctionMaker.getInstance().newJunction(activityURL,service);					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
