@@ -1,10 +1,12 @@
 package edu.stanford.prpl.junction.sample.sql;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
 
+import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
@@ -20,14 +22,12 @@ public class SQLActor extends JunctionActor {
 	public static void main(String[] argv) {
 		try {
 			System.out.println("Starting the database actor");
-			Map<String,Object> activity = new HashMap<String,Object>();
-			activity.put("host", "prpl.stanford.edu");
-			activity.put("role", "sql-server");
-			activity.put("sessionID","sqlQuerySession");
-			//activity.put("owner",true);
+			JSONObject activity = new JSONObject();
+			activity.put("sessionID", "sqlQuerySession");
+			activity.put("ad","edu.stanford.prpl.junction.demo.sql");
 			
-			JunctionMaker jm = JunctionMaker.getInstance();
-			Junction jx = jm.newJunction(activity, new SQLActor());
+			JunctionMaker jm = JunctionMaker.getInstance("prpl.stanford.edu");
+			Junction jx = jm.newJunction(new ActivityDescription(activity), new SQLActor());
 
 			/*
 			try {

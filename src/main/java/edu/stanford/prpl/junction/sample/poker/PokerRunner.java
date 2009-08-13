@@ -13,9 +13,9 @@ public class PokerRunner {
 	
 	
 	public static void main(String[] argv) {
-		URL url = null;
+		String url = null;
 		try {
-			url = new URL("http://prpl.stanford.edu:8181/cometd/cometd");
+			url = "prpl.stanford.edu";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
@@ -26,7 +26,7 @@ public class PokerRunner {
 		// This will already be available when
 		// we have a true Junction Server
 		JunctionService waiter = JunctionMakerService.newInstance();
-		waiter.register(url);
+		//waiter.register(url);
 		
 
 		////////////////////////////////////////////////////

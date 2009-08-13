@@ -13,11 +13,11 @@ import edu.stanford.prpl.junction.api.activity.JunctionActor;
 
 
 public class JunctionMaker {
-	private URL mHostURL;
+	private String mSwitchboard;
 	
-	public static JunctionMaker getInstance(URL url) {
+	public static JunctionMaker getInstance(String switchboard) {
 		// todo: singleton per-URL?
-		return new JunctionMaker(url);
+		return new JunctionMaker(switchboard);
 	}
 	
 	public static JunctionMaker getInstance() {
@@ -28,8 +28,8 @@ public class JunctionMaker {
 		
 	}
 	
-	protected JunctionMaker(URL url) {
-		mHostURL=url;
+	protected JunctionMaker(String switchboard) {
+		mSwitchboard=switchboard;
 	}
 	
 	// TODO: add 0-arg constructor for activities w/ given junction hosts
@@ -67,6 +67,12 @@ public class JunctionMaker {
 	}
 	
 	public Junction newJunction(ActivityDescription desc, JunctionActor actor) {
+		
+		// this needs to be made more formal
+		if (null == desc.getHost() && mSwitchboard != null) {
+			desc.setHost(mSwitchboard);
+		}
+		
 		Junction jx = new Junction(desc);
 		jx.registerActor(actor);
 		// creating an activity is an activity using a JunctionService.
@@ -77,12 +83,12 @@ public class JunctionMaker {
 	}
 	
 	public Junction newJunction(Map<String,Object>desc, JunctionActor actor) {
-		if (desc.get("host") == null && mHostURL == null) {
+		if (desc.get("host") == null && mSwitchboard == null) {
 			return null;
 		}
 		
 		if (desc.get("host") == null) {
-			desc.put("host", mHostURL.toExternalForm());
+			desc.put("host", mSwitchboard);
 		}
 		
 		ActivityDescription activityDesc = new ActivityDescription(desc);
