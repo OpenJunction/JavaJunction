@@ -41,6 +41,10 @@ public abstract class JunctionActor {
 		
 	}
 	
+	public void onActivityCreate() {
+		
+	}
+	
 	// TODO: yes, this should be a MessageHandler
 	public MessageHandler getMessageHandler() { return null; }
 }

@@ -77,6 +77,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		if (handler != null) {
 			registerMessageHandler(handler);
 		}
+		if (mActivityDescription.isActivityCreator()) {
+			mOwner.onActivityCreate();
+		}
 		
 		mOwner.onActivityJoin();
 		
@@ -292,7 +295,10 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			      // Add default answers to the form to submit
 			      for (Iterator<FormField> fields = form.getFields(); fields.hasNext();) {
 			          FormField field = (FormField) fields.next();
-			          //System.out.println(field.toXML());
+			          System.out.println(field.toXML());
+			          if ("muc#roomconfig_roomdesc".equals(field.getVariable())) {
+			        	  submitForm.setAnswer("muc#roomconfig_roomdesc", mActivityDescription.getJSON().toString());
+			          }
 			          if (!FormField.TYPE_HIDDEN.equals(field.getType()) && field.getVariable() != null) {
 			              // Sets the default value as the answer
 			              submitForm.setDefaultAnswer(field.getVariable());

@@ -6,13 +6,30 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 public class ActivityDescription {
+	
+	/**
+	 * Note that there is probably a lot of confusing code in here
+	 * due to our redefinition of the Activity Description.
+	 * 
+	 *  The new setup:: there is an ActivityDescription that details
+	 *  roles / platforms / codebases, and a SessionDescription,
+	 *  that specifies sessionID, switchboard, and requestedRole.
+	 *  
+	 *  Both of these constructs can be used to instantiate an Actor,
+	 *  one by creating a new session and one by joining a previously
+	 *  created one.
+	 */
+	
+	// JSON representation
+	private JSONObject mJSON = null;
+	
 	// session tokens
 	private String sessionID;
 	private String host;
 	private String activityID;
 	
 	// member tokens
-	private boolean isActivityOwner;
+	private boolean isActivityCreator;
 	private String actorID;
 	private String[] actorRoles = {};
 	
@@ -22,13 +39,15 @@ public class ActivityDescription {
 	}
 	
 	public ActivityDescription(JSONObject json) {
+		mJSON = json;
+		
 		if (json.has("host")) {
 			host = json.optString("host");
 		}
 		if (json.has("sessionID")) {
 			sessionID = json.optString("sessionID");
 		} else {
-			isActivityOwner=true;
+			isActivityCreator=true;
 			sessionID = UUID.randomUUID().toString();
 		}
 		
@@ -49,12 +68,12 @@ public class ActivityDescription {
 			sessionID = (String)desc.get("sessionID");
 			// probably temporary?
 			if (!desc.containsKey("owner")) {
-				isActivityOwner=false;
+				isActivityCreator=false;
 			} else {
-				isActivityOwner=true;
+				isActivityCreator=true;
 			}
 		} else {
-			isActivityOwner=true;
+			isActivityCreator=true;
 			sessionID = UUID.randomUUID().toString();
 		}
 		
@@ -107,7 +126,11 @@ public class ActivityDescription {
 		return actorRoles;
 	}
 	
-	public boolean isActivityOwner() {
-		return isActivityOwner;
+	public boolean isActivityCreator() {
+		return isActivityCreator;
+	}
+	
+	public JSONObject getJSON() {
+		return mJSON;
 	}
 }
