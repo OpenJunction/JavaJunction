@@ -30,12 +30,12 @@ public class ActivityDescription {
 	
 	// member tokens
 	private boolean isActivityCreator;
-	private String actorID;
+	//private String actorID;
 	private String[] actorRoles = {};
 	
 	public ActivityDescription() {
 		sessionID 	= UUID.randomUUID().toString();
-		actorID	 	= UUID.randomUUID().toString();
+		//actorID	 	= UUID.randomUUID().toString();
 	}
 	
 	public ActivityDescription(JSONObject json) {
@@ -50,12 +50,12 @@ public class ActivityDescription {
 			isActivityCreator=true;
 			sessionID = UUID.randomUUID().toString();
 		}
-		
+		/*
 		if (json.has("actorID")) {
 			actorID = json.optString("actorID");
 		} else {
 			actorID = UUID.randomUUID().toString();
-		}
+		}*/
 	}
 	
 	public ActivityDescription(Map<String,Object>desc) {
@@ -80,25 +80,26 @@ public class ActivityDescription {
 		if (desc.containsKey("activityID")) {
 			activityID = (String)desc.get("activityID");
 		}
-		
+		/*
 		if (desc.containsKey("actorID")) {
 			actorID = (String)desc.get("actorID");
 		} else {
 			actorID = UUID.randomUUID().toString();
-		}
+		}*/
 	}
 	
-	
+	/*
 	public String getActorID() {
 		return actorID;
 	}
+	
 
 
 	public void setActorID(String actorID) {
 		this.actorID = actorID;
 	}
-
-
+   */
+	
 	public String getSessionID() {
 		return sessionID;
 	}

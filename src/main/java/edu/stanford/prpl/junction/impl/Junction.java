@@ -282,7 +282,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 				
 				System.out.println("Trying to create room");
 				// TODO: is this an error? is there really a notion of ownership?
-				chat.create(mActivityDescription.getActorID());
+				chat.create(mOwner.getActorID());
 				//mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
 				
 				System.out.println("sending config form");
