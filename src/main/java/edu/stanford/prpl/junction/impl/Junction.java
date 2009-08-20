@@ -45,10 +45,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	protected Junction(ActivityDescription desc) {
 		mActivityDescription=desc;
 		mXMPPServer=mActivityDescription.getHost();
-		init();
 	}
 	
-	private void init() {
+	private void xmppInit() {
 		mXMPPConnection= new XMPPConnection(mActivityDescription.getHost());
 		try {
 			mXMPPConnection.connect();
@@ -69,6 +68,8 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		System.out.println("adding actor for role " + actor.getRole());
 		mOwner = actor;
 		mOwner.setJunction(this);
+		
+		xmppInit();
 		
 		MessageHandler handler = actor.getMessageHandler();
 		if (handler != null) {
