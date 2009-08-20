@@ -29,5 +29,9 @@ public class MessageHeader {
 		return MessageTargetFactory.getInstance(jx).getTarget("actor:"+from);
 	}
 	
+	public String getSender() {
+		return from;
+	}
+	
 	public Junction getJunction() { return jx; }
 }
