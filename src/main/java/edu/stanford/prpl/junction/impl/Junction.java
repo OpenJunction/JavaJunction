@@ -175,7 +175,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 				int i;
 				String from = message.getFrom();
 				if ((i =from.lastIndexOf('/')) >= 0) {
-					from = from.substring(i);
+					from = from.substring(i+1);
 				}
 				handler.onMessageReceived(new MessageHeader(Junction.this,obj,from), obj);
 			}
