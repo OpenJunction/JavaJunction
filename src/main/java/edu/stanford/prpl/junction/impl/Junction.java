@@ -276,7 +276,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			try {
 				try {
 					MultiUserChat.getRoomInfo(mXMPPConnection, room);
-					chat.join(mActivityDescription.getActorID(),null,history,10000);
+					chat.join(mOwner.getActorID(),null,history,10000);
 					return chat;
 				} catch (Exception e) {}
 				
@@ -312,7 +312,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 				System.out.println("Could not create room");
 				e.printStackTrace();
 				try {
-					chat.join(mActivityDescription.getActorID(),null,history,10000);
+					chat.join(mOwner.getActorID(),null,history,10000);
 				} catch (XMPPException e2) {
 					System.err.println("could not join or create room. ");
 					e2.printStackTrace();
