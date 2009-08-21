@@ -24,6 +24,7 @@ public interface Junction {
 	 * Activity Lifecycle
 	 */
 	public void start();
+	public void disconnect();
 	// public void onStart(); // or register handler?
 	
 	/** 

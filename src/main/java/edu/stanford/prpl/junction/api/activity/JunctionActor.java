@@ -41,6 +41,14 @@ public abstract class JunctionActor {
 		
 	}
 	
+	public final void leave() {
+		Junction jx = getJunction();
+		if (jx != null) {
+			jx.disconnect();
+			setJunction(null);
+		}
+	}
+	
 	public void onActivityCreate() {
 		
 	}

@@ -109,7 +109,12 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		}
 	}
 	
-
+	public void disconnect() {
+		if (mXMPPConnection != null) {
+			mXMPPConnection.disconnect();
+			mXMPPConnection = null;
+		}
+	}
 	
 	
 	class OnStartListener extends MessageHandler {
