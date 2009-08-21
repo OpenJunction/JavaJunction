@@ -41,9 +41,16 @@ public class ActivityDescription {
 	public ActivityDescription(JSONObject json) {
 		mJSON = json;
 		
-		if (json.has("host")) {
+		// preferred
+		if (json.has("switchboard")) {
+			host = json.optString("switchboard");
+		}
+		// deprecated
+		else if (json.has("host")) {
 			host = json.optString("host");
 		}
+		
+		
 		if (json.has("sessionID")) {
 			sessionID = json.optString("sessionID");
 		} else {
