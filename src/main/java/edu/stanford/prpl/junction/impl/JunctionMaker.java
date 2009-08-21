@@ -49,7 +49,7 @@ public class JunctionMaker {
 		}
 		
 		desc.setHost(url.getHost());
-		desc.setActorID(actor.getActorID());
+		//desc.setActorID(actor.getActorID());
 		
 		return newJunction(desc,actor);
 	}
