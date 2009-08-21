@@ -139,6 +139,16 @@ public class ActivityDescription {
 	}
 	
 	public JSONObject getJSON() {
-		return mJSON;
+		// hack until the object is populated correctly
+		if (mJSON != null) {
+			return mJSON;
+		}
+		
+		JSONObject j = new JSONObject();
+		try {
+			j.put("sessionID", sessionID);
+			j.put("switchboard",host);
+		} catch (Exception e) {}
+		return j;
 	}
 }
