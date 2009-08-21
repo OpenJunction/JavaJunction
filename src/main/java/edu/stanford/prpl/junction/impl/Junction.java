@@ -142,6 +142,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	public String getSessionID() {
 		return mActivityDescription.getSessionID();
 	}
+	public String getSwitchnboard() {
+		return mActivityDescription.getHost();
+	}
 
 	public void registerMessageHandler(final MessageHandler handler) {
 		PacketListener packetListener = new PacketListener() {
