@@ -55,7 +55,7 @@ public abstract class JunctionService extends JunctionActor {
 		ActivityDescription desc = new ActivityDescription();
 		desc.setHost(url.getHost());
 		desc.setSessionID(SERVICE_CHANNEL);
-		desc.setActorID(getServiceName());
+		//desc.setActorID(getServiceName());
 		desc.setActivityID("junction.service");
 		
 		Junction jx = JunctionMaker.getInstance().newJunction(desc, this);
