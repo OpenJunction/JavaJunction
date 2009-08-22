@@ -47,6 +47,16 @@ public class JunctionMaker {
 	
 	public Junction newJunction(URL url, JunctionActor actor) {
 		ActivityDescription desc = new ActivityDescription();
+		desc.setHost(url.getHost());
+		if (url.getPath() != null) { // TODO: check to make sure this works for URIs w/o path
+			desc.setSessionID(url.getPath().substring(1));
+		}
+		
+		return newJunction(desc,actor);
+		
+		/*
+		  
+		ActivityDescription desc = new ActivityDescription();
 		String query = url.getQuery();
 		
 		String tmp;
@@ -58,6 +68,8 @@ public class JunctionMaker {
 		//desc.setActorID(actor.getActorID());
 		
 		return newJunction(desc,actor);
+		
+		*/
 	}
 	
 	private String getURLParam(String query, String param) {
