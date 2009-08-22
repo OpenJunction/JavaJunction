@@ -10,15 +10,20 @@ import edu.stanford.prpl.junction.impl.Junction;
 public abstract class JunctionActor {
 	protected Junction mJunction;
 	private String actorID;
-	private String mRole;
+	private String[] mRoles;
 	
-	public String getRole() {
-		return mRole;
+	public String[] getRoles() {
+		return mRoles;
 	}
 	
 	public JunctionActor(String role) {
 		actorID = UUID.randomUUID().toString();
-		mRole = role;
+		mRoles = new String[]{role};
+	}
+	
+	public JunctionActor(String[] roles) {
+		actorID = UUID.randomUUID().toString();
+		mRoles=roles;
 	}
 	
 	public void onActivityJoin() {

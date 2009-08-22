@@ -18,7 +18,7 @@ public interface Junction {
 	public String getActivityID();
 	public String getSessionID();
 	public String getSwitchboard();
-	public List<String> getRoles();
+	public String[] getRoles();
 	
 	/**
 	 * Activity Lifecycle

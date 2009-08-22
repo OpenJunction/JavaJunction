@@ -65,7 +65,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	
 	
 	public void registerActor(final JunctionActor actor) {
-		System.out.println("adding actor for role " + actor.getRole());
+		System.out.println("adding actor for roles " + actor.getRoles());
 		mOwner = actor;
 		mOwner.setJunction(this);
 		
@@ -139,9 +139,8 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		return results;
 	}
 
-	public List<String> getRoles() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getRoles() {
+		return mActivityDescription.getRoles();
 	}
 
 	public String getSessionID() {
@@ -170,7 +169,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 					JSONObject header = obj.optJSONObject(NS_JX);
 					if (header.has("targetRole")) {
 						String target = header.optString("targetRole");
-						String[] roles = mActivityDescription.getActorRoles();
+						String[] roles = mOwner.getRoles();
 						boolean forMe=false;
 						for (int i=0;i<roles.length;i++) {
 							if (roles[i].equals(target)) {
