@@ -9,6 +9,7 @@ import org.json.JSONException;
 
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
+import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
@@ -26,11 +27,7 @@ public class SendQuery extends JunctionActor {
 			// todo: same session for client/server
 			System.out.println("Starting the query actor");
 			
-			Map<String,Object> activity = new HashMap<String,Object>();
-			
-			activity.put("host", "prpl.stanford.edu");
-			activity.put("role", "sql-client");
-			activity.put("sessionID","sqlQuerySession");
+			ActivityDescription activity = new ActivityDescription();
 			
 			Junction jx = JunctionMaker.getInstance().newJunction(activity, new SendQuery());
 			

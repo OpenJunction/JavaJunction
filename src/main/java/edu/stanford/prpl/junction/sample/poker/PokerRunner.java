@@ -4,6 +4,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
+import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.JunctionService;
 import edu.stanford.prpl.junction.impl.Junction;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
@@ -30,9 +33,7 @@ public class PokerRunner {
 		
 
 		////////////////////////////////////////////////////
-		Map<String,Object>desc = new HashMap<String, Object>();
-		desc.put("ad","poker");
-		
+		ActivityDescription desc = new ActivityDescription();
 		
 		JunctionMaker jm = JunctionMaker.getInstance(url);
 		jm.newJunction(desc, new PokerDealer());
