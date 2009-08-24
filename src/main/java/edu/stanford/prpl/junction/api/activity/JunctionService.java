@@ -37,12 +37,12 @@ public abstract class JunctionService extends JunctionActor {
 	public abstract String getServiceName();
 	
 	public JunctionService() {
-		super(null);
+		super((String)null);
 	}
 	
 	@Override
-	public String getRole() {
-		return mRole;
+	public String[] getRoles() {
+		return new String[] {mRole};
 	}
 	
 	@Override
