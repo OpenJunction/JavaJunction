@@ -55,6 +55,10 @@ public class ActivityDescription {
 			host = json.optString("host");
 		}
 		
+		// TODO: rename this field
+		if (json.has(("ad"))) {
+			activityID = json.optString("ad");
+		}
 		
 		if (json.has("sessionID")) {
 			sessionID = json.optString("sessionID");

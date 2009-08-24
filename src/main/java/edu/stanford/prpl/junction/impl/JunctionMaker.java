@@ -135,7 +135,7 @@ public class JunctionMaker {
 		XMPPConnection conn = getXMPPConnection(host);
 		
 		String room = sessionID+"@conference."+host;
-		
+		System.err.println("looking up info from xmpp room " + room);
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
 			String descString = info.getDescription();
@@ -145,6 +145,8 @@ public class JunctionMaker {
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
