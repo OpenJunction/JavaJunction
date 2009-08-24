@@ -1,5 +1,6 @@
 package edu.stanford.prpl.junction.impl;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -88,12 +89,14 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	public void requestService(String role, URL host, String serviceName) {
 		System.out.println("inviting actor for role " + role);
 		
-		Map<String,Object>message = new HashMap<String, Object>();
-		//message.put("sessionID",getSessionID());
-		//message.put("activityHost",mHostURL);
-		message.put("activityURL", getInvitationURL(role));
-		message.put("serviceName", serviceName);
-		//mManager.publish("/srv/ServiceFactory", message);
+		JSONObject message = new JSONObject();
+		try {
+			message.put("activityURL", getInvitationURI(role)); // should be URI
+			message.put("serviceName", serviceName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		sendMessageToSession(message);
 	}
 	
 	
@@ -247,11 +250,14 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		mManager.publish(mManager.channelForSystem(), message);
 	}*/
 
-	public URL getInvitationURL() {
-		URL invitation = null;
+	public URI getInvitationURI() {
+		URI invitation = null;
 		try {
 			// TODO: strip query part from hostURL
-			invitation = new URL(mHostURL.toExternalForm() + "?session=" + URLEncoder.encode(getSessionID(),"UTF-8"));
+			invitation = new URI("junction://"
+								+getSwitchboard()+"/"
+								+getSessionID()
+								);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -259,11 +265,15 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		return invitation;
 	}
 
-	public URL getInvitationURL(String requestedRole) {
-		URL invitation = null;
+	public URI getInvitationURI(String requestedRole) {
+		URI invitation = null;
 		try {
 			// TODO: strip query part from hostURL
-			invitation = new URL(mHostURL.toExternalForm() + "?session=" + URLEncoder.encode(getSessionID(),"UTF-8") + "&requestedRole=" + URLEncoder.encode(requestedRole,"UTF-8"));
+			invitation = new URI("junction://"
+								+getSwitchboard()+"/"
+								+getSessionID()
+								+"?requestedRole="+requestedRole
+								);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

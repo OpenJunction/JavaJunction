@@ -1,5 +1,6 @@
 package edu.stanford.prpl.junction.api.activity;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +41,8 @@ public interface Junction {
 	 * Actor Invitation
 	 */
 	public void requestService(String role, URL host, String serviceName);
-	public URL getInvitationURL();
-	public URL getInvitationURL(String requestedRole);
+	public URI getInvitationURI();
+	public URI getInvitationURI(String requestedRole);
 	// there will also be device-specific methods, EG QR codes / contact list on Android
 	
 	/**
