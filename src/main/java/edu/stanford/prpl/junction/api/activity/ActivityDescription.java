@@ -190,6 +190,7 @@ public class ActivityDescription {
 			JSONObject roleObj = new JSONObject();
 			roleObj.put("role", role);
 			platforms = new JSONArray();
+			platforms.put(platform);
 			roleObj.put("platforms",platforms);
 			
 			rolePlatforms.put(roleObj);
