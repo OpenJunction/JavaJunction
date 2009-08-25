@@ -180,6 +180,7 @@ public class ActivityDescription {
 						rolePlatforms.getJSONObject(i).put("platforms", platforms);
 					}
 					platforms.put(platform);
+					mJSON=null; // reset
 					return;
 				}
 			}
@@ -192,7 +193,7 @@ public class ActivityDescription {
 			roleObj.put("platforms",platforms);
 			
 			rolePlatforms.put(roleObj);
-			
+			mJSON=null; // reset
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
