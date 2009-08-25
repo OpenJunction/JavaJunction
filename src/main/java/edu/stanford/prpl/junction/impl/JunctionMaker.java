@@ -45,11 +45,11 @@ public class JunctionMaker {
 		return null;
 	}
 	
-	public Junction newJunction(URL url, JunctionActor actor) {
+	public Junction newJunction(URI uri, JunctionActor actor) {
 		ActivityDescription desc = new ActivityDescription();
-		desc.setHost(url.getHost());
-		if (url.getPath() != null) { // TODO: check to make sure this works for URIs w/o path
-			desc.setSessionID(url.getPath().substring(1));
+		desc.setHost(uri.getHost());
+		if (uri.getPath() != null) { // TODO: check to make sure this works for URIs w/o path
+			desc.setSessionID(uri.getPath().substring(1));
 		}
 		
 		return newJunction(desc,actor);
@@ -99,21 +99,6 @@ public class JunctionMaker {
 		//activity.requestService("JunctionMaker", mHostURL, "edu.stanford.prpl.junction.impl.JunctionMakerService");		
 		return jx;
 	}
-	
-	/*
-	public Junction newJunction(Map<String,Object>desc, JunctionActor actor) {
-		if (desc.get("host") == null && mSwitchboard == null) {
-			return null;
-		}
-		
-		if (desc.get("host") == null) {
-			desc.put("host", mSwitchboard);
-		}
-		
-		ActivityDescription activityDesc = new ActivityDescription(desc);
-		return newJunction(activityDesc,actor);
-	}
-	*/
 	
 	
 	public ActivityDescription getActivityDescription(URI uri) {
