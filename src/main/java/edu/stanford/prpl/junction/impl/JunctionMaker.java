@@ -153,8 +153,10 @@ public class JunctionMaker {
 			if (platform == null) return;
 			
 			String switchboard = platform.optString("switchboard");
+			System.out.println("switchboard: " + switchboard);
 			if (switchboard == null) {
 				switchboard = invitationURI.getHost();
+				System.out.println("switchboard is null, new: " + switchboard);
 			}
 			final String serviceName = platform.optString("serviceName");
 			
