@@ -27,7 +27,7 @@ public class JunctionServiceFactory extends JunctionService {
 				
 				try {
 					
-					URL activityURL = new URL((String)(message.getString("activityURL")));
+					URL activityURL = new URL((String)(message.getString("activity")));
 					
 					// TODO: support a factory mapping from serviceName => class
 					String className = message.getString("serviceName");
