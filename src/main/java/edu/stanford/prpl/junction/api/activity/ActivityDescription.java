@@ -162,14 +162,19 @@ public class ActivityDescription {
 	}
 	
 	public JSONObject getRolePlatform(String role, String platform) {
+		System.out.println("ROLE PLATFORM: " + rolePlatforms);
+		System.out.println("REQUESTING " + role + " / " + platform);
 		if (rolePlatforms == null) return null;
 		try {
 			for (int i = 0; i < rolePlatforms.length();i++) {
 				if (role.equals(rolePlatforms.getJSONObject(i).getString("role"))) {
+					System.out.println("FOUND MATCHING ROLE");
 					JSONArray platforms = rolePlatforms.getJSONObject(i).optJSONArray("platforms");
 					if (platforms == null) return null;
 					for (int j = 0; j < platforms.length(); j++) {
-						if (platform.equals(platforms.get(j))) {
+						JSONObject plat = platforms.optJSONObject(j);
+						System.out.println("CHECKING PLATFORM " + plat);
+						if (platform.equals(plat.optString("platform"))) {
 							return platforms.getJSONObject(j);
 						}
 					}

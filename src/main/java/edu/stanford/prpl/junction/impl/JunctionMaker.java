@@ -135,7 +135,14 @@ public class JunctionMaker {
 	 * @param serviceName
 	 */
 	public void inviteActorService(final URI invitationURI) {
+		
+		
+		
+		
+		
+		
 		ActivityDescription desc = getActivityDescription(invitationURI);
+		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
 		int i;
 		String role = invitationURI.toString();
@@ -147,7 +154,7 @@ public class JunctionMaker {
 			System.out.println("inviting service for role " + role);
 			
 			JSONObject platform = desc.getRolePlatform(role, "jxservice");
-			System.out.println("got platform " + platform.toString());
+			System.out.println("got platform " + platform);
 			if (platform == null) return;
 			
 			String switchboard = platform.optString("switchboard");
