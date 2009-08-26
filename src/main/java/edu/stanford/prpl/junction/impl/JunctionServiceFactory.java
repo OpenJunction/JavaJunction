@@ -1,6 +1,7 @@
 package edu.stanford.prpl.junction.impl;
 
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class JunctionServiceFactory extends JunctionService {
 				
 				try {
 					
-					URL activityURL = new URL((String)(message.getString("activity")));
+					URI activityURI = new URI(message.getString("activity"));
 					
 					// TODO: support a factory mapping from serviceName => class
 					String className = message.getString("serviceName");
@@ -48,7 +49,7 @@ public class JunctionServiceFactory extends JunctionService {
 					}
 					service = (JunctionService)method.invoke(null);
 					
-					String queryPart = activityURL.getQuery(); 
+					String queryPart = activityURI.getQuery(); 
 					System.out.println("query part is " + queryPart);
 					String localRole = "Unknown";
 					int i;
@@ -63,7 +64,7 @@ public class JunctionServiceFactory extends JunctionService {
 					service.setRole(localRole);
 					
 					System.out.println("service actorID is " + service.getActorID());
-					JunctionMaker.getInstance().newJunction(activityURL,service);					
+					JunctionMaker.getInstance().newJunction(activityURI,service);					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,4 +79,18 @@ public class JunctionServiceFactory extends JunctionService {
 		return "ServiceFactory";
 	}
 
+	
+	public static void main(String[] argv) {
+		String switchboard="prpl.stanford.edu";
+		
+		
+		JunctionService waiter = new JunctionServiceFactory();
+		waiter.register(switchboard);
+		while(true) {
+			try {
+				Thread.sleep(500000);
+			} catch (Exception e) {}
+		}
+	}
+	
 }

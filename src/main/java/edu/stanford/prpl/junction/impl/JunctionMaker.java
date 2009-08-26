@@ -1,6 +1,8 @@
 package edu.stanford.prpl.junction.impl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -113,6 +115,72 @@ public class JunctionMaker {
 		};
 		
 		JunctionMaker.getInstance().newJunction(listenerServiceURI, actor);
+	}
+	
+	/**
+	 * Requests a listening service to join this activity as the prescribed role. Here,
+	 * the service must be detailed in the activity description's list of roles.
+	 * 
+	 * An example platform in the role specification:
+	 * { role: "dealer", platforms: [ 
+	 * 						{ platform: "jxservice", 
+	 * 						  classname: "edu.stanford.prpl.poker.dealer",
+	 * 						  switchboard: "my.foreign.switchboard" } ] }
+	 * 
+	 * If switchboard is not present, it is assumed to be on the same switchboard
+	 * on which this activity is being run.
+	 * 
+	 * @param role
+	 * @param host
+	 * @param serviceName
+	 */
+	public void inviteActorService(final URI invitationURI) {
+		ActivityDescription desc = getActivityDescription(invitationURI);
+		// find service platform spec
+		int i;
+		String role = invitationURI.toString();
+		if ((i=role.indexOf("requestedRole=")) >= 0) {
+			role = role.substring(i+14);
+			if ((i=role.indexOf("&")) >= 0) {
+				role = role.substring(0,i);
+			}
+			System.out.println("inviting service for role " + role);
+			
+			JSONObject platform = desc.getRolePlatform(role, "jxservice");
+			System.out.println("got platform " + platform.toString());
+			if (platform == null) return;
+			
+			String switchboard = platform.optString("switchboard");
+			if (switchboard == null) {
+				switchboard = invitationURI.getHost();
+			}
+			final String serviceName = platform.optString("serviceName");
+			
+			// // // // // // // // // // // // // // // // 
+			JunctionActor actor = new JunctionActor("inviter") {
+				@Override
+				public void onActivityJoin() {
+					JSONObject invitation = new JSONObject();
+					try {
+						invitation.put("activity", invitationURI.toString());
+						invitation.put("serviceName",serviceName);
+					} catch (Exception e) {}
+					getJunction().sendMessageToSession(invitation);
+					leave();
+				}
+			};
+			
+			
+			// remote jxservice activity:
+			URI remoteServiceActivity=null;
+			try {
+				remoteServiceActivity = new URI("junction://"+switchboard+"/jxservice");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				return;
+			}
+			JunctionMaker.getInstance().newJunction(remoteServiceActivity, actor);
+		}
 	}
 	
 	

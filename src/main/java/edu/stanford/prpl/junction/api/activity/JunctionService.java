@@ -25,7 +25,7 @@ import edu.stanford.prpl.junction.impl.Junction;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
 
 public abstract class JunctionService extends JunctionActor {
-	public static String SERVICE_CHANNEL="jxservices";
+	public static String SERVICE_CHANNEL="jxservice";
 	
 	private static Map<String,Junction>mJunctionMap;
 	{
@@ -48,18 +48,18 @@ public abstract class JunctionService extends JunctionActor {
 	@Override
 	public void onActivityStart() {}
 	
-	public final void register(URL url) {
+	public final void register(String switchboard) {
 		
-		if (mJunctionMap.containsKey(url.getHost())) return;
+		if (mJunctionMap.containsKey(switchboard)) return;
 		
 		ActivityDescription desc = new ActivityDescription();
-		desc.setHost(url.getHost());
+		desc.setHost(switchboard);
 		desc.setSessionID(SERVICE_CHANNEL);
 		//desc.setActorID(getServiceName());
 		desc.setActivityID("junction.service");
 		
 		Junction jx = JunctionMaker.getInstance().newJunction(desc, this);
-		mJunctionMap.put(url.getHost(), jx);
+		mJunctionMap.put(switchboard, jx);
 
 	}
 	

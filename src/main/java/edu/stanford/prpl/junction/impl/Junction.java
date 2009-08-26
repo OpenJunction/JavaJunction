@@ -88,23 +88,6 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		
 	}
 	
-	
-	// TODO: use a URL for the service endpoint? (query == service)
-	public void requestService(String role, URL host, String serviceName) {
-		System.out.println("inviting actor for role " + role);
-		
-		JSONObject message = new JSONObject();
-		try {
-			message.put("activityURL", getInvitationURI(role)); // should be URI
-			message.put("serviceName", serviceName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		sendMessageToSession(message);
-	}
-	
-	
-	
 	public void start() {
 		Map<String,String>go = new HashMap<String,String>();
 		
