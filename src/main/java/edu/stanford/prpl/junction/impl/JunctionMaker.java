@@ -135,12 +135,7 @@ public class JunctionMaker {
 	 * @param serviceName
 	 */
 	public void inviteActorService(final URI invitationURI) {
-		
-		
-		
-		
-		
-		
+
 		ActivityDescription desc = getActivityDescription(invitationURI);
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
@@ -186,6 +181,7 @@ public class JunctionMaker {
 				e.printStackTrace();
 				return;
 			}
+			System.out.println("Inviting serice at uri " + remoteServiceActivity);
 			JunctionMaker.getInstance().newJunction(remoteServiceActivity, actor);
 		}
 	}
