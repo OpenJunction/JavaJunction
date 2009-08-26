@@ -29,8 +29,18 @@ public class ActivityDescription {
 	// TODO: Remove this stuff from this class
 	private String sessionID;
 	private String host;
-	private String activityID;
 	
+	private String activityID;
+	private String friendlyName;
+	public String getFriendlyName() {
+		return friendlyName;
+	}
+
+	public void setFriendlyName(String friendlyName) {
+		this.friendlyName = friendlyName;
+		mJSON=null; // reset
+	}
+
 	private JSONArray rolePlatforms;
 	
 	private boolean generatedSessionID=false;
@@ -38,7 +48,6 @@ public class ActivityDescription {
 	public ActivityDescription() {
 		sessionID 	= UUID.randomUUID().toString();
 		generatedSessionID=true;
-		//actorID	 	= UUID.randomUUID().toString();
 	}
 	
 	public ActivityDescription(JSONObject json) {
@@ -58,6 +67,10 @@ public class ActivityDescription {
 		// TODO: rename this field
 		if (json.has(("ad"))) {
 			activityID = json.optString("ad");
+		}
+		
+		if (json.has("friendlyName")) {
+			friendlyName=json.optString("friendlyName");
 		}
 		
 		if (json.has("sessionID")) {
@@ -94,6 +107,7 @@ public class ActivityDescription {
 	}
 	public void setActivityID(String activityID) {
 		this.activityID = activityID;
+		mJSON=null; // reset
 	}
 	
 	public JSONObject getJSON() {
@@ -108,6 +122,9 @@ public class ActivityDescription {
 			j.put("switchboard",host);
 			if (rolePlatforms != null) {
 				j.put("roles",rolePlatforms);
+			}
+			if (friendlyName != null) {
+				j.put("friendlyName", friendlyName);
 			}
 		} catch (Exception e) {}
 		
