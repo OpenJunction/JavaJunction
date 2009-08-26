@@ -1,11 +1,6 @@
 package edu.stanford.prpl.junction.impl;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -14,8 +9,11 @@ import org.jivesoftware.smackx.muc.RoomInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
+import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 
 
 public class JunctionMaker {
@@ -98,6 +96,23 @@ public class JunctionMaker {
 		// This service will be bundled with all Junction servers.
 		//activity.requestService("JunctionMaker", mHostURL, "edu.stanford.prpl.junction.impl.JunctionMakerService");		
 		return jx;
+	}
+	
+	
+	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) {
+		JunctionActor actor = new JunctionActor("inviter") {
+			@Override
+			public void onActivityJoin() {
+				JSONObject invitation = new JSONObject();
+				try {
+					invitation.put("activity", invitationURI.toString());
+				} catch (Exception e) {}
+				getJunction().sendMessageToSession(invitation);
+				leave();
+			}
+		};
+		
+		JunctionMaker.getInstance().newJunction(listenerServiceURI, actor);
 	}
 	
 	
