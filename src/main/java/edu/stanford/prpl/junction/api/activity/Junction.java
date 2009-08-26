@@ -41,7 +41,6 @@ public interface Junction {
 	/**
 	 * Actor Invitation
 	 */
-	public void requestService(String role, URL host, String serviceName);
 	public URI getInvitationURI();
 	public URI getInvitationURI(String requestedRole);
 	// there will also be device-specific methods, EG QR codes / contact list on Android

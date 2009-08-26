@@ -7,20 +7,14 @@ import edu.stanford.prpl.junction.impl.JunctionServiceFactory;
 
 public class JunctionFactoryRunner {
 	public static void main(String[] argv) {
-		URL url = null;
-		try {
-			url = new URL("http://prpl.stanford.edu");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+		String switchboard="prpl.stanford.edu";
 		
 		
 		// register the JunctionMakerService
 		// This will already be available when
 		// we have a true Junction Server
 		JunctionService waiter = new JunctionServiceFactory();
-		waiter.register(url);
+		waiter.register(switchboard);
 		
 		while(true) {
 			try {
