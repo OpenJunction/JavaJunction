@@ -16,6 +16,7 @@ public interface Junction {
 	 * Activity Description
 	 */
 	
+	public ActivityDescription getActivityDescription();
 	public String getActivityID();
 	public String getSessionID();
 	public String getSwitchboard();

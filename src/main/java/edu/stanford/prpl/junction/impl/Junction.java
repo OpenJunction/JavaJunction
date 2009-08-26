@@ -64,6 +64,10 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		return mActivityDescription.getActivityID();
 	}
 	
+	public ActivityDescription getActivityDescription() {
+		return mActivityDescription;
+	}
+	
 	
 	public void registerActor(final JunctionActor actor) {
 		System.out.println("adding actor for roles " + actor.getRoles());
