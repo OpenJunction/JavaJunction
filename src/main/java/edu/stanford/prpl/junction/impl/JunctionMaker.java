@@ -38,13 +38,6 @@ public class JunctionMaker {
 		mSwitchboard=switchboard;
 	}
 	
-	// TODO: add 0-arg constructor for activities w/ given junction hosts
-	// or allow static call for newJunction?
-	
-	public Junction newJunction(String friendlyName, JunctionActor actor) {
-		return null;
-	}
-	
 	public Junction newJunction(URI uri, JunctionActor actor) {
 		ActivityDescription desc = new ActivityDescription();
 		desc.setHost(uri.getHost());
