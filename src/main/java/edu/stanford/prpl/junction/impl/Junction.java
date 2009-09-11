@@ -19,6 +19,7 @@ import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
 import org.jivesoftware.smackx.muc.DiscussionHistory;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.stanford.prpl.junction.api.activity.ActivityDescription;
@@ -155,6 +156,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 					//e.printStackTrace();
 					return;
 				}
+				
 				if (obj.has(NS_JX)) {
 					JSONObject header = obj.optJSONObject(NS_JX);
 					if (header.has("targetRole")) {
@@ -205,6 +207,9 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 				jx = message.optJSONObject(NS_JX);
 			} else {
 				jx = new JSONObject();
+				try {
+					message.put(NS_JX, jx);
+				} catch (JSONException j) {}
 			}
 			try {
 				jx.put("targetRole", role);
