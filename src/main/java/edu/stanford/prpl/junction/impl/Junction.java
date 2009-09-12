@@ -146,7 +146,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			@Override
 			public void processPacket(Packet packet) {
 				Message message = (Message)packet;
-				System.out.println("got message " + message.toXML());
+				//System.out.println("got message " + message.toXML());
 				
 				JSONObject obj = null;
 				try {
