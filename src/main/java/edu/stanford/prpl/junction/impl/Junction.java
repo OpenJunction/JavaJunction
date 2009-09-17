@@ -288,7 +288,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 					MultiUserChat.getRoomInfo(mXMPPConnection, room);
 					chat.join(mOwner.getActorID(),null,history,10000);
 					return chat;
-				} catch (Exception e) { e.printStackTrace(); }
+				} catch (Exception e) { /*e.printStackTrace();*/ }
 				
 				System.out.println("Trying to create room");
 				// TODO: is this an error? is there really a notion of ownership?
@@ -315,6 +315,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			    List<String>whois = new ArrayList<String>();
 			    whois.add("moderators");
 			    submitForm.setAnswer("muc#roomconfig_whois", whois);
+			    submitForm.setAnswer("muc#roomconfig_publicroom", false);
 			    chat.sendConfigurationForm(submitForm);
 				
 				
