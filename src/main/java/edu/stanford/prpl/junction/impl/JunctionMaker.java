@@ -46,23 +46,6 @@ public class JunctionMaker {
 		}
 		
 		return newJunction(desc,actor);
-		
-		/*
-		  
-		ActivityDescription desc = new ActivityDescription();
-		String query = url.getQuery();
-		
-		String tmp;
-		if (null != (tmp = getURLParam(query,"sessionID"))) {
-			desc.setSessionID(tmp);
-		}
-		
-		desc.setHost(url.getHost());
-		//desc.setActorID(actor.getActorID());
-		
-		return newJunction(desc,actor);
-		
-		*/
 	}
 	
 	private String getURLParam(String query, String param) {
@@ -86,6 +69,23 @@ public class JunctionMaker {
 		
 		Junction jx = new Junction(desc);
 		jx.registerActor(actor);
+		
+		if (desc.isActivityCreator()) {
+			String[] roles = desc.getRoles();
+			for (String role : roles) {
+				JSONObject plat = desc.getRolePlatform(role, "jxservice");
+				if (plat != null) {
+					// Auto-invite the service via the service factory
+					System.out.println("Auto-requesting service for " + role);
+					URI invitationURI = jx.getInvitationURI(role);
+					
+					// TODO: add a method that takes in a Junction
+					// so we don't have to do an extra lookup
+					inviteActorService(invitationURI);
+				}
+			}
+		}
+		
 		// creating an activity is an activity using a JunctionService.
 		// Invite the JunctionMaker service to the session.
 		// This service will be bundled with all Junction servers.
