@@ -133,7 +133,7 @@ public class ActivityDescription {
 	}
 	
 	public String[] getRoles() {
-		if (rolePlatforms == null) return null;
+		if (rolePlatforms == null) return new String[]{};
 		String[] roles = new String[rolePlatforms.length()];
 		try {
 			for (int i=0;i<roles.length;i++) {
