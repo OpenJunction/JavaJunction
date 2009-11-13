@@ -77,11 +77,22 @@ public class JunctionMaker {
 				if (plat != null) {
 					// Auto-invite the service via the service factory
 					System.out.println("Auto-requesting service for " + role);
-					URI invitationURI = jx.getInvitationURI(role);
-					
+					inviteActorService(jx,role);
 					// TODO: add a method that takes in a Junction
 					// so we don't have to do an extra lookup
-					inviteActorService(invitationURI);
+					
+					/*
+					URI listenerURI = null;
+					try {
+						String listener = "junction://" + plat.getString("switchboard")  + "/jxservice";
+						listenerURI = new URI(listener);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					inviteActorByListenerService(invitationURI, listenerURI);
+					*/
+					
 				}
 			}
 		}
@@ -127,18 +138,12 @@ public class JunctionMaker {
 	 * @param host
 	 * @param serviceName
 	 */
-	public void inviteActorService(final URI invitationURI) {
-
-		ActivityDescription desc = getActivityDescription(invitationURI);
+//	public void inviteActorService(final URI invitationURI) {
+	public void inviteActorService(final Junction jx, final String role) {
+	ActivityDescription desc = jx.getActivityDescription();
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
-		int i;
-		String role = invitationURI.toString();
-		if ((i=role.indexOf("requestedRole=")) >= 0) {
-			role = role.substring(i+14);
-			if ((i=role.indexOf("&")) >= 0) {
-				role = role.substring(0,i);
-			}
+		
 			System.out.println("inviting service for role " + role);
 			
 			JSONObject platform = desc.getRolePlatform(role, "jxservice");
@@ -148,7 +153,7 @@ public class JunctionMaker {
 			String switchboard = platform.optString("switchboard");
 			System.out.println("switchboard: " + switchboard);
 			if (switchboard == null || switchboard.length() == 0) {
-				switchboard = invitationURI.getHost();
+				switchboard = jx.getSwitchboard();
 				System.out.println("switchboard is null, new: " + switchboard);
 			}
 			final String serviceName = platform.optString("serviceName");
@@ -159,7 +164,7 @@ public class JunctionMaker {
 				public void onActivityJoin() {
 					JSONObject invitation = new JSONObject();
 					try {
-						invitation.put("activity", invitationURI.toString());
+						invitation.put("activity", jx.getInvitationURI(role));
 						invitation.put("serviceName",serviceName);
 					} catch (Exception e) {}
 					getJunction().sendMessageToSession(invitation);
@@ -178,7 +183,7 @@ public class JunctionMaker {
 			}
 			System.out.println("Inviting serice at uri " + remoteServiceActivity);
 			JunctionMaker.getInstance().newJunction(remoteServiceActivity, actor);
-		}
+		
 	}
 	
 	
@@ -202,6 +207,8 @@ public class JunctionMaker {
 		
 		String room = sessionID+"@conference."+host;
 		System.err.println("looking up info from xmpp room " + room);
+		
+		
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
 			String descString = info.getDescription();
