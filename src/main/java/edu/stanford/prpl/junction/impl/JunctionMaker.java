@@ -205,6 +205,8 @@ public class JunctionMaker {
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
 			String descString = info.getDescription();
+			if (descString == null || descString.trim().length()==0) return null;
+			
 			JSONObject descJSON = new JSONObject(descString);
 			
 			return new ActivityDescription(descJSON);
