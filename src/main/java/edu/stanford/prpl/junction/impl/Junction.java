@@ -77,7 +77,15 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 		
 		xmppInit();
 		
-		MessageHandler handler = actor.getMessageHandler();
+		MessageHandler handler = new MessageHandler() {
+			@Override
+			public void onMessageReceived(MessageHeader header,
+					JSONObject message) {
+				
+				actor.onMessageReceived(header, message);
+			}
+		};
+		
 		if (handler != null) {
 			registerMessageHandler(handler);
 		}
@@ -264,7 +272,7 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 			invitation = new URI("junction://"
 								+getSwitchboard()+"/"
 								+getSessionID()
-								+"?requestedRole="+requestedRole
+								+"?role="+requestedRole
 								);
 		} catch (Exception e) {
 			e.printStackTrace();

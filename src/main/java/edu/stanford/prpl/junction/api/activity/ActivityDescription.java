@@ -15,7 +15,7 @@ public class ActivityDescription {
 	 * 
 	 *  The new setup:: there is an ActivityDescription that details
 	 *  roles / platforms / codebases, and a SessionDescription,
-	 *  that specifies sessionID, switchboard, and requestedRole.
+	 *  that specifies sessionID, switchboard, and role.
 	 *  
 	 *  Both of these constructs can be used to instantiate an Actor,
 	 *  one by creating a new session and one by joining a previously

@@ -211,6 +211,11 @@ public class JunctionMaker {
 		
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
+			System.err.println("room desc " + info.getDescription());
+			System.err.println("room subj " + info.getSubject());
+			System.err.println("part " + info.getOccupantsCount());
+			System.err.println("room " + info.getRoom());
+			
 			String descString = info.getDescription();
 			if (descString == null || descString.trim().length()==0) return null;
 			

@@ -42,7 +42,7 @@ public interface Junction {
 	 * Actor Invitation
 	 */
 	public URI getInvitationURI();
-	public URI getInvitationURI(String requestedRole);
+	public URI getInvitationURI(String role);
 	// there will also be device-specific methods, EG QR codes / contact list on Android
 	
 	/**

@@ -31,12 +31,8 @@ public class JunctionMakerService extends JunctionService {
 	}
 
 	@Override
-	public MessageHandler getMessageHandler() {
-		return new MessageHandler() {
-			public void onMessageReceived(MessageHeader header, JSONObject message) {
-				System.out.println("maker got message: " + message);
-			}
-		};
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+		System.out.println("maker got message: " + message);
 	}
 	
 }

@@ -15,61 +15,56 @@ import edu.stanford.prpl.junction.api.messaging.JunctionMessage;
 public class JunctionServiceFactory extends JunctionService {
 
 	@Override
-	public MessageHandler getMessageHandler() {
-		return new MessageHandler() {
-
-			public void onMessageReceived(MessageHeader header, JSONObject message) {
-				// TODO: verify you got an activity request
-				// somehow get the Activity object
-				// that means the request needs
-				// * a host
-				// * an activity descriptor
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+			// TODO: verify you got an activity request
+			// somehow get the Activity object
+			// that means the request needs
+			// * a host
+			// * an activity descriptor
+			
+			
+			try {
 				
+				URI activityURI = new URI(message.getString("activity"));
 				
+				// TODO: support a factory mapping from serviceName => class
+				String className = message.getString("serviceName");
+				
+				Class c = null;
 				try {
-					
-					URI activityURI = new URI(message.getString("activity"));
-					
-					// TODO: support a factory mapping from serviceName => class
-					String className = message.getString("serviceName");
-					
-					Class c = null;
-					try {
-						c = Class.forName(className);
-					} catch (Exception e) {
-						System.out.println("Could not find class for service " + className + ".");
-					}
-					
-					JunctionService service = null;
-					Method method = null;
-					try {
-						method = c.getMethod("newInstance");
-					} catch (Exception e) {
-						System.out.println("No newInstance method found for " + c + ".");
-					}
-					service = (JunctionService)method.invoke(null);
-					
-					String queryPart = activityURI.getQuery(); 
-					System.out.println("query part is " + queryPart);
-					String localRole = "Unknown";
-					int i;
-					if ((i = queryPart.indexOf("requestedRole=")) >= 0) {
-						localRole = queryPart.substring(i+14);
-						if ((i = localRole.indexOf("&"))>0) {
-							localRole = localRole.substring(0,i);
-						}
-					}
-					
-					System.out.println("Setting service role to " + localRole);
-					service.setRole(localRole);
-					
-					System.out.println("service actorID is " + service.getActorID());
-					JunctionMaker.getInstance().newJunction(activityURI,service);					
+					c = Class.forName(className);
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println("Could not find class for service " + className + ".");
 				}
+				
+				JunctionService service = null;
+				Method method = null;
+				try {
+					method = c.getMethod("newInstance");
+				} catch (Exception e) {
+					System.out.println("No newInstance method found for " + c + ".");
+				}
+				service = (JunctionService)method.invoke(null);
+				
+				String queryPart = activityURI.getQuery(); 
+				System.out.println("query part is " + queryPart);
+				String localRole = "Unknown";
+				int i;
+				if ((i = queryPart.indexOf("role=")) >= 0) {
+					localRole = queryPart.substring(i+14);
+					if ((i = localRole.indexOf("&"))>0) {
+						localRole = localRole.substring(0,i);
+					}
+				}
+				
+				System.out.println("Setting service role to " + localRole);
+				service.setRole(localRole);
+				
+				System.out.println("service actorID is " + service.getActorID());
+				JunctionMaker.getInstance().newJunction(activityURI,service);					
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		};
 	}
 
 

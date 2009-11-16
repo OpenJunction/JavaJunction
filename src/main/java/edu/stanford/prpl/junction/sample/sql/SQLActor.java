@@ -10,6 +10,7 @@ import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
 
 public class SQLActor extends JunctionActor {
@@ -57,10 +58,15 @@ public class SQLActor extends JunctionActor {
 		
 	}
 	
+	
+	
+	static MessageHandler handler = null;
+	
 	@Override
-	public MessageHandler getMessageHandler() {
-		return new QueryHandler(this);
-	}
-	
-	
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+		// hack to fix from updating to onMessageReceived vs getMessageHandler
+		if (handler == null) handler = new QueryHandler(this);
+		
+		handler.onMessageReceived(header, message);
+	}	
 }

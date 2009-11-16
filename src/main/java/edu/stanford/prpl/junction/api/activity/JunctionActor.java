@@ -2,7 +2,10 @@ package edu.stanford.prpl.junction.api.activity;
 
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import edu.stanford.prpl.junction.api.messaging.MessageHandler;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 import edu.stanford.prpl.junction.impl.Junction;
 
 // TODO: Make interface along with abstract class, for those who really need it.
@@ -57,7 +60,6 @@ public abstract class JunctionActor {
 	public void onActivityCreate() {
 		
 	}
-	
-	// TODO: yes, this should be a MessageHandler
-	public MessageHandler getMessageHandler() { return null; }
+
+	public void onMessageReceived(MessageHeader header, JSONObject message) {}
 }

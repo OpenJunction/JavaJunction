@@ -36,15 +36,11 @@ public class ForwardingService extends JunctionService {
 	}
 
 	@Override
-	public MessageHandler getMessageHandler() {
-		return new MessageHandler() {
-			public void onMessageReceived(MessageHeader header, JSONObject message) {
-				// TODO: get a new Junction for remote server
-				// Figure out how to preserve sender info
-				// ('originator' field or something?)
-				//getJunction().sendMessageToChannel(mChannel, message);
-			}
-		};
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+		// TODO: get a new Junction for remote server
+		// Figure out how to preserve sender info
+		// ('originator' field or something?)
+		//getJunction().sendMessageToChannel(mChannel, message)		
 	}
 	
 }
