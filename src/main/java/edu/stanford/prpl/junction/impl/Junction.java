@@ -71,7 +71,12 @@ public class Junction implements edu.stanford.prpl.junction.api.activity.Junctio
 	
 	
 	public void registerActor(final JunctionActor actor) {
-		System.out.println("adding actor for roles " + actor.getRoles());
+		System.out.print("adding actor for roles: ");
+		String[] roles =  actor.getRoles();
+		for(int i = 0; i<roles.length; i++) 
+			System.out.print(roles[i] + " ");
+		System.out.print("\n");
+		
 		mOwner = actor;
 		mOwner.setJunction(this);
 		
