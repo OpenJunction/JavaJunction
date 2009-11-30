@@ -181,7 +181,7 @@ public class JunctionMaker {
 				e.printStackTrace();
 				return;
 			}
-			System.out.println("Inviting serice at uri " + remoteServiceActivity);
+			System.out.println("Inviting service at uri " + remoteServiceActivity);
 			JunctionMaker.getInstance().newJunction(remoteServiceActivity, actor);
 		
 	}
