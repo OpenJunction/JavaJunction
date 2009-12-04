@@ -61,5 +61,17 @@ public abstract class JunctionActor {
 		
 	}
 
-	public void onMessageReceived(MessageHeader header, JSONObject message) {}
+	public void sendMessageToActor(String actorID, JSONObject message) {
+		mJunction.sendMessageToActor(actorID, message);
+	}
+	
+	public void sendMessageToSession(JSONObject message) {
+		mJunction.sendMessageToSession(message);
+	}
+	
+	public void sendMessageToRole(String role, JSONObject message) {
+		mJunction.sendMessageToRole(role, message);
+	}
+	
+	public abstract void onMessageReceived(MessageHeader header, JSONObject message);
 }
