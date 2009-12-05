@@ -116,6 +116,12 @@ public class JunctionMaker {
 				getJunction().sendMessageToSession(invitation);
 				leave();
 			}
+			
+			@Override
+			public void onMessageReceived(MessageHeader header,
+					JSONObject message) {
+				
+			}
 		};
 		
 		JunctionMaker.getInstance().newJunction(listenerServiceURI, actor);
@@ -169,6 +175,12 @@ public class JunctionMaker {
 					} catch (Exception e) {}
 					getJunction().sendMessageToSession(invitation);
 					leave();
+				}
+				
+				@Override
+				public void onMessageReceived(MessageHeader header,
+						JSONObject message) {
+					
 				}
 			};
 			
