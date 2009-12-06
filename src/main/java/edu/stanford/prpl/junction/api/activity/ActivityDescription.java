@@ -1,5 +1,6 @@
 package edu.stanford.prpl.junction.api.activity;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +42,7 @@ public class ActivityDescription {
 		mJSON=null; // reset
 	}
 
-	private JSONArray rolePlatforms;
+	private JSONObject rolePlatforms;
 	
 	private boolean generatedSessionID=false;
 	
@@ -81,7 +82,7 @@ public class ActivityDescription {
 		}
 		
 		////////////////////////////////////////////
-		rolePlatforms = json.optJSONArray("roles");
+		rolePlatforms = json.optJSONObject("roles");
 			
 	}
 	
@@ -135,9 +136,12 @@ public class ActivityDescription {
 	public String[] getRoles() {
 		if (rolePlatforms == null) return new String[]{};
 		String[] roles = new String[rolePlatforms.length()];
+		
 		try {
-			for (int i=0;i<roles.length;i++) {
-				roles[i] = rolePlatforms.getJSONObject(i).getString("role");
+			Iterator<String>iter = rolePlatforms.keys();
+			int i=0;
+			while (iter.hasNext()) {
+				roles[i++] = iter.next();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -149,37 +153,23 @@ public class ActivityDescription {
 	
 	public JSONObject getRoleSpec(String role) {
 		if (rolePlatforms == null) return null;
-		try {
-			for (int i=0;i<rolePlatforms.length();i++) {
-				if (role.equals(rolePlatforms.getJSONObject(i).getString("role"))) {
-					return rolePlatforms.getJSONObject(i);
-				}
+		if (rolePlatforms.has(role)) {
+			try {
+				return rolePlatforms.getJSONObject("role");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
 		}
 		return null;
 	}
 	
 	public JSONObject getRolePlatform(String role, String platform) {
-		System.out.println("ROLE PLATFORM: " + rolePlatforms);
-		System.out.println("REQUESTING " + role + " / " + platform);
 		if (rolePlatforms == null) return null;
 		try {
-			for (int i = 0; i < rolePlatforms.length();i++) {
-				if (role.equals(rolePlatforms.getJSONObject(i).getString("role"))) {
-					System.out.println("FOUND MATCHING ROLE");
-					JSONArray platforms = rolePlatforms.getJSONObject(i).optJSONArray("platforms");
-					if (platforms == null) return null;
-					for (int j = 0; j < platforms.length(); j++) {
-						JSONObject plat = platforms.optJSONObject(j);
-						System.out.println("CHECKING PLATFORM " + plat);
-						if (platform.equals(plat.optString("platform"))) {
-							return platforms.getJSONObject(j);
-						}
-					}
-					
-				}
+			JSONObject spec = getRoleSpec(role);
+			if (spec == null) return null;
+			if (spec.has(platform)) {
+				return spec.getJSONObject(platform);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -190,45 +180,29 @@ public class ActivityDescription {
 	/*
 	 * Platform like: { platform: "android", package: "my.package", url: "market://my.url" }
 	 */
-	public void addRolePlatform(String role, JSONObject platform) {
+	public void addRolePlatform(String role, String platform, JSONObject platformSpec) {
 		try {
 			JSONArray platforms = null;
-			if (rolePlatforms==null) rolePlatforms = new JSONArray();
-			for (int i = 0; i < rolePlatforms.length();i++) {
-				if (role.equals(rolePlatforms.getJSONObject(i).getString("role"))) {
-					platforms = rolePlatforms.getJSONObject(i).optJSONArray("platforms");
-					if (platforms == null) {
-						platforms = new JSONArray();
-						rolePlatforms.getJSONObject(i).put("platforms", platforms);
-					}
-					platforms.put(platform);
-					mJSON=null; // reset
-					return;
-				}
+			if (rolePlatforms==null) rolePlatforms = new JSONObject();
+			if (!rolePlatforms.has(role)) {
+				rolePlatforms.put(role, new JSONObject());
 			}
 			
+			JSONObject jsonRole = rolePlatforms.getJSONObject(role);
+			if (!jsonRole.has("platforms")) {
+				jsonRole.put("platforms", new JSONObject());
+			}
 			
-			// no role found
-			JSONObject roleObj = new JSONObject();
-			roleObj.put("role", role);
-			platforms = new JSONArray();
-			platforms.put(platform);
-			roleObj.put("platforms",platforms);
+			JSONObject jsonPlatforms = jsonRole.getJSONObject("platforms");
+			jsonPlatforms.put(platform, platformSpec);
 			
-			rolePlatforms.put(roleObj);
 			mJSON=null; // reset
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 * Example: [ { role: "user", platforms: [ { platform: "android" ... } ] },
-	 * 			  { role: "screen", platforms: [ { platform: "web" ... } ] }
-	 * 			]
-	 * @param platforms
-	 */
-	public void setRoles(JSONArray roles) {
+	public void setRoles(JSONObject roles) {
 		rolePlatforms=roles;
 	}
 }
