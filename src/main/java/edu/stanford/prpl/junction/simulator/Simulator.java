@@ -22,9 +22,8 @@ class simThread extends Thread{
 		desc.setSessionID(ad);
 		JSONObject platform = new JSONObject();
 		try{
-			platform.put("platform","android");
-			platform.put("url", "http://my.realsitic.url/for_android");
-			desc.addRolePlatform("simRole", platform);
+			platform.put("android", "http://my.realsitic.url/for_android");
+			desc.addRolePlatform("simulator", "android", platform);
 		} catch (Exception e) {}
 		JunctionMaker maker = JunctionMaker.getInstance("colby.stanford.edu");
 		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
@@ -35,7 +34,7 @@ class simThread extends Thread{
 }
 
 public class Simulator {
-	static int NumOfActivity = 200;
+	static int NumOfActivity = 1;
 	static int NumOfMessage = 5;
 	static int NumOfParticipant = 2;
 	public static void main(String[] argv){
@@ -94,7 +93,8 @@ class SimActor extends JunctionActor{
 			NumOfBouncedMessage++;
 			if((NumOfBouncedMessage-1) < NumOfMessage){
 				System.out.print(ID + " received" + arg1+ " " + NumOfBouncedMessage + "\n");
-				this.getJunction().sendMessageToSession(arg1);
+				//this.getJunction().sendMessageToSession(arg1);
+				this.sendMessageToSession(arg1);
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
