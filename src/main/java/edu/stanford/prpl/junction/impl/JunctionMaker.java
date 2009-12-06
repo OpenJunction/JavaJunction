@@ -229,7 +229,10 @@ public class JunctionMaker {
 			System.err.println("room " + info.getRoom());
 			
 			String descString = info.getDescription();
-			if (descString == null || descString.trim().length()==0) return null;
+			if (descString == null || descString.trim().length()==0) {
+				System.err.println("No MUC room description found.");
+				return null;
+			}
 			
 			JSONObject descJSON = new JSONObject(descString);
 			
