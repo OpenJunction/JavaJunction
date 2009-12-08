@@ -155,7 +155,7 @@ public class ActivityDescription {
 		if (rolePlatforms == null) return null;
 		if (rolePlatforms.has(role)) {
 			try {
-				return rolePlatforms.getJSONObject("role");
+				return rolePlatforms.getJSONObject(role);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
