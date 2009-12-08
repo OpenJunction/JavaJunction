@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 
 import edu.stanford.prpl.junction.api.JunctionAPI;
@@ -13,6 +14,7 @@ import edu.stanford.prpl.junction.api.activity.ActivityDescription;
 import edu.stanford.prpl.junction.api.activity.Junction;
 import edu.stanford.prpl.junction.api.activity.JunctionActor;
 import edu.stanford.prpl.junction.api.messaging.JunctionQuery;
+import edu.stanford.prpl.junction.api.messaging.MessageHeader;
 import edu.stanford.prpl.junction.api.object.InboundObjectStream;
 import edu.stanford.prpl.junction.impl.JunctionMaker;
 
@@ -53,5 +55,11 @@ public class SendQuery extends JunctionActor {
 		}
 		
 		System.out.println("Sending query: " + query.getQueryText());
+	}
+
+	@Override
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+		// TODO Auto-generated method stub
+		
 	}
 }
