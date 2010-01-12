@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl;
+package edu.stanford.junction;
 
 import java.lang.reflect.Method;
 import java.net.URI;

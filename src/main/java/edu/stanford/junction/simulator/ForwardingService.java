@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl;
+package edu.stanford.junction.simulator;
 
 import org.json.JSONObject;
 

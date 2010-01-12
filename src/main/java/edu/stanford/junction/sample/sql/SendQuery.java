@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.JunctionAPI;
 import edu.stanford.junction.api.activity.ActivityDescription;
 import edu.stanford.junction.api.activity.Junction;
@@ -16,7 +17,6 @@ import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.JunctionQuery;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.api.object.InboundObjectStream;
-import edu.stanford.junction.impl.JunctionMaker;
 
 public class SendQuery extends JunctionActor {
 	

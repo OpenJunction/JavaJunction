@@ -19,10 +19,10 @@ import org.jivesoftware.smackx.muc.DiscussionHistory;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.json.JSONObject;
 
+import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.Junction;
-import edu.stanford.junction.impl.JunctionMaker;
+import edu.stanford.junction.impl.xmpp.Junction;
 
 public abstract class JunctionService extends JunctionActor {
 	public static String SERVICE_CHANNEL="jxservice";

@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl;
+package edu.stanford.junction;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,6 +16,7 @@ import edu.stanford.junction.api.activity.ActivityDescription;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.Junction;
 
 
 public class JunctionMaker {

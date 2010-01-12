@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.Junction;
+import edu.stanford.junction.impl.xmpp.Junction;
 
 // TODO: Make interface along with abstract class, for those who really need it.
 

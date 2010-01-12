@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl;
+package edu.stanford.junction.impl.xmpp;
 
 import java.net.URI;
 import java.net.URL;

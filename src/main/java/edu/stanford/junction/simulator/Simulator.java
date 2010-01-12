@@ -3,10 +3,10 @@ package edu.stanford.junction.simulator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityDescription;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.JunctionMaker;
 
 class simThread extends Thread{
 	private int NumOfMessage;

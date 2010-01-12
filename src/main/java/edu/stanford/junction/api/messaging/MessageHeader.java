@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.api.messaging.target.MessageTarget;
 import edu.stanford.junction.api.messaging.target.MessageTargetFactory;
-import edu.stanford.junction.impl.Junction;
+import edu.stanford.junction.impl.xmpp.Junction;
 
 public class MessageHeader {
 	private Junction jx;
