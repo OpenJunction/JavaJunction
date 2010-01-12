@@ -61,7 +61,6 @@ public class SQLActor extends JunctionActor {
 	
 	
 	static MessageHandler handler = null;
-	
 	@Override
 	public void onMessageReceived(MessageHeader header, JSONObject message) {
 		// hack to fix from updating to onMessageReceived vs getMessageHandler
