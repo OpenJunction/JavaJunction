@@ -14,6 +14,7 @@ import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 public class SendQuery extends JunctionActor {
 	
@@ -28,7 +29,9 @@ public class SendQuery extends JunctionActor {
 			
 			ActivityScript activity = new ActivityScript();
 			
-			Junction jx = JunctionMaker.getInstance().newJunction(activity, new SendQuery());
+			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker jm = JunctionMaker.getInstance(config);
+			Junction jx = jm.newJunction(activity, new SendQuery());
 			
 			
 			

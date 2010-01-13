@@ -14,17 +14,12 @@ import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 
 public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
-	protected String mSwitchboard; // TODO: SwitchboardConfig
+	protected XMPPSwitchboardConfig mConfig;
 	
-	public JunctionMaker() {
-		super();
+
+	public JunctionMaker(XMPPSwitchboardConfig config) {
+		mConfig = config;		
 	}
-	
-	public JunctionMaker(String switchboard) {
-		mSwitchboard=switchboard;
-	}
-	
-	
 	
 	public Junction newJunction(URI uri, JunctionActor actor) {
 		ActivityScript desc = new ActivityScript();
@@ -39,8 +34,8 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
 		
 		// this needs to be made more formal
-		if (null == desc.getHost() && mSwitchboard != null) {
-			desc.setHost(mSwitchboard);
+		if (null == desc.getHost() && mConfig.host != null) {
+			desc.setHost(mConfig.host);
 		}
 		
 		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc);

@@ -12,6 +12,7 @@ import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 public class SQLActor extends JunctionActor {
 	// JunctionManager extends/implements JunctionAPI
@@ -27,7 +28,8 @@ public class SQLActor extends JunctionActor {
 			activity.put("sessionID", "sqlQuerySession");
 			activity.put("ad","edu.stanford.prpl.junction.demo.sql");
 			
-			JunctionMaker jm = JunctionMaker.getInstance("prpl.stanford.edu");
+			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker jm = JunctionMaker.getInstance(config);
 			Junction jx = jm.newJunction(new ActivityScript(activity), new SQLActor());
 
 			/*

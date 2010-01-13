@@ -9,6 +9,7 @@ import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 /*class simThread extends Thread{
 	private int NumOfMessage;
@@ -48,7 +49,9 @@ public class ResponseTimeSimulator {
 			desc.addRolePlatform("simulator", "android", platform);
 		} catch (Exception e) {}
 		Date makeJuncTime = new Date(); 
-		JunctionMaker maker = JunctionMaker.getInstance("prpl.stanford.edu");
+		
+		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+		JunctionMaker maker = JunctionMaker.getInstance(config);
 		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
 			maker.newJunction(desc, new SimActorRT(makeJuncTime.getTime(), actor_i));
 		}

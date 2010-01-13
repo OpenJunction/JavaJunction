@@ -6,6 +6,8 @@ import java.util.Map;
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
 
+// TODO: This class requires a switchboard, and is probably XMPP specific. Fix accordingly.
+
 public abstract class JunctionService extends JunctionActor {
 	public static String SERVICE_CHANNEL="jxservice";
 	
@@ -40,7 +42,7 @@ public abstract class JunctionService extends JunctionActor {
 		//desc.setActorID(getServiceName());
 		desc.setActivityID("junction.service");
 		
-		Junction jx = JunctionMaker.getInstance().newJunction(desc, this);
+		Junction jx = null; //JunctionMaker.getInstance().newJunction(desc, this);
 		mJunctionMap.put(switchboard, jx);
 
 	}

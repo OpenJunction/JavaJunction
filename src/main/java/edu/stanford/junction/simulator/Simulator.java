@@ -7,6 +7,7 @@ import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 class simThread extends Thread{
 	private int NumOfMessage;
@@ -26,7 +27,8 @@ class simThread extends Thread{
 			platform.put("android", "http://my.realsitic.url/for_android");
 			desc.addRolePlatform("simulator", "android", platform);
 		} catch (Exception e) {}
-		JunctionMaker maker = JunctionMaker.getInstance("prpl.stanford.edu");
+		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+		JunctionMaker maker = JunctionMaker.getInstance(config);
 		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
 			maker.newJunction(desc, new SimActor(NumOfMessage, actor_i));
 			//maker.newJunction(desc, new SimActor(NumOfMessage, 0));

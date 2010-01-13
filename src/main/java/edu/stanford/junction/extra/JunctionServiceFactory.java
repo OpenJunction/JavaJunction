@@ -12,6 +12,13 @@ import edu.stanford.junction.api.activity.JunctionService;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
+/**
+ * TODO: This class is temporarily broken. It requires switchboard information,
+ * and so is XMPP specific for now.
+ * 
+ * Line 71 has been commented out, resulting in nothing working here.
+ *
+ */
 public class JunctionServiceFactory extends JunctionService {
 
 	@Override
@@ -61,7 +68,7 @@ public class JunctionServiceFactory extends JunctionService {
 				service.setRole(localRole);
 				
 				System.out.println("service actorID is " + service.getActorID());
-				JunctionMaker.getInstance().newJunction(activityURI,service);					
+				//JunctionMaker.getInstance().newJunction(activityURI,service);					
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

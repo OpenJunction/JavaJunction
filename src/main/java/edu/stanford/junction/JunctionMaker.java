@@ -9,19 +9,19 @@ import org.json.JSONObject;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 
 public abstract class JunctionMaker {
 	
-	// TODO: Have a single getInstance method that takes a SwitchboardConfig
-	
-	public static JunctionMaker getInstance(String switchboard) {
+	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
 		// TODO: map config to maker?
-		return new edu.stanford.junction.impl.xmpp.JunctionMaker(switchboard);
-	}
-	
-	public static JunctionMaker getInstance() {
-		return new edu.stanford.junction.impl.xmpp.JunctionMaker();
+		if (switchboardConfig instanceof XMPPSwitchboardConfig) {
+			return new edu.stanford.junction.impl.xmpp.JunctionMaker((XMPPSwitchboardConfig)switchboardConfig);
+		} else {
+			// Unknown implementation;.
+			return null;
+		}
 	}
 	
 	public JunctionMaker() {
@@ -129,7 +129,7 @@ public abstract class JunctionMaker {
 				return;
 			}
 			System.out.println("Inviting service at uri " + remoteServiceActivity);
-			JunctionMaker.getInstance().newJunction(remoteServiceActivity, actor);
+			JunctionMaker.this.newJunction(remoteServiceActivity, actor);
 		
 	}
 }

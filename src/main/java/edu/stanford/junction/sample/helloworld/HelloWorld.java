@@ -2,7 +2,10 @@ package edu.stanford.junction.sample.helloworld;
 
 import java.net.URI;
 
+import org.jivesoftware.smack.XMPPConnection;
+
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 public class HelloWorld {
 	
@@ -14,7 +17,8 @@ public class HelloWorld {
 			Receiver receiver = new Receiver();
 			Sender sender = new Sender();
 			
-			JunctionMaker jm = JunctionMaker.getInstance("prpl.stanford.edu");
+			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker jm = JunctionMaker.getInstance(config);
 			jm.newJunction(JX_URI, receiver);
 			jm.newJunction(JX_URI, sender);
 			
