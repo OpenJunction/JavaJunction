@@ -124,7 +124,11 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 		XMPPConnection mXMPPConnection= new XMPPConnection(config.host);
 		try {
 			mXMPPConnection.connect();
-			mXMPPConnection.loginAnonymously();
+			if (config.user != null) {
+				mXMPPConnection.login(config.user, config.password);
+			} else {
+				mXMPPConnection.loginAnonymously();
+			}
 			
 			return mXMPPConnection;
 		} catch (Exception e) {
