@@ -1,28 +1,10 @@
 package edu.stanford.junction.api.activity;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.jivesoftware.smack.PacketListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
-import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Packet;
-import org.jivesoftware.smackx.Form;
-import org.jivesoftware.smackx.FormField;
-import org.jivesoftware.smackx.muc.DiscussionHistory;
-import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.json.JSONObject;
-
+import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.messaging.MessageHandler;
-import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.xmpp.Junction;
 
 public abstract class JunctionService extends JunctionActor {
 	public static String SERVICE_CHANNEL="jxservice";
@@ -52,7 +34,7 @@ public abstract class JunctionService extends JunctionActor {
 		
 		if (mJunctionMap.containsKey(switchboard)) return;
 		
-		ActivityDescription desc = new ActivityDescription();
+		ActivityScript desc = new ActivityScript();
 		desc.setHost(switchboard);
 		desc.setSessionID(SERVICE_CHANNEL);
 		//desc.setActorID(getServiceName());

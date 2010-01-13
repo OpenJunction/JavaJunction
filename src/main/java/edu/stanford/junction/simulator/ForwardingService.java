@@ -3,7 +3,6 @@ package edu.stanford.junction.simulator;
 import org.json.JSONObject;
 
 import edu.stanford.junction.api.activity.JunctionService;
-import edu.stanford.junction.api.messaging.JunctionMessage;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 

@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ActivityDescription {
+public class ActivityScript {
 	
 	/**
 	 * Note that there is probably a lot of confusing code in here
@@ -46,12 +46,12 @@ public class ActivityDescription {
 	
 	private boolean generatedSessionID=false;
 	
-	public ActivityDescription() {
+	public ActivityScript() {
 		sessionID 	= UUID.randomUUID().toString();
 		generatedSessionID=true;
 	}
 	
-	public ActivityDescription(JSONObject json) {
+	public ActivityScript(JSONObject json) {
 		mJSON = json;
 		
 		

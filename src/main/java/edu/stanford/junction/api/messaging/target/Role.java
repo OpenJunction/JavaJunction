@@ -2,7 +2,7 @@ package edu.stanford.junction.api.messaging.target;
 
 import org.json.JSONObject;
 
-import edu.stanford.junction.api.activity.Junction;
+import edu.stanford.junction.Junction;
 
 public class Role extends MessageTarget {
 	private Junction jx;

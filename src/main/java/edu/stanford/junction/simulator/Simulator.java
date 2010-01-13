@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.activity.ActivityDescription;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
@@ -18,7 +18,7 @@ class simThread extends Thread{
 		sessionID = id;
 	}
 	public void run(){
-		ActivityDescription desc = new ActivityDescription();
+		ActivityScript desc = new ActivityScript();
 		//String ad = "SimSession_" + sessionID;
 		//desc.setSessionID(ad);
 		JSONObject platform = new JSONObject();

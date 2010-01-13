@@ -9,14 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.JunctionAPI;
-import edu.stanford.junction.api.activity.ActivityDescription;
-import edu.stanford.junction.api.activity.Junction;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
-import edu.stanford.junction.api.messaging.JunctionQuery;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.api.object.InboundObjectStream;
 
 public class SendQuery extends JunctionActor {
 	
@@ -29,7 +26,7 @@ public class SendQuery extends JunctionActor {
 			// todo: same session for client/server
 			System.out.println("Starting the query actor");
 			
-			ActivityDescription activity = new ActivityDescription();
+			ActivityScript activity = new ActivityScript();
 			
 			Junction jx = JunctionMaker.getInstance().newJunction(activity, new SendQuery());
 			
@@ -46,15 +43,8 @@ public class SendQuery extends JunctionActor {
 
 	@Override
 	public void onActivityStart() {
-		JunctionQuery query = null;
-		try {
-			query = new JunctionQuery("sql","SELECT name FROM jz_nodes WHERE ptype='genre'");
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
-		System.out.println("Sending query: " + query.getQueryText());
+		//System.out.println("Sending query: " + query.getQueryText());
 	}
 
 	@Override

@@ -22,15 +22,15 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.stanford.junction.api.activity.ActivityDescription;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.api.messaging.target.MessageTarget;
 
-public class Junction implements edu.stanford.junction.api.activity.Junction {
+public class Junction extends edu.stanford.junction.Junction {
 	public static String NS_JX = "jx";
-	private ActivityDescription mActivityDescription;
+	private ActivityScript mActivityDescription;
 	private JunctionActor mOwner;
 	private URL mHostURL;
 
@@ -44,7 +44,9 @@ public class Junction implements edu.stanford.junction.api.activity.Junction {
 	 * 
 	 * TODO: add constructor w/ activity descriptor; keep this one for nonconstrained activity.
 	 */
-	protected Junction(ActivityDescription desc) {
+	public Junction(ActivityScript desc) {
+		super(desc);
+		
 		mActivityDescription=desc;
 		mXMPPServer=mActivityDescription.getHost();
 	}
@@ -65,7 +67,7 @@ public class Junction implements edu.stanford.junction.api.activity.Junction {
 		return mActivityDescription.getActivityID();
 	}
 	
-	public ActivityDescription getActivityDescription() {
+	public ActivityScript getActivityDescription() {
 		return mActivityDescription;
 	}
 	
@@ -242,18 +244,6 @@ public class Junction implements edu.stanford.junction.api.activity.Junction {
 		}
 		
 	}
-	
-	
-/*
-	public void sendMessageToChannel(String channel, JunctionMessage message) {
-		mManager.publish(channel, message);
-		
-	}
-*/
-	/*
-	protected void sendMessageToSystem(JunctionMessage message) {
-		mManager.publish(mManager.channelForSystem(), message);
-	}*/
 
 	public URI getInvitationURI() {
 		URI invitation = null;
@@ -342,14 +332,6 @@ public class Junction implements edu.stanford.junction.api.activity.Junction {
 					e2.printStackTrace();
 				}
 			}
-		/*} else {
-			chat.join(mActivityDescription.getActorID(),null,history,10000);
-		}*/
-		
 		return chat;
-	}
-	
-	
+	}	
 }
-
-

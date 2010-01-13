@@ -1,6 +1,6 @@
 package edu.stanford.junction.api.messaging.target;
 
-import edu.stanford.junction.api.activity.Junction;
+import edu.stanford.junction.Junction;
 
 public class MessageTargetFactory {
 	private Junction jx;

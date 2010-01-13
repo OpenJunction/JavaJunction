@@ -1,25 +1,19 @@
 package edu.stanford.junction.sample.sql;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
 import edu.stanford.junction.api.activity.JunctionActor;
-import edu.stanford.junction.api.messaging.JunctionQuery;
-import edu.stanford.junction.api.messaging.JunctionQueryHandler;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.api.object.OutboundObjectStream;
 
 public class QueryHandler extends MessageHandler {
 
@@ -30,8 +24,8 @@ public class QueryHandler extends MessageHandler {
 	}
 	
 	public static void main(String[] argv) throws JSONException {
-		JunctionQuery q = new JunctionQuery("sql","SELECT name,playcount FROM jz_nodes WHERE ptype='genre'");
-		new QueryHandler(null).onMessageReceived(null,q);
+		//JunctionQuery q = new JunctionQuery("sql","SELECT name,playcount FROM jz_nodes WHERE ptype='genre'");
+		//new QueryHandler(null).onMessageReceived(null,q);
 		
 	}
 	

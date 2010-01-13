@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.activity.ActivityDescription;
-import edu.stanford.junction.api.activity.Junction;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -28,7 +28,7 @@ public class SQLActor extends JunctionActor {
 			activity.put("ad","edu.stanford.prpl.junction.demo.sql");
 			
 			JunctionMaker jm = JunctionMaker.getInstance("prpl.stanford.edu");
-			Junction jx = jm.newJunction(new ActivityDescription(activity), new SQLActor());
+			Junction jx = jm.newJunction(new ActivityScript(activity), new SQLActor());
 
 			/*
 			try {

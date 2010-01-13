@@ -12,11 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import edu.stanford.junction.api.activity.ActivityDescription;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.xmpp.Junction;
 
 
 public class JunctionMaker {
@@ -31,7 +30,7 @@ public class JunctionMaker {
 		return new JunctionMaker();
 	}
 	
-	protected JunctionMaker() {
+	public JunctionMaker() {
 		
 	}
 	
@@ -40,7 +39,7 @@ public class JunctionMaker {
 	}
 	
 	public Junction newJunction(URI uri, JunctionActor actor) {
-		ActivityDescription desc = new ActivityDescription();
+		ActivityScript desc = new ActivityScript();
 		desc.setHost(uri.getHost());
 		if (uri.getPath() != null) { // TODO: check to make sure this works for URIs w/o path
 			desc.setSessionID(uri.getPath().substring(1));
@@ -61,14 +60,14 @@ public class JunctionMaker {
 		return val;
 	}
 	
-	public Junction newJunction(ActivityDescription desc, JunctionActor actor) {
+	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
 		
 		// this needs to be made more formal
 		if (null == desc.getHost() && mSwitchboard != null) {
 			desc.setHost(mSwitchboard);
 		}
 		
-		Junction jx = new Junction(desc);
+		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc);
 		jx.registerActor(actor);
 		
 		if (desc.isActivityCreator()) {
@@ -81,19 +80,6 @@ public class JunctionMaker {
 					inviteActorService(jx,role);
 					// TODO: add a method that takes in a Junction
 					// so we don't have to do an extra lookup
-					
-					/*
-					URI listenerURI = null;
-					try {
-						String listener = "junction://" + plat.getString("switchboard")  + "/jxservice";
-						listenerURI = new URI(listener);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					inviteActorByListenerService(invitationURI, listenerURI);
-					*/
-					
 				}
 			}
 		}
@@ -147,7 +133,7 @@ public class JunctionMaker {
 	 */
 //	public void inviteActorService(final URI invitationURI) {
 	public void inviteActorService(final Junction jx, final String role) {
-	ActivityDescription desc = jx.getActivityDescription();
+	ActivityScript desc = jx.getActivityDescription();
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
 		
@@ -200,7 +186,7 @@ public class JunctionMaker {
 	}
 	
 	
-	public ActivityDescription getActivityDescription(URI uri) {
+	public ActivityScript getActivityDescription(URI uri) {
 		
 		// TODO: Move the XMPPConnection into the JunctionMaker
 		// (out of Junction)
@@ -237,7 +223,7 @@ public class JunctionMaker {
 			
 			JSONObject descJSON = new JSONObject(descString);
 			
-			return new ActivityDescription(descJSON);
+			return new ActivityScript(descJSON);
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {

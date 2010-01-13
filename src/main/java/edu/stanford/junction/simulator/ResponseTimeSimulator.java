@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.activity.ActivityDescription;
+import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
@@ -41,7 +41,7 @@ public class ResponseTimeSimulator {
 	static int NumOfMessage = 5;
 	static int NumOfParticipant = 2;
 	public static void main(String[] argv){
-		ActivityDescription desc = new ActivityDescription();
+		ActivityScript desc = new ActivityScript();
 		JSONObject platform = new JSONObject();
 		try{
 			platform.put("android", "http://my.realsitic.url/for_android");
