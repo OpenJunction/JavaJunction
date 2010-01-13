@@ -32,8 +32,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	public static String NS_JX = "jx";
 	private ActivityScript mActivityDescription;
 	private JunctionActor mOwner;
-	private URL mHostURL;
-
+	
 	private String mXMPPServer;
 	private XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
@@ -42,25 +41,14 @@ public class Junction extends edu.stanford.junction.Junction {
 	 * Creates a new activity and registers it
 	 * with a Junction server.
 	 * 
-	 * TODO: add constructor w/ activity descriptor; keep this one for nonconstrained activity.
+	 * TODO: probably merge this function with registerActor().
 	 */
-	public Junction(ActivityScript desc) {
-		super(desc);
-		
+	protected Junction(ActivityScript desc, XMPPConnection xmppConnection) {
+
 		mActivityDescription=desc;
+		mXMPPConnection = xmppConnection;
 		mXMPPServer=mActivityDescription.getHost();
-	}
-	
-	private void xmppInit() {
-		mXMPPConnection= new XMPPConnection(mActivityDescription.getHost());
-		try {
-			mXMPPConnection.connect();
-			mXMPPConnection.loginAnonymously();
-			
-			mSessionChat = joinSessionChat();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 	}
 	
 	public String getActivityID() {
@@ -82,7 +70,11 @@ public class Junction extends edu.stanford.junction.Junction {
 		mOwner = actor;
 		mOwner.setJunction(this);
 		
-		xmppInit();
+		try {
+			mSessionChat = joinSessionChat();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		MessageHandler handler = new MessageHandler() {
 			@Override
@@ -195,7 +187,8 @@ public class Junction extends edu.stanford.junction.Junction {
 				handler.onMessageReceived(new MessageHeader(Junction.this,obj,from), obj);
 			}
 		};
-		mXMPPConnection.addPacketListener(packetListener, new PacketTypeFilter(Message.class));
+		
+		mSessionChat.addMessageListener(packetListener);
 	}
 
 	

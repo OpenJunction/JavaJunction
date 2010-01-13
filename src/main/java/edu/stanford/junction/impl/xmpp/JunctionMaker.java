@@ -16,6 +16,7 @@ import edu.stanford.junction.api.activity.JunctionActor;
 public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 	protected XMPPSwitchboardConfig mConfig;
 	
+	private XMPPConnection mXMPPConnection;
 
 	public JunctionMaker(XMPPSwitchboardConfig config) {
 		mConfig = config;		
@@ -38,7 +39,11 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 			desc.setHost(mConfig.host);
 		}
 		
-		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc);
+		if (mXMPPConnection == null) {
+			mXMPPConnection = getXMPPConnection(mConfig);
+		}
+		
+		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc,mXMPPConnection);
 		jx.registerActor(actor);
 		
 		if (desc.isActivityCreator()) {
@@ -78,7 +83,10 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 		
 		String host = uri.getHost();
 		String sessionID = uri.getPath().substring(1);
-		XMPPConnection conn = getXMPPConnection(host);
+		
+		// pretty broken..
+		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(host);
+		XMPPConnection conn = getXMPPConnection(config);
 		
 		String room = sessionID+"@conference."+host;
 		System.err.println("looking up info from xmpp room " + room);
@@ -112,8 +120,8 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 	}
 
 	
-	private XMPPConnection getXMPPConnection(String host) {
-		XMPPConnection mXMPPConnection= new XMPPConnection(host);
+	private XMPPConnection getXMPPConnection(XMPPSwitchboardConfig config) {
+		XMPPConnection mXMPPConnection= new XMPPConnection(config.host);
 		try {
 			mXMPPConnection.connect();
 			mXMPPConnection.loginAnonymously();
@@ -124,4 +132,5 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 		}
 		return null;
 	}
+	
 }

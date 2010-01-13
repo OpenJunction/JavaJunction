@@ -16,9 +16,7 @@ public abstract class Junction {
 	/**
 	 * Required constructors
 	 */
-	public Junction(ActivityScript desc) {
-		
-	}
+	public Junction() {}
 	
 	
 	/** 
