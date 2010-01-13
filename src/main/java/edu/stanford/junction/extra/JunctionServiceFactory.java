@@ -1,4 +1,4 @@
-package edu.stanford.junction;
+package edu.stanford.junction.extra;
 
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.JunctionService;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
