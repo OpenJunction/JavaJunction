@@ -13,8 +13,18 @@ public class Receiver extends JunctionActor {
 		super("receiver");
 	}
 
+	
 	@Override
-	public void onMessageReceived(MessageHeader header, JSONObject message) {
-		System.out.println("got message: " + message);
+	public void onMessageReceived(MessageHeader header, JSONObject inbound) {
+		System.out.println("receiver got: " + inbound);
+		
+		try {
+			JSONObject msg = new JSONObject();
+			msg.put("thanksFor", inbound);
+			//header.getReplyTarget().sendMessage(msg);
+			sendMessageToRole("sender",msg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
