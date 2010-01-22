@@ -18,9 +18,11 @@ public class HelloWorld {
 			Sender sender = new Sender();
 			
 			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
-			JunctionMaker jm = JunctionMaker.getInstance(config);
-			jm.newJunction(JX_URI, receiver);
-			jm.newJunction(JX_URI, sender);
+			JunctionMaker jm1 = JunctionMaker.getInstance(config);
+			jm1.newJunction(JX_URI, receiver);
+			
+			JunctionMaker jm2 = JunctionMaker.getInstance(config);
+			jm2.newJunction(JX_URI, sender);
 			
 			// keepalive sleep.
 			Object sleep = new Object();
