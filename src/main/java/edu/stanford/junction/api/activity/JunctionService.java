@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
 
 // TODO: This class requires a switchboard, and is probably XMPP specific. Fix accordingly.
 
@@ -42,7 +43,11 @@ public abstract class JunctionService extends JunctionActor {
 		//desc.setActorID(getServiceName());
 		desc.setActivityID("junction.service");
 		
-		Junction jx = null; //JunctionMaker.getInstance().newJunction(desc, this);
+		//Junction jx = null; //JunctionMaker.getInstance().newJunction(desc, this);
+		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(switchboard);
+		JunctionMaker maker = (JunctionMaker) JunctionMaker.getInstance(config);
+		Junction jx = maker.newJunction(desc, this);
+		
 		mJunctionMap.put(switchboard, jx);
 
 	}
