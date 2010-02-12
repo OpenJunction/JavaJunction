@@ -42,7 +42,7 @@ public class ActivityScript {
 		mJSON=null; // reset
 	}
 
-	private JSONObject rolePlatforms;
+	private JSONObject roleSpecs;
 	
 	private boolean generatedSessionID=false;
 	
@@ -82,7 +82,7 @@ public class ActivityScript {
 		}
 		
 		////////////////////////////////////////////
-		rolePlatforms = json.optJSONObject("roles");
+		roleSpecs = json.optJSONObject("roles");
 			
 	}
 	
@@ -111,6 +111,11 @@ public class ActivityScript {
 		mJSON=null; // reset
 	}
 	
+	@Override
+	public String toString() {
+		return getJSON().toString();
+	}
+	
 	public JSONObject getJSON() {
 		// hack until the object is populated correctly
 		if (mJSON != null) {
@@ -121,8 +126,8 @@ public class ActivityScript {
 		try {
 			j.put("sessionID", sessionID);
 			j.put("switchboard",host);
-			if (rolePlatforms != null) {
-				j.put("roles",rolePlatforms);
+			if (roleSpecs != null) {
+				j.put("roles",roleSpecs);
 			}
 			if (friendlyName != null) {
 				j.put("friendlyName", friendlyName);
@@ -134,11 +139,11 @@ public class ActivityScript {
 	}
 	
 	public String[] getRoles() {
-		if (rolePlatforms == null) return new String[]{};
-		String[] roles = new String[rolePlatforms.length()];
+		if (roleSpecs == null) return new String[]{};
+		String[] roles = new String[roleSpecs.length()];
 		
 		try {
-			Iterator<String>iter = rolePlatforms.keys();
+			Iterator<String>iter = roleSpecs.keys();
 			int i=0;
 			while (iter.hasNext()) {
 				roles[i++] = iter.next();
@@ -152,10 +157,10 @@ public class ActivityScript {
 	}
 	
 	public JSONObject getRoleSpec(String role) {
-		if (rolePlatforms == null) return null;
-		if (rolePlatforms.has(role)) {
+		if (roleSpecs == null) return null;
+		if (roleSpecs.has(role)) {
 			try {
-				return rolePlatforms.getJSONObject(role);
+				return roleSpecs.getJSONObject(role);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -164,9 +169,11 @@ public class ActivityScript {
 	}
 	
 	public JSONObject getRolePlatform(String role, String platform) {
-		if (rolePlatforms == null) return null;
 		try {
 			JSONObject spec = getRoleSpec(role);
+			if (spec == null) return null;
+			spec = spec.optJSONObject("platforms");
+			
 			if (spec == null) return null;
 			if (spec.has(platform)) {
 				return spec.getJSONObject(platform);
@@ -183,19 +190,19 @@ public class ActivityScript {
 	public void addRolePlatform(String role, String platform, JSONObject platformSpec) {
 		try {
 			JSONArray platforms = null;
-			if (rolePlatforms==null) rolePlatforms = new JSONObject();
-			if (!rolePlatforms.has(role)) {
-				rolePlatforms.put(role, new JSONObject());
+			if (roleSpecs==null) roleSpecs = new JSONObject();
+			if (!roleSpecs.has(role)) {
+				roleSpecs.put(role, new JSONObject());
 			}
-			
-			JSONObject jsonRole = rolePlatforms.getJSONObject(role);
+
+			JSONObject jsonRole = roleSpecs.getJSONObject(role);
 			if (!jsonRole.has("platforms")) {
 				jsonRole.put("platforms", new JSONObject());
 			}
 			
 			JSONObject jsonPlatforms = jsonRole.getJSONObject("platforms");
 			jsonPlatforms.put(platform, platformSpec);
-			
+
 			mJSON=null; // reset
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,6 +210,6 @@ public class ActivityScript {
 	}
 	
 	public void setRoles(JSONObject roles) {
-		rolePlatforms=roles;
+		roleSpecs=roles;
 	}
 }

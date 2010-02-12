@@ -16,7 +16,12 @@ import edu.stanford.junction.api.activity.JunctionActor;
 public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 	protected XMPPSwitchboardConfig mConfig;
 	
-	private XMPPConnection mXMPPConnection;
+	// TODO: Can't use a single connection right now-
+	// must support multiple actors in the same activity
+	// and this can't be done over a single XMPP connection now.
+	// BJD 2/2/10
+	
+	//private XMPPConnection mXMPPConnection;
 
 	public JunctionMaker(XMPPSwitchboardConfig config) {
 		mConfig = config;		
@@ -39,9 +44,15 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 			desc.setHost(mConfig.host);
 		}
 		
+		/*
 		if (mXMPPConnection == null) {
 			mXMPPConnection = getXMPPConnection(mConfig);
 		}
+		*/
+		
+		// For now, every new junction gets its own XMPP connection
+		// a big TODO is to fix this... BJD 2/2/10
+		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig);
 		
 		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc,mXMPPConnection);
 		jx.registerActor(actor);
@@ -49,7 +60,9 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 		if (desc.isActivityCreator()) {
 			String[] roles = desc.getRoles();
 			for (String role : roles) {
+				System.out.println("roles:" + role);
 				JSONObject plat = desc.getRolePlatform(role, "jxservice");
+				System.out.println("plat:" + plat);
 				if (plat != null) {
 					// Auto-invite the service via the service factory
 					System.out.println("Auto-requesting service for " + role);
