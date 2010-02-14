@@ -9,23 +9,32 @@ import org.json.JSONObject;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
+import edu.stanford.junction.provider.JunctionProvider;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 
-public abstract class JunctionMaker {
+public class JunctionMaker {
+	protected JunctionProvider mProvider;
 	
 	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
 		// TODO: map config to maker?
+		JunctionMaker maker = new JunctionMaker();
+		maker.mProvider = maker.getProvider(switchboardConfig);
+		return maker;
+	}
+	
+	protected JunctionMaker() {
+		
+	}
+	
+	
+	protected JunctionProvider getProvider(SwitchboardConfig switchboardConfig) {
 		if (switchboardConfig instanceof XMPPSwitchboardConfig) {
-			return new edu.stanford.junction.impl.xmpp.JunctionMaker((XMPPSwitchboardConfig)switchboardConfig);
+			return new edu.stanford.junction.provider.xmpp.JunctionProvider((XMPPSwitchboardConfig)switchboardConfig);
 		} else {
 			// Unknown implementation;.
 			return null;
 		}
-	}
-	
-	public JunctionMaker() {
-		
 	}
 	
 	/*
@@ -34,9 +43,17 @@ public abstract class JunctionMaker {
 	 * (2) Retrieve an activity's script given a URI
 	 * (3) Support various invitation mechanisms (often platform-specific)
 	 */
-	public abstract Junction newJunction(URI uri, JunctionActor actor);
-	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor);
-	public abstract ActivityScript getActivityDescription(URI uri);
+	public Junction newJunction(URI uri, JunctionActor actor) {
+		return mProvider.newJunction(uri, actor);
+	}
+	
+	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
+		return mProvider.newJunction(desc, actor);
+	}
+	
+	public ActivityScript getActivityDescription(URI uri) {
+		return mProvider.getActivityDescription(uri);
+	}
 	
 	
 	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) {

@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl.xmpp;
+package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
 
@@ -13,7 +13,7 @@ import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 
-public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
+public class JunctionProvider implements edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
 	
 	// TODO: Can't use a single connection right now-
@@ -23,7 +23,7 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 	
 	//private XMPPConnection mXMPPConnection;
 
-	public JunctionMaker(XMPPSwitchboardConfig config) {
+	public JunctionProvider(XMPPSwitchboardConfig config) {
 		mConfig = config;		
 	}
 	
@@ -54,7 +54,7 @@ public class JunctionMaker extends edu.stanford.junction.JunctionMaker {
 		// a big TODO is to fix this... BJD 2/2/10
 		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig);
 		
-		Junction jx = new edu.stanford.junction.impl.xmpp.Junction(desc,mXMPPConnection);
+		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection);
 		jx.registerActor(actor);
 		
 		if (desc.isActivityCreator()) {

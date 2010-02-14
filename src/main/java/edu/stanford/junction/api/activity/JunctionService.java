@@ -5,7 +5,7 @@ import java.util.Map;
 
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 // TODO: This class requires a switchboard, and is probably XMPP specific. Fix accordingly.
 

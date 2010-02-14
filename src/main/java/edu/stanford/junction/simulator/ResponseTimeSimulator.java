@@ -9,7 +9,7 @@ import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 /*class simThread extends Thread{
 	private int NumOfMessage;

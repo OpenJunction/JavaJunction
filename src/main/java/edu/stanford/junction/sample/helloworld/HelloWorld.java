@@ -2,10 +2,8 @@ package edu.stanford.junction.sample.helloworld;
 
 import java.net.URI;
 
-import org.jivesoftware.smack.XMPPConnection;
-
 import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.impl.xmpp.XMPPSwitchboardConfig;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 public class HelloWorld {
 	

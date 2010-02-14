@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl.xmpp;
+package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
 import java.net.URL;
@@ -47,6 +47,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
 		mActivityDescription=desc;
 		mXMPPConnection = xmppConnection;
+		
 		mXMPPServer=mActivityDescription.getHost();
 		
 	}
@@ -271,7 +272,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	
 	private MultiUserChat joinSessionChat() throws XMPPException {
-		String room = mActivityDescription.getSessionID()+"@conference."+mXMPPServer;
+		String room = mActivityDescription.getSessionID()+"@conference."+mXMPPConnection.getServiceName();
 		
 		DiscussionHistory history = new DiscussionHistory();
 		history.setMaxChars(0);

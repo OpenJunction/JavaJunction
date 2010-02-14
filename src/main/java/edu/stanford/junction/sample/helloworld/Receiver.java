@@ -16,7 +16,7 @@ public class Receiver extends JunctionActor {
 	
 	@Override
 	public void onMessageReceived(MessageHeader header, JSONObject inbound) {
-		System.out.println("receiver got: " + inbound);
+		System.out.println(this + " got: " + inbound);
 		
 		try {
 			JSONObject msg = new JSONObject();

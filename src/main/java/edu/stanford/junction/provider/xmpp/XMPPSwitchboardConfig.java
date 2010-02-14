@@ -1,4 +1,4 @@
-package edu.stanford.junction.impl.xmpp;
+package edu.stanford.junction.provider.xmpp;
 
 import edu.stanford.junction.SwitchboardConfig;
 
