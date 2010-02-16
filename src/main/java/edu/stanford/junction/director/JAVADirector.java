@@ -86,8 +86,6 @@ public class JAVADirector extends JunctionService {
 			command.add(activityURI.toString());
 			
 			ProcessBuilder pb = new ProcessBuilder(command);
-			
-			Map<String, String> env = pb.environment();
 			Process p = pb.start();
 		} catch (Exception e) {
 			System.out.println("failed to launch JAR.");
