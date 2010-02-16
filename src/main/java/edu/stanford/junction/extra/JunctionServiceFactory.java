@@ -93,6 +93,5 @@ public class JunctionServiceFactory extends JunctionService {
 				Thread.sleep(500000);
 			} catch (Exception e) {}
 		}
-	}
-	
+	}	
 }

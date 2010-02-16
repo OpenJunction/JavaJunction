@@ -20,6 +20,7 @@ public class JunctionMaker {
 		// TODO: map config to maker?
 		JunctionMaker maker = new JunctionMaker();
 		maker.mProvider = maker.getProvider(switchboardConfig);
+		maker.mProvider.setJunctionMaker(maker);
 		return maker;
 	}
 	
@@ -96,7 +97,6 @@ public class JunctionMaker {
 	 * @param host
 	 * @param serviceName
 	 */
-//	public void inviteActorService(final URI invitationURI) {
 	public void inviteActorService(final Junction jx, final String role) {
 	ActivityScript desc = jx.getActivityDescription();
 		System.out.println("Desc: " + desc.getJSON().toString());
@@ -136,7 +136,6 @@ public class JunctionMaker {
 				}
 			};
 			
-			
 			// remote jxservice activity:
 			URI remoteServiceActivity=null;
 			try {
@@ -147,6 +146,5 @@ public class JunctionMaker {
 			}
 			System.out.println("Inviting service at uri " + remoteServiceActivity);
 			JunctionMaker.this.newJunction(remoteServiceActivity, actor);
-		
 	}
 }

@@ -13,7 +13,7 @@ import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 
-public class JunctionProvider implements edu.stanford.junction.provider.JunctionProvider {
+public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
 	
 	// TODO: Can't use a single connection right now-
@@ -57,21 +57,8 @@ public class JunctionProvider implements edu.stanford.junction.provider.Junction
 		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection);
 		jx.registerActor(actor);
 		
-		if (desc.isActivityCreator()) {
-			String[] roles = desc.getRoles();
-			for (String role : roles) {
-				System.out.println("roles:" + role);
-				JSONObject plat = desc.getRolePlatform(role, "jxservice");
-				System.out.println("plat:" + plat);
-				if (plat != null) {
-					// Auto-invite the service via the service factory
-					System.out.println("Auto-requesting service for " + role);
-					inviteActorService(jx,role);
-					// TODO: add a method that takes in a Junction
-					// so we don't have to do an extra lookup
-				}
-			}
-		}
+		mJunctionMaker.requestServices(jx,desc);
+		
 		
 		// creating an activity is an activity using a JunctionService.
 		// Invite the JunctionMaker service to the session.
