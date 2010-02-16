@@ -57,7 +57,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection);
 		jx.registerActor(actor);
 		
-		mJunctionMaker.requestServices(jx,desc);
+		this.requestServices(jx,desc);
 		
 		
 		// creating an activity is an activity using a JunctionService.
