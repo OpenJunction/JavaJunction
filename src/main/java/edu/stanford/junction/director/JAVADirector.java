@@ -1,8 +1,10 @@
 package edu.stanford.junction.director;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
@@ -18,10 +20,9 @@ import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
- * TODO: This class is temporarily broken. It requires switchboard information,
- * and so is XMPP specific for now.
- * 
- * Line 71 has been commented out, resulting in nothing working here.
+ * Sample message to launch a JAR:
+ *  {serviceName:"test",jar:"http://prpl.stanford.edu/junction/launch/JunctionJARTest.jar",activity:"junction://testsess"}
+ * @author Ben
  *
  */
 public class JAVADirector extends JunctionService {
@@ -50,7 +51,7 @@ public class JAVADirector extends JunctionService {
 	private synchronized void launchJAR(URL jarURL, URI activityURI, String className) {
 		final String JAR_PATH = "jars/";
 		
-		String jarName = JAR_PATH + "/" + jarURL.getFile();
+		String jarName = JAR_PATH + "/" + jarURL.getPath().substring(1).replace("/", "-");
 		File jarFile = new File(jarName);
 		if (!jarFile.exists()) {
 			File tmpFile = new File(JAR_PATH+"/inbound.jar.tmp");
@@ -65,8 +66,9 @@ public class JAVADirector extends JunctionService {
 		        }
 		        in.close();
 		        out.close();
+
+		        boolean res = tmpFile.renameTo(jarFile);
 		        
-		        tmpFile.renameTo(jarFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
@@ -74,7 +76,7 @@ public class JAVADirector extends JunctionService {
 		}
 		
 		if (!jarFile.exists()) {
-			System.out.println("Failed to get JAR file.");
+			System.out.println("Failed to get JAR file " + jarFile.getName());
 			return;
 		}
 		
