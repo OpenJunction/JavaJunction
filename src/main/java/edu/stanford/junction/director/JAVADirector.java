@@ -21,7 +21,7 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
  * Sample message to launch a JAR:
- *  {serviceName:"test",jar:"http://prpl.stanford.edu/junction/launch/JunctionJARTest.jar",activity:"junction://testsess"}
+ *  {serviceName:"test",jar:"http://prpl.stanford.edu/junction/launch/poker-dealer.jar",activity:"junction://prpl.stanford.edu/pokertest"}
  * @author Ben
  *
  */
@@ -33,13 +33,11 @@ public class JAVADirector extends JunctionService {
 				
 				URI activityURI = new URI(message.getString("activity"));
 				
-				// TODO: support a factory mapping from serviceName => class
-				String className = message.getString("serviceName");
-				
 				if (message.has("jar")) {
 					URL jarURL = new URL(message.getString("jar"));
-					launchJAR(jarURL,activityURI,className);
+					launchJAR(jarURL,activityURI);
 				} else {
+					String className = message.getString("serviceName");
 					launchService(activityURI,className);
 				}
 			} catch (Exception e) {
@@ -48,7 +46,7 @@ public class JAVADirector extends JunctionService {
 	}
 
 	// currently no multi-thread support
-	private synchronized void launchJAR(URL jarURL, URI activityURI, String className) {
+	private synchronized void launchJAR(URL jarURL, URI activityURI) {
 		final String JAR_PATH = "jars/";
 		
 		String jarName = JAR_PATH + "/" + jarURL.getPath().substring(1).replace("/", "-");
@@ -84,10 +82,14 @@ public class JAVADirector extends JunctionService {
 		try {
 			List<String>command = new ArrayList<String>();
 			command.add("java");
-			command.add("-jar " + jarFile.getAbsolutePath());
+			command.add("-jar");
+			command.add(jarFile.getAbsolutePath());
 			command.add(activityURI.toString());
 			
+			System.out.println("Executing: " + command.toString());
 			ProcessBuilder pb = new ProcessBuilder(command);
+			pb.directory(jarFile.getParentFile());
+			
 			Process p = pb.start();
 		} catch (Exception e) {
 			System.out.println("failed to launch JAR.");
