@@ -11,7 +11,7 @@
 
   <groupId>edu.stanford.prpl.junction</groupId>
   <artifactId>JAVAJunction</artifactId>
-  <version>0.6-SNAPSHOT</version>
+  <version>0.6.5-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Junction</name>
   <description>JAVA Junction Manager</description>
@@ -59,8 +59,27 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>edu.stanford.junction.director.JAVADirector</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>edu.stanford.junction.director.JAVADirector</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
     </plugins>
   </build>
 
