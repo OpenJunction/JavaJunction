@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,23 @@ public class JAVADirector extends JunctionActor {
 						} else {
 							System.out.println("Warning: JAVA platform specified but no JAR found.");
 						}
-					} else {
+					} 
+					
+					else if (platforms.has("web")) {
+						// TODO: make sure this director isn't 'headless'
+						JSONObject webplat = platforms.getJSONObject("web");
+						String webURL = webplat.getString("url");
+						
+						if (webURL.contains("?")) {
+							webURL = webURL + "&";
+						} else {
+							webURL = webURL + "?";
+						}
+						webURL += "jxinvite="+URLEncoder.encode(activityString,"UTF-8");
+						BrowserControl.openUrl(webURL);
+					}
+					
+					else {
 						String className = message.getString("serviceName");
 						launchService(activityURI,className);
 					}

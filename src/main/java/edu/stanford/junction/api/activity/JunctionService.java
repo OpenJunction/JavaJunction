@@ -43,7 +43,8 @@ public abstract class JunctionService extends JunctionActor {
 		//desc.setActorID(getServiceName());
 		desc.setActivityID("junction.service");
 		
-		//Junction jx = null; //JunctionMaker.getInstance().newJunction(desc, this);
+		// TODO: register(String sb) doesn't make sense any more.
+		// Get rid of 'services' in general; just stick an actor to an activity.
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(switchboard);
 		JunctionMaker maker = (JunctionMaker) JunctionMaker.getInstance(config);
 		Junction jx = maker.newJunction(desc, this);

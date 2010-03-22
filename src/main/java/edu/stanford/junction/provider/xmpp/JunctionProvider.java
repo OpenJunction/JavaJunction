@@ -2,6 +2,8 @@ package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
 
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -94,11 +96,12 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
+			/*
 			System.err.println("room desc " + info.getDescription());
 			System.err.println("room subj " + info.getSubject());
 			System.err.println("part " + info.getOccupantsCount());
 			System.err.println("room " + info.getRoom());
-			
+			*/
 			String descString = info.getDescription();
 			if (descString == null || descString.trim().length()==0) {
 				System.err.println("No MUC room description found.");
@@ -132,9 +135,24 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			
 			return mXMPPConnection;
 		} catch (Exception e) {
+			System.err.println("Could not connect to XMPP provider");
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	// test
+	public static void main(String[] args) {
+		//ConnectionConfiguration config = new ConnectionConfiguration("prpl.stanford.edu",5222);
+		//XMPPConnection con = new XMPPConnection(config);
+		XMPPConnection con = new XMPPConnection("prpl.stanford.edu");
+	
+		try {
+			con.connect();
+			System.out.println("Connected.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
