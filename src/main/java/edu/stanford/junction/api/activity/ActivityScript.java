@@ -132,6 +132,9 @@ public class ActivityScript {
 			if (friendlyName != null) {
 				j.put("friendlyName", friendlyName);
 			}
+			if (activityID != null) {
+				j.put("ad", activityID);
+			}
 		} catch (Exception e) {}
 		
 		mJSON=j;

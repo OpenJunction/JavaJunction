@@ -25,8 +25,13 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 /**
- * Sample message to launch a JAR:
- *  {serviceName:"test",jar:"http://prpl.stanford.edu/junction/launch/poker-dealer.jar",activity:"junction://prpl.stanford.edu/pokertest"}
+ * This is a Director written for the JAVA platform.
+ * It is capable of launching .JAR actors, as well as web-based actors.
+ * The director activity also allows a user to see what's running on this machine.
+ * 
+ * TODO:
+ * 	support properties for the director: directorSessionID, platformHints, security/access control
+ * 
  * @author Ben
  *
  */
@@ -53,6 +58,7 @@ public class JAVADirector extends JunctionActor {
 						try {
 							activity.process.exitValue();
 							// If we get this far, the process is terminated.
+							System.out.println("exit value " + activity.process.exitValue());
 							mActivities.remove(i);
 						} catch (Exception e) {
 							// No exit value means its still running.
@@ -81,7 +87,6 @@ public class JAVADirector extends JunctionActor {
 				}
 				
 				else if ("cast".equals(action)) {
-					// TODO: support different platforms ("java", "web")
 					String activityString = message.getString("activity");
 					URI activityURI = new URI(activityString);
 					
@@ -105,7 +110,10 @@ public class JAVADirector extends JunctionActor {
 						JSONObject javaplat = platforms.getJSONObject("java");
 						if (javaplat.has("jar")) {
 							URL jarURL = new URL(javaplat.getString("jar"));
-							launchJAR(jarURL,activityURI);
+							Process proc = launchJAR(jarURL,activityURI);
+							if (proc != null) {
+								mActivities.add(new Activity(activityURI,proc));
+							}
 						} else {
 							System.out.println("Warning: JAVA platform specified but no JAR found.");
 						}
@@ -113,6 +121,7 @@ public class JAVADirector extends JunctionActor {
 					
 					else if (platforms.has("web")) {
 						// TODO: make sure this director isn't 'headless'
+						// (add these properties)
 						JSONObject webplat = platforms.getJSONObject("web");
 						String webURL = webplat.getString("url");
 						
@@ -122,7 +131,10 @@ public class JAVADirector extends JunctionActor {
 							webURL = webURL + "?";
 						}
 						webURL += "jxinvite="+URLEncoder.encode(activityString,"UTF-8");
-						BrowserControl.openUrl(webURL);
+						Process proc = BrowserControl.openUrl(webURL);
+						if (proc != null) {
+							mActivities.add(new Activity(activityURI,proc));
+						}
 					}
 					
 					else {
@@ -136,7 +148,7 @@ public class JAVADirector extends JunctionActor {
 		}
 	}
 
-	private void launchJAR(URL jarURL, URI activityURI) {
+	private Process launchJAR(URL jarURL, URI activityURI) {
 		final String JAR_PATH = "jars/";
 
 		String jarName = JAR_PATH + "/" + jarURL.getPath().substring(1).replace("/", "-");
@@ -161,13 +173,13 @@ public class JAVADirector extends JunctionActor {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				return;
+				return null;
 			}
 		}
 
 		if (!jarFile.exists()) {
 			System.out.println("Failed to get JAR file " + jarFile.getName());
-			return;
+			return null;
 		}
 
 		// Launch the new JVM
@@ -184,12 +196,12 @@ public class JAVADirector extends JunctionActor {
 
 			Process p = pb.start();
 			// TODO: make sure it worked
-			mActivities.add(new Activity(activityURI,p));
+			return p;
 		} catch (Exception e) {
 			System.out.println("failed to launch JAR.");
 			e.printStackTrace();
 		}
-
+		return null;
 	}
 
 	private void launchService(URI activityURI, String className) {	
@@ -234,19 +246,24 @@ public class JAVADirector extends JunctionActor {
 		String switchboard="prpl.stanford.edu";
 		String sessionID = "jxservice";
 		
-		URI activityURI = null;
-		try {
-			activityURI = new URI("junction://"+switchboard+"/"+sessionID);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+		ActivityScript script = new ActivityScript();
+		script.setActivityID("edu.junction.stanford.director");
+		//script.addRolePlatform("director", "java", null);
+		//script.addRolePlatform("director","web", null); 
+		//
+		script.setFriendlyName("Activity Director");
+		
+		// TODO: These should be in a "carrier" field
+		// ( carrier; implementation; provider; ... )
+		script.setSessionID(sessionID);
+		script.setHost(switchboard);
+
 		
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(switchboard);
 		mMaker = JunctionMaker.getInstance(config);
 		
 		JunctionActor director = new JAVADirector();
-		mMaker.newJunction(activityURI, director);
+		mMaker.newJunction(script, director);
 		
 		synchronized(director){
 			try {
