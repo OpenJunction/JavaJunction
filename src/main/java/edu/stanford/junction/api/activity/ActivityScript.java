@@ -188,7 +188,7 @@ public class ActivityScript {
 	}
 	
 	/*
-	 * Platform like: { platform: "android", package: "my.package", url: "market://my.url" }
+	 * Role/Platform like: "player" : { platforms: { "web" : { ... } } }
 	 */
 	public void addRolePlatform(String role, String platform, JSONObject platformSpec) {
 		try {
