@@ -14,7 +14,7 @@ public abstract class JunctionProvider {
 	
 	public abstract Junction newJunction(URI uri, JunctionActor actor);
 	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor);
-	public abstract ActivityScript getActivityDescription(URI uri);
+	public abstract ActivityScript getActivityScript(URI uri);
 	
 	public void setJunctionMaker(JunctionMaker maker) {
 		this.mJunctionMaker=maker;

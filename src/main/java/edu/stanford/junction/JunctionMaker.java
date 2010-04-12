@@ -52,11 +52,62 @@ public class JunctionMaker {
 		return mProvider.newJunction(desc, actor);
 	}
 	
-	public ActivityScript getActivityDescription(URI uri) {
-		return mProvider.getActivityDescription(uri);
+	public ActivityScript getActivityScript(URI uri) {
+		return mProvider.getActivityScript(uri);
 	}
 	
+	/**
+	 * Sends a request to a Director activity
+	 * to cast an actor to accept a given invitation.
+	 * 
+	 * @param directorURI The director listening for requests
+	 * @param invitationURI The activity to join (potentially including role information)
+	 */
+	public void castActor(final URI directorURI, final URI invitationURI) {
+		JunctionActor actor = new JunctionActor("inviter") {
+			@Override
+			public void onActivityJoin() {
+				JSONObject invitation = new JSONObject();
+				try {
+					invitation.put("action","cast");
+					invitation.put("activity", invitationURI.toString());
+				} catch (Exception e) {}
+				getJunction().sendMessageToSession(invitation);
+				leave();
+			}
+			
+			@Override
+			public void onMessageReceived(MessageHeader header,
+					JSONObject message) {
+				
+			}
+		};
+		
+		JunctionMaker.this.newJunction(directorURI, actor);
+	}
 	
+	/**
+	 * Returns the role associated with a given Junction invitation.
+	 * @param uri
+	 * @return
+	 */
+	public static String getRoleFromInvitation(URI uri) {
+		String query = uri.getQuery();
+		if (query == null) return null;
+		int pos = query.indexOf("role=");
+		if (pos == -1) {
+			return null;
+		}
+
+		query = query.substring(pos+5);
+		pos = query.indexOf('&');
+		if (pos > -1) {
+			query = query.substring(0,pos);
+		}
+		return query;
+	}
+	
+	@Deprecated
 	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) {
 		JunctionActor actor = new JunctionActor("inviter") {
 			@Override
@@ -97,6 +148,7 @@ public class JunctionMaker {
 	 * @param host
 	 * @param serviceName
 	 */
+	@Deprecated
 	public void inviteActorService(final Junction jx, final String role) {
 	ActivityScript desc = jx.getActivityDescription();
 		System.out.println("Desc: " + desc.getJSON().toString());
