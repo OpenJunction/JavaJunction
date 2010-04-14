@@ -33,7 +33,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	private ActivityScript mActivityDescription;
 	private JunctionActor mOwner;
 	
-	private String mXMPPServer;
 	private XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
 	
@@ -47,9 +46,6 @@ public class Junction extends edu.stanford.junction.Junction {
 
 		mActivityDescription=desc;
 		mXMPPConnection = xmppConnection;
-		
-		mXMPPServer=mActivityDescription.getHost();
-		
 	}
 	
 	public String getActivityID() {
@@ -127,16 +123,15 @@ public class Junction extends edu.stanford.junction.Junction {
 			started=true;
 			// mManager.removeListener(this);
 		}
+		public List<String> getActorsForRole(String role) {
+			// inefficient but who cares. small map.
+			List<String>results = new ArrayList<String>();
+			
+			return results;
+		}
 	}
 
 
-
-	public List<String> getActorsForRole(String role) {
-		// inefficient but who cares. small map.
-		List<String>results = new ArrayList<String>();
-		
-		return results;
-	}
 
 	public String[] getRoles() {
 		return mActivityDescription.getRoles();
