@@ -2,11 +2,14 @@ package edu.stanford.junction;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONObject;
 
 
 import edu.stanford.junction.api.activity.ActivityScript;
+import edu.stanford.junction.api.activity.Cast;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.JunctionProvider;
@@ -52,6 +55,30 @@ public class JunctionMaker {
 		return mProvider.newJunction(desc, actor);
 	}
 	
+	/**
+	 * Creates a new Junction and requests the casting of various roles.
+	 * There is no guarantee if and when the roles will be filled.
+	 * There may or may not be user interaction at the casting director.
+	 * 
+	 * @param desc
+	 * @param actor
+	 * @param support
+	 * @return
+	 */
+	public Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support) {
+		Junction jx = mProvider.newJunction(desc, actor);
+		
+		int size=support.size();
+		for (int i=0;i<size;i++){
+			if (support.getDirector(i) != null) {
+				URI invitationURI = jx.getInvitationURI(support.getRole(i));
+				this.castActor(support.getDirector(i), invitationURI);
+			}
+		}
+		
+		return jx;
+	}
+	
 	public ActivityScript getActivityScript(URI uri) {
 		return mProvider.getActivityScript(uri);
 	}
@@ -85,6 +112,7 @@ public class JunctionMaker {
 		
 		JunctionMaker.this.newJunction(directorURI, actor);
 	}
+	
 	
 	/**
 	 * Returns the role associated with a given Junction invitation.
