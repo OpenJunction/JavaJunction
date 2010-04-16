@@ -1,6 +1,7 @@
 package edu.stanford.junction.api.activity;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +20,11 @@ public class Cast {
 		public Cast() {
 			mRoles = new LinkedList<String>();
 			mDirectors = new LinkedList<URI>();
+		}
+		
+		public Cast(List<String>roles,List<URI>directors) {
+			mRoles = roles;
+			mDirectors = directors;
 		}
 		
 		public void add(String role, URI castingDirector) {
