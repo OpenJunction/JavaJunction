@@ -91,7 +91,7 @@ public class JAVADirector extends JunctionActor {
 					URI activityURI = new URI(activityString);
 					
 					// TODO: clean this up.
-					ActivityScript script = mMaker.getActivityDescription(activityURI);
+					ActivityScript script = mMaker.getActivityScript(activityURI);
 					int p = activityString.indexOf("role=");
 					if (p < 0) {
 						System.out.println("Invitation does not specify a role.");

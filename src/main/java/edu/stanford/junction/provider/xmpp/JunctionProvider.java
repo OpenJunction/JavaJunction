@@ -69,7 +69,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		return jx;
 	}
 	
-	public ActivityScript getActivityDescription(URI uri) {
+	public ActivityScript getActivityScript(URI uri) {
 		
 		// TODO: Move the XMPPConnection into the JunctionMaker
 		// (out of Junction)

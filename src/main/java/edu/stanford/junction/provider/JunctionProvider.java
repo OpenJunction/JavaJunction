@@ -15,7 +15,7 @@ public abstract class JunctionProvider {
 	
 	public abstract Junction newJunction(URI uri, JunctionActor actor);
 	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor);
-	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support);
+	//public abstract Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support);
 	
 	public abstract ActivityScript getActivityScript(URI uri);
 	

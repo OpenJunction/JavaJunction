@@ -9,10 +9,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.filter.MessageTypeFilter;
+import org.jivesoftware.smack.filter.OrFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.Form;
@@ -35,6 +38,8 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	private XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
+	PacketFilter mMessageFilter = new OrFilter(new MessageTypeFilter(Message.Type.chat), 
+			new MessageTypeFilter(Message.Type.groupchat));
 	
 	/**
 	 * Creates a new activity and registers it
@@ -77,7 +82,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			@Override
 			public void onMessageReceived(MessageHeader header,
 					JSONObject message) {
-				
+
 				actor.onMessageReceived(header, message);
 			}
 		};
@@ -184,7 +189,8 @@ public class Junction extends edu.stanford.junction.Junction {
 			}
 		};
 		
-		mSessionChat.addMessageListener(packetListener);
+		mXMPPConnection.addPacketListener(packetListener, mMessageFilter);
+		//mSessionChat.addMessageListener(packetListener);
 	}
 
 	
@@ -193,11 +199,9 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToActor(String actorID, JSONObject message) {
-	
 		try {
-			Chat chat = mSessionChat.createPrivateChat(mSessionChat.getRoom()+"/"+actorID,
-					null);
-		
+			String privChat = mSessionChat.getRoom()+"/" + actorID;
+			Chat chat = mSessionChat.createPrivateChat(privChat,null);
 			chat.sendMessage(message.toString());
 		} catch (XMPPException e) {
 			e.printStackTrace();

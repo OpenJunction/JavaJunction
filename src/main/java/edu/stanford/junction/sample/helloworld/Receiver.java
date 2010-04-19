@@ -20,9 +20,9 @@ public class Receiver extends JunctionActor {
 		
 		try {
 			JSONObject msg = new JSONObject();
-			msg.put("thanksFor", inbound);
+			msg.put("thanksFor", inbound.get("tic"));
 			//header.getReplyTarget().sendMessage(msg);
-			sendMessageToRole("sender",msg);
+			sendMessageToActor(header.getSender(),msg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
