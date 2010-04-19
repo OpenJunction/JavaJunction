@@ -192,7 +192,6 @@ public class ActivityScript {
 	 */
 	public void addRolePlatform(String role, String platform, JSONObject platformSpec) {
 		try {
-			JSONArray platforms = null;
 			if (roleSpecs==null) roleSpecs = new JSONObject();
 			if (!roleSpecs.has(role)) {
 				roleSpecs.put(role, new JSONObject());
@@ -205,6 +204,27 @@ public class ActivityScript {
 			
 			JSONObject jsonPlatforms = jsonRole.getJSONObject("platforms");
 			jsonPlatforms.put(platform, platformSpec);
+
+			mJSON=null; // reset
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addRoleHint(String role, String hint) {
+		try {
+			if (roleSpecs==null) roleSpecs = new JSONObject();
+			if (!roleSpecs.has(role)) {
+				roleSpecs.put(role, new JSONObject());
+			}
+
+			JSONObject jsonRole = roleSpecs.getJSONObject(role);
+			if (!jsonRole.has("hints")) {
+				jsonRole.put("hints", new JSONArray());
+			}
+			
+			JSONArray jsonHints = jsonRole.getJSONArray("hints");
+			jsonHints.put(hint);
 
 			mJSON=null; // reset
 		} catch (Exception e) {
