@@ -67,10 +67,12 @@ public class JunctionMaker {
 	 */
 	public Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support) {
 		Junction jx = mProvider.newJunction(desc, actor);
-		
+		//System.out.println("creating activity " + desc.getJSON());
 		int size=support.size();
+		System.out.println("going to cast " + size + " roles");
 		for (int i=0;i<size;i++){
 			if (support.getDirector(i) != null) {
+				//System.out.println("Casting role " + support.getRole(i) + " on " + support.getDirector(i));
 				URI invitationURI = jx.getInvitationURI(support.getRole(i));
 				this.castActor(support.getDirector(i), invitationURI);
 			}

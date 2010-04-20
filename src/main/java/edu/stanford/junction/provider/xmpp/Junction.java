@@ -32,6 +32,13 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.api.messaging.target.MessageTarget;
 
 public class Junction extends edu.stanford.junction.Junction {
+	
+	//TODO: XMPP won't let you query for room information
+	// if the room is private.
+	// Update getActivityScript() to join the room and get info.
+	// or break the spec...
+	private boolean PUBLIC_ROOM = true;
+	
 	public static String NS_JX = "jx";
 	private ActivityScript mActivityDescription;
 	private JunctionActor mOwner;
@@ -311,7 +318,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			    List<String>whois = new ArrayList<String>();
 			    whois.add("moderators");
 			    submitForm.setAnswer("muc#roomconfig_whois", whois);
-			    submitForm.setAnswer("muc#roomconfig_publicroom", false);
+			    submitForm.setAnswer("muc#roomconfig_publicroom", PUBLIC_ROOM);
 			    chat.sendConfigurationForm(submitForm);
 				
 				
