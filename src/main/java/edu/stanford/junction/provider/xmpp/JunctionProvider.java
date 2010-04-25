@@ -1,6 +1,12 @@
 package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -17,6 +23,7 @@ import edu.stanford.junction.api.activity.JunctionActor;
 
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
+	protected static boolean ONE_CONNECTION_PER_SESSION=false;
 	
 	// TODO: Can't use a single connection right now-
 	// must support multiple actors in the same activity
@@ -46,17 +53,8 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			desc.setHost(mConfig.host);
 		}
 		
-		/*
-		if (mXMPPConnection == null) {
-			mXMPPConnection = getXMPPConnection(mConfig);
-		}
-		*/
-		
-		// For now, every new junction gets its own XMPP connection
-		// a big TODO is to fix this... BJD 2/2/10
-		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig);
-		
-		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection);
+		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig,desc.getSessionID());
+		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection,mConfig);
 		jx.registerActor(actor);
 		
 		this.requestServices(jx,desc);
@@ -88,9 +86,9 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		
 		// pretty broken..
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(host);
-		XMPPConnection conn = getXMPPConnection(config);
+		XMPPConnection conn = getXMPPConnection(config,sessionID);
 		
-		String room = sessionID+"@conference."+host;
+		String room = sessionID+"@" +config.getChatService();
 		System.err.println("looking up info from xmpp room " + room);
 		
 		
@@ -122,22 +120,80 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		return null;
 	}
 
+	private static ArrayList<XMPPConnection> sConnections = new ArrayList<XMPPConnection>();
+	private static ArrayList<HashSet<String>> sConnectionSessions
+		= new ArrayList<HashSet<String>>();
 	
-	private XMPPConnection getXMPPConnection(XMPPSwitchboardConfig config) {
-		XMPPConnection mXMPPConnection= new XMPPConnection(config.host);
-		try {
-			mXMPPConnection.connect();
-			if (config.user != null) {
-				mXMPPConnection.login(config.user, config.password);
-			} else {
-				mXMPPConnection.loginAnonymously();
-			}
+	private synchronized XMPPConnection getXMPPConnection(XMPPSwitchboardConfig config, String roomid) {
+
+		if (ONE_CONNECTION_PER_SESSION) {
+			XMPPConnection theConnection = new XMPPConnection(config.host);
+			sConnections.add(theConnection);
+			HashSet<String> set = new HashSet<String>();
+			set.add(roomid);
+			sConnectionSessions.add(set);
 			
-			return mXMPPConnection;
-		} catch (Exception e) {
-			System.err.println("Could not connect to XMPP provider");
-			e.printStackTrace();
+			try {
+				theConnection.connect();
+				if (config.user != null) {
+					theConnection.login(config.user, config.password);
+				} else {
+					theConnection.loginAnonymously();
+				}
+				
+				return theConnection;
+			} catch (Exception e) {
+				System.err.println("Could not connect to XMPP provider");
+				e.printStackTrace();
+				return null;
+			}
 		}
+
+		
+		
+		XMPPConnection theConnection = null;
+		for (int i=0;i<sConnections.size();i++) {
+			if (!sConnectionSessions.get(i).contains(roomid)) {
+				// this connection can support this roomid.
+				theConnection = sConnections.get(i);
+				sConnectionSessions.get(i).add(roomid);
+				
+				if (!theConnection.isConnected()) {
+					System.out.println("Have non-connected XMPPConnection.");
+					try {
+						theConnection.connect();
+					} catch (XMPPException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				return theConnection;
+			}
+		}
+
+		if (theConnection == null) {
+			theConnection = new XMPPConnection(config.host);
+			sConnections.add(theConnection);
+			HashSet<String> set = new HashSet<String>();
+			set.add(roomid);
+			sConnectionSessions.add(set);
+			
+			try {
+				theConnection.connect();
+				if (config.user != null) {
+					theConnection.login(config.user, config.password);
+				} else {
+					theConnection.loginAnonymously();
+				}
+				
+				return theConnection;
+			} catch (Exception e) {
+				System.err.println("Could not connect to XMPP provider");
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
 		return null;
 	}
 	

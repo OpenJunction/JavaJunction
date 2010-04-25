@@ -13,6 +13,8 @@ import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.FromContainsFilter;
 import org.jivesoftware.smack.filter.MessageTypeFilter;
 import org.jivesoftware.smack.filter.OrFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
@@ -45,8 +47,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	private XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
-	PacketFilter mMessageFilter = new OrFilter(new MessageTypeFilter(Message.Type.chat), 
-			new MessageTypeFilter(Message.Type.groupchat));
+	PacketFilter mMessageFilter = null;
 	
 	/**
 	 * Creates a new activity and registers it
@@ -54,8 +55,16 @@ public class Junction extends edu.stanford.junction.Junction {
 	 * 
 	 * TODO: probably merge this function with registerActor().
 	 */
-	protected Junction(ActivityScript desc, XMPPConnection xmppConnection) {
+	protected Junction(ActivityScript desc, XMPPConnection xmppConnection, XMPPSwitchboardConfig xmppConfig) {
+		
+		PacketFilter typeFilter = new OrFilter(new MessageTypeFilter(Message.Type.chat), 
+				new MessageTypeFilter(Message.Type.groupchat));
 
+		PacketFilter addrFilter = new FromContainsFilter("@"+xmppConfig.getChatService());
+		
+		mMessageFilter = new AndFilter(typeFilter,addrFilter);
+		
+		
 		mActivityDescription=desc;
 		mXMPPConnection = xmppConnection;
 	}
@@ -98,10 +107,22 @@ public class Junction extends edu.stanford.junction.Junction {
 			registerMessageHandler(handler);
 		}
 		if (mActivityDescription.isActivityCreator()) {
-			mOwner.onActivityCreate();
+			// TODO: This threading model may be weird.
+			new Thread() {
+				public void run() {
+					mOwner.onActivityCreate();
+					mOwner.onActivityJoin();					
+				};
+			}.start();
+
+		} else {
+			new Thread() {
+				public void run() {
+					mOwner.onActivityJoin();					
+				};
+			}.start();
 		}
 		
-		mOwner.onActivityJoin();
 		
 	}
 	

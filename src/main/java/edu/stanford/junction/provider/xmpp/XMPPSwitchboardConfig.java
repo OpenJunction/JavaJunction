@@ -21,4 +21,8 @@ public class XMPPSwitchboardConfig implements SwitchboardConfig {
 	}
 	
 	public XMPPSwitchboardConfig(){}
+	
+	protected String getChatService() {
+		return "conference." + host;
+	}
 }
