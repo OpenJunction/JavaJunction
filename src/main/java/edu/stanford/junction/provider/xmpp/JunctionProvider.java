@@ -54,7 +54,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		}
 		
 		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig,desc.getSessionID());
-		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection,mConfig);
+		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection,mConfig,this);
 		jx.registerActor(actor);
 		
 		this.requestServices(jx,desc);
@@ -195,6 +195,16 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		}
 		
 		return null;
+	}
+	
+	protected synchronized void remove(edu.stanford.junction.provider.xmpp.Junction jx) {
+		// O(n) can be improved, but n is small.
+		XMPPConnection conn = jx.mXMPPConnection;
+		for (int i=0;i<sConnections.size();i++) {
+			if (sConnections.get(i).equals(conn)) {
+				sConnectionSessions.get(i).remove(jx.getSessionID());
+			}
+		}
 	}
 	
 	// test

@@ -17,6 +17,17 @@ import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 
 public class JunctionMaker {
+	public static final String DIRECTOR_ACTIVITY = "edu.stanford.junction.director";
+	public static final URI  CASTING_DIRECTOR;
+	static {
+		URI dumbWayToAssignStaticFinalURI;
+		try {
+			dumbWayToAssignStaticFinalURI = new URI("junction://jx-director-local/cast");
+		} catch (Exception e ) {
+			dumbWayToAssignStaticFinalURI = null;
+		}
+		CASTING_DIRECTOR = dumbWayToAssignStaticFinalURI;
+	}
 	protected JunctionProvider mProvider;
 	
 	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
@@ -180,7 +191,7 @@ public class JunctionMaker {
 	 */
 	@Deprecated
 	public void inviteActorService(final Junction jx, final String role) {
-	ActivityScript desc = jx.getActivityDescription();
+	ActivityScript desc = jx.getActivityScript();
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
 		

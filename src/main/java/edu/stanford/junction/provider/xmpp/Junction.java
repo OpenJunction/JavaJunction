@@ -44,8 +44,9 @@ public class Junction extends edu.stanford.junction.Junction {
 	public static String NS_JX = "jx";
 	private ActivityScript mActivityDescription;
 	private JunctionActor mOwner;
+	private JunctionProvider mProvider;
 	
-	private XMPPConnection mXMPPConnection;
+	protected XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
 	PacketFilter mMessageFilter = null;
 	
@@ -55,7 +56,8 @@ public class Junction extends edu.stanford.junction.Junction {
 	 * 
 	 * TODO: probably merge this function with registerActor().
 	 */
-	protected Junction(ActivityScript desc, XMPPConnection xmppConnection, XMPPSwitchboardConfig xmppConfig) {
+	protected Junction(ActivityScript desc, XMPPConnection xmppConnection, 
+			XMPPSwitchboardConfig xmppConfig, JunctionProvider prov) {
 		
 		PacketFilter typeFilter = new OrFilter(new MessageTypeFilter(Message.Type.chat), 
 				new MessageTypeFilter(Message.Type.groupchat));
@@ -67,23 +69,24 @@ public class Junction extends edu.stanford.junction.Junction {
 		
 		mActivityDescription=desc;
 		mXMPPConnection = xmppConnection;
+		mProvider=prov;
 	}
 	
 	public String getActivityID() {
 		return mActivityDescription.getActivityID();
 	}
 	
-	public ActivityScript getActivityDescription() {
+	public ActivityScript getActivityScript() {
 		return mActivityDescription;
 	}
 	
 	
 	public void registerActor(final JunctionActor actor) {
-		System.out.print("adding actor for roles: ");
+		//System.out.print("adding actor for roles: ");
 		String[] roles =  actor.getRoles();
-		for(int i = 0; i<roles.length; i++) 
+		/*for(int i = 0; i<roles.length; i++) 
 			System.out.print(roles[i] + " ");
-		System.out.print("\n");
+		System.out.print("\n");*/
 		
 		mOwner = actor;
 		mOwner.setJunction(this);
@@ -138,10 +141,8 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void disconnect() {
-		if (mXMPPConnection != null) {
-			mXMPPConnection.disconnect();
-			mXMPPConnection = null;
-		}
+		mSessionChat.leave();
+		mProvider.remove(this);
 	}
 	
 	

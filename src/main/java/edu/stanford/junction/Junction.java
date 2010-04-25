@@ -23,10 +23,10 @@ public abstract class Junction {
 	 * Activity Description
 	 */
 	
-	public abstract ActivityScript getActivityDescription();
+	public abstract ActivityScript getActivityScript();
 	
 	//public String getActivityID();
-	//public String getSessionID();
+	public abstract String getSessionID();
 	
 	public abstract String getSwitchboard();
 	//public String[] getRoles();
@@ -34,9 +34,9 @@ public abstract class Junction {
 	/**
 	 * Activity Lifecycle
 	 */
-	//public void start();
-	//public void disconnect();
-	// public void onStart(); // or register handler?
+	//public abstract void start();
+	public abstract void disconnect();
+	// public abstract void onStart(); // or register handler?
 	
 	/** 
 	 * Actor Management
