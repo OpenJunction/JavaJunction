@@ -111,19 +111,25 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 		if (mActivityDescription.isActivityCreator()) {
 			// TODO: This threading model may be weird.
+			/*
 			new Thread() {
 				public void run() {
 					mOwner.onActivityCreate();
 					mOwner.onActivityJoin();					
 				};
 			}.start();
-
+			*/
+			mOwner.onActivityCreate();
+			mOwner.onActivityJoin();
 		} else {
+			/*
 			new Thread() {
 				public void run() {
 					mOwner.onActivityJoin();					
 				};
 			}.start();
+			*/
+			mOwner.onActivityJoin();
 		}
 		
 		
