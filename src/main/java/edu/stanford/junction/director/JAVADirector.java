@@ -1,9 +1,11 @@
 package edu.stanford.junction.director;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -111,8 +113,17 @@ public class JAVADirector extends JunctionActor {
 						if (javaplat.has("jar")) {
 							URL jarURL = new URL(javaplat.getString("jar"));
 							Process proc = launchJAR(jarURL,activityURI);
+							
 							if (proc != null) {
 								mActivities.add(new Activity(activityURI,proc));
+								
+								 InputStream is = proc.getInputStream();
+							     BufferedReader br = new BufferedReader( new InputStreamReader(is));
+							     String line;
+
+							     while ((line = br.readLine()) != null) {
+							    	System.out.println(line);
+							     }
 							}
 						} else {
 							System.out.println("Warning: JAVA platform specified but no JAR found.");
@@ -191,11 +202,13 @@ public class JAVADirector extends JunctionActor {
 			command.add(activityURI.toString());
 
 			System.out.println("Executing: " + command.toString());
+			
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.directory(jarFile.getParentFile());
-
+			pb.redirectErrorStream(true);
 			Process p = pb.start();
 			// TODO: make sure it worked
+
 			return p;
 		} catch (Exception e) {
 			System.out.println("failed to launch JAR.");
@@ -247,7 +260,7 @@ public class JAVADirector extends JunctionActor {
 		String sessionID = "jxservice";
 		
 		ActivityScript script = new ActivityScript();
-		script.setActivityID("edu.junction.stanford.director");
+		script.setActivityID(JunctionMaker.DIRECTOR_ACTIVITY);
 		//script.addRolePlatform("director", "java", null);
 		//script.addRolePlatform("director","web", null); 
 		//
