@@ -35,31 +35,39 @@ public class ExtrasDirector {
 		return true;
 	}
 	
-	public boolean onSendMessageToActor(String actorID, JSONObject message) {
+	public void afterOnMessageReceived(MessageHeader header, JSONObject message) {
+		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			ex.afterOnMessageReceived(header, message);
+		}
+	}
+	
+	public boolean beforeSendMessageToActor(String actorID, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
 			JunctionExtra ex = iter.next();
-			if (!ex.onSendMessageToActor(actorID, message))
+			if (!ex.beforeSendMessageToActor(actorID, message))
 				return false;
 		}
 		return true;
 	}
 	
-	public boolean onSendMessageToRole(String role, JSONObject message) {
+	public boolean beforeSendMessageToRole(String role, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
 			JunctionExtra ex = iter.next();
-			if (!ex.onSendMessageToRole(role, message))
+			if (!ex.beforeSendMessageToRole(role, message))
 				return false;
 		}
 		return true;
 	}
 	
-	public boolean onSendMessageToSession(JSONObject message) {
+	public boolean beforeSendMessageToSession(JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
 			JunctionExtra ex = iter.next();
-			if (!ex.onSendMessageToSession(message))
+			if (!ex.beforeSendMessageToSession(message))
 				return false;
 		}
 		return true;

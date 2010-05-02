@@ -113,6 +113,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
 				if (mExtrasDirector.beforeOnMessageReceived(header,message)) {
 					actor.onMessageReceived(header, message);
+					mExtrasDirector.afterOnMessageReceived(header,message);
 				}
 			}
 		};
@@ -229,7 +230,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToActor(String actorID, JSONObject message) {
-		if (mExtrasDirector.onSendMessageToActor(actorID, message)) {
+		if (mExtrasDirector.beforeSendMessageToActor(actorID, message)) {
 			try {
 				String privChat = mSessionChat.getRoom()+"/" + actorID;
 				Chat chat = mSessionChat.createPrivateChat(privChat,null);
@@ -241,7 +242,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToRole(String role, JSONObject message) {
-		if (mExtrasDirector.onSendMessageToRole(role, message)) {
+		if (mExtrasDirector.beforeSendMessageToRole(role, message)) {
 			try {
 				JSONObject jx;
 				if (message.has(NS_JX)) {
@@ -263,7 +264,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	public void sendMessageToSession(JSONObject message) {
-		if (mExtrasDirector.onSendMessageToSession(message)) {
+		if (mExtrasDirector.beforeSendMessageToSession(message)) {
 			try {
 				mSessionChat.sendMessage(message.toString());
 			} catch (XMPPException e) {

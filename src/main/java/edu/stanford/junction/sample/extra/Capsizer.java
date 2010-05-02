@@ -36,7 +36,7 @@ public class Capsizer {
 					ArrayList<JunctionExtra> extras = new ArrayList<JunctionExtra>();
 					extras.add(new OutboundUpperCapsizer());
 					extras.add(new OutboundLowerCapsizer());
-					
+					extras.add(new LogExtra());
 					return extras;
 				}
 				
@@ -69,7 +69,7 @@ public class Capsizer {
 
 class OutboundUpperCapsizer extends JunctionExtra {
 	@Override
-	public boolean onSendMessage(JSONObject msg) {
+	public boolean beforeSendMessage(JSONObject msg) {
 		Iterator<String> keys = msg.keys();
 		
 		try {
@@ -96,7 +96,7 @@ class OutboundUpperCapsizer extends JunctionExtra {
 
 class OutboundLowerCapsizer extends JunctionExtra {
 	@Override
-	public boolean onSendMessage(JSONObject msg) {
+	public boolean beforeSendMessage(JSONObject msg) {
 		Iterator<String> keys = msg.keys();
 		
 		try {
@@ -157,5 +157,12 @@ class InboundUpperCapsizer extends JunctionExtra {
 			e.printStackTrace();
 		}
 		return true;
+	}
+}
+
+class LogExtra extends JunctionExtra {
+	@Override
+	public void afterOnMessageReceived(MessageHeader h, JSONObject msg) {
+		System.out.println("logger received " + msg.toString());
 	}
 }
