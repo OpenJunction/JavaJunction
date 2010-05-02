@@ -17,46 +17,49 @@ import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 public class Capsizer {
 	
+	static JunctionActor mActor = new JunctionActor("capsizer") {
+		
+		@Override
+		public void onMessageReceived(MessageHeader header, JSONObject message) {
+			// TODO Auto-generated method stub
+			System.out.println("got: " + message.toString());
+		}
+		
+		@Override
+		public List<JunctionExtra> getInitialExtras() {
+			ArrayList<JunctionExtra> extras = new ArrayList<JunctionExtra>();
+			extras.add(new OutboundUpperCapsizer());
+			extras.add(new OutboundLowerCapsizer());
+			extras.add(new LogExtra());
+			return extras;
+		}
+		
+		@Override
+		public void onActivityJoin() {
+			JSONObject msg = new JSONObject();
+			try {
+				msg.put("msg","SOOO... This Is Cool");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			sendMessageToSession(msg);
+		}
+	};
+	
+	
+	
 	public static void main(String[] args) {
 		try {
 			SwitchboardConfig switchboardConfig = new XMPPSwitchboardConfig("prpl.stanford.edu");
 			JunctionMaker maker = JunctionMaker.getInstance(switchboardConfig);
 			URI uri = new URI("junction://prpl.stanford.edu/capsizer");
 			
-			JunctionActor actor = new JunctionActor("capsizer") {
-				
-				@Override
-				public void onMessageReceived(MessageHeader header, JSONObject message) {
-					// TODO Auto-generated method stub
-					System.out.println("got: " + message.toString());
-				}
-				
-				@Override
-				public List<JunctionExtra> getInitialExtras() {
-					ArrayList<JunctionExtra> extras = new ArrayList<JunctionExtra>();
-					extras.add(new OutboundUpperCapsizer());
-					extras.add(new OutboundLowerCapsizer());
-					extras.add(new LogExtra());
-					return extras;
-				}
-				
-				@Override
-				public void onActivityJoin() {
-					JSONObject msg = new JSONObject();
-					try {
-						msg.put("msg","SOOO... This Is Cool");
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					sendMessageToSession(msg);
-				}
-			};
 			
-			maker.newJunction(uri, actor);
+			maker.newJunction(uri, mActor);
 			
-			synchronized(actor){
-				actor.wait();
+			synchronized(mActor){
+				mActor.wait();
 			}
 			System.out.println("Exiting.");
 		} catch (Exception e) {
