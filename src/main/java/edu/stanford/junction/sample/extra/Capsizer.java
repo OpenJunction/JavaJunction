@@ -15,7 +15,7 @@ import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
-public class Capsizer extends JunctionExtra {
+public class Capsizer {
 	
 	public static void main(String[] args) {
 		try {
@@ -34,7 +34,8 @@ public class Capsizer extends JunctionExtra {
 				@Override
 				public List<JunctionExtra> getInitialExtras() {
 					ArrayList<JunctionExtra> extras = new ArrayList<JunctionExtra>();
-					extras.add(new Capsizer());
+					extras.add(new OutboundUpperCapsizer());
+					extras.add(new OutboundLowerCapsizer());
 					
 					return extras;
 				}
@@ -62,8 +63,11 @@ public class Capsizer extends JunctionExtra {
 			e.printStackTrace();
 		}
 	}
-	
-	
+}
+
+
+
+class OutboundUpperCapsizer extends JunctionExtra {
 	@Override
 	public boolean onSendMessage(JSONObject msg) {
 		Iterator<String> keys = msg.keys();
@@ -84,6 +88,40 @@ public class Capsizer extends JunctionExtra {
 	}
 	
 	@Override
+	public Integer getPriority() {
+		return 30;
+	}
+}
+
+
+class OutboundLowerCapsizer extends JunctionExtra {
+	@Override
+	public boolean onSendMessage(JSONObject msg) {
+		Iterator<String> keys = msg.keys();
+		
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toLowerCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	@Override
+	public Integer getPriority() {
+		return 10;
+	}
+}
+
+class InboundLowerCapsizer extends JunctionExtra {
+	@Override
 	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject msg) {
 		Iterator<String> keys = msg.keys();
 		try {
@@ -93,6 +131,26 @@ public class Capsizer extends JunctionExtra {
 					String s = msg.getString(k);
 					msg.remove(k);
 					msg.put(k, s.toLowerCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+}
+
+class InboundUpperCapsizer extends JunctionExtra {
+	@Override
+	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject msg) {
+		Iterator<String> keys = msg.keys();
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toUpperCase());
 				}
 			}
 		} catch (Exception e ) {
