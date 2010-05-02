@@ -4,10 +4,13 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.api.messaging.target.MessageTarget;
@@ -49,6 +53,8 @@ public class Junction extends edu.stanford.junction.Junction {
 	protected XMPPConnection mXMPPConnection;
 	private MultiUserChat mSessionChat;
 	PacketFilter mMessageFilter = null;
+	
+	private ExtrasDirector mExtrasDirector = new ExtrasDirector();
 	
 	/**
 	 * Creates a new activity and registers it
@@ -91,6 +97,13 @@ public class Junction extends edu.stanford.junction.Junction {
 		mOwner = actor;
 		mOwner.setJunction(this);
 		
+		List<JunctionExtra> extras = actor.getInitialExtras();
+		if (extras != null){
+			for (int i=0;i<extras.size();i++) {
+				mExtrasDirector.registerExtra(extras.get(i));
+			}
+		}
+		
 		try {
 			mSessionChat = joinSessionChat();
 		} catch (Exception e) {
@@ -102,7 +115,9 @@ public class Junction extends edu.stanford.junction.Junction {
 			public void onMessageReceived(MessageHeader header,
 					JSONObject message) {
 
-				actor.onMessageReceived(header, message);
+				if (mExtrasDirector.beforeOnMessageReceived(header,message)) {
+					actor.onMessageReceived(header, message);
+				}
 			}
 		};
 		
@@ -110,25 +125,9 @@ public class Junction extends edu.stanford.junction.Junction {
 			registerMessageHandler(handler);
 		}
 		if (mActivityDescription.isActivityCreator()) {
-			// TODO: This threading model may be weird.
-			/*
-			new Thread() {
-				public void run() {
-					mOwner.onActivityCreate();
-					mOwner.onActivityJoin();					
-				};
-			}.start();
-			*/
 			mOwner.onActivityCreate();
 			mOwner.onActivityJoin();
 		} else {
-			/*
-			new Thread() {
-				public void run() {
-					mOwner.onActivityJoin();					
-				};
-			}.start();
-			*/
 			mOwner.onActivityJoin();
 		}
 		
@@ -234,43 +233,47 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToActor(String actorID, JSONObject message) {
-		try {
-			String privChat = mSessionChat.getRoom()+"/" + actorID;
-			Chat chat = mSessionChat.createPrivateChat(privChat,null);
-			chat.sendMessage(message.toString());
-		} catch (XMPPException e) {
-			e.printStackTrace();
+		if (mExtrasDirector.onSendMessageToActor(actorID, message)) {
+			try {
+				String privChat = mSessionChat.getRoom()+"/" + actorID;
+				Chat chat = mSessionChat.createPrivateChat(privChat,null);
+				chat.sendMessage(message.toString());
+			} catch (XMPPException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
 	public void sendMessageToRole(String role, JSONObject message) {
-		try {
-			JSONObject jx;
-			if (message.has(NS_JX)) {
-				jx = message.optJSONObject(NS_JX);
-			} else {
-				jx = new JSONObject();
-				try {
-					message.put(NS_JX, jx);
-				} catch (JSONException j) {}
-			}
+		if (mExtrasDirector.onSendMessageToRole(role, message)) {
 			try {
-				jx.put("targetRole", role);
-			} catch (Exception e) {}
-			mSessionChat.sendMessage(message.toString());
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}
-		
+				JSONObject jx;
+				if (message.has(NS_JX)) {
+					jx = message.optJSONObject(NS_JX);
+				} else {
+					jx = new JSONObject();
+					try {
+						message.put(NS_JX, jx);
+					} catch (JSONException j) {}
+				}
+				try {
+					jx.put("targetRole", role);
+				} catch (Exception e) {}
+				mSessionChat.sendMessage(message.toString());
+			} catch (XMPPException e) {
+				e.printStackTrace();
+			}
+		}		
 	}
 
 	public void sendMessageToSession(JSONObject message) {
-		try {
-			mSessionChat.sendMessage(message.toString());
-		} catch (XMPPException e) {
-			e.printStackTrace();
+		if (mExtrasDirector.onSendMessageToSession(message)) {
+			try {
+				mSessionChat.sendMessage(message.toString());
+			} catch (XMPPException e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 
 	public URI getInvitationURI() {
@@ -361,5 +364,75 @@ public class Junction extends edu.stanford.junction.Junction {
 				}
 			}
 		return chat;
+	}
+
+	@Override
+	public void registerExtra(JunctionExtra extra) {
+		mExtrasDirector.registerExtra(extra);
 	}	
+}
+
+class ExtrasDirector {
+	
+	Comparator<JunctionExtra>mComparator = new Comparator<JunctionExtra>() {
+		@Override
+		public int compare(JunctionExtra o1, JunctionExtra o2) {
+			return o1.getPriority().compareTo(o2.getPriority());
+		}
+	};
+	TreeSet<JunctionExtra>mExtras = new TreeSet<JunctionExtra>(mComparator);
+	
+	/**
+	 * Returns true if onMessageReceived should be called in the usual way.
+	 * @param header
+	 * @param message
+	 * @return
+	 */
+	protected boolean beforeOnMessageReceived(MessageHeader header, JSONObject message) {
+		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.beforeOnMessageReceived(header, message))
+				return false;
+		}
+		return true;
+	}
+	
+	protected boolean onSendMessageToActor(String actorID, JSONObject message) {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.onSendMessageToActor(actorID, message))
+				return false;
+		}
+		return true;
+	}
+	
+	protected boolean onSendMessageToRole(String role, JSONObject message) {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.onSendMessageToRole(role, message))
+				return false;
+		}
+		return true;
+	}
+	
+	protected boolean onSendMessageToSession(JSONObject message) {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.onSendMessageToSession(message))
+				return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Adds an Extra to the set of executed extras.
+	 * @param extra
+	 */
+	public void registerExtra(JunctionExtra extra) {
+		mExtras.add(extra);
+	}
 }

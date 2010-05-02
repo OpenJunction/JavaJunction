@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHandler;
 
 public abstract class Junction {
@@ -67,4 +68,5 @@ public abstract class Junction {
 	// receive
 	//public void registerMessageHandler(MessageHandler handler);
 	
+	public abstract void registerExtra(JunctionExtra extra);
 }

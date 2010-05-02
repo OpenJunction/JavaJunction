@@ -1,5 +1,7 @@
 package edu.stanford.junction.api.activity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -74,4 +76,17 @@ public abstract class JunctionActor {
 	}
 	
 	public abstract void onMessageReceived(MessageHeader header, JSONObject message);
+	
+	/**
+	 * Returns a list of JunctionExtras that should be loaded
+	 * when the actor joins an activity
+	 * @return
+	 */
+	public List<JunctionExtra>getInitialExtras() {
+		return new ArrayList<JunctionExtra>();
+	}
+	
+	public void registerExtra(JunctionExtra extra) {
+		mJunction.registerExtra(extra);
+	}
 }
