@@ -55,7 +55,7 @@ public abstract class JunctionExtra {
 	
 	/**
 	 * Returns an integer priority for this Extra.
-	 * Lower priority means closer to network;
+	 * Lower priority means closer to switchboard;
 	 * Higher means closer to actor.
 	 */
 	public Integer getPriority() { return 20; }
