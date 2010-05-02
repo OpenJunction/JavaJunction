@@ -123,8 +123,16 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 		if (mActivityDescription.isActivityCreator()) {
 			mOwner.onActivityCreate();
+			if (!mExtrasDirector.beforeActivityJoin()) {
+				disconnect();
+				return;
+			}
 			mOwner.onActivityJoin();
 		} else {
+			if (!mExtrasDirector.beforeActivityJoin()) {
+				disconnect();
+				return;
+			}
 			mOwner.onActivityJoin();
 		}
 		

@@ -33,8 +33,11 @@ public abstract class JunctionExtra {
 	 * @return
 	 */
 	public boolean beforeSendMessage(JSONObject msg) { return true; }
-	
 	//public boolean afterSendMessage(Header h, Message msg) {}
+	
+	public boolean beforeActivityJoin() {
+		return true;
+	}
 	
 	//public void beforeGetActivityScript();
 	

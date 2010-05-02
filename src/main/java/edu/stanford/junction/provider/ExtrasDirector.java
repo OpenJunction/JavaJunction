@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
-public class ExtrasDirector {
+public class ExtrasDirector extends JunctionExtra {
 	
 	Comparator<JunctionExtra>mComparator = new Comparator<JunctionExtra>() {
 		@Override
@@ -25,6 +25,7 @@ public class ExtrasDirector {
 	 * @param message
 	 * @return
 	 */
+	@Override
 	public boolean beforeOnMessageReceived(MessageHeader header, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
 		while (iter.hasNext()) {
@@ -35,6 +36,7 @@ public class ExtrasDirector {
 		return true;
 	}
 	
+	@Override
 	public void afterOnMessageReceived(MessageHeader header, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
 		while (iter.hasNext()) {
@@ -43,6 +45,7 @@ public class ExtrasDirector {
 		}
 	}
 	
+	@Override
 	public boolean beforeSendMessageToActor(String actorID, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
@@ -53,6 +56,7 @@ public class ExtrasDirector {
 		return true;
 	}
 	
+	@Override
 	public boolean beforeSendMessageToRole(String role, JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
@@ -63,6 +67,7 @@ public class ExtrasDirector {
 		return true;
 	}
 	
+	@Override
 	public boolean beforeSendMessageToSession(JSONObject message) {
 		Iterator<JunctionExtra>iter = mExtras.iterator();
 		while (iter.hasNext()) {
@@ -72,6 +77,20 @@ public class ExtrasDirector {
 		}
 		return true;
 	}
+	
+	
+	@Override
+	public boolean beforeActivityJoin() {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.beforeActivityJoin())
+				return false;
+		}
+		return true;
+	}
+	
+	
 	
 	/**
 	 * Adds an Extra to the set of executed extras.
