@@ -51,6 +51,10 @@ public abstract class JunctionExtra {
 		return true;
 	}
 	
+	public void afterActivityJoin() {
+		
+	}
+	
 	//public void beforeGetActivityScript();
 	
 	/**

@@ -128,12 +128,14 @@ public class Junction extends edu.stanford.junction.Junction {
 				return;
 			}
 			mOwner.onActivityJoin();
+			mExtrasDirector.afterActivityJoin();
 		} else {
 			if (!mExtrasDirector.beforeActivityJoin()) {
 				disconnect();
 				return;
 			}
 			mOwner.onActivityJoin();
+			mExtrasDirector.afterActivityJoin();
 		}
 		
 		
