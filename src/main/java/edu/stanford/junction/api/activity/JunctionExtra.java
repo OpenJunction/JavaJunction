@@ -7,10 +7,18 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 public abstract class JunctionExtra {
 	JunctionActor mParent=null;
 	
+	/**
+	 * Provides access to the associated JunctionActor.
+	 * @return
+	 */
 	public final JunctionActor getActor() {
 		return mParent;
 	}
 	
+	/**
+	 * This method should only be called internally.
+	 * @param actor
+	 */
 	public void setActor(JunctionActor actor) {
 		mParent=actor;
 	}
@@ -35,6 +43,10 @@ public abstract class JunctionExtra {
 	public boolean beforeSendMessage(JSONObject msg) { return true; }
 	//public boolean afterSendMessage(Header h, Message msg) {}
 	
+	/**
+	 * Called before an actor joins an activity.
+	 * Returning false aborts the attempted join.
+	 */
 	public boolean beforeActivityJoin() {
 		return true;
 	}

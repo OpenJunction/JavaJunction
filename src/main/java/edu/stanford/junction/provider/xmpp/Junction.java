@@ -155,28 +155,6 @@ public class Junction extends edu.stanford.junction.Junction {
 		mProvider.remove(this);
 	}
 	
-	
-	class OnStartListener extends MessageHandler {
-		private boolean started=false;
-		public void onMessageReceived(MessageHeader header, JSONObject message) {
-			
-			/*for (JunctionActor actor : mActors) {
-					actor.onActivityStart();
-			}*/
-			mOwner.onActivityStart();
-			started=true;
-			// mManager.removeListener(this);
-		}
-		public List<String> getActorsForRole(String role) {
-			// inefficient but who cares. small map.
-			List<String>results = new ArrayList<String>();
-			
-			return results;
-		}
-	}
-
-
-
 	public String[] getRoles() {
 		return mActivityDescription.getRoles();
 	}
