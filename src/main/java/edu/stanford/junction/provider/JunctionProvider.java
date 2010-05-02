@@ -23,6 +23,7 @@ public abstract class JunctionProvider {
 		this.mJunctionMaker=maker;
 	}
 	
+	@Deprecated
 	protected void requestServices(Junction jx, ActivityScript desc) {
 		if (desc.isActivityCreator()) {
 			String[] roles = desc.getRoles();
