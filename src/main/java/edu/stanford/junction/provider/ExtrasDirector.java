@@ -90,7 +90,14 @@ public class ExtrasDirector extends JunctionExtra {
 		return true;
 	}
 	
-	
+	@Override
+	public void afterActivityJoin() {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			ex.afterActivityJoin();
+		}
+	}
 	
 	/**
 	 * Adds an Extra to the set of executed extras.
