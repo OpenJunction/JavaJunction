@@ -100,7 +100,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		List<JunctionExtra> extras = actor.getInitialExtras();
 		if (extras != null){
 			for (int i=0;i<extras.size();i++) {
-				mExtrasDirector.registerExtra(extras.get(i));
+				registerExtra(extras.get(i));
 			}
 		}
 		
@@ -368,6 +368,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	@Override
 	public void registerExtra(JunctionExtra extra) {
+		extra.setActor(mOwner);
 		mExtrasDirector.registerExtra(extra);
 	}	
 }

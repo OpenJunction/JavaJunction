@@ -5,7 +5,16 @@ import org.json.JSONObject;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
 public abstract class JunctionExtra {
-
+	JunctionActor mParent=null;
+	
+	public final JunctionActor getActor() {
+		return mParent;
+	}
+	
+	public void setActor(JunctionActor actor) {
+		mParent=actor;
+	}
+	
 	/**
 	 * Returns true if the normal event handling should proceed;
 	 * Return false to stop cascading.
@@ -36,20 +45,3 @@ public abstract class JunctionExtra {
 	 */
 	public Integer getPriority() { return 20; }
 }
-
-/**
-
-public abstract class EventHandler {
-	public void before() {
-	
-	}
-	
-	public void after() {
-	
-	}
-	
-	public int priority() { return 10; }
-}
-
-
-**/
