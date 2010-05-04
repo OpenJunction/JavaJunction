@@ -1,5 +1,7 @@
 package edu.stanford.junction.api.activity;
 
+import java.util.Map;
+
 import org.json.JSONObject;
 
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -21,6 +23,13 @@ public abstract class JunctionExtra {
 	 */
 	public void setActor(JunctionActor actor) {
 		mParent=actor;
+	}
+	
+	/**
+	 * Update the parameters that will be sent in an invitation
+	 */
+	public void updateInvitationParameters(Map<String,String>params) {
+		
 	}
 	
 	/**

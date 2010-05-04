@@ -20,6 +20,8 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.SwitchboardConfig;
+import edu.stanford.junction.api.activity.ActivityScript;
+import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
@@ -55,12 +57,78 @@ public class Encryption extends JunctionExtra {
 	}
 	
 	public static void main(String[] args) {
-		SwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
-		JunctionMaker jm = JunctionMaker.getInstance(config);
-		
-		// TODO: add JunctionExtra.addInvitationParams(Map<String,String>());
-		
-		//jm.newJunction(desc, actor)
+		try {
+			SwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker jm = JunctionMaker.getInstance(config);
+			
+			
+			JunctionActor rec = new JunctionActor("Recevier") {
+				@Override
+				public void onMessageReceived(MessageHeader header,
+						JSONObject message) {
+					System.out.println("rec got " + message.toString());
+				}
+				
+				@Override
+				public List<JunctionExtra> getInitialExtras() {
+					List<JunctionExtra> e = super.getInitialExtras();
+					e.add(new Encryption());
+					return e;
+				}
+				
+				@Override
+				public void onActivityCreate() {
+					System.out.println("Receiver created");
+				}
+			};
+			
+			JunctionActor send = new JunctionActor("Sender") {
+				@Override
+				public void onMessageReceived(MessageHeader header,
+						JSONObject message) {
+					System.out.println("send got " + message.toString());
+				}
+				
+				@Override
+				public void onActivityJoin() {
+					try {
+						JSONObject message = new JSONObject("{\"msg\":\"hello!! encrypted!\"}");
+						sendMessageToSession(message);
+					} catch (Exception e) {}
+				}
+				
+				@Override
+				public List<JunctionExtra> getInitialExtras() {
+					List<JunctionExtra> e = super.getInitialExtras();
+					e.add(new Encryption());
+					return e;
+				}
+				
+				@Override
+				public void onActivityCreate() {
+					System.out.println("Sender created");
+				}
+			};
+			
+			ActivityScript myScript = new ActivityScript();
+			myScript.setActivityID("edu.stanford.junction.cryptdemo");
+			myScript.setFriendlyName("CryptDemo");
+			myScript.setSessionID("cryptosess");
+			
+			URI mySession = new URI("junction://prpl.stanford.edu/cryptosess?skey=XPVisDpGE82GYc8nCcgj%2FQ%3D%3D");
+			jm.newJunction(mySession, rec);
+			//jm.newJunction(myScript, rec);
+			URI invite = rec.getJunction().getInvitationURI();
+			
+			System.out.println("created invitation " + invite);
+			jm.newJunction(invite,send);
+			
+			synchronized(send){
+				send.wait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void encTest() throws Exception {
@@ -88,6 +156,7 @@ public class Encryption extends JunctionExtra {
 		
 		try {
 			URI invite = getActor().getJunction().getAcceptedInvitation();
+			System.out.println("JOINING " + invite);
 			if (invite != null) {
 				String params = invite.getQuery();
 				QueryString qs = new QueryString(params);
@@ -188,6 +257,14 @@ public class Encryption extends JunctionExtra {
 	@Override
 	public Integer getPriority() {
 		return 3;
+	}
+	
+	@Override
+	public void updateInvitationParameters(Map<String, String> params) {
+		if (mKey!=null){
+			String b64 = new String(Base64Coder.encode(mKey));
+			params.put(URL_KEY_PARAM,b64);
+		}
 	}
 }
 

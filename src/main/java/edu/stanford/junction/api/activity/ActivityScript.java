@@ -91,6 +91,10 @@ public class ActivityScript {
 		return generatedSessionID;
 	}
 	
+	public void isActivityCreator(boolean is) {
+		this.generatedSessionID=is;
+	}
+	
 	public String getSessionID() {
 		return sessionID;
 	}

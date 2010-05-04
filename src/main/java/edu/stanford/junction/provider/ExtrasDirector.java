@@ -2,6 +2,7 @@ package edu.stanford.junction.provider;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.json.JSONObject;
@@ -125,5 +126,14 @@ public class ExtrasDirector extends JunctionExtra {
 	 */
 	public void registerExtra(JunctionExtra extra) {
 		mExtras.add(extra);
+	}
+	
+	@Override
+	public void updateInvitationParameters(Map<String, String> params) {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			ex.updateInvitationParameters(params);
+		}
 	}
 }

@@ -1,11 +1,13 @@
 package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.PacketListener;
@@ -123,6 +125,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 		
 		// Create
+		System.out.println("CHECKING FOR CREATIVE POWER");
 		if (mActivityDescription.isActivityCreator()) {
 			if (!mExtrasDirector.beforeActivityCreate()) {
 				disconnect();
@@ -262,12 +265,28 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	public URI getInvitationURI() {
+		Map<String,String>params = new HashMap<String, String>();
+		mExtrasDirector.updateInvitationParameters(params);
+
+		StringBuffer queryBuf = new StringBuffer("?");
+		Set<String>keys = params.keySet();
+		for (String key : keys) {
+			try{
+				queryBuf.append(URLEncoder.encode(key,"UTF-8")
+							+"="
+							+URLEncoder.encode(params.get(key),"UTF-8")
+							+"&");
+			} catch (Exception e){}
+		}
+		String queryStr = queryBuf.substring(0, queryBuf.length()-1);
+		
 		URI invitation = null;
 		try {
 			// TODO: strip query part from hostURL
 			invitation = new URI("junction://"
 								+getSwitchboard()+"/"
 								+getSessionID()
+								+queryStr
 								);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -277,13 +296,29 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	public URI getInvitationURI(String requestedRole) {
+		Map<String,String>params = new HashMap<String, String>();
+		params.put("role",requestedRole);
+		mExtrasDirector.updateInvitationParameters(params);
+		
+		StringBuffer queryBuf = new StringBuffer("?");
+		Set<String>keys = params.keySet();
+		for (String key : keys) {
+			try{
+				queryBuf.append(URLEncoder.encode(key,"UTF-8")
+							+"="
+							+URLEncoder.encode(params.get(key),"UTF-8")
+							+"&");
+			} catch (Exception e){}
+		}
+		String queryStr = queryBuf.substring(0, queryBuf.length()-1);
+		
 		URI invitation = null;
 		try {
 			// TODO: strip query part from hostURL
 			invitation = new URI("junction://"
 								+getSwitchboard()+"/"
 								+getSessionID()
-								+"?role="+requestedRole
+								+queryStr
 								);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -306,12 +341,17 @@ public class Junction extends edu.stanford.junction.Junction {
 				try {
 					MultiUserChat.getRoomInfo(mXMPPConnection, room);
 					chat.join(mOwner.getActorID(),null,history,10000);
+					mActivityDescription.isActivityCreator(false);
 					return chat;
 				} catch (Exception e) { /*e.printStackTrace();*/ }
 				
 				System.out.println("Trying to create room");
+				
+				
 				// TODO: is this an error? is there really a notion of ownership?
+				mActivityDescription.isActivityCreator(true);
 				chat.create(mOwner.getActorID());
+
 				//mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
 				
 				System.out.println("sending config form");

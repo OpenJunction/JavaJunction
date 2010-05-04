@@ -43,25 +43,27 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			desc.setSessionID(uri.getPath().substring(1));
 		}
 		
-		edu.stanford.junction.provider.xmpp.Junction jx = 
-			(edu.stanford.junction.provider.xmpp.Junction)newJunction(desc,actor);
-		jx.mAcceptedInvitation=uri;
-		
-		return jx;
+		return (edu.stanford.junction.provider.xmpp.Junction)newJunction(desc,uri,actor);
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
-		
+		return newJunction(desc,null,actor);
+	}
+	
+	private Junction newJunction(ActivityScript script, URI invitation, JunctionActor actor) {
 		// this needs to be made more formal
-		if (null == desc.getHost() && mConfig.host != null) {
-			desc.setHost(mConfig.host);
+		if (null == script.getHost() && mConfig.host != null) {
+			script.setHost(mConfig.host);
 		}
 		
-		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig,desc.getSessionID());
-		Junction jx = new edu.stanford.junction.provider.xmpp.Junction(desc,mXMPPConnection,mConfig,this);
+		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig,script.getSessionID());
+		edu.stanford.junction.provider.xmpp.Junction jx = 
+			new edu.stanford.junction.provider.xmpp.Junction(script,mXMPPConnection,mConfig,this);
+		
+		jx.mAcceptedInvitation=invitation;
 		jx.registerActor(actor);
 		
-		this.requestServices(jx,desc);
+		this.requestServices(jx,script);
 		
 		
 		// creating an activity is an activity using a JunctionService.
