@@ -43,7 +43,11 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			desc.setSessionID(uri.getPath().substring(1));
 		}
 		
-		return newJunction(desc,actor);
+		edu.stanford.junction.provider.xmpp.Junction jx = 
+			(edu.stanford.junction.provider.xmpp.Junction)newJunction(desc,actor);
+		jx.mAcceptedInvitation=uri;
+		
+		return jx;
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) {

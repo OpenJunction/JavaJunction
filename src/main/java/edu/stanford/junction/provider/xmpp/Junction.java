@@ -51,7 +51,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	PacketFilter mMessageFilter = null;
 	
 	private ExtrasDirector mExtrasDirector = new ExtrasDirector();
-	
+	protected URI mAcceptedInvitation = null;
 	/**
 	 * Creates a new activity and registers it
 	 * with a Junction server.
@@ -85,7 +85,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	public void registerActor(final JunctionActor actor) {
 		//System.out.print("adding actor for roles: ");
-		String[] roles =  actor.getRoles();
+		//String[] roles =  actor.getRoles();
 		/*for(int i = 0; i<roles.length; i++) 
 			System.out.print(roles[i] + " ");
 		System.out.print("\n");*/
@@ -121,24 +121,24 @@ public class Junction extends edu.stanford.junction.Junction {
 		if (handler != null) {
 			registerMessageHandler(handler);
 		}
+		
+		// Create
 		if (mActivityDescription.isActivityCreator()) {
+			if (!mExtrasDirector.beforeActivityCreate()) {
+				disconnect();
+				return;
+			}
 			mOwner.onActivityCreate();
-			if (!mExtrasDirector.beforeActivityJoin()) {
-				disconnect();
-				return;
-			}
-			mOwner.onActivityJoin();
-			mExtrasDirector.afterActivityJoin();
-		} else {
-			if (!mExtrasDirector.beforeActivityJoin()) {
-				disconnect();
-				return;
-			}
-			mOwner.onActivityJoin();
-			mExtrasDirector.afterActivityJoin();
+			mExtrasDirector.afterActivityCreate();
 		}
 		
-		
+		// Join
+		if (!mExtrasDirector.beforeActivityJoin()) {
+			disconnect();
+			return;
+		}
+		mOwner.onActivityJoin();
+		mExtrasDirector.afterActivityJoin();
 	}
 	
 	public void start() {
@@ -355,5 +355,10 @@ public class Junction extends edu.stanford.junction.Junction {
 	public void registerExtra(JunctionExtra extra) {
 		extra.setActor(mOwner);
 		mExtrasDirector.registerExtra(extra);
+	}
+
+	@Override
+	public URI getAcceptedInvitation() {
+		return mAcceptedInvitation;
 	}	
 }

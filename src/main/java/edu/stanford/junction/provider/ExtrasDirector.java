@@ -99,6 +99,26 @@ public class ExtrasDirector extends JunctionExtra {
 		}
 	}
 	
+	@Override
+	public boolean beforeActivityCreate() {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			if (!ex.beforeActivityCreate())
+				return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public void afterActivityCreate() {
+		Iterator<JunctionExtra>iter = mExtras.iterator();
+		while (iter.hasNext()) {
+			JunctionExtra ex = iter.next();
+			ex.afterActivityCreate();
+		}
+	}
+	
 	/**
 	 * Adds an Extra to the set of executed extras.
 	 * @param extra

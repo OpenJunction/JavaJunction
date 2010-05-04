@@ -26,6 +26,8 @@ public abstract class Junction {
 	
 	public abstract ActivityScript getActivityScript();
 	
+	public abstract URI getAcceptedInvitation();
+	
 	//public String getActivityID();
 	public abstract String getSessionID();
 	

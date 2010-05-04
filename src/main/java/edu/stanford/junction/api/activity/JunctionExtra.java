@@ -55,6 +55,18 @@ public abstract class JunctionExtra {
 		
 	}
 	
+	/**
+	 * Called before an actor joins an activity.
+	 * Returning false aborts the attempted join.
+	 */
+	public boolean beforeActivityCreate() {
+		return true;
+	}
+	
+	public void afterActivityCreate() {
+		
+	}
+	
 	//public void beforeGetActivityScript();
 	
 	/**
