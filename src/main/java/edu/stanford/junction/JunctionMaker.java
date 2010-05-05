@@ -92,6 +92,19 @@ public class JunctionMaker {
 		return jx;
 	}
 	
+	/**
+	 * Sends a message to an activity. In the
+	 * unoptimized case, joins an activity, sends
+	 * a message, and leaves.
+	 * 
+	 * @param activitySession
+	 * @param msg
+	 */
+	public void sendMessageToActivity(URI activitySession, JSONObject msg) {
+		mProvider.sendMessageToActivity(activitySession,msg);
+	}
+	
+	
 	public ActivityScript getActivityScript(URI uri) {
 		return mProvider.getActivityScript(uri);
 	}

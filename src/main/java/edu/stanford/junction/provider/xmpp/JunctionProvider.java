@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.messaging.MessageHeader;
 
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
@@ -226,5 +227,5 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			e.printStackTrace();
 		}
 	}
-	
+
 }

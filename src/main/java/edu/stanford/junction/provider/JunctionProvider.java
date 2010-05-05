@@ -9,12 +9,37 @@ import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.Cast;
 import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.messaging.MessageHeader;
 
 public abstract class JunctionProvider {
 	protected JunctionMaker mJunctionMaker;
 	
 	public abstract Junction newJunction(URI uri, JunctionActor actor);
 	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor);
+
+
+	/**
+	 * Unoptimized implementation that joins a session,
+	 * sends a messasge, and disconnects
+	 */
+	public void sendMessageToActivity(URI activitySession, final JSONObject msg) {
+		JunctionActor sender = new JunctionActor("transient") {
+			@Override
+			public void onMessageReceived(MessageHeader header,
+					JSONObject message) {
+			}
+			
+			@Override
+			public void onActivityJoin() {
+				sendMessageToSession(msg);
+				leave();
+			}
+		};
+		
+		newJunction(activitySession,sender);
+	}
+	
+	
 	//public abstract Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support);
 	
 	public abstract ActivityScript getActivityScript(URI uri);
