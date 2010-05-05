@@ -14,8 +14,10 @@ import java.util.TreeMap;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.jivesoftware.smack.util.Base64;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
@@ -32,6 +34,7 @@ public class Encryption extends JunctionExtra {
 	 * to use encryption via a parameter "aes=[key]" in the invitation.
 	 */
 	public final static String FIELD_ENC = "e";
+	public final static String FIELD_IV = "iv";
 	public final static String URL_KEY_PARAM = "skey";
 	
 	private Cipher mCipher = null;
@@ -49,7 +52,7 @@ public class Encryption extends JunctionExtra {
 	
 	private void init() {
 		try {
-			mCipher = Cipher.getInstance("AES");
+			mCipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 			mKeySpec = new SecretKeySpec(mKey, "AES");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -205,13 +208,14 @@ public class Encryption extends JunctionExtra {
 			byte[] enc = null;
 			enc = mCipher.doFinal(msgStr.getBytes());
 			String encStr = new String(Base64Coder.encode(enc));
-			
+			String ivStr = new String(Base64Coder.encode(mCipher.getIV()));
 			// clear object
 			Iterator<String>keys = msg.keys();
 			while (keys.hasNext()) {
 				msg.remove(keys.next());
 			}
 			msg.put(FIELD_ENC,encStr);
+			msg.put(FIELD_IV,ivStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,7 +236,13 @@ public class Encryption extends JunctionExtra {
 				String b64 = msg.getString(FIELD_ENC);
 				byte[] dec = Base64Coder.decode(b64);
 			
-				mCipher.init(Cipher.DECRYPT_MODE, mKeySpec);
+				if (msg.has(FIELD_IV)) {
+					byte[] iv = Base64.decode(msg.getString(FIELD_IV));
+					mCipher.init(Cipher.DECRYPT_MODE, mKeySpec,new IvParameterSpec(iv));
+					msg.remove(FIELD_IV);
+				} else {
+					mCipher.init(Cipher.DECRYPT_MODE, mKeySpec);
+				}
 				
 				byte[] res = mCipher.doFinal(dec);
 				JSONObject obj = new JSONObject(new String(res));

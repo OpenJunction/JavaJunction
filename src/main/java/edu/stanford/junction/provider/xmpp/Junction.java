@@ -125,7 +125,6 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 		
 		// Create
-		System.out.println("CHECKING FOR CREATIVE POWER");
 		if (mActivityDescription.isActivityCreator()) {
 			if (!mExtrasDirector.beforeActivityCreate()) {
 				disconnect();
