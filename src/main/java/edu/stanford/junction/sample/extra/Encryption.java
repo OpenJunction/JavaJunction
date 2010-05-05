@@ -18,6 +18,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.jivesoftware.smack.util.Base64;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
@@ -104,6 +105,7 @@ public class Encryption extends JunctionExtra {
 						
 						message = new JSONObject("{\"msg\":\"Keep the cryptotimes rollin!\",\"more\":\"mannnn\"}");
 						sendMessageToSession(message);
+						message = new JSONObject("{\"msg\":\"Keep the cryptotimes rollin!\",\"more\":\"mannnn\"}");
 						sendMessageToSession(message);
 					} catch (Exception e) {}
 				}
@@ -200,9 +202,9 @@ public class Encryption extends JunctionExtra {
 			String encStr = new String(Base64Coder.encode(enc));
 			String ivStr = new String(Base64Coder.encode(mCipher.getIV()));
 			// clear object
-			Iterator<String>keys = msg.keys();
-			while (keys.hasNext()) {
-				msg.remove(keys.next());
+			JSONArray keys = msg.names();
+			for (int i=0;i<keys.length();i++) {
+				msg.remove(keys.getString(i));
 			}
 			
 			msg.put(FIELD_ENC,encStr);
@@ -223,29 +225,30 @@ public class Encryption extends JunctionExtra {
 		if (mKeySpec == null) return true;
 		
 		try {
-			if (msg.has(FIELD_ENC)) {
-				String b64 = msg.getString(FIELD_ENC);
-				byte[] dec = Base64Coder.decode(b64);
-			
-				if (msg.has(FIELD_IV)) {
-					byte[] iv = Base64.decode(msg.getString(FIELD_IV));
-					mCipher.init(Cipher.DECRYPT_MODE, mKeySpec,new IvParameterSpec(iv));
-					msg.remove(FIELD_IV);
-				} else {
-					mCipher.init(Cipher.DECRYPT_MODE, mKeySpec);
-				}
-				
-				byte[] res = mCipher.doFinal(dec);
-				JSONObject obj = new JSONObject(new String(res));
-				
-				msg.remove("e");
-				Iterator<String> keys = obj.keys();
-				while (keys.hasNext()) {
-					String key = keys.next();
-					msg.put(key, obj.get(key));
-				}
+			if (!msg.has(FIELD_ENC)) {
+				return true;
 			}
+
+			String b64 = msg.getString(FIELD_ENC);
+			byte[] dec = Base64Coder.decode(b64);
 		
+			if (msg.has(FIELD_IV)) {
+				byte[] iv = Base64.decode(msg.getString(FIELD_IV));
+				mCipher.init(Cipher.DECRYPT_MODE, mKeySpec,new IvParameterSpec(iv));
+				msg.remove(FIELD_IV);
+			} else {
+				mCipher.init(Cipher.DECRYPT_MODE, mKeySpec);
+			}
+			
+			byte[] res = mCipher.doFinal(dec);
+			JSONObject obj = new JSONObject(new String(res));
+			
+			msg.remove("e");
+			Iterator<String> keys = obj.keys();
+			while (keys.hasNext()) {
+				String key = keys.next();
+				msg.put(key, obj.get(key));
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
