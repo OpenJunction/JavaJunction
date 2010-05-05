@@ -97,6 +97,14 @@ public class Encryption extends JunctionExtra {
 					try {
 						JSONObject message = new JSONObject("{\"msg\":\"hello!! encrypted!\"}");
 						sendMessageToSession(message);
+						message = new JSONObject("{\"msg\":\"hello!! encrypted!\"}");
+						sendMessageToSession(message);
+						message = new JSONObject("{\"msg\":\"hello!! encrypted!\"}");
+						sendMessageToSession(message);
+						
+						message = new JSONObject("{\"msg\":\"Keep the cryptotimes rollin!\",\"more\":\"mannnn\"}");
+						sendMessageToSession(message);
+						sendMessageToSession(message);
 					} catch (Exception e) {}
 				}
 				
@@ -132,25 +140,7 @@ public class Encryption extends JunctionExtra {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void encTest() throws Exception {
-		KeyGenerator kgen = KeyGenerator.getInstance("AES");
-		kgen.init(128);
-		SecretKey skey = kgen.generateKey();
-		
-		Encryption encryption = new Encryption(skey.getEncoded());
-		
-	    JSONObject testObj = new JSONObject("{\"msg\":\"testing!\"}");
-	    
-	    System.out.println("before encryption: " + testObj.toString());
-	    encryption.beforeSendMessage(testObj);
-	    System.out.println("after encryption: " + testObj.toString());
-	    
-	    encryption.beforeOnMessageReceived(null, testObj);
-	    System.out.println("after decryption: " + testObj.toString());
-	}
-	
+	}	
 	
 	@Override
 	public boolean beforeActivityJoin() {
@@ -214,6 +204,7 @@ public class Encryption extends JunctionExtra {
 			while (keys.hasNext()) {
 				msg.remove(keys.next());
 			}
+			
 			msg.put(FIELD_ENC,encStr);
 			msg.put(FIELD_IV,ivStr);
 		} catch (Exception e) {
