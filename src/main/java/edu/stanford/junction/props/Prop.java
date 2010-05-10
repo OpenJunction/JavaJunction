@@ -17,7 +17,7 @@ public abstract class Prop extends JunctionExtra {
 	public static final int MSG_SEND_ME_STATE = 5;
 	public static final int MSG_PLZ_CATCHUP = 6;
 
-	public static final int PLZ_CATCHUP_THRESHOLD = 10;
+	public static final int PLZ_CATCHUP_THRESHOLD = 5;
 
 	private String uuid = UUID.randomUUID().toString();
 	private String propName;
@@ -75,7 +75,7 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	protected HistoryMAC newHistoryMAC(){
-		return new HistoryMAC(stateNumber, state.hash());
+		return new HistoryMAC(getStateNumber(), this.state.hash());
 	}
 
 	abstract protected IPropState destringifyState(String s);
@@ -144,6 +144,7 @@ public abstract class Prop extends JunctionExtra {
 		String fromReplicaName = rawMsg.optString("senderReplicaName");
 		logInfo(propReplicaName + " processing message from: " + fromReplicaName);
 		String fromActor = header.getSender();
+		boolean isSelfMsg = (fromPeer.equals(this.uuid));
 		switch(mode){
 		case MODE_NORM:
 			switch(msgType){
@@ -172,23 +173,26 @@ public abstract class Prop extends JunctionExtra {
 					// staleness and SYNC.
 
 					// Send them a hint if things get too bad..
-					if((getStateNumber() - predictedStateNumber) > PLZ_CATCHUP_THRESHOLD){
+					if(!isSelfMsg && 
+					   (getStateNumber() - predictedStateNumber) > PLZ_CATCHUP_THRESHOLD){
 						logInfo("I'm at " + getStateNumber() + ", they're at " + predictedStateNumber + ". " + 
 								"Sending catchup.");
 						sendMessageToPropReplica(fromActor, new PlzCatchUpMsg(getStateNumber()));
 					}
 
-					if(fromPeer == this.uuid){
+					if(isSelfMsg){
 						this.staleness = (getNextStateNumber() - predictedStateNumber);
 					}
+
 					logInfo("Applying msg " + 
 							msg + " from " + 
 							fromReplicaName + 
 							", currently at " + 
 							getStateNumber());
+
 					applyOperation(msg, true);
 
-					if(fromPeer == this.uuid){
+					if(!isSelfMsg){
 						checkHistory(msg.mac);
 					}
 				}
@@ -196,40 +200,46 @@ public abstract class Prop extends JunctionExtra {
 			}
 			case MSG_WHO_HAS_STATE:{
 				WhoHasStateMsg msg = new WhoHasStateMsg(rawMsg);
-				// Can we fill the gap for this peer?
-				if(getStateNumber() >= msg.desiredStateNumber){
-					sendMessageToPropReplica(
-						fromActor, 
-						new IHaveStateMsg(getStateNumber(), msg.syncNonce));
-				}
-				else{
-					logInfo("Oops! got state request for state i don't have!");
+				if(!isSelfMsg){
+					// Can we fill the gap for this peer?
+					if(getStateNumber() >= msg.desiredStateNumber){
+						sendMessageToPropReplica(
+							fromActor, 
+							new IHaveStateMsg(getStateNumber(), msg.syncNonce));
+					}
+					else{
+						logInfo("Oops! got state request for state i don't have!");
+					}
 				}
 				break;
 			}
 			case MSG_SEND_ME_STATE:{
 				SendMeStateMsg msg = new SendMeStateMsg(rawMsg);
-				logInfo("Got SendMeState");
-				// Can we fill the gap for this peer?
-				if(getStateNumber() > msg.desiredStateNumber){
-					logInfo("Sending state..");
-					sendMessageToPropReplica(
-						fromActor, 
-						new StateSyncMsg(
-							getStateNumber(), 
-							this.state.stringify(), 
-							msg.syncNonce, 
-							this.lastOperationNonce));
+				if(!isSelfMsg){
+					logInfo("Got SendMeState");
+					// Can we fill the gap for this peer?
+					if(getStateNumber() > msg.desiredStateNumber){
+						logInfo("Sending state..");
+						sendMessageToPropReplica(
+							fromActor, 
+							new StateSyncMsg(
+								getStateNumber(), 
+								this.state.stringify(), 
+								msg.syncNonce, 
+								this.lastOperationNonce));
+					}
 				}
 				break;
 			}
 			case MSG_PLZ_CATCHUP:{
 				PlzCatchUpMsg msg = new PlzCatchUpMsg(rawMsg);
-				// Some peer is trying to tell us we are stale.
-				// Do we believe them?
-				logInfo("Got PlzCatchup : " + msg);
-				if(msg.stateNumber > getStateNumber()) {
-					enterSYNCMode(msg.stateNumber);
+				if(!isSelfMsg){
+					// Some peer is trying to tell us we are stale.
+					// Do we believe them?
+					logInfo("Got PlzCatchup : " + msg);
+					if(msg.stateNumber > getStateNumber()) {
+						enterSYNCMode(msg.stateNumber);
+					}
 				}
 				break;
 			}
@@ -268,69 +278,73 @@ public abstract class Prop extends JunctionExtra {
 			}
 			case MSG_I_HAVE_STATE:{
 				IHaveStateMsg msg = new IHaveStateMsg(rawMsg);
-				logInfo("Got IHaveState");
-				if(msg.syncNonce == this.syncNonce && msg.stateNumber > getStateNumber()){
-					logInfo("Requesting state");
-					this.waitingForIHaveState = false;
-					sendMessageToPropReplica(fromActor, new SendMeStateMsg(getStateNumber(), msg.syncNonce));
+				if(!isSelfMsg){
+					logInfo("Got IHaveState");
+					if(msg.syncNonce == this.syncNonce && msg.stateNumber > getStateNumber()){
+						logInfo("Requesting state");
+						this.waitingForIHaveState = false;
+						sendMessageToPropReplica(fromActor, new SendMeStateMsg(getStateNumber(), msg.syncNonce));
+					}
 				}
 				break;
 			}
 			case MSG_STATE_SYNC:{
 				StateSyncMsg msg = new StateSyncMsg(rawMsg);
-				// First check that this sync message corresponds to this
-				// instance of SYNC mode. This is critical for assumptions
-				// we make about the contents of incomingBuffer...
-				if(msg.syncNonce != this.syncNonce){
-					logInfo("Bogus SYNC nonce! ignoring StateSyncMsg");
-				}
-				else{
-					logInfo("Got StateSyncMsg:" + msg.state);
-	      
-					// If local peer has buffered no operations, we know that no operations
-					// were applied since the creation of state. We can safely assume
-					// the given state.
-					if(this.incomingBuffer.isEmpty()){
-						logInfo("No buffered items.. applying sync");
-						this.state = destringifyState(msg.state);
-						this.lastOperationNonce = msg.lastOperationNonce;
-						this.stateNumber = msg.stateNumber;
-						exitSYNCMode();
-						dispatchChangeNotification("change", null);
+				if(!isSelfMsg){
+					// First check that this sync message corresponds to this
+					// instance of SYNC mode. This is critical for assumptions
+					// we make about the contents of incomingBuffer...
+					if(msg.syncNonce != this.syncNonce){
+						logInfo("Bogus SYNC nonce! ignoring StateSyncMsg");
 					}
 					else{
-						// Otherwise, we've buffered some operations.
-						//
-						// Since we started buffering before we sent the WhoHasState request, 
-						// it must be that we've buffered all operations with seqNums >= that of
-						// state.
-						// 
-						this.state = destringifyState(msg.state);
-						this.lastOperationNonce = msg.lastOperationNonce;
-						this.stateNumber = msg.stateNumber;
-
-						// It's possible that ALL buffered messages are already incorportated
-						// into state. In that case want to ignore buffered items and 
-						// just assume state.
-
-						// Otherwise, there is some tail of buffered operations that occurred after
-						// the state was captured. We find this tail by comparing the nonce
-						// of each buffered operation with that of the last operation incorporated
-						// into state. (NOTE: we don't know the seqNums of the buffered msgs!
-						// that's why we need the nonce.)
-						for(int i = 0; i < this.incomingBuffer.size(); i++){
-							StateOperationMsg m = this.incomingBuffer.get(i);
-							if(m.operation.getNonce() == msg.lastOperationNonce){
-								logInfo("Found nonce match in buffered messages!");
-								for(int j = i + 1; j < this.incomingBuffer.size(); j++){
-									applyOperation(this.incomingBuffer.get(j), false);
-								}
-								break;
-							}
+						logInfo("Got StateSyncMsg:" + msg.state);
+	      
+						// If local peer has buffered no operations, we know that no operations
+						// were applied since the creation of state. We can safely assume
+						// the given state.
+						if(this.incomingBuffer.isEmpty()){
+							logInfo("No buffered items.. applying sync");
+							this.state = destringifyState(msg.state);
+							this.lastOperationNonce = msg.lastOperationNonce;
+							this.stateNumber = msg.stateNumber;
+							exitSYNCMode();
+							dispatchChangeNotification("change", null);
 						}
-						this.incomingBuffer.clear();
-						exitSYNCMode();
-						dispatchChangeNotification("change", null);
+						else{
+							// Otherwise, we've buffered some operations.
+							//
+							// Since we started buffering before we sent the WhoHasState request, 
+							// it must be that we've buffered all operations with seqNums >= that of
+							// state.
+							// 
+							this.state = destringifyState(msg.state);
+							this.lastOperationNonce = msg.lastOperationNonce;
+							this.stateNumber = msg.stateNumber;
+
+							// It's possible that ALL buffered messages are already incorportated
+							// into state. In that case want to ignore buffered items and 
+							// just assume state.
+
+							// Otherwise, there is some tail of buffered operations that occurred after
+							// the state was captured. We find this tail by comparing the nonce
+							// of each buffered operation with that of the last operation incorporated
+							// into state. (NOTE: we don't know the seqNums of the buffered msgs!
+							// that's why we need the nonce.)
+							for(int i = 0; i < this.incomingBuffer.size(); i++){
+								StateOperationMsg m = this.incomingBuffer.get(i);
+								if(m.operation.getNonce() == msg.lastOperationNonce){
+									logInfo("Found nonce match in buffered messages!");
+									for(int j = i + 1; j < this.incomingBuffer.size(); j++){
+										applyOperation(this.incomingBuffer.get(j), false);
+									}
+									break;
+								}
+							}
+							this.incomingBuffer.clear();
+							exitSYNCMode();
+							dispatchChangeNotification("change", null);
+						}
 					}
 				}
 				break;
@@ -378,13 +392,13 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	protected void sendOperation(IPropStateOperation operation){
 		int predictedStateNumber = getNextStateNumber();
+		HistoryMAC mac = newHistoryMAC();
 		StateOperationMsg msg = new StateOperationMsg(
 			predictedStateNumber, 
 			operation, newHistoryMAC());
 		logInfo(propReplicaName + 
 				" sending " + msg + 
-				". Currently at " + 
-				getStateNumber());
+				". Current MAC: " + mac);
 		sendMessageToProp(msg);
 	}
 
