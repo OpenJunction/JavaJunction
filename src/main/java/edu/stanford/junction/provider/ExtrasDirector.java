@@ -1,5 +1,6 @@
 package edu.stanford.junction.provider;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,8 @@ public class ExtrasDirector extends JunctionExtra {
 	 */
 	@Override
 	public boolean beforeOnMessageReceived(MessageHeader header, JSONObject message) {
+		// not available on android (API 4)
+		/*
 		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
 		while (iter.hasNext()) {
 			JunctionExtra ex = iter.next();
@@ -35,13 +38,40 @@ public class ExtrasDirector extends JunctionExtra {
 				return false;
 		}
 		return true;
+		*/
+		
+		Iterator<JunctionExtra>fwd = mExtras.iterator();
+		ArrayList<JunctionExtra>list = new ArrayList<JunctionExtra>();
+		while (fwd.hasNext()) {
+			list.add(fwd.next());
+		}
+		for (int i=list.size()-1;i>=0;i--){
+			JunctionExtra ex = list.get(i);
+			if (!ex.beforeOnMessageReceived(header, message))
+				return false;
+		}
+		
+		return true;
 	}
 	
 	@Override
 	public void afterOnMessageReceived(MessageHeader header, JSONObject message) {
+		// not available on android (API 4)
+		/*
 		Iterator<JunctionExtra>iter = mExtras.descendingIterator();
 		while (iter.hasNext()) {
 			JunctionExtra ex = iter.next();
+			ex.afterOnMessageReceived(header, message);
+		}
+		*/
+		
+		Iterator<JunctionExtra>fwd = mExtras.iterator();
+		ArrayList<JunctionExtra>list = new ArrayList<JunctionExtra>();
+		while (fwd.hasNext()) {
+			list.add(fwd.next());
+		}
+		for (int i=list.size()-1;i>=0;i--){
+			JunctionExtra ex = list.get(i);
 			ex.afterOnMessageReceived(header, message);
 		}
 	}
