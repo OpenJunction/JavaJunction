@@ -4,7 +4,7 @@ import org.json.JSONException;
 import java.util.Random;
 
 
-class NullOp implements IPropStateOperation{
+public class NullOp implements IPropStateOperation{
 	private long nonce;
 
 	public NullOp(long nonce){

@@ -17,6 +17,8 @@ public abstract class Prop extends JunctionExtra {
 	public static final int MSG_SEND_ME_STATE = 5;
 	public static final int MSG_PLZ_CATCHUP = 6;
 
+	public static final int PLZ_CATCHUP_THRESHOLD = 10;
+
 	private String uuid = UUID.randomUUID().toString();
 	private String propName;
 	private String propReplicaName = "";
@@ -29,6 +31,7 @@ public abstract class Prop extends JunctionExtra {
 	private boolean waitingForIHaveState = false;
 	private Vector<StateOperationMsg> incomingBuffer = new Vector<StateOperationMsg>();
 	private Vector<HistoryMAC> verifyHistory = new Vector<HistoryMAC>();
+	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
 
 
 	public Prop(String propName, IPropState state, String propReplicaName){
@@ -38,9 +41,8 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	public Prop(String propName, IPropState state){
-		this(propName, state, "");
+		this(propName, state, propName + "-replica" + UUID.randomUUID().toString());
 	}
-
 
 	public int getStaleness(){
 		return staleness;
@@ -79,7 +81,18 @@ public abstract class Prop extends JunctionExtra {
 	abstract protected IPropState destringifyState(String s);
 	abstract protected IPropStateOperation destringifyOperation(String s);
 
-	protected void applyOperation(StateOperationMsg msg){
+	public void addChangeListener(IPropChangeListener listener){
+		changeListeners.add(listener);
+	}
+
+	protected void dispatchChangeNotification(String evtType, Object o){
+		for(IPropChangeListener l : changeListeners){
+			logInfo("Dispatching change notification...");
+			l.onChange(evtType, o);
+		}
+	}
+
+	protected void applyOperation(StateOperationMsg msg, boolean notify){
 		IPropStateOperation operation = msg.operation;
 		this.state = state.applyOperation(operation);
 		this.lastOperationNonce = operation.getNonce();
@@ -91,6 +104,10 @@ public abstract class Prop extends JunctionExtra {
 			newHistory.add(verifyHistory.get(i));
 		}
 		this.verifyHistory = newHistory;
+
+		if(notify && !(operation instanceof NullOp)){
+			dispatchChangeNotification("change", null);
+		}
 	}
 
 	protected void checkHistory(HistoryMAC mac){
@@ -153,6 +170,14 @@ public abstract class Prop extends JunctionExtra {
 					// It's not unsound to apply the operation - but we
 					// hope that sender will eventually notice it's own
 					// staleness and SYNC.
+
+					// Send them a hint if things get too bad..
+					if((getStateNumber() - predictedStateNumber) > PLZ_CATCHUP_THRESHOLD){
+						logInfo("I'm at " + getStateNumber() + ", they're at " + predictedStateNumber + ". " + 
+								"Sending catchup.");
+						sendMessageToPropReplica(fromActor, new PlzCatchUpMsg(getStateNumber()));
+					}
+
 					if(fromPeer == this.uuid){
 						this.staleness = (getNextStateNumber() - predictedStateNumber);
 					}
@@ -161,8 +186,11 @@ public abstract class Prop extends JunctionExtra {
 							fromReplicaName + 
 							", currently at " + 
 							getStateNumber());
-					applyOperation(msg);
-					checkHistory(msg.mac);
+					applyOperation(msg, true);
+
+					if(fromPeer == this.uuid){
+						checkHistory(msg.mac);
+					}
 				}
 				break;
 			}
@@ -199,6 +227,7 @@ public abstract class Prop extends JunctionExtra {
 				PlzCatchUpMsg msg = new PlzCatchUpMsg(rawMsg);
 				// Some peer is trying to tell us we are stale.
 				// Do we believe them?
+				logInfo("Got PlzCatchup : " + msg);
 				if(msg.stateNumber > getStateNumber()) {
 					enterSYNCMode(msg.stateNumber);
 				}
@@ -224,7 +253,7 @@ public abstract class Prop extends JunctionExtra {
 					logInfo("Applying msg " + msg + 
 							" from " + fromReplicaName + 
 							", currently at " + getStateNumber());
-					applyOperation(msg);
+					applyOperation(msg, true);
 					checkHistory(msg.mac);
 					exitSYNCMode();
 				}
@@ -256,7 +285,7 @@ public abstract class Prop extends JunctionExtra {
 					logInfo("Bogus SYNC nonce! ignoring StateSyncMsg");
 				}
 				else{
-					logInfo("Got StateSyncMsg");
+					logInfo("Got StateSyncMsg:" + msg.state);
 	      
 					// If local peer has buffered no operations, we know that no operations
 					// were applied since the creation of state. We can safely assume
@@ -267,6 +296,7 @@ public abstract class Prop extends JunctionExtra {
 						this.lastOperationNonce = msg.lastOperationNonce;
 						this.stateNumber = msg.stateNumber;
 						exitSYNCMode();
+						dispatchChangeNotification("change", null);
 					}
 					else{
 						// Otherwise, we've buffered some operations.
@@ -293,13 +323,14 @@ public abstract class Prop extends JunctionExtra {
 							if(m.operation.getNonce() == msg.lastOperationNonce){
 								logInfo("Found nonce match in buffered messages!");
 								for(int j = i + 1; j < this.incomingBuffer.size(); j++){
-									applyOperation(this.incomingBuffer.get(j));
+									applyOperation(this.incomingBuffer.get(j), false);
 								}
 								break;
 							}
 						}
 						this.incomingBuffer.clear();
 						exitSYNCMode();
+						dispatchChangeNotification("change", null);
 					}
 				}
 				break;
@@ -361,7 +392,7 @@ public abstract class Prop extends JunctionExtra {
 	/**
 	 * Add an operation to the state managed by this Prop
 	 */
-	protected void addOperation(IPropStateOperation operation){
+	synchronized public void addOperation(IPropStateOperation operation){
 		sendOperation(operation);
 	}
 
@@ -548,13 +579,13 @@ public abstract class Prop extends JunctionExtra {
 		public PlzCatchUpMsg(JSONObject msg){
 			stateNumber = msg.optInt("stateNumber");
 		}
-		public PlzCatchUpMsg(int stateNumber, long syncNonce){
+		public PlzCatchUpMsg(int stateNumber){
 			this.stateNumber = stateNumber;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
-				obj.put("type", MSG_WHO_HAS_STATE);
+				obj.put("type", MSG_PLZ_CATCHUP);
 				obj.put("stateNumber", stateNumber);
 			}catch(JSONException e){}
 			return obj;
