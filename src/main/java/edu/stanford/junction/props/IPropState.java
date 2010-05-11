@@ -4,6 +4,6 @@ import org.json.JSONObject;
 
 public interface IPropState extends IStringifiable{
 	IPropState applyOperation(IPropStateOperation operation);
-	IPropStateOperation nullOperation();
 	String hash();
+	IPropState copy();
 }

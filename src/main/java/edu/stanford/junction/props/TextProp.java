@@ -42,15 +42,14 @@ public class TextProp extends Prop {
 	protected IPropStateOperation destringifyOperation(String s){
 		try{
 			JSONObject obj = new JSONObject(s);
-			long nonce = obj.optLong("nonce");
 			String type = obj.optString("type");
 			if(type.equals("insertChar")){
 				int index = obj.optInt("index");
 				String charact = obj.optString("char");
-				return new InsertCharOp(index, charact, nonce);
+				return new InsertCharOp(index, charact);
 			}
 			else if(type.equals("null")){
-				return new NullOp(nonce);
+				return new NullOp();
 			}
 			else{
 				return null;
@@ -121,18 +120,12 @@ class TextState implements IPropState{
 }
 
 class InsertCharOp implements IPropStateOperation{
-	private long nonce;
 	private int i;
 	private String c;
 
-	public InsertCharOp(int index, String charact, long nonce){
-		this.nonce = nonce;
+	public InsertCharOp(int index, String charact){
 		this.i = index;
 		this.c = charact;
-	}
-
-	public InsertCharOp(int index, String charact){
-		this(index, charact, (new Random()).nextLong());
 	}
 
 	public InsertCharOp(int index, char charact){
@@ -144,15 +137,10 @@ class InsertCharOp implements IPropStateOperation{
 		return new TextState(newText);
 	}
 
-	public long getNonce(){ 
-		return this.nonce; 
-	}
-
 	private JSONObject toJSONObject(){
 		JSONObject obj = new JSONObject();
 		try{
 			obj.put("type", "insertChar");
-			obj.put("nonce", nonce);
 			obj.put("index", this.i);
 			obj.put("char", this.c);
 		}catch(JSONException e){}

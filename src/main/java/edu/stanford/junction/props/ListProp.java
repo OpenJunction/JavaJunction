@@ -72,17 +72,16 @@ public class ListProp extends Prop {
 	protected IPropStateOperation destringifyOperation(String s){
 		try{
 			JSONObject obj = new JSONObject(s);
-			long nonce = obj.optLong("nonce");
 			String type = obj.optString("type");
 			if(type.equals("pushOp")){
 				IStringifiable item = destringifyItem(obj.getString("item"));
-				return new PushOp(item, nonce);
+				return new PushOp(item);
 			}
 			if(type.equals("popOp")){
-				return new PopOp(nonce);
+				return new PopOp();
 			}
 			else{
-				return new NullOp(nonce);
+				return new NullOp();
 			}
 		}
 		catch(JSONException e){
@@ -162,11 +161,15 @@ class ListState implements IPropState{
 	}
 
 	public IPropState copy(){
-		return new ListState(items);
+		return new ListState((Vector<IStringifiable>)items.clone());
 	}
 
 	public void push(IStringifiable item){
 		items.add(item);
+	}
+
+	public void insert(IStringifiable item, int index){
+		items.add(index, item);
 	}
 
 	public void pop(){
@@ -181,16 +184,10 @@ class ListState implements IPropState{
 }
 
 class PushOp implements IPropStateOperation{
-	private long nonce;
 	private IStringifiable item;
 
-	public PushOp(IStringifiable item, long nonce){
-		this.nonce = nonce;
-		this.item = item;
-	}
-
 	public PushOp(IStringifiable item){
-		this(item, (new Random()).nextLong());
+		this.item = item;
 	}
 
 	public ListState applyTo(ListState s){
@@ -199,15 +196,42 @@ class PushOp implements IPropStateOperation{
 		return newS;
 	}
 
-	public long getNonce(){ 
-		return this.nonce; 
+	public String stringify(){
+		try{
+			JSONObject obj = new JSONObject();
+			obj.put("type", "pushOp");
+			obj.put("item", item.stringify());
+			return obj.toString();
+		}catch(JSONException e){}
+		return "";
+	}
+}
+
+
+class InsertOp implements IPropStateOperation{
+
+	private int index;
+	private IStringifiable item;
+
+	public InsertOp(IStringifiable item, int index){
+		this.item = item;
+		this.index = index;
+	}
+
+	public InsertOp(IStringifiable item){
+		this(item, 0);
+	}
+
+	public ListState applyTo(ListState s){
+		ListState newS = (ListState)s.copy();
+		newS.insert(item, index);
+		return newS;
 	}
 
 	public String stringify(){
 		try{
 			JSONObject obj = new JSONObject();
 			obj.put("type", "pushOp");
-			obj.put("nonce", nonce);
 			obj.put("item", item.stringify());
 			return obj.toString();
 		}catch(JSONException e){}
@@ -217,15 +241,6 @@ class PushOp implements IPropStateOperation{
 
 
 class PopOp implements IPropStateOperation{
-	private long nonce;
-
-	public PopOp(long nonce){
-		this.nonce = nonce;
-	}
-
-	public PopOp(){
-		this((new Random()).nextLong());
-	}
 
 	public ListState applyTo(ListState s){
 		ListState newS = (ListState)s.copy();
@@ -233,15 +248,10 @@ class PopOp implements IPropStateOperation{
 		return newS;
 	}
 
-	public long getNonce(){ 
-		return this.nonce; 
-	}
-
 	public String stringify(){
 		try{
 			JSONObject obj = new JSONObject();
 			obj.put("type", "popOp");
-			obj.put("nonce", nonce);
 			return obj.toString();
 		}catch(JSONException e){}
 		return "";
