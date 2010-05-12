@@ -11,7 +11,6 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 /**
  * TODO: 
  * state numbers should be long, not int
- * don't say 'nonce', say 'uuid'
  *
  */
 public abstract class Prop extends JunctionExtra {
@@ -32,9 +31,7 @@ public abstract class Prop extends JunctionExtra {
 	private String propReplicaName = "";
 
 	private IPropState state;
-	private long stateNum = 0;
 	private IPropState finState;
-	private long finStateNum = 0;
 
 	private long sequenceNum = 0;
 	private long opSequenceNum = 0;
@@ -43,7 +40,7 @@ public abstract class Prop extends JunctionExtra {
 
 	private int mode = MODE_NORM;
 	private long staleness = 0;
-	private long syncNonce = 0;
+	private long syncNonce = -1;
 	private boolean waitingForIHaveState = false;
 
 	private Vector<OperationOrderAckMsg> orderAckBuffer = new Vector<OperationOrderAckMsg>();
@@ -73,12 +70,8 @@ public abstract class Prop extends JunctionExtra {
 		return state;
 	}
 
-	public long getStateNum(){
-		return stateNum;
-	}
-
-	protected long getNextStateNumber(){
-		return getStateNum() + 1;
+	public long getSequenceNum(){
+		return opSequenceNum;
 	}
 
 	protected String getPropName(){
@@ -96,7 +89,7 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	protected HistoryMAC newHistoryMAC(){
-		return new HistoryMAC(finStateNum, this.finState.hash());
+		return new HistoryMAC(opSequenceNum, this.finState.hash());
 	}
 
 	abstract protected IPropState destringifyState(String s);
@@ -114,6 +107,45 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 
+
+	/**
+	 * Returns true if the normal event handling should proceed;
+	 * Return false to stop cascading.
+	 */
+	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject rawMsg) { 
+		if(rawMsg.optString("propTarget").equals(getPropName())){
+			IPropMsg msg = propMsgFromJSONObject(h, rawMsg, this);
+			if(msg.getType() == MSG_STATE_OPERATION){
+				IStateOperationMsg opMsg = (IStateOperationMsg)msg;
+
+				logInfo("Got msg: " + opMsg);
+
+				// Sort it into the buffer.
+				Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
+				buf.add(opMsg);
+				int len = buf.size();
+				for(int i = 0; i < len; i++){
+					IStateOperationMsg m = buf.get(i);
+					if(opMsg.getSequenceNum() < m.getSequenceNum()){
+						buf.add(i, buf.remove(len - 1));
+						break;
+					}
+				}
+				logInfo("Sorted op into seq buffer: " + sequentialOpsBuffer);
+				processOperationsInSequence();
+			}
+			else{
+				handleMessage(msg);
+			}
+			return false;
+		}
+		else{
+			return true; 
+		}
+	}
+
+
+
 	/**
 	 * See 'Copies convergence in a distributed real-time collaborative environment' 2000 
 	 *  Vidot, Cart, Ferrie, Suleiman
@@ -125,7 +157,6 @@ public abstract class Prop extends JunctionExtra {
 			// apply predicted operation immediately
 			logInfo("Applying local prediction: " + msg);
 			this.state = state.applyOperation(op);
-			this.stateNum += 1;
 
 			if(notify){
 				dispatchChangeNotification("change", null);
@@ -146,10 +177,7 @@ public abstract class Prop extends JunctionExtra {
 				remoteOpT = this.transposeForward(localOp, remoteOpT);
 			}
 			this.state = state.applyOperation(remoteOpT);
-			this.stateNum += 1;
-
 			this.finState = finState.applyOperation(remoteOpT);
-			this.finStateNum += 1;
 
 
 
@@ -172,8 +200,8 @@ public abstract class Prop extends JunctionExtra {
 		logInfo("pendingNonLocals: " + this.pendingNonLocals);
 		logInfo("orderAckBuffer: " + this.orderAckBuffer);
 		logInfo("sequentialOpsBuffer: " + this.sequentialOpsBuffer);
-		logInfo("stateNum: " + this.stateNum);
-		logInfo("finStateNum: " + this.finStateNum);
+		logInfo("opSequenceNum: " + this.opSequenceNum);
+		logInfo("sequenceNum: " + this.sequenceNum);
 		logInfo("");
 	}
 
@@ -188,13 +216,12 @@ public abstract class Prop extends JunctionExtra {
 
 	protected void checkHistory(HistoryMAC mac){
 		for(HistoryMAC m : this.verifyHistory){
-			if(m.stateNum == mac.stateNum){
+			if(m.seqNum == mac.seqNum){
 				if(!(m.stateHash.equals(mac.stateHash))){
 					logErr("Invalid state!" + 
 						   m + " vs " + 
 						   mac + 
 						   " broadcasting Hello to flush out newbs..");
-					sendHello();
 				}
 			}
 		}
@@ -206,60 +233,77 @@ public abstract class Prop extends JunctionExtra {
 		this.syncNonce = -1;
 	}
 
-	protected void enterSYNCMode(long desiredStateNumber){
+	protected void enterSYNCMode(long desiredSeqNumber){
 		logInfo("Entering SYNC mode.");
 		this.mode = MODE_SYNC;
 		Random rng = new Random();
 		this.syncNonce = rng.nextLong();
 		this.opSequenceNum = -1;
 		this.sequenceNum = -1;
-		sendMessageToProp(new WhoHasStateMsg(desiredStateNumber, this.syncNonce));
+		sendMessageToProp(new WhoHasStateMsg(desiredSeqNumber, this.syncNonce));
 		this.waitingForIHaveState = true;
 	}
 
-	protected void handleOrderAck(OperationOrderAckMsg msg){ 
-		this.sequenceNum += 1;
-		this.lastOrderAckUUID = msg.uuid;
-		if(isSelfMsg(msg)){
-			// When we get back the authoritative order for 
-			// a message...
-			if(msg.predicted){
-				if(this.pendingLocals.size() > 0){
-					IStateOperationMsg m = this.pendingLocals.get(0);
-					if(m.getUUID().equals(msg.msgUUID)){
-						m.setSequenceNum(this.sequenceNum);
-						this.pendingLocals.remove(0);
-						this.finState = finState.applyOperation(m.getOp());
-						this.finStateNum += 1;
-						sendMessageToProp(m);
-						logInfo("Ordered local prediction: " + m);
-					}
-					else{
-						logErr("Got order Ack of local op out of order..uuid mismatch!!");
-					}
-				}
-				else {
-					logErr("Ack of local op found empty pendingLocals!!");
-				}
+	protected void handleOrderAck(OperationOrderAckMsg msg){
+		if(msg.opSequenceNum > opSequenceNum){
+			logInfo("msg opSequenceNum is newer..");
+			if(mode == MODE_NORM && !isSelfMsg(msg)){
+				enterSYNCMode(msg.opSequenceNum);
 			}
-			else{
-				if(this.pendingNonLocals.size() > 0){
-					IStateOperationMsg m = this.pendingNonLocals.get(0);
-					if(m.getUUID().equals(msg.msgUUID)){
-						m.setSequenceNum(this.sequenceNum);
-						this.pendingNonLocals.remove(0);
-						sendMessageToProp(m);
-						logInfo("Ordered non-local prediction: " + m);
+			
+		}
+		else if(msg.opSequenceNum < opSequenceNum){
+			logInfo("msg opSequenceNum is older..");
+			if(mode == MODE_NORM && !isSelfMsg(msg)){
+				sendMessageToPropReplica(msg.getSenderActor(), new PlzCatchUpMsg(opSequenceNum));
+			}
+		}
+		else{
+			this.sequenceNum += 1;
+			this.lastOrderAckUUID = msg.uuid;
+			if(isSelfMsg(msg)){
+				// When we get back the authoritative order for 
+				// a message...
+				if(msg.predicted){
+					if(this.pendingLocals.size() > 0){
+						IStateOperationMsg m = this.pendingLocals.get(0);
+						if(m.getUUID().equals(msg.msgUUID)){
+							m.setSequenceNum(this.sequenceNum);
+							this.pendingLocals.remove(0);
+							this.finState = finState.applyOperation(m.getOp());
+							sendMessageToProp(m);
+							logInfo("Ordered local prediction: " + m);
+						}
+						else{
+							logErr("Got order Ack of local op out of order..uuid mismatch!!");
+						}
 					}
-					else{
-						logErr("Got Ack of non-local op out of order..uuid mismatch!!");
+					else {
+						logErr("Ack of local op found empty pendingLocals!!");
 					}
 				}
-				else {
-					logErr("Ack of non-local op found empty pendingNonLocals!!");
+				else{
+					if(this.pendingNonLocals.size() > 0){
+						IStateOperationMsg m = this.pendingNonLocals.get(0);
+						if(m.getUUID().equals(msg.msgUUID)){
+							m.setSequenceNum(this.sequenceNum);
+							this.pendingNonLocals.remove(0);
+							sendMessageToProp(m);
+							logInfo("Ordered non-local prediction: " + m);
+						}
+						else{
+							logErr("Got Ack of non-local op out of order..uuid mismatch!!");
+						}
+					}
+					else {
+						logErr("Ack of non-local op found empty pendingNonLocals!!");
+					}
 				}
 			}
 		}
+		logInfo("Order Ack handled:" + msg);
+		logInfo("opSequenceNum:" + this.opSequenceNum);
+		logInfo("sequenceNum:" + this.sequenceNum);
 	}
 
 	protected boolean isSelfMsg(IPropMsg msg){
@@ -318,11 +362,11 @@ public abstract class Prop extends JunctionExtra {
 				if(!isSelfMsg(msg)){
 					logInfo("Got who has state..");
 					// Can we fill the gap for this peer?
-					if(finStateNum >= msg.desiredStateNumber){
+					if(opSequenceNum >= msg.desiredSeqNumber){
 						logInfo("Sending IHaveState..");
 						sendMessageToPropReplica(
 							fromActor, 
-							new IHaveStateMsg(finStateNum, msg.syncNonce));
+							new IHaveStateMsg(opSequenceNum, msg.syncNonce));
 					}
 					else{
 						logInfo("Oops! got state request for state i don't have!");
@@ -335,9 +379,8 @@ public abstract class Prop extends JunctionExtra {
 				if(!isSelfMsg(msg)){
 					logInfo("Got SendMeState");
 					// Can we fill the gap for this peer?
-					if(finStateNum >= msg.desiredStateNumber){
+					if(opSequenceNum >= msg.desiredSeqNumber){
 						StateSyncMsg sync = new StateSyncMsg(
-							finStateNum, 
 							this.finState.stringify(),
 							msg.syncNonce,
 							this.opSequenceNum,
@@ -355,8 +398,8 @@ public abstract class Prop extends JunctionExtra {
 					// Some peer is trying to tell us we are stale.
 					// Do we believe them?
 					logInfo("Got PlzCatchup : " + msg);
-					if(msg.finStateNum > finStateNum) {
-						enterSYNCMode(msg.finStateNum);
+					if(msg.seqNum > opSequenceNum) {
+						enterSYNCMode(msg.seqNum);
 					}
 				}
 				break;
@@ -399,10 +442,10 @@ public abstract class Prop extends JunctionExtra {
 				IHaveStateMsg msg = (IHaveStateMsg)rawMsg;
 				if(!isSelfMsg(msg) && this.waitingForIHaveState){
 					logInfo("Got IHaveState");
-					if(msg.syncNonce == this.syncNonce && msg.finStateNum > finStateNum){
+					if(msg.syncNonce == this.syncNonce && msg.seqNum > opSequenceNum){
 						logInfo("Requesting state");
 						this.waitingForIHaveState = false;
-						sendMessageToPropReplica(fromActor, new SendMeStateMsg(msg.finStateNum, msg.syncNonce));
+						sendMessageToPropReplica(fromActor, new SendMeStateMsg(msg.seqNum, msg.syncNonce));
 					}
 				}
 				break;
@@ -423,16 +466,18 @@ public abstract class Prop extends JunctionExtra {
 						logInfo("Bogus SYNC nonce! ignoring StateSyncMsg");
 					}
 					else{
-						logInfo("Got StateSyncMsg:" + msg.state);
-
+						logInfo("Got StateSyncMsg:" + msg);
 
 						this.finState = destringifyState(msg.state);
-						this.finStateNum = msg.finStateNum;
 						this.state = finState.copy();
-						this.stateNum = finStateNum;
 						this.opSequenceNum = msg.opSequenceNum;
 						this.sequenceNum = msg.sequenceNum;
 						this.lastOrderAckUUID = msg.lastOrderAckUUID;
+
+						logInfo("Installed state.");
+						logInfo("opSequenceNum:" + opSequenceNum);
+						logInfo("sequenceNum:" + sequenceNum);
+						logInfo("Now applying buffered things....");
 
 						// We may have applied some predictions locally.
 						// Just forget all these predictions (we're wiping our
@@ -459,56 +504,22 @@ public abstract class Prop extends JunctionExtra {
 
 						processOperationsInSequence();
 
-						dispatchChangeNotification("change", null);
+
+						logInfo("Finished syncing.");
+						logInfo("opSequenceNum:" + opSequenceNum);
+						logInfo("sequenceNum:" + sequenceNum);
+
 						exitSYNCMode();
+
+						dispatchChangeNotification("sync", null);
 					}
 				}
 				break;
 			}
-			default:
-				logErr("SYNC mode: Unrecognized message, "  + rawMsg);
 			}
-			break;
 		}
 
 		signalStateUpdate();
-	}
-
-	/**
-	 * Returns true if the normal event handling should proceed;
-	 * Return false to stop cascading.
-	 */
-	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject rawMsg) { 
-		if(rawMsg.optString("propTarget").equals(getPropName())){
-			IPropMsg msg = propMsgFromJSONObject(h, rawMsg, this);
-			if(msg.getType() == MSG_STATE_OPERATION){
-				IStateOperationMsg opMsg = (IStateOperationMsg)msg;
-
-				logInfo("Got msg: " + opMsg);
-				logInfo("opSequenceNum = " + opSequenceNum);
-
-				// Sort it into the buffer.
-				Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
-				buf.add(opMsg);
-				int len = buf.size();
-				for(int i = 0; i < len; i++){
-					IStateOperationMsg m = buf.get(i);
-					if(opMsg.getSequenceNum() < m.getSequenceNum()){
-						buf.add(i, buf.remove(len - 1));
-						break;
-					}
-				}
-				logInfo("Sorted op into seq buffer: " + sequentialOpsBuffer);
-				processOperationsInSequence();
-			}
-			else{
-				handleMessage(msg);
-			}
-			return false;
-		}
-		else{
-			return true; 
-		}
 	}
 
 
@@ -522,13 +533,15 @@ public abstract class Prop extends JunctionExtra {
 		for(i = 0; i < len; i++){
 			IStateOperationMsg m = buf.get(i);
 			if(m.getSequenceNum() < (opSequenceNum + 1)){
+				logInfo("Skipping stale msg: " + i);
 				// Continue..
 				// We want to skip past all messages that are too
 				// early (probably arrived during SYNC).
 			}
 			else if(m.getSequenceNum() == (opSequenceNum + 1)){
-				handleMessage(m);
 				this.opSequenceNum = m.getSequenceNum();
+				logInfo("Handling msg at: " + i);
+				handleMessage(m);
 				// Continue..
 				// There might be multiple to handle..
 			}
@@ -544,33 +557,18 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	/**
-	 * Send a hello message to all prop-replicas in this prop.
-	 * The hello message is a state operation that does not affect
-	 * the state. It serves to initiate conversation when all peers
-	 * are at state 0.
-	 */
-	protected void sendHello(){
-		sendMessageToProp(new HelloMsg(
-							  getNextStateNumber(), 
-							  finStateNum,
-							  new NullOp(), 
-							  newHistoryMAC()));
-	}
-
-
-	/**
 	 * Add an operation to the state managed by this Prop
 	 */
 	synchronized public void addOperation(IPropStateOperation operation){
+		logInfo("Adding non-predicted operation.");
 		HistoryMAC mac = newHistoryMAC();
 		IStateOperationMsg msg = new StateOperationMsg(
-			getNextStateNumber(), 
-			finStateNum,
+			opSequenceNum + 1, 
 			operation, 
 			mac,
 			false);
 		this.pendingNonLocals.add(msg);
-		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), false);
+		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), false, opSequenceNum);
 		sendMessageToProp(ack);
 	}
 
@@ -578,16 +576,16 @@ public abstract class Prop extends JunctionExtra {
 	 * Add an operation to the state managed by this Prop, with prediction
 	 */
 	synchronized public void addPredictedOperation(IPropStateOperation operation){
+		logInfo("Adding predicted operation.");
 		HistoryMAC mac = newHistoryMAC();
 		IStateOperationMsg msg = new StateOperationMsg(
-			getNextStateNumber(),
-			finStateNum,
+			opSequenceNum + 1,
 			operation,
 			mac,
 			true);
 		applyOperation(msg, true, true);
 		this.pendingLocals.add(msg);
-		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), true);
+		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), true, opSequenceNum);
 		sendMessageToProp(ack);
 	}
 
@@ -620,10 +618,7 @@ public abstract class Prop extends JunctionExtra {
 	}
     
 	
-	public void afterActivityJoin() {
-		sendHello();
-	}
-
+	public void afterActivityJoin() {}
 
 	public static class Pair<T, S>{
 		private T first;
@@ -716,8 +711,7 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class StateOperationMsg extends PropMsg implements IStateOperationMsg{
-		protected long predictedStateNum;
-		protected long finStateNum;
+		protected long predictedSeqNum;
 		protected long sequenceNum;
 		protected String uuid;
 		protected IPropStateOperation operation;
@@ -727,28 +721,25 @@ public abstract class Prop extends JunctionExtra {
 		public StateOperationMsg(JSONObject msg, Prop prop){
 			super(msg);
 			this.uuid = msg.optString("uuid");
-			this.predictedStateNum = msg.optLong("predStateNum");
-			this.finStateNum = msg.optLong("finStateNum");
+			this.predictedSeqNum = msg.optLong("predSeqNum");
 			this.sequenceNum = msg.optLong("sequenceNum");
 			this.predicted = msg.optBoolean("predicted");
-			this.mac = new HistoryMAC(msg.optLong("macStateNum"),
+			this.mac = new HistoryMAC(msg.optLong("macSeqNum"),
 									  msg.optString("macStateHash"));
 			this.operation = prop.destringifyOperation(msg.optString("operation"));
 		}
 
-		public StateOperationMsg(long predictedStateNum, long finStateNum, IPropStateOperation operation, HistoryMAC mac, boolean predicted){
+		public StateOperationMsg(long predictedSeqNum, IPropStateOperation operation, HistoryMAC mac, boolean predicted){
 			this.uuid = UUID.randomUUID().toString();
-			this.predictedStateNum = predictedStateNum;
-			this.finStateNum = finStateNum;
-			this.sequenceNum = -1; // <- will be provided by MSG_OP_ORDER_ACK
+			this.predictedSeqNum = predictedSeqNum;
+			this.sequenceNum = 0; // <- will be provided by MSG_OP_ORDER_ACK
 			this.mac = mac;
 			this.operation = operation;
 			this.predicted = predicted;
 		}
 
 		public IStateOperationMsg newWithOp(IPropStateOperation op){
-			StateOperationMsg msg = new StateOperationMsg(predictedStateNum,
-														  finStateNum,
+			StateOperationMsg msg = new StateOperationMsg(predictedSeqNum,
 														  op,
 														  mac,
 														  predicted);
@@ -762,17 +753,14 @@ public abstract class Prop extends JunctionExtra {
 		public String getUUID(){
 			return this.uuid;
 		}
-		public long getFinStateNum(){
-			return this.finStateNum;
-		}
 		public long getSequenceNum(){
 			return this.sequenceNum;
 		}
 		public void setSequenceNum(long num){
 			this.sequenceNum = num;
 		}
-		public long getPredictedStateNum(){
-			return this.predictedStateNum;
+		public long getPredictedSeqNum(){
+			return this.predictedSeqNum;
 		}
 		public HistoryMAC getHistoryMAC(){
 			return this.mac;
@@ -787,10 +775,9 @@ public abstract class Prop extends JunctionExtra {
 			try{
 				obj.put("type", MSG_STATE_OPERATION);
 				obj.put("uuid", uuid);
-				obj.put("finStateNum", finStateNum);
 				obj.put("sequenceNum", sequenceNum);
-				obj.put("predStateNum", predictedStateNum);
-				obj.put("macStateNum", mac.stateNum);
+				obj.put("predSeqNum", predictedSeqNum);
+				obj.put("macSeqNum", mac.seqNum);
 				obj.put("macStateHash", mac.stateHash);
 				obj.put("operation", operation.stringify());
 				obj.put("predicted", predicted);
@@ -804,13 +791,12 @@ public abstract class Prop extends JunctionExtra {
 		public HelloMsg(JSONObject msg, Prop prop){
 			super(msg, prop);
 		}
-		public HelloMsg(long predictedStateNumber, long finStateNum, IPropStateOperation operation, HistoryMAC mac){
-			super(predictedStateNumber, finStateNum, operation, mac, false);
+		public HelloMsg(long predictedSeqNumber, IPropStateOperation operation, HistoryMAC mac){
+			super(predictedSeqNumber, operation, mac, false);
 		}
 	}
 
 	class StateSyncMsg extends PropMsg{
-		public long finStateNum;
 		public String state;
 		public long syncNonce;
 		public long opSequenceNum;
@@ -819,15 +805,13 @@ public abstract class Prop extends JunctionExtra {
 
 		public StateSyncMsg(JSONObject msg){
 			super(msg);
-			finStateNum = msg.optLong("finStateNum");
 			state = msg.optString("state");
 			syncNonce = msg.optLong("syncNonce");
 			opSequenceNum = msg.optLong("opSeqNum");
 			sequenceNum = msg.optLong("seqNum");
 			lastOrderAckUUID = msg.optString("lastOrderAckUUID");
 		}
-		public StateSyncMsg(long finStateNum, String state, long syncNonce, long opSeqNum, long seqNum, String lastOrderAckUUID){
-			this.finStateNum = finStateNum;
+		public StateSyncMsg(String state, long syncNonce, long opSeqNum, long seqNum, String lastOrderAckUUID){
 			this.state = state;
 			this.syncNonce = syncNonce;
 			this.opSequenceNum = opSeqNum;
@@ -838,7 +822,6 @@ public abstract class Prop extends JunctionExtra {
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_STATE_SYNC);
-				obj.put("finStateNum", finStateNum);
 				obj.put("state", state);
 				obj.put("syncNonce", syncNonce);
 				obj.put("opSeqNum", opSequenceNum);
@@ -851,22 +834,22 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class WhoHasStateMsg extends PropMsg{
-		public long desiredStateNumber;
+		public long desiredSeqNumber;
 		public long syncNonce;
 		public WhoHasStateMsg(JSONObject msg){
 			super(msg);
-			desiredStateNumber = msg.optLong("desiredStateNumber");
+			desiredSeqNumber = msg.optLong("desiredSeqNumber");
 			syncNonce = msg.optLong("syncNonce");
 		}
-		public WhoHasStateMsg(long desiredStateNumber, long syncNonce){
-			this.desiredStateNumber = desiredStateNumber;
+		public WhoHasStateMsg(long desiredSeqNumber, long syncNonce){
+			this.desiredSeqNumber = desiredSeqNumber;
 			this.syncNonce = syncNonce;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_WHO_HAS_STATE);
-				obj.put("desiredStateNumber", desiredStateNumber);
+				obj.put("desiredSeqNumber", desiredSeqNumber);
 				obj.put("syncNonce", syncNonce);
 			}catch(JSONException e){}
 			return obj;
@@ -875,22 +858,22 @@ public abstract class Prop extends JunctionExtra {
 
 
 	class IHaveStateMsg extends PropMsg{
-		public long finStateNum;
+		public long seqNum;
 		public long syncNonce;
 		public IHaveStateMsg(JSONObject msg){
 			super(msg);
-			finStateNum = msg.optLong("finStateNum");
+			seqNum = msg.optLong("seqNum");
 			syncNonce = msg.optLong("syncNonce");
 		}
-		public IHaveStateMsg(long finStateNum, long syncNonce){
-			this.finStateNum = finStateNum;
+		public IHaveStateMsg(long seqNum, long syncNonce){
+			this.seqNum = seqNum;
 			this.syncNonce = syncNonce;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_I_HAVE_STATE);
-				obj.put("finStateNum", finStateNum);
+				obj.put("seqNum", seqNum);
 				obj.put("syncNonce", syncNonce);
 			}catch(JSONException e){}
 			return obj;
@@ -898,22 +881,22 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class SendMeStateMsg extends PropMsg{
-		public long desiredStateNumber;
+		public long desiredSeqNumber;
 		public long syncNonce;
 		public SendMeStateMsg(JSONObject msg){
 			super(msg);
-			desiredStateNumber = msg.optLong("desiredStateNumber");
+			desiredSeqNumber = msg.optLong("desiredSeqNumber");
 			syncNonce = msg.optLong("syncNonce");
 		}
-		public SendMeStateMsg(long desiredStateNumber, long syncNonce){
-			this.desiredStateNumber = desiredStateNumber;
+		public SendMeStateMsg(long desiredSeqNumber, long syncNonce){
+			this.desiredSeqNumber = desiredSeqNumber;
 			this.syncNonce = syncNonce;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_SEND_ME_STATE);
-				obj.put("desiredStateNumber", desiredStateNumber);
+				obj.put("desiredSeqNumber", desiredSeqNumber);
 				obj.put("syncNonce", syncNonce);
 			}catch(JSONException e){}
 			return obj;
@@ -921,19 +904,19 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class PlzCatchUpMsg extends PropMsg{
-		public long finStateNum;
+		public long seqNum;
 		public PlzCatchUpMsg(JSONObject msg){
 			super(msg);
-			finStateNum = msg.optLong("finStateNum");
+			seqNum = msg.optLong("seqNum");
 		}
-		public PlzCatchUpMsg(long finStateNum){
-			this.finStateNum = finStateNum;
+		public PlzCatchUpMsg(long seqNum){
+			this.seqNum = seqNum;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_PLZ_CATCHUP);
-				obj.put("finStateNum", finStateNum);
+				obj.put("seqNum", seqNum);
 			}catch(JSONException e){}
 			return obj;
 		}
@@ -943,16 +926,19 @@ public abstract class Prop extends JunctionExtra {
 		public String uuid;
 		public String msgUUID;
 		public boolean predicted;
+		public long opSequenceNum;
 		public OperationOrderAckMsg(JSONObject msg){
 			super(msg);
 			uuid = msg.optString("uuid");
 			msgUUID = msg.optString("msgUUID");
 			predicted = msg.optBoolean("predicted");
+			opSequenceNum = msg.optInt("opSequenceNum");
 		}
-		public OperationOrderAckMsg(String msgUUID, boolean predicted){
+		public OperationOrderAckMsg(String msgUUID, boolean predicted, long opSequenceNum){
 			this.uuid = UUID.randomUUID().toString();
 			this.msgUUID = msgUUID;
 			this.predicted = predicted;
+			this.opSequenceNum = opSequenceNum;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
@@ -961,6 +947,7 @@ public abstract class Prop extends JunctionExtra {
 				obj.put("uuid", uuid);
 				obj.put("msgUUID", msgUUID);
 				obj.put("predicted", predicted);
+				obj.put("opSequenceNum", opSequenceNum);
 			}catch(JSONException e){}
 			return obj;
 		}
