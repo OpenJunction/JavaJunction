@@ -11,7 +11,7 @@ public class ListProp extends Prop {
 		super(propName, new ListState(), propReplicaName);
 	}
 
-	public void push(IStringifiable item){
+	public void push(IListItem item){
 		addOperation(new PushOp(item));
 	}
 
@@ -37,9 +37,9 @@ public class ListProp extends Prop {
 			if(type.equals("ListState")){
 
 				JSONArray a = obj.getJSONArray("items");
-				Vector<IStringifiable> items = new Vector<IStringifiable>();
+				Vector<IListItem> items = new Vector<IListItem>();
 				for(int i = 0; i < a.length(); i++){
-					IStringifiable item = destringifyItem(a.getString(i));
+					IListItem item = destringifyItem(a.getString(i));
 					items.add(item);
 				}
 				return new ListState(items);
@@ -53,7 +53,7 @@ public class ListProp extends Prop {
 		}
 	}
 
-	protected IStringifiable destringifyItem(String s){
+	protected IListItem destringifyItem(String s){
 		try{
 			JSONObject obj = new JSONObject(s);
 			String type = obj.optString("type");
@@ -74,7 +74,7 @@ public class ListProp extends Prop {
 			JSONObject obj = new JSONObject(s);
 			String type = obj.optString("type");
 			if(type.equals("pushOp")){
-				IStringifiable item = destringifyItem(obj.getString("item"));
+				IListItem item = destringifyItem(obj.getString("item"));
 				return new PushOp(item);
 			}
 			if(type.equals("popOp")){
@@ -91,7 +91,7 @@ public class ListProp extends Prop {
 
 }
 
-class StringItem implements IStringifiable{
+class StringItem implements IListItem{
 
 	public String value;
 
@@ -111,18 +111,23 @@ class StringItem implements IStringifiable{
 	public String toString(){ 
 		return "\"" + value + "\"";
 	}
+
+	public IListItem copy(){
+		return new StringItem(value);
+	}
+
 }
 
 
 class ListState implements IPropState{
-	private Vector<IStringifiable> items;
+	private Vector<IListItem> items;
 
-	public ListState(Vector<IStringifiable> items){
+	public ListState(Vector<IListItem> items){
 		this.items = items;
 	}
 
 	public ListState(){
-		this(new Vector<IStringifiable>());
+		this(new Vector<IListItem>());
 	}
 
 	public IPropState applyOperation(IPropStateOperation operation){
@@ -151,7 +156,7 @@ class ListState implements IPropState{
 		JSONObject obj = new JSONObject();
 		try{
 			JSONArray a = new JSONArray();
-			for(IStringifiable item : items){
+			for(IListItem item : items){
 				a.put(item.stringify());
 			}
 			obj.put("type", "ListState");
@@ -161,14 +166,18 @@ class ListState implements IPropState{
 	}
 
 	public IPropState copy(){
-		return new ListState((Vector<IStringifiable>)items.clone());
+		Vector<IListItem> newItems = new Vector<IListItem>();
+		for(IListItem ea : items){
+			newItems.add(ea.copy());
+		}
+		return new ListState(newItems);
 	}
 
-	public void push(IStringifiable item){
+	public void push(IListItem item){
 		items.add(item);
 	}
 
-	public void insert(IStringifiable item, int index){
+	public void insert(IListItem item, int index){
 		items.add(index, item);
 	}
 
@@ -184,9 +193,9 @@ class ListState implements IPropState{
 }
 
 class PushOp implements IPropStateOperation{
-	private IStringifiable item;
+	private IListItem item;
 
-	public PushOp(IStringifiable item){
+	public PushOp(IListItem item){
 		this.item = item;
 	}
 
@@ -211,14 +220,14 @@ class PushOp implements IPropStateOperation{
 class InsertOp implements IPropStateOperation{
 
 	private int index;
-	private IStringifiable item;
+	private IListItem item;
 
-	public InsertOp(IStringifiable item, int index){
+	public InsertOp(IListItem item, int index){
 		this.item = item;
 		this.index = index;
 	}
 
-	public InsertOp(IStringifiable item){
+	public InsertOp(IListItem item){
 		this(item, 0);
 	}
 

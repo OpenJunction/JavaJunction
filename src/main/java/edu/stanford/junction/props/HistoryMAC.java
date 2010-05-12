@@ -1,15 +1,15 @@
 package edu.stanford.junction.props;
 
 class HistoryMAC{
-	public long stateNumber;
+	public long stateNum;
 	public String stateHash;
-	public HistoryMAC(long stateNumber, String stateHash){
-		this.stateNumber = stateNumber;
+	public HistoryMAC(long stateNum, String stateHash){
+		this.stateNum = stateNum;
 		this.stateHash = stateHash;
 	}
 
 	public String toString(){
-		return "[" + stateNumber + ":" + stateHash + "]";
+		return "[" + stateNum + ":" + stateHash + "]";
 	}
 }
 
