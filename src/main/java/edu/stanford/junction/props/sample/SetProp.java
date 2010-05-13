@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Vector;
+import java.util.Collections;
+import java.util.Iterator;
 import edu.stanford.junction.props.Prop;
 import edu.stanford.junction.props.IPropState;
 import edu.stanford.junction.props.IPropStateOperation;
@@ -37,6 +39,11 @@ public class SetProp extends Prop {
 		addOperation(new DeleteOp(item));
 	}
 
+	public Set items(){
+		SetState s = (SetState)getState();
+		return s.unmodifiableSet();
+	}
+
 	// Debug
 	public void doRandom(){
 		Vector<String> words = new Vector<String>();
@@ -53,7 +60,10 @@ public class SetProp extends Prop {
 			add(new StringSetItem(words.get(rng.nextInt(words.size()))));
 		}
 		else{
-			delete(new StringSetItem(words.get(rng.nextInt(words.size()))));
+			Iterator it = items().iterator();
+			if(it.hasNext()){
+				delete((ISetItem)it.next());
+			}
 		}
 	}
 
@@ -141,6 +151,10 @@ class StringSetItem implements SetProp.ISetItem{
 		return obj.toString();
 	}
 
+	public int hashCode(){
+		return value.hashCode();
+	}
+
 	public String toString(){ 
 		return "\"" + value + "\"";
 	}
@@ -177,6 +191,10 @@ class SetState implements IPropState{
 		}
 	}
 
+	public Set unmodifiableSet(){
+		return Collections.unmodifiableSet(items);
+	}
+
 	public IPropStateOperation nullOperation(){
 		return new NullOp();
 	}
@@ -211,7 +229,7 @@ class SetState implements IPropState{
 	}
 
 	public void delete(SetProp.ISetItem item){
-		items.add(item);
+		items.remove(item);
 	}
 
 	public String toString(){

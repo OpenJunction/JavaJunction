@@ -69,15 +69,19 @@ public abstract class Prop extends JunctionExtra {
 		return staleness;
 	}
 
-	public IPropState getState(){
-		return state;
-	}
-
 	public long getSequenceNum(){
 		return sequenceNum;
 	}
 
-	protected String getPropName(){
+	protected IPropState getState(){
+		return state;
+	}
+
+	public String stateToString(){
+		return state.toString();
+	}
+
+	public String getPropName(){
 		return propName;
 	}
 
