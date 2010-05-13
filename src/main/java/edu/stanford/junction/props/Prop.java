@@ -124,7 +124,6 @@ public abstract class Prop extends JunctionExtra {
 		}
 	}
 
-
 	/**
 	 * Returns true if the normal event handling should proceed;
 	 * Return false to stop cascading.
@@ -146,7 +145,8 @@ public abstract class Prop extends JunctionExtra {
 						break;
 					}
 				}
-				processOperationsInSequence();
+				processOperationsSequentially();
+				logState("Got op off wire, finished processing: " + opMsg);
 			}
 			else{
 				handleMessage(msg);
@@ -156,21 +156,31 @@ public abstract class Prop extends JunctionExtra {
 		else{
 			return true; 
 		}
+
 	}
 
 
-	protected void processOperationsInSequence(){
+	protected void processOperationsSequentially(){
 		// Execute all that are in sequence..
 		// Recall that the sequence is always sorted
 		// in ascending order of sequence number.
 		Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
 		int i;
 		int len = buf.size();
+
+		// If we're stuck waiting for a particular message,
+		// forget it after some threshold.
+		// Note, this decision MUST be the same at all replicas!
+		if(len > 10){
+			logInfo("sequentialOpsBuffer buffer too long! All replicas to next message!");
+			this.opSequenceNum = buf.get(0).getSequenceNum() - 1;
+		}
+
 		for(i = 0; i < len; i++){
 			IStateOperationMsg m = buf.get(i);
 			if(m.getSequenceNum() < (opSequenceNum + 1)){
 				// Continue..
-				// We want to skip past all messages that are too
+				// We want to discarded all messages that are too
 				// early (probably arrived during SYNC).
 			}
 			else if(m.getSequenceNum() == (opSequenceNum + 1)){
@@ -184,8 +194,6 @@ public abstract class Prop extends JunctionExtra {
 				break;
 			}
 		}
-
-		// remove all that are handled or too early..
 		buf.subList(0,i).clear();
 	}
 
@@ -241,6 +249,7 @@ public abstract class Prop extends JunctionExtra {
 		logInfo("Exiting SYNC mode");
 		this.mode = MODE_NORM;
 		this.syncNonce = -1;
+		this.waitingForIHaveState = false;
 	}
 
 	protected void enterSYNCMode(long desiredSeqNumber){
@@ -250,6 +259,8 @@ public abstract class Prop extends JunctionExtra {
 		this.syncNonce = rng.nextLong();
 		this.opSequenceNum = -1;
 		this.sequenceNum = -1;
+		this.orderAckBuffer.clear();
+		this.sequentialOpsBuffer.clear();
 		sendMessageToProp(new WhoHasStateMsg(desiredSeqNumber, this.syncNonce));
 		this.waitingForIHaveState = true;
 	}
@@ -436,8 +447,10 @@ public abstract class Prop extends JunctionExtra {
 						// Also forget about any incomplete non-local ops..
 						this.pendingNonLocals.clear();
 
-						// Apply any sequence number updates that we've
-						// received while syncing..
+						// Apply any ordering acknowledgements that 
+						// we recieved while syncing. This has the effect of
+						// synchronizing the value of this.sequenceNum with
+						// the other peers.
 						boolean apply = false;
 						for(OperationOrderAckMsg m : this.orderAckBuffer){
 							if(!apply && m.uuid.equals(this.lastOrderAckUUID)){
@@ -450,14 +463,13 @@ public abstract class Prop extends JunctionExtra {
 						}
 						this.orderAckBuffer.clear();
 
-						processOperationsInSequence();
-
-
-						logInfo("Finished syncing.");
-						logInfo("opSequenceNum:" + opSequenceNum);
-						logInfo("sequenceNum:" + sequenceNum);
+						// Now execute state operations that were received
+						// while syncing..
+						processOperationsSequentially();
 
 						exitSYNCMode();
+
+						logState("Finished syncing.");
 
 						dispatchChangeNotification("sync", null);
 					}
@@ -516,7 +528,9 @@ public abstract class Prop extends JunctionExtra {
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
 			m.put("senderReplicaName", propReplicaName);
-		}catch(JSONException e){}
+		}catch(JSONException e){
+			logErr("JSON Error: " + e);
+		}
 		getActor().sendMessageToSession(m);
 	}
 
@@ -530,7 +544,9 @@ public abstract class Prop extends JunctionExtra {
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
 			m.put("senderReplicaName", propReplicaName);
-		}catch(JSONException e){}
+		}catch(JSONException e){
+			logErr("JSON Error: " + e);
+		}
 		getActor().sendMessageToActor(actorId, m);
 	}
     
