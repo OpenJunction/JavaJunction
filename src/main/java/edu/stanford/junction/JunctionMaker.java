@@ -38,6 +38,14 @@ public class JunctionMaker {
 		return maker;
 	}
 	
+	public static String getSessionIDFromURI(URI uri) {
+		try {
+			return uri.getPath().substring(1);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	protected JunctionMaker() {
 		
 	}
