@@ -1,7 +1,12 @@
-package edu.stanford.junction.props;
+package edu.stanford.junction.props.sample;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.Random;
+import edu.stanford.junction.props.Prop;
+import edu.stanford.junction.props.IPropState;
+import edu.stanford.junction.props.IPropStateOperation;
+import edu.stanford.junction.props.NullOp;
+
 
 public class TextProp extends Prop {
 
