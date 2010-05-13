@@ -1,5 +1,6 @@
 package edu.stanford.junction.props;
 
 public interface IPropChangeListener  {
-	void onChange(String evtType, Object data);
+	String getType();
+	void onChange(Object data, IPropState state);
 }

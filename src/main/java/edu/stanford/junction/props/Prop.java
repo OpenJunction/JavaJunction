@@ -10,21 +10,22 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
  * TODO: 
- * state numbers should be long, not int
+ * Do we need to serialize the pendingLocals and pendingNonLocals on SYNC?
  *
  */
 public abstract class Prop extends JunctionExtra {
-	public static final int MODE_NORM = 1;
-	public static final int MODE_SYNC = 2;
-	public static final int MSG_STATE_OPERATION = 1;
-	public static final int MSG_STATE_SYNC = 2;
-	public static final int MSG_WHO_HAS_STATE = 3;
-	public static final int MSG_I_HAVE_STATE = 4;
-	public static final int MSG_SEND_ME_STATE = 5;
-	public static final int MSG_PLZ_CATCHUP = 6;
-	public static final int MSG_OP_ORDER_ACK = 7;
+	private static final int MODE_NORM = 1;
+	private static final int MODE_SYNC = 2;
+	private static final int MSG_STATE_OPERATION = 1;
+	private static final int MSG_STATE_SYNC = 2;
+	private static final int MSG_WHO_HAS_STATE = 3;
+	private static final int MSG_I_HAVE_STATE = 4;
+	private static final int MSG_SEND_ME_STATE = 5;
+	private static final int MSG_PLZ_CATCHUP = 6;
+	private static final int MSG_OP_ORDER_ACK = 7;
 
-	public static final int PLZ_CATCHUP_THRESHOLD = 5;
+	public static final String EVT_CHANGE = "change";
+	public static final String EVT_SYNC = "sync";
 
 	private String uuid = UUID.randomUUID().toString();
 	private String propName;
@@ -124,7 +125,9 @@ public abstract class Prop extends JunctionExtra {
 
 	protected void dispatchChangeNotification(String evtType, Object o){
 		for(IPropChangeListener l : changeListeners){
-			l.onChange(evtType, o);
+			if(l.getType().equals(evtType)){
+				l.onChange(o, state);
+			}
 		}
 	}
 
@@ -188,6 +191,7 @@ public abstract class Prop extends JunctionExtra {
 
 		// If we're stuck waiting for a particular message,
 		// forget it after some threshold.
+        //
 		// Note, this decision MUST be the same at all replicas!
 		if(len > 10){
 			logInfo("sequentialOpsBuffer buffer too long! All replicas to next message!");
@@ -197,9 +201,8 @@ public abstract class Prop extends JunctionExtra {
 		for(i = 0; i < len; i++){
 			IStateOperationMsg m = buf.get(i);
 			if(m.getSequenceNum() < (sequenceNum + 1)){
-				// We want to discard messages that are too
-				// early (probably arrived during SYNC).
-				// Decrement the sequence number counter, since we're ignoring this msg..
+				// We want to discard messages that are too early.
+				// Decrement the sequence number counter, since we're not using that sequence num..
 				this.seqNumCounter -= 1;
 				logInfo("Decrementing seqNumCounterber, and ignoring: " + m);
 			}
@@ -287,7 +290,7 @@ public abstract class Prop extends JunctionExtra {
 			// apply predicted operation immediately
 			this.state = state.applyOperation(op);
 			if(notify){
-				dispatchChangeNotification("change", null);
+				dispatchChangeNotification(EVT_CHANGE, null);
 			}
 		}
 		else if(!(isSelfMsg(msg) && msg.isPredicted())){ // Broadcasts of our own local ops are ignored.
@@ -306,7 +309,7 @@ public abstract class Prop extends JunctionExtra {
 
 
 			if(notify){
-				dispatchChangeNotification("change", null);
+				dispatchChangeNotification(EVT_CHANGE, null);
 			}
 		}
 
@@ -341,7 +344,6 @@ public abstract class Prop extends JunctionExtra {
 		sendMessageToProp(new WhoHasStateMsg(desiredSeqNumber, this.syncNonce));
 		this.waitingForIHaveState = true;
 	}
-
 
 	protected boolean isSelfMsg(IPropMsg msg){
 		return msg.getSenderReplicaUUID().equals(this.uuid);
@@ -517,7 +519,7 @@ public abstract class Prop extends JunctionExtra {
 
 						logState("Finished syncing.");
 
-						dispatchChangeNotification("sync", null);
+						dispatchChangeNotification(EVT_SYNC, null);
 					}
 				}
 				break;
