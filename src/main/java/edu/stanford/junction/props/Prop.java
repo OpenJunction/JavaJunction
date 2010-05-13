@@ -48,7 +48,6 @@ public abstract class Prop extends JunctionExtra {
 	private Vector<IStateOperationMsg> pendingNonLocals = new Vector<IStateOperationMsg>();
 	private Vector<IStateOperationMsg> sequentialOpsBuffer = new Vector<IStateOperationMsg>();
 
-	private Vector<HistoryMAC> verifyHistory = new Vector<HistoryMAC>();
 	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
 
 	public Prop(String propName, IPropState state, String propReplicaName){
@@ -177,6 +176,7 @@ public abstract class Prop extends JunctionExtra {
 			else if(m.getSequenceNum() == (opSequenceNum + 1)){
 				this.opSequenceNum = m.getSequenceNum();
 				handleMessage(m);
+				logInfo("Sequentially processed: " + m.getSequenceNum());
 				// Continue..
 				// There might be multiple to handle..
 			}
@@ -221,15 +221,6 @@ public abstract class Prop extends JunctionExtra {
 			this.finState = finState.applyOperation(remoteOpT);
 
 
-			// Do some book-keeping for history debugging..
-			this.verifyHistory.insertElementAt(newHistoryMAC(), 0);
-			Vector<HistoryMAC> newHistory = new Vector<HistoryMAC>();
-			for(int i = 0; i < verifyHistory.size() && i < 10; i++){
-				newHistory.add(verifyHistory.get(i));
-			}
-			this.verifyHistory = newHistory;
-
-
 			if(notify){
 				dispatchChangeNotification("change", null);
 			}
@@ -244,19 +235,6 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2){
 		return o2;
-	}
-
-	protected void checkHistory(HistoryMAC mac){
-		for(HistoryMAC m : this.verifyHistory){
-			if(m.seqNum == mac.seqNum){
-				if(!(m.stateHash.equals(mac.stateHash))){
-					logErr("Invalid state!" + 
-						   m + " vs " + 
-						   mac + 
-						   " broadcasting Hello to flush out newbs..");
-				}
-			}
-		}
 	}
 
 	protected void exitSYNCMode(){
@@ -277,18 +255,12 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	protected void handleOrderAck(OperationOrderAckMsg msg){
+		// Is this a safe assumption?
 		if(msg.opSequenceNum > opSequenceNum){
 			logState("Ignoring order ack that's too new:" + msg);
 			logInfo("msg opSequenceNum is newer: " + msg.opSequenceNum);
 			if(mode == MODE_NORM && !isSelfMsg(msg)){
 				enterSYNCMode(msg.opSequenceNum);
-			}
-		}
-		else if(msg.opSequenceNum < opSequenceNum){
-			logState("Ignoring order ack that's too old:" + msg);
-			logInfo("msg opSequenceNum is older: " + msg.opSequenceNum);
-			if(mode == MODE_NORM && !isSelfMsg(msg)){
-				sendMessageToPropReplica(msg.getSenderActor(), new PlzCatchUpMsg(opSequenceNum));
 			}
 		}
 		else{
@@ -473,7 +445,7 @@ public abstract class Prop extends JunctionExtra {
 								continue;
 							}
 							else if(apply){
-								handleOrderAck(m);	
+								handleOrderAck(m);
 							}
 						}
 						this.orderAckBuffer.clear();
@@ -512,7 +484,7 @@ public abstract class Prop extends JunctionExtra {
 			false);
 		this.pendingNonLocals.add(msg);
 		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), false, opSequenceNum);
-		logState("Requesting order ack: " + msg);
+		logState("Requesting order ack: " + ack);
 		sendMessageToProp(ack);
 	}
 
@@ -530,7 +502,7 @@ public abstract class Prop extends JunctionExtra {
 		applyOperation(msg, true, true);
 		this.pendingLocals.add(msg);
 		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), true, opSequenceNum);
-		logState("Requesting order ack: " + msg);
+		logState("Requesting order ack: " + ack);
 		sendMessageToProp(ack);
 	}
 
