@@ -85,8 +85,6 @@ public abstract class Prop extends JunctionExtra {
 		return propName;
 	}
 
-	protected void signalStateUpdate(){}
-
 	protected void logInfo(String s){
 		System.out.println("prop@" + propReplicaName + ": " + s);
 	}
@@ -130,7 +128,7 @@ public abstract class Prop extends JunctionExtra {
 	protected void dispatchChangeNotification(String evtType, Object o){
 		for(IPropChangeListener l : changeListeners){
 			if(l.getType().equals(evtType)){
-				l.onChange(o, state);
+				l.onChange(o);
 			}
 		}
 	}
@@ -153,40 +151,32 @@ public abstract class Prop extends JunctionExtra {
 
 
 	/**
-	 * State operation messages are always placed into the sequential
-	 * processing buffer. Must be processed in order of sequenceNumber.
+	 * What to do with a newly arrived operation? Depends on mode of 
+	 * operation.
 	 */
-	protected void handleReceivedOp(IStateOperationMsg opMsg){
-		// Ignore self messages if in SYNC mode (must have been sent 
-		// by this peer before entering SYNC mode)
-		if(mode == MODE_SYNC){
-			if(!isSelfMsg(opMsg)){
-				opsSYNC.add(opMsg);
+	private void handleReceivedOp(IStateOperationMsg opMsg){
+		this.lastOpUUID = opMsg.getUUID();
+		// Sort it into the buffer.
+		Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
+		buf.add(opMsg);
+		int len = buf.size();
+		for(int i = 0; i < len; i++){
+			IStateOperationMsg m = buf.get(i);
+			if(opMsg.getSequenceNum() < m.getSequenceNum()){
+				buf.add(i, buf.remove(len - 1));
+				break;
 			}
 		}
-		else{
-			this.lastOpUUID = opMsg.getUUID();
-			// Sort it into the buffer.
-			Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
-			buf.add(opMsg);
-			int len = buf.size();
-			for(int i = 0; i < len; i++){
-				IStateOperationMsg m = buf.get(i);
-				if(opMsg.getSequenceNum() < m.getSequenceNum()){
-					buf.add(i, buf.remove(len - 1));
-					break;
-				}
-			}
-			processOperationsSequentially();
-			logState("Got op off wire, finished processing: " + opMsg);
-		}
+		// Process any messages that are ready..
+		processOperationsSequentially();
+		logState("Got op off wire, finished processing: " + opMsg);
 	}
 
 
 	/**
 	 * Process as many state ops as possible.
 	 */
-	protected void processOperationsSequentially(){
+	private void processOperationsSequentially(){
 		// Recall that the sequence is always sorted
 		// in ascending order of sequence number.
 		Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
@@ -224,7 +214,7 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 
-	protected void handleOrderAck(OperationOrderAckMsg msg){
+	private void handleOrderAck(OperationOrderAckMsg msg){
 		// Is this a safe assumption?
 		if(msg.sequenceNum > sequenceNum){
 			logState("Ignoring order ack that's too new:" + msg);
@@ -251,11 +241,11 @@ public abstract class Prop extends JunctionExtra {
 							logState("Ordered local prediction: " + m);
 						}
 						else{
-							die("Got order Ack of local op out of order..uuid mismatch!!");
+							logErr("Got order Ack of local op out of order..uuid mismatch!!");
 						}
 					}
 					else {
-						die("Ack of local op found empty pendingLocals!!");
+						logErr("Ack of local op found empty pendingLocals!!");
 					}
 				}
 				else{
@@ -288,7 +278,7 @@ public abstract class Prop extends JunctionExtra {
 	 *  Vidot, Cart, Ferrie, Suleiman
 	 *
 	 */
-	protected void applyOperation(IStateOperationMsg msg, boolean notify, boolean localPrediction){
+	private void applyOperation(IStateOperationMsg msg, boolean notify, boolean localPrediction){
 		IPropStateOperation op = msg.getOp();
 		if(localPrediction){
 			// apply predicted operation immediately
@@ -319,7 +309,6 @@ public abstract class Prop extends JunctionExtra {
 
 	}
 
-
 	/**
 	 * Should return a new operation, defined on the state resulting from the execution of o1, 
 	 * and realizing the same intention as op2.
@@ -328,14 +317,14 @@ public abstract class Prop extends JunctionExtra {
 		return o2;
 	}
 
-	protected void exitSYNCMode(){
+	private void exitSYNCMode(){
 		logInfo("Exiting SYNC mode");
 		this.mode = MODE_NORM;
 		this.syncNonce = -1;
 		this.waitingForIHaveState = false;
 	}
 
-	protected void enterSYNCMode(long desiredSeqNumber){
+	private void enterSYNCMode(long desiredSeqNumber){
 		logInfo("Entering SYNC mode.");
 		this.mode = MODE_SYNC;
 		Random rng = new Random();
@@ -349,11 +338,11 @@ public abstract class Prop extends JunctionExtra {
 		this.waitingForIHaveState = true;
 	}
 
-	protected boolean isSelfMsg(IPropMsg msg){
+	private boolean isSelfMsg(IPropMsg msg){
 		return msg.getSenderReplicaUUID().equals(this.uuid);
 	}
 
-	synchronized protected void handleMessage(IPropMsg rawMsg){
+	synchronized private void handleMessage(IPropMsg rawMsg){
 		int msgType = rawMsg.getType();
 		String fromActor = rawMsg.getSenderActor();
 		switch(mode){
@@ -518,7 +507,6 @@ public abstract class Prop extends JunctionExtra {
 						}
 						this.opsSYNC.clear();
 
-
 						exitSYNCMode();
 
 						logState("Finished syncing.");
@@ -530,8 +518,6 @@ public abstract class Prop extends JunctionExtra {
 			}
 			}
 		}
-
-		signalStateUpdate();
 	}
 
 
@@ -574,7 +560,7 @@ public abstract class Prop extends JunctionExtra {
 	/**
 	 * Send a message to all prop-replicas in this prop
 	 */
-	protected void sendMessageToProp(IPropMsg msg){
+	private void sendMessageToProp(IPropMsg msg){
 		JSONObject m = msg.toJSONObject();
 		try{
 			m.put("propTarget", getPropName());
@@ -590,7 +576,7 @@ public abstract class Prop extends JunctionExtra {
 	/**
 	 * Send a message to the prop-replica hosted at the given actorId.
 	 */
-	protected void sendMessageToPropReplica(String actorId, IPropMsg msg){
+	private void sendMessageToPropReplica(String actorId, IPropMsg msg){
 		JSONObject m = msg.toJSONObject();
 		try{
 			m.put("propTarget", getPropName());
@@ -623,7 +609,7 @@ public abstract class Prop extends JunctionExtra {
 		}
 	}
 
-	protected IPropMsg propMsgFromJSONObject(MessageHeader header, JSONObject obj, Prop prop){
+	private IPropMsg propMsgFromJSONObject(MessageHeader header, JSONObject obj, Prop prop){
 		PropMsg msg = null;
 		int type = obj.optInt("type");
 		switch(type){

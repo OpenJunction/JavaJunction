@@ -155,6 +155,13 @@ class StringSetItem implements SetProp.ISetItem{
 		return value.hashCode();
 	}
 
+	public boolean equals(Object obj) {
+		if(obj instanceof SetProp.ISetItem){
+			return ((StringSetItem)obj).value.equals(value);
+		}
+		return false;
+	}
+
 	public String toString(){ 
 		return "\"" + value + "\"";
 	}
