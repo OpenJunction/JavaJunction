@@ -13,6 +13,7 @@ import edu.stanford.junction.props.IPropState;
 import edu.stanford.junction.props.IPropStateOperation;
 import edu.stanford.junction.props.NullOp;
 import edu.stanford.junction.props.IStringifiable;
+import edu.stanford.junction.props.UnexpectedOpPairException;
 
 public class SetProp extends Prop {
 
@@ -31,12 +32,55 @@ public class SetProp extends Prop {
 		this(propName, propReplicaName, new StringSetItemBuilder());
 	}
 
+	/**
+	 * Assume o1 and o2 operate on the same state s.
+	 * 
+	 * Intent Preservation:
+	 * transposeForward(o1,o2) is a new operation, defined on the state resulting from the execution of o1, 
+	 * and realizing the same intention as op2.
+	 * 
+	 * Convergence:
+	 * It must hold that o1*transposeForward(o1,o2) = o2*transposeForward(o2,o1).
+	 *
+	 * (where oi*oj denotes the execution of oi followed by the execution of oj)
+	 * 
+	 */
+	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2) throws UnexpectedOpPairException{
+		SetOp s1 = (SetOp)o1;
+		SetOp s2 = (SetOp)o2;
+		if(s1.getItem().equals(s2.getItem())){
+			if(s1 instanceof AddOp && s2 instanceof AddOp){
+				// No problem, Set semantics take care of everything.
+				return s1;
+			}
+			else if(s1 instanceof DeleteOp && s2 instanceof DeleteOp){
+				// No problem, Set semantics (deletes of same item are idempotent).
+				return s1;
+			}
+			else if(s1 instanceof AddOp && s2 instanceof DeleteOp){
+				// Delete takes precedence..
+				return s2;
+			}
+			else if(s1 instanceof DeleteOp && s2 instanceof AddOp){
+				// Delete takes precedence..
+				return s1;
+			}
+			else{
+				throw new UnexpectedOpPairException(o1,o2);
+			}
+		}
+		else{
+			// Different items. No conflict possible. Choose either op.
+			return s2;
+		}
+	}
+
 	public void add(ISetItem item){
-		addOperation(new AddOp(item));
+		addPredictedOperation(new AddOp(item));
 	}
 
 	public void delete(ISetItem item){
-		addOperation(new DeleteOp(item));
+		addPredictedOperation(new DeleteOp(item));
 	}
 
 	public Set items(){
@@ -244,11 +288,25 @@ class SetState implements IPropState{
 	}
 }
 
-class AddOp implements IPropStateOperation{
-	private SetProp.ISetItem item;
+
+abstract class SetOp implements IPropStateOperation{
+	protected SetProp.ISetItem item;
+
+	public SetOp(SetProp.ISetItem item){
+		this.item = item;
+	}
+
+	public SetProp.ISetItem getItem(){
+		return item;
+	}
+
+	abstract public String stringify();
+}
+
+class AddOp extends SetOp{
 
 	public AddOp(SetProp.ISetItem item){
-		this.item = item;
+		super(item);
 	}
 
 	public SetState applyTo(SetState s){
@@ -268,11 +326,10 @@ class AddOp implements IPropStateOperation{
 	}
 }
 
-class DeleteOp implements IPropStateOperation{
-	private SetProp.ISetItem item;
+class DeleteOp extends SetOp{
 
 	public DeleteOp(SetProp.ISetItem item){
-		this.item = item;
+		super(item);
 	}
 
 	public SetState applyTo(SetState s){

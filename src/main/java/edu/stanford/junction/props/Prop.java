@@ -48,6 +48,8 @@ public abstract class Prop extends JunctionExtra {
 	private Vector<OperationOrderAckMsg> orderAckSYNC = new Vector<OperationOrderAckMsg>();
 	private Vector<IStateOperationMsg> opsSYNC = new Vector<IStateOperationMsg>();
 
+	private Vector<SendMeStateMsg> stateSyncRequests = new Vector<SendMeStateMsg>();
+
 	private Vector<IStateOperationMsg> pendingLocals = new Vector<IStateOperationMsg>();
 	private Vector<IStateOperationMsg> pendingNonLocals = new Vector<IStateOperationMsg>();
 	private Vector<IStateOperationMsg> sequentialOpsBuffer = new Vector<IStateOperationMsg>();
@@ -137,7 +139,7 @@ public abstract class Prop extends JunctionExtra {
 	 * Returns true if the normal event handling should proceed;
 	 * Return false to stop cascading.
 	 */
-	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject rawMsg) { 
+	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject rawMsg) {
 		if(rawMsg.optString("propTarget").equals(getPropName())){
 			IPropMsg msg = propMsgFromJSONObject(h, rawMsg, this);
 			handleMessage(msg);
@@ -169,6 +171,9 @@ public abstract class Prop extends JunctionExtra {
 		}
 		// Process any messages that are ready..
 		processOperationsSequentially();
+
+		// Check if state is calm, to process any pending state sync requests..
+		processStateSyncRequests();
 		logState("Got op off wire, finished processing: " + opMsg);
 	}
 
@@ -183,12 +188,12 @@ public abstract class Prop extends JunctionExtra {
 		int i;
 		int len = buf.size();
 
+		// Proposal:
 		// If we're stuck waiting for a particular message,
 		// forget it after some threshold.
-        //
 		// Note, this decision MUST be the same at all replicas!
-		if(len > 10){
-			logInfo("sequentialOpsBuffer buffer too long! All replicas to next message!");
+		if(len > 100){
+			logErr("sequentialOpsBuffer buffer too long! All replicas to next message!");
 			this.sequenceNum = buf.get(0).getSequenceNum() - 1;
 		}
 
@@ -198,7 +203,7 @@ public abstract class Prop extends JunctionExtra {
 				// We want to discard messages that are too early.
 				// Decrement the sequence number counter, since we're not using that sequence num..
 				this.seqNumCounter -= 1;
-				logInfo("Decrementing seqNumCounterber, and ignoring: " + m);
+				logInfo("Decrementing seqNumCounter, and ignoring: " + m);
 			}
 			else if(m.getSequenceNum() == (sequenceNum + 1)){
 				this.sequenceNum = m.getSequenceNum();
@@ -211,6 +216,33 @@ public abstract class Prop extends JunctionExtra {
 			}
 		}
 		buf.subList(0,i).clear();
+	}
+
+
+	
+	/**
+	 * Wait for a moment of calm to send out state synchronization messages.
+	 * Otherwise we would have to serialize all these buffers and send as part
+	 * of the sync.
+	 *
+	 * Question: Is it realistic to expect these all to be empty at some times?
+	 */
+	private void processStateSyncRequests(){
+		if(this.sequentialOpsBuffer.isEmpty() && 
+		   this.pendingNonLocals.isEmpty() &&
+		   this.pendingLocals.isEmpty()){
+			for(SendMeStateMsg msg : this.stateSyncRequests){
+				StateSyncMsg sync = new StateSyncMsg(
+					this.finState.stringify(),
+					msg.syncNonce,
+					this.sequenceNum,
+					this.seqNumCounter,
+					this.lastOrderAckUUID,
+					this.lastOpUUID);
+				sendMessageToPropReplica(msg.getSenderActor(), sync);
+			}
+			this.stateSyncRequests.clear();
+		}
 	}
 
 
@@ -270,6 +302,7 @@ public abstract class Prop extends JunctionExtra {
 				logState("Acknowledging peer's order ack: " + msg);
 			}
 		}
+		processStateSyncRequests();
 	}
 
 
@@ -288,19 +321,24 @@ public abstract class Prop extends JunctionExtra {
 			}
 		}
 		else if(!(isSelfMsg(msg) && msg.isPredicted())){ // Broadcasts of our own local ops are ignored.
-			IPropStateOperation remoteOpT = msg.getOp();
-			for(int i = 0; i < this.pendingLocals.size(); i++){
-				IStateOperationMsg local = this.pendingLocals.get(i);
-				IPropStateOperation localOp = local.getOp();
 
-				IPropStateOperation localOpT = this.transposeForward(remoteOpT, localOp);
-				this.pendingLocals.set(i, local.newWithOp(localOpT));
+			try{
+				IPropStateOperation remoteOpT = msg.getOp();
+				for(int i = 0; i < this.pendingLocals.size(); i++){
+					IStateOperationMsg local = this.pendingLocals.get(i);
+					IPropStateOperation localOp = local.getOp();
 
-				remoteOpT = this.transposeForward(localOp, remoteOpT);
+					IPropStateOperation localOpT = this.transposeForward(remoteOpT, localOp);
+					this.pendingLocals.set(i, local.newWithOp(localOpT));
+
+					remoteOpT = this.transposeForward(localOp, remoteOpT);
+				}
+				this.state = state.applyOperation(remoteOpT);
+				this.finState = finState.applyOperation(remoteOpT);
 			}
-			this.state = state.applyOperation(remoteOpT);
-			this.finState = finState.applyOperation(remoteOpT);
-
+			catch(UnexpectedOpPairException e){
+				logErr(" --- STATE IS CORRUPT! ---  " + e);
+			}
 
 			if(notify){
 				dispatchChangeNotification(EVT_CHANGE, null);
@@ -310,10 +348,19 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	/**
-	 * Should return a new operation, defined on the state resulting from the execution of o1, 
+	 * Assume o1 and o2 operate on the same state s.
+	 * 
+	 * Intent Preservation:
+	 * transposeForward(o1,o2) is a new operation, defined on the state resulting from the execution of o1, 
 	 * and realizing the same intention as op2.
+	 * 
+	 * Convergence:
+	 * It must hold that o1*transposeForward(o1,o2) = o2*transposeForward(o2,o1).
+	 *
+	 * (where oi*oj denotes the execution of oi followed by the execution of oj)
+	 * 
 	 */
-	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2){
+	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2) throws UnexpectedOpPairException{
 		return o2;
 	}
 
@@ -373,14 +420,8 @@ public abstract class Prop extends JunctionExtra {
 				if(!isSelfMsg(msg)){
 					// Can we fill the gap for this peer?
 					if(sequenceNum >= msg.desiredSeqNumber){
-						StateSyncMsg sync = new StateSyncMsg(
-							this.finState.stringify(),
-							msg.syncNonce,
-							this.sequenceNum,
-							this.seqNumCounter,
-							this.lastOrderAckUUID,
-							this.lastOpUUID);
-						sendMessageToPropReplica(fromActor, sync);
+						this.stateSyncRequests.add(msg);
+						this.processStateSyncRequests();
 					}
 				}
 				break;
