@@ -116,10 +116,6 @@ public abstract class Prop extends JunctionExtra {
 		System.out.println("");
 	}
 
-	protected HistoryMAC newHistoryMAC(){
-		return new HistoryMAC(sequenceNum, this.finState.hash());
-	}
-
 	abstract protected IPropState destringifyState(String s);
 	abstract protected IPropStateOperation destringifyOperation(String s);
 
@@ -567,11 +563,8 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	synchronized public void addOperation(IPropStateOperation operation){
 		logInfo("Adding non-predicted operation.");
-		HistoryMAC mac = newHistoryMAC();
 		IStateOperationMsg msg = new StateOperationMsg(
-			sequenceNum + 1, 
 			operation, 
-			mac,
 			false);
 		this.pendingNonLocals.add(msg);
 		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), false, sequenceNum);
@@ -584,11 +577,8 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	synchronized public void addPredictedOperation(IPropStateOperation operation){
 		logInfo("Adding predicted operation.");
-		HistoryMAC mac = newHistoryMAC();
 		IStateOperationMsg msg = new StateOperationMsg(
-			sequenceNum + 1,
 			operation,
-			mac,
 			true);
 		applyOperation(msg, true, true);
 		this.pendingLocals.add(msg);
@@ -606,7 +596,6 @@ public abstract class Prop extends JunctionExtra {
 		try{
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
-			m.put("senderReplicaName", propReplicaName);
 		}catch(JSONException e){
 			logErr("JSON Error: " + e);
 		}
@@ -622,7 +611,6 @@ public abstract class Prop extends JunctionExtra {
 		try{
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
-			m.put("senderReplicaName", propReplicaName);
 		}catch(JSONException e){
 			logErr("JSON Error: " + e);
 		}
@@ -687,7 +675,6 @@ public abstract class Prop extends JunctionExtra {
 
 	abstract class PropMsg implements IPropMsg{
 		protected String senderReplicaUUID = "";
-		protected String senderReplicaName = "";
 		protected String senderActor = "";
 		protected int type;
 
@@ -696,7 +683,6 @@ public abstract class Prop extends JunctionExtra {
 		public PropMsg(JSONObject obj){
 			this.type = obj.optInt("type");
 			this.senderReplicaUUID = obj.optString("senderReplicaUUID");
-			this.senderReplicaName = obj.optString("senderReplicaName");
 		}
 
 		abstract public JSONObject toJSONObject();
@@ -709,10 +695,6 @@ public abstract class Prop extends JunctionExtra {
 			return senderReplicaUUID;
 		}
 
-		public String getSenderReplicaName(){
-			return senderReplicaName;
-		}
-
 		public String getSenderActor(){
 			return senderActor;
 		}
@@ -723,42 +705,33 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class StateOperationMsg extends PropMsg implements IStateOperationMsg{
-		protected long predictedSeqNum;
 		protected long sequenceNum;
 		protected String uuid;
 		protected IPropStateOperation operation;
-		protected HistoryMAC mac;
 		protected boolean predicted;
 
 		public StateOperationMsg(JSONObject msg, Prop prop){
 			super(msg);
 			this.uuid = msg.optString("uuid");
-			this.predictedSeqNum = msg.optLong("predSeqNum");
-			this.sequenceNum = msg.optLong("sequenceNum");
-			this.predicted = msg.optBoolean("predicted");
-			this.mac = new HistoryMAC(msg.optLong("macSeqNum"),
-									  msg.optString("macStateHash"));
-			this.operation = prop.destringifyOperation(msg.optString("operation"));
+			this.sequenceNum = msg.optLong("seqNum");
+			this.predicted = msg.optBoolean("pred");
+			this.operation = prop.destringifyOperation(msg.optString("op"));
 		}
 
-		public StateOperationMsg(String uuid, long predictedSeqNum, IPropStateOperation operation, HistoryMAC mac, boolean predicted){
+		public StateOperationMsg(String uuid, IPropStateOperation operation, boolean predicted){
 			this.uuid = uuid;
-			this.predictedSeqNum = predictedSeqNum;
 			this.sequenceNum = 0; // <- will be provided by MSG_OP_ORDER_ACK
-			this.mac = mac;
 			this.operation = operation;
 			this.predicted = predicted;
 		}
 
-		public StateOperationMsg(long predictedSeqNum, IPropStateOperation operation, HistoryMAC mac, boolean predicted){
-			this(UUID.randomUUID().toString(), predictedSeqNum, operation, mac, predicted);
+		public StateOperationMsg(IPropStateOperation operation, boolean predicted){
+			this(UUID.randomUUID().toString(), operation, predicted);
 		}
 
 		public IStateOperationMsg newWithOp(IPropStateOperation op){
 			StateOperationMsg msg = new StateOperationMsg(uuid,
-														  predictedSeqNum,
 														  op,
-														  mac,
 														  predicted);
 			msg.setSequenceNum(sequenceNum);
 			return msg;
@@ -776,12 +749,7 @@ public abstract class Prop extends JunctionExtra {
 		public void setSequenceNum(long num){
 			this.sequenceNum = num;
 		}
-		public long getPredictedSeqNum(){
-			return this.predictedSeqNum;
-		}
-		public HistoryMAC getHistoryMAC(){
-			return this.mac;
-		}
+
 		public IPropStateOperation getOp(){
 			return this.operation;
 		}
@@ -792,12 +760,9 @@ public abstract class Prop extends JunctionExtra {
 			try{
 				obj.put("type", MSG_STATE_OPERATION);
 				obj.put("uuid", uuid);
-				obj.put("sequenceNum", sequenceNum);
-				obj.put("predSeqNum", predictedSeqNum);
-				obj.put("macSeqNum", mac.seqNum);
-				obj.put("macStateHash", mac.stateHash);
-				obj.put("operation", operation.stringify());
-				obj.put("predicted", predicted);
+				obj.put("seqNum", sequenceNum);
+				obj.put("op", operation.stringify());
+				obj.put("pred", predicted);
 			}catch(JSONException e){}
 			return obj;
 		}
@@ -808,8 +773,8 @@ public abstract class Prop extends JunctionExtra {
 		public HelloMsg(JSONObject msg, Prop prop){
 			super(msg, prop);
 		}
-		public HelloMsg(long predictedSeqNumber, IPropStateOperation operation, HistoryMAC mac){
-			super(predictedSeqNumber, operation, mac, false);
+		public HelloMsg(IPropStateOperation operation){
+			super(operation, false);
 		}
 	}
 
@@ -953,7 +918,7 @@ public abstract class Prop extends JunctionExtra {
 			uuid = msg.optString("uuid");
 			msgUUID = msg.optString("msgUUID");
 			predicted = msg.optBoolean("predicted");
-			sequenceNum = msg.optInt("sequenceNum");
+			sequenceNum = msg.optInt("seqNum");
 		}
 		public OperationOrderAckMsg(String msgUUID, boolean predicted, long sequenceNum){
 			this.uuid = UUID.randomUUID().toString();
@@ -968,7 +933,7 @@ public abstract class Prop extends JunctionExtra {
 				obj.put("uuid", uuid);
 				obj.put("msgUUID", msgUUID);
 				obj.put("predicted", predicted);
-				obj.put("sequenceNum", sequenceNum);
+				obj.put("seqNum", sequenceNum);
 			}catch(JSONException e){}
 			return obj;
 		}

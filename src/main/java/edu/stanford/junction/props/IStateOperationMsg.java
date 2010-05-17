@@ -7,8 +7,6 @@ public interface IStateOperationMsg extends IPropMsg{
 	String getUUID();
 	long getSequenceNum();
 	void setSequenceNum(long num);
-	long getPredictedSeqNum();
-	HistoryMAC getHistoryMAC();
 	IPropStateOperation getOp();
 	IStateOperationMsg newWithOp(IPropStateOperation op);
 }
