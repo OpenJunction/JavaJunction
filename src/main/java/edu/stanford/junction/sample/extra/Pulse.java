@@ -8,7 +8,7 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
  * A pulse. Pulses are queued for transmission at a duration approximated by mSleep.
- * @author Ben
+ * @author bjdodson
  *
  */
 public class Pulse extends JunctionExtra {
