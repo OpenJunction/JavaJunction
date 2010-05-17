@@ -1,10 +1,16 @@
 package edu.stanford.junction.api.activity;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
 
+import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.SwitchboardConfig;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 public abstract class JunctionExtra {
 	JunctionActor mParent=null;
@@ -84,4 +90,32 @@ public abstract class JunctionExtra {
 	 * Higher means closer to actor.
 	 */
 	public Integer getPriority() { return 20; }
+	
+	public void test() {
+		JunctionActor actor =
+			new JunctionActor("unittest") {			
+				@Override
+				public void onMessageReceived(MessageHeader header, JSONObject message) {
+					System.out.println(message.toString());
+				}
+				
+				@Override
+				public List<JunctionExtra> getInitialExtras() {
+					List<JunctionExtra> extras = new ArrayList<JunctionExtra>();
+					extras.add(JunctionExtra.this);
+					return extras;
+				}
+			};
+			
+		try {
+			// todo: registeredextras here
+			SwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker.getInstance(config).newJunction(new URI("junction://prpl.stanford.edu/junit-test"), actor);
+			synchronized(this) {
+				this.wait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
