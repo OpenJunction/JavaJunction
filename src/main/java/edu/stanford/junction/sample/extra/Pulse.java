@@ -30,10 +30,8 @@ public class Pulse extends JunctionExtra {
 		 * can just send links, but editor can render inline (or, at least, in dedicated frame)
 		 */
 		@Override
-		public boolean beforeActivityJoin() {
+		public void afterActivityJoin() {
 			mHeartbeat = new Heartbeat(mSleep);
-			
-			return true;
 		}
 		
 		class Heartbeat {
@@ -45,10 +43,6 @@ public class Pulse extends JunctionExtra {
 					@Override
 					public void run() {
 						try {
-							// PREAMBLE
-							
-							
-							// EVENT
 							while (true/*Thread.sleep(time)*/) {
 								try {
 									helpimalive.put("tic",mTics++); // TODO: check for dirty deletion
@@ -58,15 +52,8 @@ public class Pulse extends JunctionExtra {
 									// also hijack system.out (out.jacking)
 									e.printStackTrace();
 								}
-								
-								
 								Thread.sleep(time);
-								
-								
 							}
-							
-							// CONCLUSION
-							
 						} catch (Exception e) {
 							
 						}
@@ -78,4 +65,6 @@ public class Pulse extends JunctionExtra {
 		public static void main(String ... args) {
 			new Pulse().test();
 		}
+		
+		// public void test() {} // overrides testing.  geucy.
 }
