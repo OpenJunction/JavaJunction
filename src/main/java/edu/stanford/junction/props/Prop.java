@@ -313,7 +313,7 @@ public abstract class Prop extends JunctionExtra {
 			// apply predicted operation immediately
 			this.state = state.applyOperation(op);
 			if(notify){
-				dispatchChangeNotification(EVT_CHANGE, null);
+				dispatchChangeNotification(EVT_CHANGE, op);
 			}
 		}
 		else if(!(isSelfMsg(msg) && msg.isPredicted())){ // Broadcasts of our own local ops are ignored.
@@ -337,7 +337,7 @@ public abstract class Prop extends JunctionExtra {
 			}
 
 			if(notify){
-				dispatchChangeNotification(EVT_CHANGE, null);
+				dispatchChangeNotification(EVT_CHANGE, msg.getOp());
 			}
 		}
 
