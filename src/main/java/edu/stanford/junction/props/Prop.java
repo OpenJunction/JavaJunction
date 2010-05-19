@@ -23,6 +23,7 @@ public abstract class Prop extends JunctionExtra {
 	private static final int MSG_SEND_ME_STATE = 5;
 	private static final int MSG_PLZ_CATCHUP = 6;
 	private static final int MSG_OP_ORDER_ACK = 7;
+	private static final int MSG_HELLO = 8;
 
 	public static final String EVT_CHANGE = "change";
 	public static final String EVT_SYNC = "sync";
@@ -434,6 +435,15 @@ public abstract class Prop extends JunctionExtra {
 				}
 				break;
 			}
+			case MSG_HELLO:{
+				HelloMsg msg = (HelloMsg)rawMsg;
+				if(msg.seqNum < sequenceNum) {
+					sendMessageToPropReplica(
+						fromActor,
+						new PlzCatchUpMsg(sequenceNum));
+				}
+				break;
+			}
 			case MSG_OP_ORDER_ACK:{
 				OperationOrderAckMsg msg = (OperationOrderAckMsg)rawMsg;
 				handleOrderAck(msg);
@@ -618,7 +628,9 @@ public abstract class Prop extends JunctionExtra {
 	}
     
 	
-	public void afterActivityJoin() {}
+	public void afterActivityJoin() {
+		sendMessageToProp(new HelloMsg(sequenceNum));
+	}
 
 	public static class Pair<T, S>{
 		private T first;
@@ -659,6 +671,9 @@ public abstract class Prop extends JunctionExtra {
 			break;
 		case MSG_PLZ_CATCHUP:
 			msg = new PlzCatchUpMsg(obj);
+			break;
+		case MSG_HELLO:
+			msg = new HelloMsg(obj);
 			break;
 		case MSG_OP_ORDER_ACK:
 			msg = new OperationOrderAckMsg(obj);
@@ -769,14 +784,6 @@ public abstract class Prop extends JunctionExtra {
 
 	}
 
-	class HelloMsg extends StateOperationMsg{
-		public HelloMsg(JSONObject msg, Prop prop){
-			super(msg, prop);
-		}
-		public HelloMsg(IPropStateOperation operation){
-			super(operation, false);
-		}
-	}
 
 	class StateSyncMsg extends PropMsg{
 		public String state;
@@ -902,6 +909,25 @@ public abstract class Prop extends JunctionExtra {
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_PLZ_CATCHUP);
+				obj.put("seqNum", seqNum);
+			}catch(JSONException e){}
+			return obj;
+		}
+	}
+
+	class HelloMsg extends PropMsg{
+		public long seqNum;
+		public HelloMsg(JSONObject msg){
+			super(msg);
+			seqNum = msg.optLong("seqNum");
+		}
+		public HelloMsg(long seqNum){
+			this.seqNum = seqNum;
+		}
+		public JSONObject toJSONObject(){
+			JSONObject obj = new JSONObject();
+			try{
+				obj.put("type", MSG_HELLO);
 				obj.put("seqNum", seqNum);
 			}catch(JSONException e){}
 			return obj;
