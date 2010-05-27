@@ -2,17 +2,14 @@ package edu.stanford.junction.props;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.Vector;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.Random;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
 
-/**
- * TODO: 
- * Do we need to serialize the pendingLocals and pendingNonLocals on SYNC?
- *
- */
+
 public abstract class Prop extends JunctionExtra {
 	private static final int MODE_NORM = 1;
 	private static final int MODE_SYNC = 2;
@@ -33,7 +30,6 @@ public abstract class Prop extends JunctionExtra {
 	private String propReplicaName = "";
 
 	private IPropState state;
-	private IPropState finState;
 
 	private long seqNumCounter = 0;
 	private long sequenceNum = 0;
@@ -52,15 +48,14 @@ public abstract class Prop extends JunctionExtra {
 	private Vector<SendMeStateMsg> stateSyncRequests = new Vector<SendMeStateMsg>();
 
 	private Vector<IStateOperationMsg> pendingLocals = new Vector<IStateOperationMsg>();
-	private Vector<IStateOperationMsg> pendingNonLocals = new Vector<IStateOperationMsg>();
 	private Vector<IStateOperationMsg> sequentialOpsBuffer = new Vector<IStateOperationMsg>();
+
 
 	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
 
 	public Prop(String propName, IPropState state, String propReplicaName){
 		this.propName = propName;
-		this.finState = state;
-		this.state = finState.copy();
+		this.state = state;
 		this.propReplicaName = propReplicaName;
 	}
 
@@ -107,7 +102,6 @@ public abstract class Prop extends JunctionExtra {
 		System.out.println("--------");
 		logInfo(s);
 		System.out.println("pendingLocals: " + this.pendingLocals);
-		System.out.println("pendingNonLocals: " + this.pendingNonLocals);
 		System.out.println("orderAckSYNC: " + this.orderAckSYNC);
 		System.out.println("opsSync: " + this.opsSYNC);
 		System.out.println("sequentialOpsBuffer: " + this.sequentialOpsBuffer);
@@ -166,8 +160,12 @@ public abstract class Prop extends JunctionExtra {
 				break;
 			}
 		}
+
 		// Process any messages that are ready..
-		processOperationsSequentially();
+		processIncomingOpsSequentially();
+		
+		// Send out any pending broadcasts of predicted operations..
+		processDeferredBroadcasts();
 
 		// Check if state is calm, to process any pending state sync requests..
 		processStateSyncRequests();
@@ -178,7 +176,7 @@ public abstract class Prop extends JunctionExtra {
 	/**
 	 * Process as many state ops as possible.
 	 */
-	private void processOperationsSequentially(){
+	private void processIncomingOpsSequentially(){
 		// Recall that the sequence is always sorted
 		// in ascending order of sequence number.
 		Vector<IStateOperationMsg> buf = this.sequentialOpsBuffer;
@@ -189,7 +187,7 @@ public abstract class Prop extends JunctionExtra {
 		// If we're stuck waiting for a particular message,
 		// forget it after some threshold.
 		// Note, this decision MUST be the same at all replicas!
-		if(len > 100){
+		if(len > 10){
 			logErr("sequentialOpsBuffer buffer too long! All replicas to next message!");
 			this.sequenceNum = buf.get(0).getSequenceNum() - 1;
 		}
@@ -200,7 +198,7 @@ public abstract class Prop extends JunctionExtra {
 				// We want to discard messages that are too early.
 				// Decrement the sequence number counter, since we're not using that sequence num..
 				this.seqNumCounter -= 1;
-				logInfo("Decrementing seqNumCounter, and ignoring: " + m);
+				logErr("Decrementing seqNumCounter, and ignoring: " + m);
 			}
 			else if(m.getSequenceNum() == (sequenceNum + 1)){
 				this.sequenceNum = m.getSequenceNum();
@@ -226,11 +224,10 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	private void processStateSyncRequests(){
 		if(this.sequentialOpsBuffer.isEmpty() && 
-		   this.pendingNonLocals.isEmpty() &&
 		   this.pendingLocals.isEmpty()){
 			for(SendMeStateMsg msg : this.stateSyncRequests){
 				StateSyncMsg sync = new StateSyncMsg(
-					this.finState.stringify(),
+					this.state.stringify(),
 					msg.syncNonce,
 					this.sequenceNum,
 					this.seqNumCounter,
@@ -243,6 +240,14 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 
+	
+	/**
+	 * The order ack tells us the sequence number for the 
+	 * corresponding message. Set the sequence number.
+	 *
+	 * deferredSend will broadcast the message once all msgs
+	 * with smaller sequence numbers have been handled.
+	 */
 	private void handleOrderAck(OperationOrderAckMsg msg){
 		// Is this a safe assumption?
 		if(msg.sequenceNum > sequenceNum){
@@ -256,50 +261,51 @@ public abstract class Prop extends JunctionExtra {
 		else{
 			this.seqNumCounter += 1;
 			this.lastOrderAckUUID = msg.uuid;
-			if(isSelfMsg(msg)){
-				// When we get back the authoritative order for 
-				// a message...
-				if(msg.predicted){
-					if(this.pendingLocals.size() > 0){
-						IStateOperationMsg m = this.pendingLocals.get(0);
-						if(m.getUUID().equals(msg.msgUUID)){
-							m.setSequenceNum(this.seqNumCounter);
-							this.pendingLocals.remove(0);
-							this.finState = finState.applyOperation(m.getOp());
-							sendMessageToProp(m);
-							logState("Ordered local prediction: " + m);
-						}
-						else{
-							logErr("Got order Ack of local op out of order..uuid mismatch!!");
-						}
-					}
-					else {
-						logErr("Ack of local op found empty pendingLocals!!");
-					}
-				}
-				else{
-					if(this.pendingNonLocals.size() > 0){
-						IStateOperationMsg m = this.pendingNonLocals.get(0);
-						if(m.getUUID().equals(msg.msgUUID)){
-							m.setSequenceNum(this.seqNumCounter);
-							this.pendingNonLocals.remove(0);
-							sendMessageToProp(m);
-							logState("Ordered non-local message: " + m);
-						}
-						else{
-							logErr("Got Ack of non-local op out of order..uuid mismatch!!");
-						}
-					}
-					else {
-						logErr("Ack of non-local op found empty pendingNonLocals!!");
-					}
-				}
-			}
-			else{
+			if(!isSelfMsg(msg)){
 				logState("Acknowledging peer's order ack: " + msg);
 			}
+			else{
+				
+				// When we get back the authoritative order for 
+				// a message...
+				boolean found = false;
+				Iterator<IStateOperationMsg> it = this.pendingLocals.iterator();
+				while(it.hasNext()){
+					IStateOperationMsg m = it.next();
+					if(m.getUUID().equals(msg.msgUUID)){
+						m.setSequenceNum(this.seqNumCounter);
+						logState("Ordered local prediction: " + m);
+						found = true;
+						break;
+					}
+				}
+				
+				if(!found){
+					logErr("Ack of local op could not find pending op!!");
+				}
+			}
 		}
+		processDeferredBroadcasts();
 		processStateSyncRequests();
+	}
+
+	/**
+	 * Broadcasts of predicted ops are deferred until the local 
+	 * sequence number indicates that all messages with lesser
+	 * sequence numbers have been processed.
+	 */
+	private void processDeferredBroadcasts(){
+		// Note. Messages should be sorted in ascending order of sequenceNumber
+		Iterator<IStateOperationMsg> it = this.pendingLocals.iterator();
+		while(it.hasNext()){
+			IStateOperationMsg m = it.next();
+			if(m.getSequenceNum() <= (sequenceNum + 1) && 
+			   (m.getSequenceNum() != StateOperationMsg.NO_SEQ_NUM)){
+				sendMessageToProp(m);
+				it.remove();
+				logInfo("Broadcast deferred op: " + m.getSequenceNum());
+			}
+		}
 	}
 
 
@@ -317,8 +323,7 @@ public abstract class Prop extends JunctionExtra {
 				dispatchChangeNotification(EVT_CHANGE, op);
 			}
 		}
-		else if(!(isSelfMsg(msg) && msg.isPredicted())){ // Broadcasts of our own local ops are ignored.
-
+		else if(!isSelfMsg(msg)){ // Broadcasts of our own local ops are ignored.
 			try{
 				IPropStateOperation remoteOpT = msg.getOp();
 				for(int i = 0; i < this.pendingLocals.size(); i++){
@@ -331,7 +336,6 @@ public abstract class Prop extends JunctionExtra {
 					remoteOpT = this.transposeForward(localOp, remoteOpT);
 				}
 				this.state = state.applyOperation(remoteOpT);
-				this.finState = finState.applyOperation(remoteOpT);
 			}
 			catch(UnexpectedOpPairException e){
 				logErr(" --- STATE IS CORRUPT! ---  " + e);
@@ -503,8 +507,7 @@ public abstract class Prop extends JunctionExtra {
 					else{
 						logInfo("Got StateSyncMsg:" + msg);
 
-						this.finState = destringifyState(msg.state);
-						this.state = finState.copy();
+						this.state = destringifyState(msg.state);
 						this.sequenceNum = msg.sequenceNum;
 						this.seqNumCounter = msg.seqNumCounter;
 						this.lastOrderAckUUID = msg.lastOrderAckUUID;
@@ -520,9 +523,6 @@ public abstract class Prop extends JunctionExtra {
 						// local state completely. Any straggler ACKS originating
 						// from this peer will have to be ignored..
 						this.pendingLocals.clear();
-
-						// Also forget about any incomplete non-local ops..
-						this.pendingNonLocals.clear();
 
 						// Apply any ordering acknowledgements that 
 						// we recieved while syncing. Ignore those that are
@@ -569,32 +569,20 @@ public abstract class Prop extends JunctionExtra {
 
 
 	/**
-	 * Add an operation to the state managed by this Prop
-	 */
-	synchronized public void addOperation(IPropStateOperation operation){
-		logInfo("Adding non-predicted operation.");
-		IStateOperationMsg msg = new StateOperationMsg(
-			operation, 
-			false);
-		this.pendingNonLocals.add(msg);
-		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), false, sequenceNum);
-		logState("Requesting order ack: " + ack);
-		sendMessageToProp(ack);
-	}
-
-	/**
 	 * Add an operation to the state managed by this Prop, with prediction
 	 */
-	synchronized public void addPredictedOperation(IPropStateOperation operation){
-		logInfo("Adding predicted operation.");
-		IStateOperationMsg msg = new StateOperationMsg(
-			operation,
-			true);
-		applyOperation(msg, true, true);
-		this.pendingLocals.add(msg);
-		OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), true, sequenceNum);
-		logState("Requesting order ack: " + ack);
-		sendMessageToProp(ack);
+	synchronized public void addOperation(IPropStateOperation operation){
+		if(mode == MODE_NORM){
+			logInfo("Adding predicted operation.");
+			IStateOperationMsg msg = new StateOperationMsg(
+				operation,
+				true);
+			applyOperation(msg, true, true);
+			this.pendingLocals.add(msg);
+			OperationOrderAckMsg ack = new OperationOrderAckMsg(msg.getUUID(), true, sequenceNum);
+			logState("Requesting order ack: " + ack);
+			sendMessageToProp(ack);
+		}
 	}
 
 
@@ -720,7 +708,8 @@ public abstract class Prop extends JunctionExtra {
 	}
 
 	class StateOperationMsg extends PropMsg implements IStateOperationMsg{
-		protected long sequenceNum;
+		public static final int NO_SEQ_NUM = -1;
+		protected long sequenceNum = NO_SEQ_NUM;
 		protected String uuid;
 		protected IPropStateOperation operation;
 		protected boolean predicted;
@@ -735,7 +724,6 @@ public abstract class Prop extends JunctionExtra {
 
 		public StateOperationMsg(String uuid, IPropStateOperation operation, boolean predicted){
 			this.uuid = uuid;
-			this.sequenceNum = 0; // <- will be provided by MSG_OP_ORDER_ACK
 			this.operation = operation;
 			this.predicted = predicted;
 		}
@@ -752,9 +740,6 @@ public abstract class Prop extends JunctionExtra {
 			return msg;
 		}
 
-		public boolean isPredicted(){
-			return this.predicted;
-		}
 		public String getUUID(){
 			return this.uuid;
 		}

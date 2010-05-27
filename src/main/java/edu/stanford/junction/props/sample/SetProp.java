@@ -76,11 +76,11 @@ public class SetProp extends Prop {
 	}
 
 	public void add(ISetItem item){
-		addPredictedOperation(new AddOp(item));
+		addOperation(new AddOp(item));
 	}
 
 	public void delete(ISetItem item){
-		addPredictedOperation(new DeleteOp(item));
+		addOperation(new DeleteOp(item));
 	}
 
 	public Set items(){
