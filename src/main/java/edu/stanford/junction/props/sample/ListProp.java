@@ -3,13 +3,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.Random;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.List;
-import edu.stanford.junction.props.Prop;
-import edu.stanford.junction.props.IPropState;
-import edu.stanford.junction.props.IPropStateOperation;
-import edu.stanford.junction.props.NullOp;
-import edu.stanford.junction.props.IStringifiable;
+import edu.stanford.junction.props.*;
+
 
 public class ListProp extends Prop {
 
@@ -21,11 +18,30 @@ public class ListProp extends Prop {
 	}
 
 	public ListProp(String propName, String propReplicaName, IListItemBuilder builder){
-		this(propName, propReplicaName, builder, new Vector<IListItem>());
+		this(propName, propReplicaName, builder, new ArrayList<IListItem>());
 	}
 
 	public ListProp(String propName, String propReplicaName){
 		this(propName, propReplicaName, new StringItemBuilder());
+	}
+
+	/**
+	 * Assume o1 and o2 operate on the same state s.
+	 * 
+	 * Intent Preservation:
+	 * transposeForward(o1,o2) is a new operation, defined on the state resulting from the execution of o1, 
+	 * and realizing the same intention as op2.
+	 * 
+	 * Convergence:
+	 * It must hold that o1*transposeForward(o1,o2) = o2*transposeForward(o2,o1).
+	 *
+	 * (where oi*oj denotes the execution of oi followed by the execution of oj)
+	 * 
+	 */
+	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2) throws UnexpectedOpPairException{
+		ListOp l1 = (ListOp)o1;
+		ListOp l2 = (ListOp)o2;
+		return l2;
 	}
 
 	public void push(IListItem item){
@@ -37,7 +53,7 @@ public class ListProp extends Prop {
 	}
 
 	public void pushRandom(){
-		Vector<String> words = new Vector<String>();
+		ArrayList<String> words = new ArrayList<String>();
 		words.add("dude");
 		words.add("apple");
 		words.add("hat");
@@ -54,7 +70,7 @@ public class ListProp extends Prop {
 			if(type.equals("ListState")){
 
 				JSONArray a = obj.getJSONArray("items");
-				Vector<IListItem> items = new Vector<IListItem>();
+				ArrayList<IListItem> items = new ArrayList<IListItem>();
 				for(int i = 0; i < a.length(); i++){
 					IListItem item = builder.destringify(a.getString(i));
 					items.add(item);
@@ -145,11 +161,11 @@ class ListState implements IPropState{
 	private List<ListProp.IListItem> items;
 
 	public ListState(List<ListProp.IListItem> items){
-		this.items = new Vector<ListProp.IListItem>(items);
+		this.items = new ArrayList<ListProp.IListItem>(items);
 	}
 
 	public ListState(){
-		this(new Vector<ListProp.IListItem>());
+		this(new ArrayList<ListProp.IListItem>());
 	}
 
 	public IPropState applyOperation(IPropStateOperation operation){
@@ -214,7 +230,11 @@ class ListState implements IPropState{
 	}
 }
 
-class PushOp implements IPropStateOperation{
+abstract class ListOp implements IPropStateOperation{
+	abstract public String stringify();
+}
+
+class PushOp extends ListOp{
 	private ListProp.IListItem item;
 
 	public PushOp(ListProp.IListItem item){
@@ -238,40 +258,7 @@ class PushOp implements IPropStateOperation{
 	}
 }
 
-
-class InsertOp implements IPropStateOperation{
-
-	private int index;
-	private ListProp.IListItem item;
-
-	public InsertOp(ListProp.IListItem item, int index){
-		this.item = item;
-		this.index = index;
-	}
-
-	public InsertOp(ListProp.IListItem item){
-		this(item, 0);
-	}
-
-	public ListState applyTo(ListState s){
-		ListState newS = (ListState)s.copy();
-		newS.insert(item, index);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "pushOp");
-			obj.put("item", item.stringify());
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
-
-
-class PopOp implements IPropStateOperation{
+class PopOp extends ListOp{
 
 	public ListState applyTo(ListState s){
 		ListState newS = (ListState)s.copy();
@@ -283,6 +270,36 @@ class PopOp implements IPropStateOperation{
 		try{
 			JSONObject obj = new JSONObject();
 			obj.put("type", "popOp");
+			return obj.toString();
+		}catch(JSONException e){}
+		return "";
+	}
+}
+
+
+
+class MoveOp extends ListOp {
+
+	private int fromIndex;
+	private int toIndex;
+
+	public MoveOp(int fromIndex, int toIndex){
+		this.fromIndex = fromIndex;
+		this.toIndex = toIndex;
+	}
+
+	public ListState applyTo(ListState s){
+		ListState newS = (ListState)s.copy();
+//		newS.moveItem(fromIndex, toIndex);
+		return newS;
+	}
+
+	public String stringify(){
+		try{
+			JSONObject obj = new JSONObject();
+			obj.put("type", "pushOp");
+			obj.put("fromIndex", fromIndex);
+			obj.put("toIndex", toIndex);
 			return obj.toString();
 		}catch(JSONException e){}
 		return "";

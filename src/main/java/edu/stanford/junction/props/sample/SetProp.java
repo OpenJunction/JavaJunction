@@ -5,7 +5,7 @@ import org.json.JSONException;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import edu.stanford.junction.props.Prop;
@@ -65,6 +65,26 @@ public class SetProp extends Prop {
 				// Delete takes precedence..
 				return s1;
 			}
+			else if(s1 instanceof ReplaceOp && s2 instanceof ReplaceOp){
+				// No problem
+				return s1;
+			}
+			else if(s1 instanceof ReplaceOp && s2 instanceof AddOp){
+				// Add takes precedence
+				return s2;
+			}
+			else if(s1 instanceof AddOp && s2 instanceof ReplaceOp){
+				// Add takes precedence
+				return s1;
+			}
+			else if(s1 instanceof ReplaceOp && s2 instanceof DeleteOp){
+				// Delete takes precedence
+				return s2;
+			}
+			else if(s1 instanceof DeleteOp && s2 instanceof ReplaceOp){
+				// Delete takes precedence
+				return s1;
+			}
 			else{
 				throw new UnexpectedOpPairException(o1,o2);
 			}
@@ -79,6 +99,10 @@ public class SetProp extends Prop {
 		addOperation(new AddOp(item));
 	}
 
+	public void replace(ISetItem item1, ISetItem item2){
+		addOperation(new ReplaceOp(item1, item2));
+	}
+
 	public void delete(ISetItem item){
 		addOperation(new DeleteOp(item));
 	}
@@ -90,7 +114,7 @@ public class SetProp extends Prop {
 
 	// Debug
 	public void doRandom(){
-		Vector<String> words = new Vector<String>();
+		ArrayList<String> words = new ArrayList<String>();
 		words.add("dude");
 		words.add("apple");
 		words.add("hat");
@@ -145,6 +169,11 @@ public class SetProp extends Prop {
 			else if(type.equals("deleteOp")){
 				ISetItem item = builder.destringify(obj.getString("item"));
 				return new DeleteOp(item);
+			}
+			else if(type.equals("replaceOp")){
+				ISetItem item1 = builder.destringify(obj.getString("item1"));
+				ISetItem item2 = builder.destringify(obj.getString("item2"));
+				return new ReplaceOp(item2, item2);
 			}
 			else{
 				return new NullOp();
@@ -229,13 +258,8 @@ class SetState implements IPropState{
 	}
 
 	public IPropState applyOperation(IPropStateOperation operation){
-		if(operation instanceof AddOp){
-			AddOp op = (AddOp)operation;
-			return op.applyTo(this);
-		}
-		else if(operation instanceof DeleteOp){
-			DeleteOp op = (DeleteOp)operation;
-			return op.applyTo(this);
+		if(operation instanceof SetOp){
+			return ((SetOp)operation).applyTo(this);
 		}
 		else{
 			return this;
@@ -283,6 +307,11 @@ class SetState implements IPropState{
 		items.remove(item);
 	}
 
+	public void replace(SetProp.ISetItem item1, SetProp.ISetItem item2){
+		items.remove(item1);
+		items.add(item2);
+	}
+
 	public String toString(){
 		return items.toString();
 	}
@@ -301,6 +330,8 @@ abstract class SetOp implements IPropStateOperation{
 	}
 
 	abstract public String stringify();
+
+	abstract public SetState applyTo(SetState s);
 }
 
 class AddOp extends SetOp{
@@ -343,6 +374,35 @@ class DeleteOp extends SetOp{
 			JSONObject obj = new JSONObject();
 			obj.put("type", "deleteOp");
 			obj.put("item", item.stringify());
+			return obj.toString();
+		}catch(JSONException e){}
+		return "";
+	}
+}
+
+class ReplaceOp extends SetOp{
+
+	protected SetProp.ISetItem item1;
+	protected SetProp.ISetItem item2;
+
+	public ReplaceOp(SetProp.ISetItem item1, SetProp.ISetItem item2){
+		super(item1);
+		this.item1 = item1;
+		this.item2 = item2;
+	}
+
+	public SetState applyTo(SetState s){
+		SetState newS = (SetState)s.copy();
+		newS.replace(item1, item2);
+		return newS;
+	}
+
+	public String stringify(){
+		try{
+			JSONObject obj = new JSONObject();
+			obj.put("type", "replaceOp");
+			obj.put("item1", item1.stringify());
+			obj.put("item2", item2.stringify());
 			return obj.toString();
 		}catch(JSONException e){}
 		return "";
