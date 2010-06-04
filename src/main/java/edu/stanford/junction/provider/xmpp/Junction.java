@@ -70,7 +70,9 @@ public class Junction extends edu.stanford.junction.Junction {
 		
 		mMessageFilter = new AndFilter(typeFilter,addrFilter);
 		
-		
+		if (xmppConnection == null) {
+			throw new IllegalArgumentException("XMPPConnection must not be null.");
+		}
 		mActivityDescription=desc;
 		mXMPPConnection = xmppConnection;
 		mProvider=prov;
@@ -106,6 +108,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			mSessionChat = joinSessionChat();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
 		
 		MessageHandler handler = new MessageHandler() {
