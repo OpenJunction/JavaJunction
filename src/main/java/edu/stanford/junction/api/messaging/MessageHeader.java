@@ -2,9 +2,9 @@ package edu.stanford.junction.api.messaging;
 
 import org.json.JSONObject;
 
+import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.messaging.target.MessageTarget;
 import edu.stanford.junction.api.messaging.target.MessageTargetFactory;
-import edu.stanford.junction.provider.xmpp.Junction;
 
 public class MessageHeader {
 	private Junction jx;

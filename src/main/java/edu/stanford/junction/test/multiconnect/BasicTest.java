@@ -5,6 +5,7 @@ import java.net.URI;
 import org.junit.Test;
 
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.provider.jvm.JVMSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 public class BasicTest {
@@ -26,7 +27,8 @@ public class BasicTest {
 			Receiver receiver2 = new Receiver("R2");
 			Sender sender2 = new Sender("S2");
 			
-			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			//XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JVMSwitchboardConfig config = new JVMSwitchboardConfig();
 			JunctionMaker jm1 = JunctionMaker.getInstance(config);
 			
 			System.out.println("creating R1");

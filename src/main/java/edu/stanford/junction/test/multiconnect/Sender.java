@@ -33,7 +33,9 @@ public class Sender extends JunctionActor {
 						sendMessageToRole("receiver", msg);
 						Thread.sleep(3000);
 					} 
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		//	}
 		//}.start();
 	}

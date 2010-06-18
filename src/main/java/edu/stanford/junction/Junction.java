@@ -13,6 +13,7 @@ import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHandler;
 
 public abstract class Junction {
+	public static String NS_JX = "jx";
 	
 	/**
 	 * Required constructors
@@ -31,6 +32,9 @@ public abstract class Junction {
 	//public String getActivityID();
 	public abstract String getSessionID();
 	
+	// TODO: doesn't make sense for other switchboard implementations.
+	// return Maker object instead?
+	@Deprecated
 	public abstract String getSwitchboard();
 	//public String[] getRoles();
 	
@@ -45,7 +49,7 @@ public abstract class Junction {
 	 * Actor Management
 	 */
 	
-	public abstract void registerActor(JunctionActor actor);
+	//public abstract void registerActor(JunctionActor actor);
 	//public List<String> getActorsForRole(String role);
 	// getActorsForHuman(String id); // some way of getting actor(s) associated with a person
 	//public void onActorJoin(JunctionActor actor); // or do we want registerActorJoinHandler()
@@ -62,7 +66,6 @@ public abstract class Junction {
 	 */
 	
 	// send
-	//public void sendMessageToChannel(String channel, JunctionMessage message);
 	public abstract void sendMessageToRole(String role, JSONObject message);
 	public abstract void sendMessageToActor(String actorID, JSONObject message);
 	public abstract void sendMessageToSession(JSONObject message);
@@ -70,5 +73,7 @@ public abstract class Junction {
 	// receive
 	//public void registerMessageHandler(MessageHandler handler);
 	
+	// TODO: get rid of this; have all the glue be implementation-agnostic
+	// as much as possible
 	public abstract void registerExtra(JunctionExtra extra);
 }

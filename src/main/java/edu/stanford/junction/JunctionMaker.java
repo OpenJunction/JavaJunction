@@ -13,6 +13,7 @@ import edu.stanford.junction.api.activity.Cast;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.JunctionProvider;
+import edu.stanford.junction.provider.jvm.JVMSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 
@@ -31,6 +32,8 @@ public class JunctionMaker {
 	protected JunctionProvider mProvider;
 	
 	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
+		// TODO: invitationURI to JunctionMaker method, supporting fragments (#jvm)
+		
 		// TODO: map config to maker?
 		JunctionMaker maker = new JunctionMaker();
 		maker.mProvider = maker.getProvider(switchboardConfig);
@@ -54,6 +57,8 @@ public class JunctionMaker {
 	protected JunctionProvider getProvider(SwitchboardConfig switchboardConfig) {
 		if (switchboardConfig instanceof XMPPSwitchboardConfig) {
 			return new edu.stanford.junction.provider.xmpp.JunctionProvider((XMPPSwitchboardConfig)switchboardConfig);
+		} else if (switchboardConfig instanceof JVMSwitchboardConfig){
+			return new edu.stanford.junction.provider.jvm.JunctionProvider((JVMSwitchboardConfig)switchboardConfig);
 		} else {
 			// Unknown implementation;.
 			return null;

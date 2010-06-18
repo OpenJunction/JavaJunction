@@ -16,6 +16,7 @@ public class HelloWorld {
 			Sender sender = new Sender();
 			
 			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			//config.setCredentials("junction", "junction");
 			JunctionMaker jm1 = JunctionMaker.getInstance(config);
 			jm1.newJunction(JX_URI, receiver);
 			

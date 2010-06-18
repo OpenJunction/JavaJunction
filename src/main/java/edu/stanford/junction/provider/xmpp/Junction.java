@@ -393,7 +393,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		return chat;
 	}
 
-	@Override
+	//@Override
 	public void registerExtra(JunctionExtra extra) {
 		extra.setActor(mOwner);
 		mExtrasDirector.registerExtra(extra);
