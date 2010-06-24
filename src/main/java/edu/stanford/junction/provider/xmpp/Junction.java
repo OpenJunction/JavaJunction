@@ -202,47 +202,41 @@ public class Junction extends edu.stanford.junction.Junction {
 		target.sendMessage(message);
 	}
 	
-	public void sendMessageToActor(String actorID, JSONObject message) {
-		if (getExtrasDirector().beforeSendMessageToActor(actorID, message)) {
-			try {
-				String privChat = mSessionChat.getRoom()+"/" + actorID;
-				Chat chat = mSessionChat.createPrivateChat(privChat,null);
-				chat.sendMessage(message.toString());
-			} catch (XMPPException e) {
-				e.printStackTrace();
-			}
+	public void doSendMessageToActor(String actorID, JSONObject message) {
+		try {
+			String privChat = mSessionChat.getRoom()+"/" + actorID;
+			Chat chat = mSessionChat.createPrivateChat(privChat,null);
+			chat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public void sendMessageToRole(String role, JSONObject message) {
-		if (getExtrasDirector().beforeSendMessageToRole(role, message)) {
-			try {
-				JSONObject jx;
-				if (message.has(NS_JX)) {
-					jx = message.optJSONObject(NS_JX);
-				} else {
-					jx = new JSONObject();
-					try {
-						message.put(NS_JX, jx);
-					} catch (JSONException j) {}
-				}
+	public void doSendMessageToRole(String role, JSONObject message) {
+		try {
+			JSONObject jx;
+			if (message.has(NS_JX)) {
+				jx = message.optJSONObject(NS_JX);
+			} else {
+				jx = new JSONObject();
 				try {
-					jx.put("targetRole", role);
-				} catch (Exception e) {}
-				mSessionChat.sendMessage(message.toString());
-			} catch (XMPPException e) {
-				e.printStackTrace();
+					message.put(NS_JX, jx);
+				} catch (JSONException j) {}
 			}
-		}		
+			try {
+				jx.put("targetRole", role);
+			} catch (Exception e) {}
+			mSessionChat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void sendMessageToSession(JSONObject message) {
-		if (getExtrasDirector().beforeSendMessageToSession(message)) {
-			try {
-				mSessionChat.sendMessage(message.toString());
-			} catch (XMPPException e) {
-				e.printStackTrace();
-			}
+	public void doSendMessageToSession(JSONObject message) {
+		try {
+			mSessionChat.sendMessage(message.toString());
+		} catch (XMPPException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -69,17 +69,17 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	@Override
-	public void sendMessageToActor(String actorID, JSONObject message) {
+	public void doSendMessageToActor(String actorID, JSONObject message) {
 		multiJunction.sendMessageToActor(mOwner,actorID,message);
 	}
 
 	@Override
-	public void sendMessageToRole(String role, JSONObject message) {
+	public void doSendMessageToRole(String role, JSONObject message) {
 		multiJunction.sendMessageToRole(mOwner,role,message);
 	}
 
 	@Override
-	public void sendMessageToSession(JSONObject message) {
+	public void doSendMessageToSession(JSONObject message) {
 		multiJunction.sendMessageToSession(mOwner,message);
 	}
 

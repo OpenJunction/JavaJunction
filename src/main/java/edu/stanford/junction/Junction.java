@@ -65,9 +65,27 @@ public abstract class Junction {
 	 */
 	
 	// send
-	public abstract void sendMessageToRole(String role, JSONObject message);
-	public abstract void sendMessageToActor(String actorID, JSONObject message);
-	public abstract void sendMessageToSession(JSONObject message);
+	
+	public abstract void doSendMessageToRole(String role, JSONObject message);
+	public final void sendMessageToRole(String role, JSONObject message) {
+		if (mExtrasDirector.beforeSendMessageToRole(role, message)) {
+			doSendMessageToRole(role, message);
+		}
+	}
+	
+	public abstract void doSendMessageToActor(String actorID, JSONObject message);
+	public final void sendMessageToActor(String actorID, JSONObject message) {
+		if (getExtrasDirector().beforeSendMessageToActor(actorID, message)) {
+			doSendMessageToActor(actorID,message);
+		}
+	}
+	
+	public abstract void doSendMessageToSession(JSONObject message);
+	public final void sendMessageToSession(JSONObject message) {
+		if (getExtrasDirector().beforeSendMessageToSession( message)) {
+			doSendMessageToSession(message);
+		}
+	}
 	
 	// receive
 	public void triggerMessageReceived(MessageHeader header, JSONObject message) {
