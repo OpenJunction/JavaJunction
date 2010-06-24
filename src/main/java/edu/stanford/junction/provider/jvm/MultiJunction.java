@@ -41,7 +41,7 @@ public class MultiJunction {
 	
 	protected void sendMessageToActor(JunctionActor from, String actorID, JSONObject message) {
 		if (actorMap.containsKey(actorID)) {
-			actorMap.get(actorID).onMessageReceived(
+			actorMap.get(actorID).getJunction().triggerMessageReceived(
 					new MessageHeader(from.getJunction(),message,from.getActorID()),
 					message);
 		}
@@ -52,7 +52,7 @@ public class MultiJunction {
 		for (JunctionActor actor : actorMap.values()) {
 			for (String r : actor.getRoles()) {
 				if (role.equals(r)) {
-					actorMap.get(actor.getActorID()).onMessageReceived(
+					actorMap.get(actor.getActorID()).getJunction().triggerMessageReceived(
 							new MessageHeader(from.getJunction(),message,from.getActorID()),
 							message);
 				}
@@ -62,7 +62,7 @@ public class MultiJunction {
 	
 	protected void sendMessageToSession(JunctionActor from, JSONObject message) {
 		for (JunctionActor actor : actorMap.values()) {
-			actorMap.get(actor.getActorID()).onMessageReceived(
+			actorMap.get(actor.getActorID()).getJunction().triggerMessageReceived(
 						new MessageHeader(from.getJunction(),message,from.getActorID()),
 						message);
 		}

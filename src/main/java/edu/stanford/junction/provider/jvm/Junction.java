@@ -20,11 +20,9 @@ public class Junction extends edu.stanford.junction.Junction {
 		new Thread() {
 			public void run() {
 				actor.setJunction(Junction.this);
-				actor.onActivityJoin();
+				triggerActorJoin(mActivityScript.isActivityCreator()); // TODO: wrong
 			};
 		}.start();
-		
-		// TODO: check for onActivityCreate
 	}
 	
 	@Override
