@@ -1,6 +1,10 @@
 package edu.stanford.junction;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -10,6 +14,13 @@ import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.ExtrasDirector;
 
+/**
+ *  This class is the glue between an
+ * app-developer's actor and the service
+ * provider's junction implementation.
+ * 
+ *    <actor> :: [JUNCTION] :: <junction provider>
+ */
 public abstract class Junction {
 	public static String NS_JX = "jx";
 	
@@ -56,8 +67,42 @@ public abstract class Junction {
 	/**
 	 * Actor Invitation
 	 */
-	public abstract URI getInvitationURI();
-	public abstract URI getInvitationURI(String role);
+	public abstract URI getBaseInvitationURI();
+	
+	public final URI getInvitationURI() {
+		return getInvitationURI(null);
+	}
+	
+	public URI getInvitationURI(String role) {
+		URI uri = getBaseInvitationURI();
+		
+		Map<String,String>params = new HashMap<String, String>();
+		if (role != null) {
+			params.put("role",role);
+		}
+		mExtrasDirector.updateInvitationParameters(params);
+		
+		StringBuffer queryBuf = new StringBuffer("?");
+		Set<String>keys = params.keySet();
+		for (String key : keys) {
+			try{
+				queryBuf.append(URLEncoder.encode(key,"UTF-8")
+							+"="
+							+URLEncoder.encode(params.get(key),"UTF-8")
+							+"&");
+			} catch (Exception e){}
+		}
+		String queryStr = queryBuf.substring(0, queryBuf.length()-1);
+		
+		try {
+			uri = new URI(uri.toString()+queryStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return uri;
+	}
+	
 	// there will also be device-specific methods, EG QR codes / contact list on Android
 	
 	/**
@@ -75,14 +120,14 @@ public abstract class Junction {
 	
 	public abstract void doSendMessageToActor(String actorID, JSONObject message);
 	public final void sendMessageToActor(String actorID, JSONObject message) {
-		if (getExtrasDirector().beforeSendMessageToActor(actorID, message)) {
+		if (mExtrasDirector.beforeSendMessageToActor(actorID, message)) {
 			doSendMessageToActor(actorID,message);
 		}
 	}
 	
 	public abstract void doSendMessageToSession(JSONObject message);
 	public final void sendMessageToSession(JSONObject message) {
-		if (getExtrasDirector().beforeSendMessageToSession( message)) {
+		if (mExtrasDirector.beforeSendMessageToSession( message)) {
 			doSendMessageToSession(message);
 		}
 	}
@@ -119,11 +164,5 @@ public abstract class Junction {
 	final public void registerExtra(JunctionExtra extra) {
 		extra.setActor(getActor());
 		mExtrasDirector.registerExtra(extra);
-	}
-	
-	// TODO: get rid of this; be smarter about what you expose.
-	// <actor> :: JUNCTION :: <junction provider>
-	public ExtrasDirector getExtrasDirector() {
-		return mExtrasDirector;
 	}
 }

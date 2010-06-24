@@ -45,15 +45,12 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	@Override
-	public URI getInvitationURI() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public URI getInvitationURI(String role) {
-		// TODO Auto-generated method stub
-		return null;
+	public URI getBaseInvitationURI() {
+		try {
+			return new URI("junction://localhost#jvm");
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override

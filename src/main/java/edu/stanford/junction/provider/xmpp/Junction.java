@@ -240,61 +240,13 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 	}
 
-	public URI getInvitationURI() {
-		Map<String,String>params = new HashMap<String, String>();
-		getExtrasDirector().updateInvitationParameters(params);
-
-		StringBuffer queryBuf = new StringBuffer("?");
-		Set<String>keys = params.keySet();
-		for (String key : keys) {
-			try{
-				queryBuf.append(URLEncoder.encode(key,"UTF-8")
-							+"="
-							+URLEncoder.encode(params.get(key),"UTF-8")
-							+"&");
-			} catch (Exception e){}
-		}
-		String queryStr = queryBuf.substring(0, queryBuf.length()-1);
-		
+	public URI getBaseInvitationURI() {
 		URI invitation = null;
 		try {
 			// TODO: strip query part from hostURL
 			invitation = new URI("junction://"
 								+getSwitchboard()+"/"
 								+getSessionID()
-								+queryStr
-								);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return invitation;
-	}
-
-	public URI getInvitationURI(String requestedRole) {
-		Map<String,String>params = new HashMap<String, String>();
-		params.put("role",requestedRole);
-		getExtrasDirector().updateInvitationParameters(params);
-		
-		StringBuffer queryBuf = new StringBuffer("?");
-		Set<String>keys = params.keySet();
-		for (String key : keys) {
-			try{
-				queryBuf.append(URLEncoder.encode(key,"UTF-8")
-							+"="
-							+URLEncoder.encode(params.get(key),"UTF-8")
-							+"&");
-			} catch (Exception e){}
-		}
-		String queryStr = queryBuf.substring(0, queryBuf.length()-1);
-		
-		URI invitation = null;
-		try {
-			// TODO: strip query part from hostURL
-			invitation = new URI("junction://"
-								+getSwitchboard()+"/"
-								+getSessionID()
-								+queryStr
 								);
 		} catch (Exception e) {
 			e.printStackTrace();
