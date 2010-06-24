@@ -52,7 +52,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	private MultiUserChat mSessionChat;
 	PacketFilter mMessageFilter = null;
 	
-	private ExtrasDirector mExtrasDirector = new ExtrasDirector();
 	protected URI mAcceptedInvitation = null;
 	/**
 	 * Creates a new activity and registers it
@@ -115,11 +114,8 @@ public class Junction extends edu.stanford.junction.Junction {
 			@Override
 			public void onMessageReceived(MessageHeader header,
 					JSONObject message) {
-
-				if (mExtrasDirector.beforeOnMessageReceived(header,message)) {
-					actor.onMessageReceived(header, message);
-					mExtrasDirector.afterOnMessageReceived(header,message);
-				}
+				
+				Junction.this.triggerMessageReceived(header, message);
 			}
 		};
 		
@@ -127,23 +123,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			registerMessageHandler(handler);
 		}
 		
-		// Create
-		if (mActivityDescription.isActivityCreator()) {
-			if (!mExtrasDirector.beforeActivityCreate()) {
-				disconnect();
-				return;
-			}
-			mOwner.onActivityCreate();
-			mExtrasDirector.afterActivityCreate();
-		}
-		
-		// Join
-		if (!mExtrasDirector.beforeActivityJoin()) {
-			disconnect();
-			return;
-		}
-		mOwner.onActivityJoin();
-		mExtrasDirector.afterActivityJoin();
+		Junction.this.triggerActorJoin(mActivityDescription.isActivityCreator());
 	}
 	
 	public void start() {
@@ -223,7 +203,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToActor(String actorID, JSONObject message) {
-		if (mExtrasDirector.beforeSendMessageToActor(actorID, message)) {
+		if (getExtrasDirector().beforeSendMessageToActor(actorID, message)) {
 			try {
 				String privChat = mSessionChat.getRoom()+"/" + actorID;
 				Chat chat = mSessionChat.createPrivateChat(privChat,null);
@@ -235,7 +215,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	public void sendMessageToRole(String role, JSONObject message) {
-		if (mExtrasDirector.beforeSendMessageToRole(role, message)) {
+		if (getExtrasDirector().beforeSendMessageToRole(role, message)) {
 			try {
 				JSONObject jx;
 				if (message.has(NS_JX)) {
@@ -257,7 +237,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	public void sendMessageToSession(JSONObject message) {
-		if (mExtrasDirector.beforeSendMessageToSession(message)) {
+		if (getExtrasDirector().beforeSendMessageToSession(message)) {
 			try {
 				mSessionChat.sendMessage(message.toString());
 			} catch (XMPPException e) {
@@ -268,7 +248,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	public URI getInvitationURI() {
 		Map<String,String>params = new HashMap<String, String>();
-		mExtrasDirector.updateInvitationParameters(params);
+		getExtrasDirector().updateInvitationParameters(params);
 
 		StringBuffer queryBuf = new StringBuffer("?");
 		Set<String>keys = params.keySet();
@@ -300,7 +280,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	public URI getInvitationURI(String requestedRole) {
 		Map<String,String>params = new HashMap<String, String>();
 		params.put("role",requestedRole);
-		mExtrasDirector.updateInvitationParameters(params);
+		getExtrasDirector().updateInvitationParameters(params);
 		
 		StringBuffer queryBuf = new StringBuffer("?");
 		Set<String>keys = params.keySet();
@@ -393,14 +373,13 @@ public class Junction extends edu.stanford.junction.Junction {
 		return chat;
 	}
 
-	//@Override
-	public void registerExtra(JunctionExtra extra) {
-		extra.setActor(mOwner);
-		mExtrasDirector.registerExtra(extra);
-	}
-
 	@Override
 	public URI getAcceptedInvitation() {
 		return mAcceptedInvitation;
+	}
+
+	@Override
+	public JunctionActor getActor() {
+		return mOwner;
 	}	
 }

@@ -1,17 +1,14 @@
 package edu.stanford.junction.provider.jvm;
 
 import java.net.URI;
-import java.util.Map;
 
 import org.json.JSONObject;
 
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.activity.JunctionExtra;
-import edu.stanford.junction.api.messaging.MessageHeader;
 
 public class Junction extends edu.stanford.junction.Junction {
-	private static Map<String,Map<String,JunctionActor>> junctions;
 	private JunctionActor mOwner;
 	private ActivityScript mActivityScript;
 	MultiJunction multiJunction;
@@ -90,6 +87,11 @@ public class Junction extends edu.stanford.junction.Junction {
 	public void registerExtra(JunctionExtra extra) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public JunctionActor getActor() {
+		return mOwner;
 	}
 	
 }

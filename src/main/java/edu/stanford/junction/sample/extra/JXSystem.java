@@ -11,10 +11,10 @@ import edu.stanford.junction.api.messaging.MessageHeader;
  * @author bjdodson
  *
  */
-public class System extends JunctionExtra {	
+public class JXSystem extends JunctionExtra {	
 		protected static final String JX_SYSTEM_NS = "JXSYSTEMMSG";
 		
-		public System() {
+		public JXSystem() {
 		
 		}
 
@@ -39,7 +39,7 @@ public class System extends JunctionExtra {
 		// make sure that runs through the appropriate Extras.
 		
 		public static void main(String ... args) {
-			new System().test();
+			new JXSystem().test();
 		}
 		
 		// public void test() {} // overrides testing.  geucy.

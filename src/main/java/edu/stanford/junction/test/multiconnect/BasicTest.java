@@ -27,21 +27,21 @@ public class BasicTest {
 			Receiver receiver2 = new Receiver("R2");
 			Sender sender2 = new Sender("S2");
 			
-			//XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
-			JVMSwitchboardConfig config = new JVMSwitchboardConfig();
+			XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			//JVMSwitchboardConfig config = new JVMSwitchboardConfig();
 			JunctionMaker jm1 = JunctionMaker.getInstance(config);
 			
-			System.out.println("creating R1");
+			System.out.println("binding R1");
 			jm1.newJunction(JX_URI1, receiver1);
 			
-			System.out.println("creating S1");
+			System.out.println("binding S1");
 			//JunctionMaker jm2 = JunctionMaker.getInstance(config);
 			jm1.newJunction(JX_URI1, sender1);
 			
 			
-			System.out.println("creating R2");
+			System.out.println("binding R2");
 			jm1.newJunction(JX_URI2, receiver2);
-			System.out.println("creating S2");
+			System.out.println("binding S2");
 			jm1.newJunction(JX_URI2, sender2);
 			
 			// keepalive sleep.
