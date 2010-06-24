@@ -98,7 +98,7 @@ public abstract class Junction {
 	}
 	
 	private ExtrasDirector mExtrasDirector = new ExtrasDirector();
-	public void registerExtra(JunctionExtra extra) {
+	final public void registerExtra(JunctionExtra extra) {
 		extra.setActor(getActor());
 		mExtrasDirector.registerExtra(extra);
 	}

@@ -84,12 +84,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	@Override
-	public void registerExtra(JunctionExtra extra) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public JunctionActor getActor() {
 		return mOwner;
 	}
