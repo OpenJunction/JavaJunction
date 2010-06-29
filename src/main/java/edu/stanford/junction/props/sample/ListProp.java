@@ -5,8 +5,9 @@ import org.json.JSONException;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
+import java.util.Collections;
 import edu.stanford.junction.props.*;
-
 
 public class ListProp extends Prop {
 
@@ -22,7 +23,7 @@ public class ListProp extends Prop {
 	}
 
 	public ListProp(String propName, String propReplicaName){
-		this(propName, propReplicaName, new StringItemBuilder());
+		this(propName, propReplicaName, new StringListItemBuilder());
 	}
 
 	/**
@@ -39,28 +40,69 @@ public class ListProp extends Prop {
 	 * 
 	 */
 	protected IPropStateOperation transposeForward(IPropStateOperation o1, IPropStateOperation o2) throws UnexpectedOpPairException{
-		ListOp l1 = (ListOp)o1;
-		ListOp l2 = (ListOp)o2;
-		return l2;
+		ListOp s1 = (ListOp)o1;
+		ListOp s2 = (ListOp)o2;
+		if(s1.getItem().equals(s2.getItem())){
+			if(s1 instanceof AddOp && s2 instanceof AddOp){
+				// No problem, Set semantics take care of everything.
+				return s1;
+			}
+			else if(s1 instanceof DeleteOp && s2 instanceof DeleteOp){
+				// No problem, just delete it..
+				return s1;
+			}
+			else if(s1 instanceof AddOp && s2 instanceof DeleteOp){
+				// Delete takes precedence..
+				return s2;
+			}
+			else if(s1 instanceof DeleteOp && s2 instanceof AddOp){
+				// Delete takes precedence..
+				return s1;
+			}
+			else{
+				throw new UnexpectedOpPairException(o1,o2);
+			}
+		}
+		else{
+			// Different items. No conflict possible. Choose either op.
+			return s2;
+		}
 	}
 
-	public void push(IListItem item){
-		addOperation(new PushOp(item));
+	public void add(IListItem item){
+		addOperation(new AddOp(item));
 	}
 
-	public void pop(){
-		addOperation(new PopOp());
+	public void delete(IListItem item){
+		addOperation(new DeleteOp(item));
 	}
 
-	public void pushRandom(){
+	public List items(){
+		ListState s = (ListState)getState();
+		return s.unmodifiableList();
+	}
+
+	// Debug
+	public void doRandom(){
 		ArrayList<String> words = new ArrayList<String>();
 		words.add("dude");
 		words.add("apple");
 		words.add("hat");
 		words.add("cat");
 		words.add("barge");
+		words.add("horse");
+		words.add("mango");
+		words.add("code");
 		Random rng = new Random();
-		push(new StringItem(words.get(rng.nextInt(words.size()))));
+		if(rng.nextInt(2) == 0){
+			add(new StringListItem(words.get(rng.nextInt(words.size()))));
+		}
+		else{
+			Iterator it = items().iterator();
+			if(it.hasNext()){
+				delete((IListItem)it.next());
+			}
+		}
 	}
 
 	protected IPropState destringifyState(String s){
@@ -68,9 +110,8 @@ public class ListProp extends Prop {
 			JSONObject obj = new JSONObject(s);
 			String type = obj.optString("type");
 			if(type.equals("ListState")){
-
 				JSONArray a = obj.getJSONArray("items");
-				ArrayList<IListItem> items = new ArrayList<IListItem>();
+				List<IListItem> items = new ArrayList<IListItem>();
 				for(int i = 0; i < a.length(); i++){
 					IListItem item = builder.destringify(a.getString(i));
 					items.add(item);
@@ -90,12 +131,13 @@ public class ListProp extends Prop {
 		try{
 			JSONObject obj = new JSONObject(s);
 			String type = obj.optString("type");
-			if(type.equals("pushOp")){
+			if(type.equals("addOp")){
 				IListItem item = builder.destringify(obj.getString("item"));
-				return new PushOp(item);
+				return new AddOp(item);
 			}
-			if(type.equals("popOp")){
-				return new PopOp();
+			else if(type.equals("deleteOp")){
+				IListItem item = builder.destringify(obj.getString("item"));
+				return new DeleteOp(item);
 			}
 			else{
 				return new NullOp();
@@ -114,36 +156,111 @@ public class ListProp extends Prop {
 		IListItem copy();
 	}
 
+
+	abstract class ListOp implements IPropStateOperation{
+		protected ListProp.IListItem item;
+
+		public ListOp(ListProp.IListItem item){
+			this.item = item;
+		}
+
+		public ListProp.IListItem getItem(){
+			return item;
+		}
+
+		abstract public String stringify();
+
+		abstract public ListState applyTo(ListState s);
+	}
+
+	class AddOp extends ListOp{
+
+		public AddOp(ListProp.IListItem item){
+			super(item);
+		}
+
+		public ListState applyTo(ListState s){
+			ListState newS = (ListState)s.copy();
+			newS.add(item);
+			return newS;
+		}
+
+		public String stringify(){
+			try{
+				JSONObject obj = new JSONObject();
+				obj.put("type", "addOp");
+				obj.put("item", item.stringify());
+				return obj.toString();
+			}catch(JSONException e){}
+			return "";
+		}
+	}
+
+	class DeleteOp extends ListOp{
+
+		public DeleteOp(ListProp.IListItem item){
+			super(item);
+		}
+
+		public ListState applyTo(ListState s){
+			ListState newS = (ListState)s.copy();
+			newS.delete(item);
+			return newS;
+		}
+
+		public String stringify(){
+			try{
+				JSONObject obj = new JSONObject();
+				obj.put("type", "deleteOp");
+				obj.put("item", item.stringify());
+				return obj.toString();
+			}catch(JSONException e){}
+			return "";
+		}
+	}
+
+
 }
 
 
-class StringItemBuilder implements ListProp.IListItemBuilder{
+class StringListItemBuilder implements ListProp.IListItemBuilder{
 	public ListProp.IListItem destringify(String s){
 		try{
 			JSONObject obj = new JSONObject(s);
-			return new StringItem(obj.optString("text"));
+			return new StringListItem(obj.optString("text"));
 		}
 		catch(JSONException e){
-			return new StringItem("");
+			return new StringListItem("");
 		}		
 	}
 }
 
-class StringItem implements ListProp.IListItem{
+class StringListItem implements ListProp.IListItem{
 
 	public String value;
 
-	public StringItem(String value){
+	public StringListItem(String value){
 		this.value = value;
 	}
 
 	public String stringify(){ 
 		JSONObject obj = new JSONObject();
 		try{
-			obj.put("type", "StringItem");
+			obj.put("type", "StringListItem");
 			obj.put("text", value);
 		}catch(JSONException e){}
 		return obj.toString();
+	}
+
+	public int hashCode(){
+		return value.hashCode();
+	}
+
+	public boolean equals(Object obj) {
+		if(obj instanceof ListProp.IListItem){
+			return ((StringListItem)obj).value.equals(value);
+		}
+		return false;
 	}
 
 	public String toString(){ 
@@ -151,7 +268,7 @@ class StringItem implements ListProp.IListItem{
 	}
 
 	public ListProp.IListItem copy(){
-		return new StringItem(value);
+		return new StringListItem(value);
 	}
 
 }
@@ -161,7 +278,7 @@ class ListState implements IPropState{
 	private List<ListProp.IListItem> items;
 
 	public ListState(List<ListProp.IListItem> items){
-		this.items = new ArrayList<ListProp.IListItem>(items);
+		this.items = new ArrayList(items);
 	}
 
 	public ListState(){
@@ -169,17 +286,16 @@ class ListState implements IPropState{
 	}
 
 	public IPropState applyOperation(IPropStateOperation operation){
-		if(operation instanceof PushOp){
-			PushOp op = (PushOp)operation;
-			return op.applyTo(this);
-		}
-		else if(operation instanceof PopOp){
-			PopOp op = (PopOp)operation;
-			return op.applyTo(this);
+		if(operation instanceof ListProp.ListOp){
+			return ((ListProp.ListOp)operation).applyTo(this);
 		}
 		else{
 			return this;
 		}
+	}
+
+	public List unmodifiableList(){
+		return Collections.unmodifiableList(items);
 	}
 
 	public IPropStateOperation nullOperation(){
@@ -204,25 +320,19 @@ class ListState implements IPropState{
 	}
 
 	public IPropState copy(){
-		ListState l = new ListState();
+		ListState s = new ListState();
 		for(ListProp.IListItem ea : items){
-			l.push(ea.copy());
+			s.add(ea.copy());
 		}
-		return l;
+		return s;
 	}
 
-	public void push(ListProp.IListItem item){
+	public void add(ListProp.IListItem item){
 		items.add(item);
 	}
 
-	public void insert(ListProp.IListItem item, int index){
-		items.add(index, item);
-	}
-
-	public void pop(){
-		if(items.size() > 0){
-			items.remove(items.size() - 1);
-		}
+	public void delete(ListProp.IListItem item){
+		items.remove(item);
 	}
 
 	public String toString(){
@@ -230,78 +340,3 @@ class ListState implements IPropState{
 	}
 }
 
-abstract class ListOp implements IPropStateOperation{
-	abstract public String stringify();
-}
-
-class PushOp extends ListOp{
-	private ListProp.IListItem item;
-
-	public PushOp(ListProp.IListItem item){
-		this.item = item;
-	}
-
-	public ListState applyTo(ListState s){
-		ListState newS = (ListState)s.copy();
-		newS.push(item);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "pushOp");
-			obj.put("item", item.stringify());
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
-
-class PopOp extends ListOp{
-
-	public ListState applyTo(ListState s){
-		ListState newS = (ListState)s.copy();
-		newS.pop();
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "popOp");
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
-
-
-
-class MoveOp extends ListOp {
-
-	private int fromIndex;
-	private int toIndex;
-
-	public MoveOp(int fromIndex, int toIndex){
-		this.fromIndex = fromIndex;
-		this.toIndex = toIndex;
-	}
-
-	public ListState applyTo(ListState s){
-		ListState newS = (ListState)s.copy();
-//		newS.moveItem(fromIndex, toIndex);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "pushOp");
-			obj.put("fromIndex", fromIndex);
-			obj.put("toIndex", toIndex);
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}

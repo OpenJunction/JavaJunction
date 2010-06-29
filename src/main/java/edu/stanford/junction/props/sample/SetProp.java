@@ -192,6 +192,97 @@ public class SetProp extends Prop {
 		ISetItem copy();
 	}
 
+	abstract class SetOp implements IPropStateOperation{
+		protected SetProp.ISetItem item;
+
+		public SetOp(SetProp.ISetItem item){
+			this.item = item;
+		}
+
+		public SetProp.ISetItem getItem(){
+			return item;
+		}
+
+		abstract public String stringify();
+
+		abstract public SetState applyTo(SetState s);
+	}
+
+	class AddOp extends SetOp{
+
+		public AddOp(SetProp.ISetItem item){
+			super(item);
+		}
+
+		public SetState applyTo(SetState s){
+			SetState newS = (SetState)s.copy();
+			newS.add(item);
+			return newS;
+		}
+
+		public String stringify(){
+			try{
+				JSONObject obj = new JSONObject();
+				obj.put("type", "addOp");
+				obj.put("item", item.stringify());
+				return obj.toString();
+			}catch(JSONException e){}
+			return "";
+		}
+	}
+
+	class DeleteOp extends SetOp{
+
+		public DeleteOp(SetProp.ISetItem item){
+			super(item);
+		}
+
+		public SetState applyTo(SetState s){
+			SetState newS = (SetState)s.copy();
+			newS.delete(item);
+			return newS;
+		}
+
+		public String stringify(){
+			try{
+				JSONObject obj = new JSONObject();
+				obj.put("type", "deleteOp");
+				obj.put("item", item.stringify());
+				return obj.toString();
+			}catch(JSONException e){}
+			return "";
+		}
+	}
+
+	class ReplaceOp extends SetOp{
+
+		protected SetProp.ISetItem item1;
+		protected SetProp.ISetItem item2;
+
+		public ReplaceOp(SetProp.ISetItem item1, SetProp.ISetItem item2){
+			super(item1);
+			this.item1 = item1;
+			this.item2 = item2;
+		}
+
+		public SetState applyTo(SetState s){
+			SetState newS = (SetState)s.copy();
+			newS.replace(item1, item2);
+			return newS;
+		}
+
+		public String stringify(){
+			try{
+				JSONObject obj = new JSONObject();
+				obj.put("type", "replaceOp");
+				obj.put("item1", item1.stringify());
+				obj.put("item2", item2.stringify());
+				return obj.toString();
+			}catch(JSONException e){}
+			return "";
+		}
+	}
+
 }
 
 
@@ -258,8 +349,8 @@ class SetState implements IPropState{
 	}
 
 	public IPropState applyOperation(IPropStateOperation operation){
-		if(operation instanceof SetOp){
-			return ((SetOp)operation).applyTo(this);
+		if(operation instanceof SetProp.SetOp){
+			return ((SetProp.SetOp)operation).applyTo(this);
 		}
 		else{
 			return this;
@@ -318,94 +409,4 @@ class SetState implements IPropState{
 }
 
 
-abstract class SetOp implements IPropStateOperation{
-	protected SetProp.ISetItem item;
-
-	public SetOp(SetProp.ISetItem item){
-		this.item = item;
-	}
-
-	public SetProp.ISetItem getItem(){
-		return item;
-	}
-
-	abstract public String stringify();
-
-	abstract public SetState applyTo(SetState s);
-}
-
-class AddOp extends SetOp{
-
-	public AddOp(SetProp.ISetItem item){
-		super(item);
-	}
-
-	public SetState applyTo(SetState s){
-		SetState newS = (SetState)s.copy();
-		newS.add(item);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "addOp");
-			obj.put("item", item.stringify());
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
-
-class DeleteOp extends SetOp{
-
-	public DeleteOp(SetProp.ISetItem item){
-		super(item);
-	}
-
-	public SetState applyTo(SetState s){
-		SetState newS = (SetState)s.copy();
-		newS.delete(item);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "deleteOp");
-			obj.put("item", item.stringify());
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
-
-class ReplaceOp extends SetOp{
-
-	protected SetProp.ISetItem item1;
-	protected SetProp.ISetItem item2;
-
-	public ReplaceOp(SetProp.ISetItem item1, SetProp.ISetItem item2){
-		super(item1);
-		this.item1 = item1;
-		this.item2 = item2;
-	}
-
-	public SetState applyTo(SetState s){
-		SetState newS = (SetState)s.copy();
-		newS.replace(item1, item2);
-		return newS;
-	}
-
-	public String stringify(){
-		try{
-			JSONObject obj = new JSONObject();
-			obj.put("type", "replaceOp");
-			obj.put("item1", item1.stringify());
-			obj.put("item2", item2.stringify());
-			return obj.toString();
-		}catch(JSONException e){}
-		return "";
-	}
-}
 
