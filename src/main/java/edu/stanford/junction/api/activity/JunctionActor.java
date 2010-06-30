@@ -11,7 +11,7 @@ import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
- * The JunctionActor is the primary method used
+ * The JunctionActor is the primary class used
  * to communicate within a Junction activity.
  * <br/><br/>
  * Primarily, you will need to override the onMessageReceived
