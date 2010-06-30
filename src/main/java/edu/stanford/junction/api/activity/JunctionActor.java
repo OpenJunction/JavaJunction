@@ -10,8 +10,14 @@ import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
-// TODO: Make interface along with abstract class, for those who really need it.
-
+/**
+ * The JunctionActor is the primary method used
+ * to communicate within a Junction activity.
+ * <br/><br/>
+ * Primarily, you will need to override the onMessageReceived
+ * method to handle inbound messages, and use the sendMessageTo*
+ * methods to transmit them.
+ */
 public abstract class JunctionActor {
 	protected Junction mJunction;
 	private String actorID;
@@ -63,18 +69,30 @@ public abstract class JunctionActor {
 		
 	}
 
-	public void sendMessageToActor(String actorID, JSONObject message) {
+	/**
+	 * Send a message to an individual actor, idenfified by actorID
+	 */
+	public final void sendMessageToActor(String actorID, JSONObject message) {
 		mJunction.sendMessageToActor(actorID, message);
 	}
-	
-	public void sendMessageToSession(JSONObject message) {
+
+	/**
+	 * Send a message for anyone in the Junction session.
+	 */	
+	public final void sendMessageToSession(JSONObject message) {
 		mJunction.sendMessageToSession(message);
 	}
 	
-	public void sendMessageToRole(String role, JSONObject message) {
+	/**
+	 * Send a message to an actor claiming a certain role.
+	 */
+	public final void sendMessageToRole(String role, JSONObject message) {
 		mJunction.sendMessageToRole(role, message);
 	}
 	
+	/**
+	 * Asynchronously handle an inbound message.
+	 */
 	public abstract void onMessageReceived(MessageHeader header, JSONObject message);
 	
 	/**
