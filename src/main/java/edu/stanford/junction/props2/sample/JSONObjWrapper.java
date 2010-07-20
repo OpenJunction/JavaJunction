@@ -19,6 +19,10 @@ class JSONObjWrapper extends JSONObject{
 		this.self = obj;
 	}
 
+	public JSONObject getRaw(){
+		return self;
+	}
+
 	public int hashCode(){
 		return this.optInt("id");
 	}
@@ -39,8 +43,6 @@ class JSONObjWrapper extends JSONObject{
 		catch(JSONException e){}
 		return new JSONObjWrapper(copy);
 	}
-
-
 
 	/** 
 	 * Get the value object associated with a key.

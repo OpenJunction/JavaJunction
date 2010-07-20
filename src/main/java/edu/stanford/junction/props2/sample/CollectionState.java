@@ -73,10 +73,12 @@ abstract class CollectionState implements IPropState{
 		JSONObject obj = new JSONObject();
 		try{
 			JSONArray a = new JSONArray();
-			for(JSONObject item : this.items){
-				a.put(item);
+			for(JSONObject o : this.items){
+				JSONObjWrapper item = (JSONObjWrapper)o;
+				a.put(item.getRaw());
 			}
 			obj.put("items", a);
+			System.out.println("ARRAY: " + a.toString());
 		}
 		catch(JSONException e){}
 		return obj;

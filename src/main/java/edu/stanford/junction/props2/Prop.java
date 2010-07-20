@@ -316,7 +316,9 @@ public abstract class Prop extends JunctionExtra {
 	protected void handleStateSyncMsg(JSONObject msg){
 		logInfo("Got StateSyncMsg:" + msg);
 
+		logInfo("Reifying received state..");
 		this.cleanState = this.reifyState(msg.optJSONObject("state"));
+		logInfo("Copying clean to predicted..");
 		this.state = this.cleanState.copy();
 		this.sequenceNum = msg.optLong("seqNum");
 		this.lastOpUUID = msg.optString("lastOpUUID");
