@@ -316,8 +316,8 @@ class ListState implements IPropState{
 			obj.put("type", "ListState");
 			obj.put("items", a);
 		}catch(JSONException e){}
-		return obj.toString();
-	}
+		return obj.toString();	
+}
 
 	public IPropState copy(){
 		ListState s = new ListState();

@@ -39,7 +39,7 @@ public abstract class Prop extends JunctionExtra {
 
 	private int mode = MODE_NORM;
 	private long staleness = 0;
-	private long syncNonce = -1;
+	private String syncId = "";
 	private boolean waitingForIHaveState = false;
 
 	private Vector<OperationOrderAckMsg> orderAckSYNC = new Vector<OperationOrderAckMsg>();
@@ -228,7 +228,7 @@ public abstract class Prop extends JunctionExtra {
 			for(SendMeStateMsg msg : this.stateSyncRequests){
 				StateSyncMsg sync = new StateSyncMsg(
 					this.state.stringify(),
-					msg.syncNonce,
+					msg.syncId,
 					this.sequenceNum,
 					this.seqNumCounter,
 					this.lastOrderAckUUID,
@@ -368,21 +368,20 @@ public abstract class Prop extends JunctionExtra {
 	private void exitSYNCMode(){
 		logInfo("Exiting SYNC mode");
 		this.mode = MODE_NORM;
-		this.syncNonce = -1;
+		this.syncId = "";
 		this.waitingForIHaveState = false;
 	}
 
 	private void enterSYNCMode(long desiredSeqNumber){
 		logInfo("Entering SYNC mode.");
 		this.mode = MODE_SYNC;
-		Random rng = new Random();
-		this.syncNonce = rng.nextLong();
+		this.syncId = UUID.randomUUID().toString();
 		this.sequenceNum = -1;
 		this.seqNumCounter = -1;
 		this.orderAckSYNC.clear();
 		this.opsSYNC.clear();
 		this.sequentialOpsBuffer.clear();
-		sendMessageToProp(new WhoHasStateMsg(desiredSeqNumber, this.syncNonce));
+		sendMessageToProp(new WhoHasStateMsg(desiredSeqNumber, this.syncId));
 		this.waitingForIHaveState = true;
 	}
 
@@ -404,11 +403,13 @@ public abstract class Prop extends JunctionExtra {
 			case MSG_WHO_HAS_STATE:{
 				WhoHasStateMsg msg = (WhoHasStateMsg)rawMsg;
 				if(!isSelfMsg(msg)){
+					logInfo("Got WhoHasState..");
 					// Can we fill the gap for this peer?
 					if(sequenceNum >= msg.desiredSeqNumber){
+						logInfo("I have the desired seqNum, sending IHaveState");
 						sendMessageToPropReplica(
 							fromActor, 
-							new IHaveStateMsg(sequenceNum, msg.syncNonce));
+							new IHaveStateMsg(sequenceNum, msg.syncId));
 					}
 					else{
 						logInfo("Oops! got state request for state i don't have!");
@@ -419,8 +420,10 @@ public abstract class Prop extends JunctionExtra {
 			case MSG_SEND_ME_STATE: {
 				SendMeStateMsg msg = (SendMeStateMsg)rawMsg;
 				if(!isSelfMsg(msg)){
+					logInfo("Got SendMeState");
 					// Can we fill the gap for this peer?
 					if(sequenceNum >= msg.desiredSeqNumber){
+						logInfo("I have the desired seqNum, enqueing State Request");
 						this.stateSyncRequests.add(msg);
 						this.processStateSyncRequests();
 					}
@@ -477,9 +480,11 @@ public abstract class Prop extends JunctionExtra {
 			case MSG_I_HAVE_STATE:{
 				IHaveStateMsg msg = (IHaveStateMsg)rawMsg;
 				if(!isSelfMsg(msg) && this.waitingForIHaveState){
-					if(msg.syncNonce == this.syncNonce && msg.seqNum > sequenceNum){
+					logInfo("Got I have state..");
+					if(msg.syncId.equals(this.syncId) && msg.seqNum > sequenceNum){
+						logInfo("Sending SendMeState..");
 						this.waitingForIHaveState = false;
-						sendMessageToPropReplica(fromActor, new SendMeStateMsg(msg.seqNum, msg.syncNonce));
+						sendMessageToPropReplica(fromActor, new SendMeStateMsg(msg.seqNum, msg.syncId));
 					}
 				}
 				break;
@@ -501,8 +506,8 @@ public abstract class Prop extends JunctionExtra {
 					// First check that this sync message corresponds to this
 					// instance of SYNC mode. This is critical for assumptions
 					// we make about the contents of incomingBuffer...
-					if(msg.syncNonce != this.syncNonce){
-						logInfo("Bogus SYNC nonce! ignoring StateSyncMsg");
+					if(!(msg.syncId.equals(this.syncId))){
+						logInfo("Bogus sync id! ignoring StateSyncMsg");
 					}
 					else{
 						logInfo("Got StateSyncMsg:" + msg);
@@ -772,7 +777,7 @@ public abstract class Prop extends JunctionExtra {
 
 	class StateSyncMsg extends PropMsg{
 		public String state;
-		public long syncNonce;
+		public String syncId;
 		public long sequenceNum;
 		public long seqNumCounter;
 		public String lastOrderAckUUID;
@@ -781,15 +786,15 @@ public abstract class Prop extends JunctionExtra {
 		public StateSyncMsg(JSONObject msg){
 			super(msg);
 			state = msg.optString("state");
-			syncNonce = msg.optLong("syncNonce");
+			syncId = msg.optString("syncId");
 			sequenceNum = msg.optLong("opSeqNum");
 			seqNumCounter = msg.optLong("seqNumCounter");
 			lastOrderAckUUID = msg.optString("lastOrderAckUUID");
 			lastOpUUID = msg.optString("lastOpUUID");
 		}
-		public StateSyncMsg(String state, long syncNonce, long opSeqNum, long seqNumCounter, String lastOrderAckUUID, String lastOpUUID){
+		public StateSyncMsg(String state, String syncId, long opSeqNum, long seqNumCounter, String lastOrderAckUUID, String lastOpUUID){
 			this.state = state;
-			this.syncNonce = syncNonce;
+			this.syncId = syncId;
 			this.sequenceNum = opSeqNum;
 			this.seqNumCounter = seqNumCounter;
 			this.lastOrderAckUUID = lastOrderAckUUID;
@@ -800,7 +805,7 @@ public abstract class Prop extends JunctionExtra {
 			try{
 				obj.put("type", MSG_STATE_SYNC);
 				obj.put("state", state);
-				obj.put("syncNonce", syncNonce);
+				obj.put("syncId", syncId);
 				obj.put("opSeqNum", sequenceNum);
 				obj.put("seqNumCounter", seqNumCounter);
 				obj.put("lastOrderAckUUID", lastOrderAckUUID);
@@ -813,22 +818,22 @@ public abstract class Prop extends JunctionExtra {
 
 	class WhoHasStateMsg extends PropMsg{
 		public long desiredSeqNumber;
-		public long syncNonce;
+		public String syncId;
 		public WhoHasStateMsg(JSONObject msg){
 			super(msg);
 			desiredSeqNumber = msg.optLong("desiredSeqNumber");
-			syncNonce = msg.optLong("syncNonce");
+			syncId = msg.optString("syncId");
 		}
-		public WhoHasStateMsg(long desiredSeqNumber, long syncNonce){
+		public WhoHasStateMsg(long desiredSeqNumber, String syncId){
 			this.desiredSeqNumber = desiredSeqNumber;
-			this.syncNonce = syncNonce;
+			this.syncId = syncId;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_WHO_HAS_STATE);
 				obj.put("desiredSeqNumber", desiredSeqNumber);
-				obj.put("syncNonce", syncNonce);
+				obj.put("syncId", syncId);
 			}catch(JSONException e){}
 			return obj;
 		}
@@ -837,22 +842,22 @@ public abstract class Prop extends JunctionExtra {
 
 	class IHaveStateMsg extends PropMsg{
 		public long seqNum;
-		public long syncNonce;
+		public String syncId;
 		public IHaveStateMsg(JSONObject msg){
 			super(msg);
 			seqNum = msg.optLong("seqNum");
-			syncNonce = msg.optLong("syncNonce");
+			syncId = msg.optString("syncId");
 		}
-		public IHaveStateMsg(long seqNum, long syncNonce){
+		public IHaveStateMsg(long seqNum, String syncId){
 			this.seqNum = seqNum;
-			this.syncNonce = syncNonce;
+			this.syncId = syncId;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_I_HAVE_STATE);
 				obj.put("seqNum", seqNum);
-				obj.put("syncNonce", syncNonce);
+				obj.put("syncId", syncId);
 			}catch(JSONException e){}
 			return obj;
 		}
@@ -860,22 +865,22 @@ public abstract class Prop extends JunctionExtra {
 
 	class SendMeStateMsg extends PropMsg{
 		public long desiredSeqNumber;
-		public long syncNonce;
+		public String syncId;
 		public SendMeStateMsg(JSONObject msg){
 			super(msg);
 			desiredSeqNumber = msg.optLong("desiredSeqNumber");
-			syncNonce = msg.optLong("syncNonce");
+			syncId = msg.optString("syncId");
 		}
-		public SendMeStateMsg(long desiredSeqNumber, long syncNonce){
+		public SendMeStateMsg(long desiredSeqNumber, String syncId){
 			this.desiredSeqNumber = desiredSeqNumber;
-			this.syncNonce = syncNonce;
+			this.syncId = syncId;
 		}
 		public JSONObject toJSONObject(){
 			JSONObject obj = new JSONObject();
 			try{
 				obj.put("type", MSG_SEND_ME_STATE);
 				obj.put("desiredSeqNumber", desiredSeqNumber);
-				obj.put("syncNonce", syncNonce);
+				obj.put("syncId", syncId);
 			}catch(JSONException e){}
 			return obj;
 		}

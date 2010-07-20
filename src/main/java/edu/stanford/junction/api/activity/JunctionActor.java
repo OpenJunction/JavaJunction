@@ -72,21 +72,21 @@ public abstract class JunctionActor {
 	/**
 	 * Send a message to an individual actor, idenfified by actorID
 	 */
-	public final void sendMessageToActor(String actorID, JSONObject message) {
+	public void sendMessageToActor(String actorID, JSONObject message) {
 		mJunction.sendMessageToActor(actorID, message);
 	}
 
 	/**
 	 * Send a message for anyone in the Junction session.
 	 */	
-	public final void sendMessageToSession(JSONObject message) {
+	public void sendMessageToSession(JSONObject message) {
 		mJunction.sendMessageToSession(message);
 	}
 	
 	/**
 	 * Send a message to an actor claiming a certain role.
 	 */
-	public final void sendMessageToRole(String role, JSONObject message) {
+	public void sendMessageToRole(String role, JSONObject message) {
 		mJunction.sendMessageToRole(role, message);
 	}
 	
