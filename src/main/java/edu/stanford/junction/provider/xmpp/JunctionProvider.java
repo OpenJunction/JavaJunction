@@ -1,12 +1,14 @@
 package edu.stanford.junction.provider.xmpp;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -225,6 +227,16 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			System.out.println("Connected.");
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public URI generateSessionUri() {
+		String session = UUID.randomUUID().toString();
+		try {
+			return new URI("junction://" + mConfig.host + "/" + session);
+		} catch (URISyntaxException e) {
+			throw new AssertionError("Invalid URI");
 		}
 	}
 

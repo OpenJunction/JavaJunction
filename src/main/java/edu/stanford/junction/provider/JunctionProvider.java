@@ -44,6 +44,8 @@ public abstract class JunctionProvider {
 	
 	public abstract ActivityScript getActivityScript(URI uri);
 	
+	public abstract URI generateSessionUri();
+	
 	public void setJunctionMaker(JunctionMaker maker) {
 		this.mJunctionMaker=maker;
 	}

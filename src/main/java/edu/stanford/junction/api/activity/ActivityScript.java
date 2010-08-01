@@ -1,12 +1,12 @@
 package edu.stanford.junction.api.activity;
 
+import java.net.URI;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import edu.stanford.junction.JunctionMaker;
 
 public class ActivityScript {
 	
@@ -47,8 +47,12 @@ public class ActivityScript {
 	private boolean generatedSessionID=false;
 	
 	public ActivityScript() {
-		sessionID 	= UUID.randomUUID().toString();
 		generatedSessionID=true;
+	}
+	
+	public void setUri(URI uri) {
+		sessionID = JunctionMaker.getSessionIDFromURI(uri);
+		host = uri.getHost();
 	}
 	
 	public ActivityScript(JSONObject json) {
@@ -76,9 +80,6 @@ public class ActivityScript {
 		
 		if (json.has("sessionID")) {
 			sessionID = json.optString("sessionID");
-		} else {
-			sessionID = UUID.randomUUID().toString();
-			generatedSessionID=true;
 		}
 		
 		////////////////////////////////////////////

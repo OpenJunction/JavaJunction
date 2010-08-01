@@ -76,7 +76,15 @@ public class JunctionMaker {
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
+		if (desc.getSessionID() == null) {
+			desc.isActivityCreator(true);
+			desc.setUri(mProvider.generateSessionUri());
+		}
 		return mProvider.newJunction(desc, actor);
+	}
+	
+	public URI generateSessionUri() {
+		return mProvider.generateSessionUri();
 	}
 	
 	/**

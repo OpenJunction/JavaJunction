@@ -40,4 +40,14 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	public JunctionProvider(JVMSwitchboardConfig config) {
 		
 	}
+
+	@Override
+	public URI generateSessionUri() {
+		try {
+			String session = UUID.randomUUID().toString();
+			return new URI("junction://" + session);
+		} catch (URISyntaxException e) {
+			throw new AssertionError("Invalid URI");
+		}
+	}
 }
