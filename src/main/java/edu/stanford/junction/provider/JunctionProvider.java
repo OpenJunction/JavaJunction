@@ -14,8 +14,7 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 public abstract class JunctionProvider {
 	protected JunctionMaker mJunctionMaker;
 	
-	public abstract Junction newJunction(URI uri, JunctionActor actor);
-	public abstract Junction newJunction(ActivityScript desc, JunctionActor actor);
+	public abstract Junction newJunction(URI uri, ActivityScript script, JunctionActor actor);
 
 
 	/**
@@ -36,7 +35,7 @@ public abstract class JunctionProvider {
 			}
 		};
 		
-		newJunction(activitySession,sender);
+		newJunction(activitySession, null, sender);
 	}
 	
 	
