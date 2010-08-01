@@ -10,6 +10,10 @@ import edu.stanford.junction.api.activity.JunctionActor;
 
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	
+	public JunctionProvider(JVMSwitchboardConfig config) {
+		
+	}
+	
 	@Override
 	public ActivityScript getActivityScript(URI uri) {
 		// TODO Auto-generated method stub
@@ -17,35 +21,15 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	}
 
 	@Override
-	public Junction newJunction(URI uri, JunctionActor actor) {
+	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
 		return new edu.stanford.junction.provider.jvm.Junction(uri,null,actor);
-	}
-
-	@Override
-	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
-		// TODO: The way sessionIDs are created and managed is garbage.
-		// fix.
-		
-		String uuid = UUID.randomUUID().toString();
-		URI uri = null;
-		try {
-			uri = new URI("junction://"+uuid+"#jvm");
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return new edu.stanford.junction.provider.jvm.Junction(uri,desc,actor);
-	}
-
-	public JunctionProvider(JVMSwitchboardConfig config) {
-		
 	}
 
 	@Override
 	public URI generateSessionUri() {
 		try {
 			String session = UUID.randomUUID().toString();
-			return new URI("junction://" + session);
+			return new URI("junction://" + session + "#jvm");
 		} catch (URISyntaxException e) {
 			throw new AssertionError("Invalid URI");
 		}

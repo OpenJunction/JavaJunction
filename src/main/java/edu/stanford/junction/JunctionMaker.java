@@ -71,16 +71,39 @@ public class JunctionMaker {
 	 * (2) Retrieve an activity's script given a URI
 	 * (3) Support various invitation mechanisms (often platform-specific)
 	 */
+	
+	/**
+	 * This method has been deprecated. Please see 
+	 * {@link newJunction(URI, ActivityScript, JunctionActor)}
+	 */
+	@Deprecated
 	public Junction newJunction(URI uri, JunctionActor actor) {
-		return mProvider.newJunction(uri, actor);
+		return mProvider.newJunction(uri, null, actor);
+	}
+	
+	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
+		return mProvider.newJunction(uri, script, actor);
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
-		if (desc.getSessionID() == null) {
-			desc.isActivityCreator(true);
-			desc.setUri(mProvider.generateSessionUri());
+		URI sessionUri;
+		if (desc == null) {
+			desc = new ActivityScript();
 		}
-		return mProvider.newJunction(desc, actor);
+		if (desc.getSessionID() == null) {
+			sessionUri = mProvider.generateSessionUri();
+			desc.isActivityCreator(true);
+			desc.setUri(sessionUri);
+		} else {
+			// TODO: get rid of this.
+			try {
+				sessionUri = new URI("junction://" + desc.getHost() + "/" + desc.getSessionID());
+			} catch (URISyntaxException e) {
+				throw new IllegalArgumentException("Bad URI from activity script");
+			}
+		}
+
+		return mProvider.newJunction(sessionUri, desc, actor);
 	}
 	
 	public URI generateSessionUri() {
@@ -98,7 +121,7 @@ public class JunctionMaker {
 	 * @return
 	 */
 	public Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support) {
-		Junction jx = mProvider.newJunction(desc, actor);
+		Junction jx = newJunction(desc, actor);
 		//System.out.println("creating activity " + desc.getJSON());
 		int size=support.size();
 		System.out.println("going to cast " + size + " roles");

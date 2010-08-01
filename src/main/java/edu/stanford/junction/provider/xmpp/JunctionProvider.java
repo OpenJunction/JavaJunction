@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.stanford.junction.Junction;
+import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -39,29 +40,19 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		mConfig = config;		
 	}
 	
-	public Junction newJunction(URI uri, JunctionActor actor) {
-		ActivityScript desc = new ActivityScript();
-		desc.setHost(uri.getHost());
-		if (uri.getPath() != null) { // TODO: check to make sure this works for URIs w/o path
-			desc.setSessionID(uri.getPath().substring(1));
-		}
-		
-		return (edu.stanford.junction.provider.xmpp.Junction)newJunction(desc,uri,actor);
-	}
-	
-	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
-		return newJunction(desc,null,actor);
-	}
-	
-	private Junction newJunction(ActivityScript script, URI invitation, JunctionActor actor) {
+	public Junction newJunction(URI invitation, ActivityScript script, JunctionActor actor) {
 		// this needs to be made more formal
-		if (null == script.getHost() && mConfig.host != null) {
-			script.setHost(mConfig.host);
+		if (script == null) {
+			script = new ActivityScript();
+		}
+		if (null == script.getHost()) {
+			script.setUri(invitation);
 		}
 		
-		XMPPConnection mXMPPConnection = getXMPPConnection(mConfig,script.getSessionID());
-		edu.stanford.junction.provider.xmpp.Junction jx = 
-			new edu.stanford.junction.provider.xmpp.Junction(script,mXMPPConnection,mConfig,this);
+		XMPPConnection mXMPPConnection 
+		    = getXMPPConnection(mConfig,JunctionMaker.getSessionIDFromURI(invitation));
+		edu.stanford.junction.provider.xmpp.Junction jx
+			= new edu.stanford.junction.provider.xmpp.Junction(script,mXMPPConnection,mConfig,this);
 		
 		jx.mAcceptedInvitation=invitation;
 		jx.registerActor(actor);
