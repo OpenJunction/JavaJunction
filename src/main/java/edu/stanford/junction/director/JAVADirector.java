@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.activity.JunctionService;
@@ -117,13 +118,13 @@ public class JAVADirector extends JunctionActor {
 							if (proc != null) {
 								mActivities.add(new Activity(activityURI,proc));
 								
-								 InputStream is = proc.getInputStream();
-							     BufferedReader br = new BufferedReader( new InputStreamReader(is));
-							     String line;
+								InputStream is = proc.getInputStream();
+								BufferedReader br = new BufferedReader( new InputStreamReader(is));
+								String line;
 
-							     while ((line = br.readLine()) != null) {
+								while ((line = br.readLine()) != null) {
 							    	System.out.println(line);
-							     }
+								}
 							}
 						} else {
 							System.out.println("Warning: JAVA platform specified but no JAR found.");
@@ -276,14 +277,18 @@ public class JAVADirector extends JunctionActor {
 		mMaker = JunctionMaker.getInstance(config);
 		
 		JunctionActor director = new JAVADirector();
-		mMaker.newJunction(script, director);
-		
-		synchronized(director){
-			try {
-				director.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		try{
+			mMaker.newJunction(script, director);
+			synchronized(director){
+				try {
+					director.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
+		}
+		catch(JunctionException e){
+			e.printStackTrace(System.err);
 		}
 	}	
 }

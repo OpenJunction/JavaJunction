@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Date;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
@@ -21,6 +27,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -40,7 +47,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		mConfig = config;		
 	}
 	
-	public Junction newJunction(URI invitation, ActivityScript script, JunctionActor actor) {
+	public Junction newJunction(URI invitation, ActivityScript script, JunctionActor actor) throws JunctionException{
 		// this needs to be made more formal
 		if (script == null) {
 			script = new ActivityScript();
@@ -67,19 +74,19 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		return jx;
 	}
 	
-	public ActivityScript getActivityScript(URI uri) {
+	public ActivityScript getActivityScript(URI uri) throws JunctionException {
 		
 		// TODO: Move the XMPPConnection into the JunctionMaker
 		// (out of Junction)
 		/*
-		JunctionMaker jm = null;
-		String host = uri.getHost();
-		if (host.equals(mSwitchboard)) {
-			jm = this;
-		} else {
-			jm = new JunctionMaker(host);
-		}
-		 */
+		  JunctionMaker jm = null;
+		  String host = uri.getHost();
+		  if (host.equals(mSwitchboard)) {
+		  jm = this;
+		  } else {
+		  jm = new JunctionMaker(host);
+		  }
+		*/
 		
 		String host = uri.getHost();
 		String sessionID = uri.getPath().substring(1);
@@ -94,107 +101,119 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		
 		try {
 			RoomInfo info = MultiUserChat.getRoomInfo(conn, room);
-			/*
-			System.err.println("room desc " + info.getDescription());
-			System.err.println("room subj " + info.getSubject());
-			System.err.println("part " + info.getOccupantsCount());
-			System.err.println("room " + info.getRoom());
-			*/
 			String descString = info.getDescription();
+
 			if (descString == null || descString.trim().length()==0) {
-				System.err.println("No MUC room description found.");
-				return null;
+				throw new JunctionException("No MUC room description found.");
 			}
 			
 			JSONObject descJSON = new JSONObject(descString);
 			
 			return new ActivityScript(descJSON);
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new JunctionException("Failed to initialize XMPP Chat Room.", e);
 		}
-		
-		return null;
+
 	}
 
 	private static ArrayList<XMPPConnection> sConnections = new ArrayList<XMPPConnection>();
 	private static ArrayList<HashSet<String>> sConnectionSessions
 		= new ArrayList<HashSet<String>>();
-	
-	private synchronized XMPPConnection getXMPPConnection(XMPPSwitchboardConfig config, String roomid) {
 
-		if (ONE_CONNECTION_PER_SESSION) {
-			XMPPConnection theConnection = new XMPPConnection(config.host);
-			sConnections.add(theConnection);
-			HashSet<String> set = new HashSet<String>();
-			set.add(roomid);
-			sConnectionSessions.add(set);
-			
-			try {
-				theConnection.connect();
-				if (config.user != null) {
-					theConnection.login(config.user, config.password);
-				} else {
-					theConnection.loginAnonymously();
-				}
-				
-				return theConnection;
-			} catch (Exception e) {
-				System.err.println("Could not connect to XMPP provider");
-				e.printStackTrace();
-				return null;
-			}
+
+	class ConnectionThread extends Thread{
+		public volatile XMPPConnection connection = null;
+		public volatile Throwable failureReason = null;
+		public volatile boolean stop = false;
+
+		private CountDownLatch waitForConnect;
+		private XMPPSwitchboardConfig config;
+
+		public ConnectionThread(XMPPSwitchboardConfig config, CountDownLatch latch){
+			this.waitForConnect = latch;
+			this.config = config;
 		}
 
-		
-		
-		XMPPConnection theConnection = null;
-		for (int i=0;i<sConnections.size();i++) {
-			if (!sConnectionSessions.get(i).contains(roomid)) {
-				// this connection can support this roomid.
-				theConnection = sConnections.get(i);
-				sConnectionSessions.get(i).add(roomid);
-				
-				if (!theConnection.isConnected()) {
-					System.out.println("Have non-connected XMPPConnection.");
-					try {
-						theConnection.connect();
-					} catch (XMPPException e) {
-						e.printStackTrace();
+		public void run(){
+			while(connection == null && stop == false){
+				XMPPConnection conn = new XMPPConnection(config.host);
+				try {
+					conn.connect();
+					if (config.user != null) {
+						conn.login(config.user, config.password);
+					} 
+					else {
+						conn.loginAnonymously();
+					}
+					failureReason = null;
+					connection = conn;
+					waitForConnect.countDown();
+				}
+				catch (XMPPException e) {
+					Throwable ex = e.getWrappedThrowable();
+					if(ex instanceof IOException){
+						failureReason = ex;
+						continue;
+					}
+					else if(ex instanceof UnknownHostException){
+						failureReason = ex;
+						continue;
+					}
+					else {
+						// Otherwise, we consider the exception
+						// unrecoverable.
+						failureReason = e;
+						waitForConnect.countDown();
+						break;
 					}
 				}
-				
-				return theConnection;
+				catch (Exception e) {
+					failureReason = e;
+					waitForConnect.countDown();
+					break;
+				}
 			}
 		}
+	}
 
-		if (theConnection == null) {
-			theConnection = new XMPPConnection(config.host);
-			sConnections.add(theConnection);
+
+
+	private synchronized XMPPConnection getXMPPConnection(XMPPSwitchboardConfig config, String roomid) throws JunctionException{
+		final CountDownLatch waitForConnect = new CountDownLatch(1);
+		ConnectionThread t = new ConnectionThread(config, waitForConnect);
+		t.start();
+
+		boolean noTimeout = true;
+		try{
+			noTimeout = waitForConnect.await(config.connectionTimeout, TimeUnit.MILLISECONDS);
+		}
+		catch(InterruptedException e){
+			throw new JunctionException("Interrupted while waiting for connection.");
+		}
+
+		t.stop = true;
+
+		if(noTimeout && t.connection != null && t.failureReason == null){
+			sConnections.add(t.connection);
 			HashSet<String> set = new HashSet<String>();
 			set.add(roomid);
 			sConnectionSessions.add(set);
-			
-			try {
-				theConnection.connect();
-				if (config.user != null) {
-					theConnection.login(config.user, config.password);
-				} else {
-					theConnection.loginAnonymously();
-				}
-				
-				return theConnection;
-			} catch (Exception e) {
-				System.err.println("Could not connect to XMPP provider");
-				e.printStackTrace();
-				return null;
+			return t.connection;
+		}
+		else if(noTimeout){
+			if(t.failureReason != null){
+				throw new JunctionException("Connection attempt failed.", t.failureReason);
+			}
+			else{
+				throw new JunctionException("Connection attempt failed for unknown reason.", t.failureReason);
 			}
 		}
-		
-		return null;
+		else{
+			String msg = "Connection attempt failed to complete within provided timeout of " + 
+				config.connectionTimeout + " milliseconds.";
+			throw new JunctionException(msg, new ConnectionTimeoutException(msg));
+		}
 	}
 	
 	protected synchronized void remove(edu.stanford.junction.provider.xmpp.Junction jx) {

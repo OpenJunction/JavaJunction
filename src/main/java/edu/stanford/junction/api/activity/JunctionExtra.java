@@ -81,6 +81,7 @@ public abstract class JunctionExtra {
 	public void afterActivityCreate() {
 		
 	}
+
 	
 	//public void beforeGetActivityScript();
 	

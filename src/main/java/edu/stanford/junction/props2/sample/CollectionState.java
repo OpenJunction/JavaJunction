@@ -5,6 +5,7 @@ import org.json.JSONException;
 import java.util.*;
 import edu.stanford.junction.props2.Prop;
 import edu.stanford.junction.props2.IPropState;
+import edu.stanford.junction.extra.JSONObjWrapper;
 
 abstract class CollectionState implements IPropState{
 
@@ -36,6 +37,10 @@ abstract class CollectionState implements IPropState{
 		this.items.add(obj2);
 	}
 
+	public void clear(){
+		this.items.clear();
+	}
+
 	public IPropState applyOperation(JSONObject obj){
 		String type = obj.optString("type");
 		if(type.equals("addOp")){
@@ -47,6 +52,9 @@ abstract class CollectionState implements IPropState{
 		else if(type.equals("replaceOp")){
 			replace(new JSONObjWrapper(obj.optJSONObject("item1")),
 					new JSONObjWrapper(obj.optJSONObject("item2")));
+		}
+		else if(type.equals("clearOp")){
+			clear();
 		}
 		else{
 			System.err.println("Unrecognized operation: " + type);

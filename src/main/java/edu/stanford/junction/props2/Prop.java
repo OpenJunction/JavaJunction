@@ -5,8 +5,6 @@ import java.util.*;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
-
-
 public abstract class Prop extends JunctionExtra {
 	private static final int MODE_NORM = 1;
 	private static final int MODE_SYNC = 2;
@@ -65,7 +63,11 @@ public abstract class Prop extends JunctionExtra {
 	class PeriodicTask extends TimerTask{
 		public void run(){
 			long t = (new Date()).getTime();
-			if(active && getActor() != null){
+			if(active && getActor() != null && 
+			   
+			   // should be null if actor has 'left' the activity
+			   getActor().getJunction() != null 
+			   ){
 				if(mode == MODE_NORM){
 					if((t - timeOfLastHello) > 3000){
 						sendHello();

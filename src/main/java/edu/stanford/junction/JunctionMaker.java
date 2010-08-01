@@ -12,6 +12,7 @@ import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.Cast;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.provider.JunctionProvider;
 import edu.stanford.junction.provider.jvm.JVMSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
@@ -71,21 +72,22 @@ public class JunctionMaker {
 	 * (2) Retrieve an activity's script given a URI
 	 * (3) Support various invitation mechanisms (often platform-specific)
 	 */
+
 	
 	/**
 	 * This method has been deprecated. Please see 
 	 * {@link newJunction(URI, ActivityScript, JunctionActor)}
 	 */
 	@Deprecated
-	public Junction newJunction(URI uri, JunctionActor actor) {
+	public Junction newJunction(URI uri, JunctionActor actor) throws JunctionException{
 		return mProvider.newJunction(uri, null, actor);
 	}
 	
-	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
+	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException{
 		return mProvider.newJunction(uri, script, actor);
 	}
 	
-	public Junction newJunction(ActivityScript desc, JunctionActor actor) {
+	public Junction newJunction(ActivityScript desc, JunctionActor actor) throws JunctionException{
 		URI sessionUri;
 		if (desc == null) {
 			desc = new ActivityScript();
@@ -120,7 +122,7 @@ public class JunctionMaker {
 	 * @param support
 	 * @return
 	 */
-	public Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support) {
+	public Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support) throws JunctionException{
 		Junction jx = newJunction(desc, actor);
 		//System.out.println("creating activity " + desc.getJSON());
 		int size=support.size();
@@ -144,12 +146,12 @@ public class JunctionMaker {
 	 * @param activitySession
 	 * @param msg
 	 */
-	public void sendMessageToActivity(URI activitySession, JSONObject msg) {
+	public void sendMessageToActivity(URI activitySession, JSONObject msg) throws JunctionException{
 		mProvider.sendMessageToActivity(activitySession,msg);
 	}
 	
 	
-	public ActivityScript getActivityScript(URI uri) {
+	public ActivityScript getActivityScript(URI uri) throws JunctionException{
 		return mProvider.getActivityScript(uri);
 	}
 	
@@ -160,7 +162,7 @@ public class JunctionMaker {
 	 * @param directorURI The director listening for requests
 	 * @param invitationURI The activity to join (potentially including role information)
 	 */
-	public void castActor(final URI directorURI, final URI invitationURI) {
+	public void castActor(final URI directorURI, final URI invitationURI) throws JunctionException{
 		JunctionActor actor = new JunctionActor("inviter") {
 			@Override
 			public void onActivityJoin() {
@@ -168,8 +170,11 @@ public class JunctionMaker {
 				try {
 					invitation.put("action","cast");
 					invitation.put("activity", invitationURI.toString());
-				} catch (Exception e) {}
-				getJunction().sendMessageToSession(invitation);
+					getJunction().sendMessageToSession(invitation);
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+
 				leave();
 			}
 			
@@ -206,15 +211,18 @@ public class JunctionMaker {
 	}
 	
 	@Deprecated
-	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) {
+	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) throws JunctionException {
 		JunctionActor actor = new JunctionActor("inviter") {
 			@Override
 			public void onActivityJoin() {
 				JSONObject invitation = new JSONObject();
 				try {
 					invitation.put("activity", invitationURI.toString());
-				} catch (Exception e) {}
-				getJunction().sendMessageToSession(invitation);
+					getJunction().sendMessageToSession(invitation);
+				} 
+				catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
 				leave();
 			}
 			
@@ -247,7 +255,7 @@ public class JunctionMaker {
 	 * @param serviceName
 	 */
 	@Deprecated
-	public void inviteActorService(final Junction jx, final String role) {
+	public void inviteActorService(final Junction jx, final String role)  throws JunctionException{
 	ActivityScript desc = jx.getActivityScript();
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec

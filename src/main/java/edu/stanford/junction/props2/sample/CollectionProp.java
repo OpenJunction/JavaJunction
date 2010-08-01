@@ -33,6 +33,10 @@ abstract public class CollectionProp extends Prop {
 		addOperation(newDeleteOp(item));
 	}
 
+	public void clear(){
+		addOperation(newClearOp());
+	}
+
 	public Collection<JSONObject> items(){
 		CollectionState s = (CollectionState)getState();
 		return s.items();
@@ -101,6 +105,14 @@ abstract public class CollectionProp extends Prop {
 			obj.put("type", "replaceOp");
 			obj.put("item1", item1);
 			obj.put("item2", item2);
+		}catch(JSONException e){}
+		return obj;
+	}
+
+	protected JSONObject newClearOp(){
+		JSONObject obj = new JSONObject();
+		try{
+			obj.put("type", "clearOp");
 		}catch(JSONException e){}
 		return obj;
 	}

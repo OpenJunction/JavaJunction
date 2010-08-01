@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.stanford.junction.Junction;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
@@ -47,10 +48,15 @@ public abstract class JunctionService extends JunctionActor {
 		// Get rid of 'services' in general; just stick an actor to an activity.
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(switchboard);
 		JunctionMaker maker = (JunctionMaker) JunctionMaker.getInstance(config);
-		Junction jx = maker.newJunction(desc, this);
-		
-		mJunctionMap.put(switchboard, jx);
 
+		try{
+			Junction jx = maker.newJunction(desc, this);
+			mJunctionMap.put(switchboard, jx);
+		}
+		catch(JunctionException e){
+			System.err.println("Failed to register JunctionService");
+			e.printStackTrace(System.err);
+		}
 	}
 	
 	public void setRole(String role) {

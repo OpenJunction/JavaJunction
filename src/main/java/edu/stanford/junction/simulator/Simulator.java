@@ -30,7 +30,12 @@ class simThread extends Thread{
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
 		JunctionMaker maker = JunctionMaker.getInstance(config);
 		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
-			maker.newJunction(desc, new SimActor(NumOfMessage, actor_i));
+			try{
+				maker.newJunction(desc, new SimActor(NumOfMessage, actor_i));
+			}
+			catch(Exception e){
+				e.printStackTrace(System.err);
+			}
 			//maker.newJunction(desc, new SimActor(NumOfMessage, 0));
 		}
 	}

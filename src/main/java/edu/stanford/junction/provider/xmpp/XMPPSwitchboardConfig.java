@@ -6,6 +6,7 @@ public class XMPPSwitchboardConfig implements SwitchboardConfig {
 	protected String host;
 	protected String user;
 	protected String password;
+	protected long connectionTimeout = 10000; // 10 seconds in milliseconds
 	
 	public XMPPSwitchboardConfig(String host) {
 		this.host = host;
@@ -18,6 +19,10 @@ public class XMPPSwitchboardConfig implements SwitchboardConfig {
 	public void setCredentials(String username, String password) {
 		this.user = username;
 		this.password = password;
+	}
+
+	public void setConnectionTimeout(long t) {
+		this.connectionTimeout = t;
 	}
 	
 	public XMPPSwitchboardConfig(){}

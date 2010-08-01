@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.Cast;
 import edu.stanford.junction.api.activity.JunctionActor;
@@ -14,34 +15,32 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 public abstract class JunctionProvider {
 	protected JunctionMaker mJunctionMaker;
 	
-	public abstract Junction newJunction(URI uri, ActivityScript script, JunctionActor actor);
-
+	public abstract Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException;
 
 	/**
 	 * Unoptimized implementation that joins a session,
 	 * sends a messasge, and disconnects
 	 */
-	public void sendMessageToActivity(URI activitySession, final JSONObject msg) {
+	public void sendMessageToActivity(URI activitySession, final JSONObject msg) throws JunctionException{
 		JunctionActor sender = new JunctionActor("transient") {
-			@Override
-			public void onMessageReceived(MessageHeader header,
-					JSONObject message) {
-			}
+				@Override
+				public void onMessageReceived(MessageHeader header,
+											  JSONObject message) {
+				}
 			
-			@Override
-			public void onActivityJoin() {
-				sendMessageToSession(msg);
-				leave();
-			}
-		};
-		
+				@Override
+				public void onActivityJoin() {
+					sendMessageToSession(msg);
+					leave();
+				}
+			};
 		newJunction(activitySession, null, sender);
 	}
 	
 	
 	//public abstract Junction newJunction(ActivityScript desc, JunctionActor actor, Cast support);
 	
-	public abstract ActivityScript getActivityScript(URI uri);
+	public abstract ActivityScript getActivityScript(URI uri) throws JunctionException;
 	
 	public abstract URI generateSessionUri();
 	
@@ -50,7 +49,7 @@ public abstract class JunctionProvider {
 	}
 	
 	@Deprecated
-	protected void requestServices(Junction jx, ActivityScript desc) {
+	protected void requestServices(Junction jx, ActivityScript desc) throws JunctionException{
 		if (desc.isActivityCreator()) {
 			String[] roles = desc.getRoles();
 			for (String role : roles) {

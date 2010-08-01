@@ -6,36 +6,37 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 /*class simThread extends Thread{
-	private int NumOfMessage;
-	private int NumOfParticipant;
-	private int sessionID;
-	simThread(int NumMsg, int NumP, int id){
-		NumOfMessage = NumMsg;
-		NumOfParticipant = NumP;
-		sessionID = id;
-	}
-	public void run(){
-		ActivityDescription desc = new ActivityDescription();
-		//String ad = "SimSession_" + sessionID;
-		//desc.setSessionID(ad);
-		JSONObject platform = new JSONObject();
-		try{
-			platform.put("android", "http://my.realsitic.url/for_android");
-			desc.addRolePlatform("simulator", "android", platform);
-		} catch (Exception e) {}
-		JunctionMaker maker = JunctionMaker.getInstance("prpl.stanford.edu");
-		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
-			maker.newJunction(desc, new SimActor(NumOfMessage, actor_i));
-			//maker.newJunction(desc, new SimActor(NumOfMessage, 0));
-		}
-	}
-}*/
+  private int NumOfMessage;
+  private int NumOfParticipant;
+  private int sessionID;
+  simThread(int NumMsg, int NumP, int id){
+  NumOfMessage = NumMsg;
+  NumOfParticipant = NumP;
+  sessionID = id;
+  }
+  public void run(){
+  ActivityDescription desc = new ActivityDescription();
+  //String ad = "SimSession_" + sessionID;
+  //desc.setSessionID(ad);
+  JSONObject platform = new JSONObject();
+  try{
+  platform.put("android", "http://my.realsitic.url/for_android");
+  desc.addRolePlatform("simulator", "android", platform);
+  } catch (Exception e) {}
+  JunctionMaker maker = JunctionMaker.getInstance("prpl.stanford.edu");
+  for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
+  maker.newJunction(desc, new SimActor(NumOfMessage, actor_i));
+  //maker.newJunction(desc, new SimActor(NumOfMessage, 0));
+  }
+  }
+  }*/
 
 public class ResponseTimeSimulator {
 	static int NumOfActivity = 1;
@@ -53,7 +54,12 @@ public class ResponseTimeSimulator {
 		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
 		JunctionMaker maker = JunctionMaker.getInstance(config);
 		for(int actor_i = NumOfParticipant-1 ; actor_i >=0; actor_i --){
-			maker.newJunction(desc, new SimActorRT(makeJuncTime.getTime(), actor_i));
+			try{
+				maker.newJunction(desc, new SimActorRT(makeJuncTime.getTime(), actor_i));
+			}
+			catch(JunctionException e){
+				e.printStackTrace(System.err);
+			}
 		}
 		
 		while(true) {
