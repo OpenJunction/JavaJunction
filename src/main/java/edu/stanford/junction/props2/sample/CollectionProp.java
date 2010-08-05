@@ -9,8 +9,12 @@ import edu.stanford.junction.props2.IPropState;
 
 abstract public class CollectionProp extends Prop {
 
+	public CollectionProp(String propName, String propReplicaName, IPropState state, long seqNum){
+		super(propName, propReplicaName, state, seqNum);
+	}
+
 	public CollectionProp(String propName, String propReplicaName, IPropState state){
-		super(propName, state, propReplicaName);
+		super(propName, propReplicaName, state, 0);
 	}
 
 	protected IPropState newStateWith(Collection<JSONObject> items){

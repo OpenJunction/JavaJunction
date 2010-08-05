@@ -36,7 +36,6 @@ public abstract class Prop extends JunctionExtra {
 	private boolean waitingForIHaveState = false;
 
 	private Vector<JSONObject> opsSYNC = new Vector<JSONObject>();
-	private Vector<JSONObject> stateSyncRequests = new Vector<JSONObject>();
 
 	private Vector<JSONObject> pendingLocals = new Vector<JSONObject>();
 	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
@@ -44,17 +43,22 @@ public abstract class Prop extends JunctionExtra {
 	private Timer taskTimer;
 	private boolean active = false;
 
-	public Prop(String propName, IPropState state, String propReplicaName){
+	public Prop(String propName, String propReplicaName, IPropState state, long seqNum){
 		this.propName = propName;
-		this.cleanState = state;	
+		this.cleanState = state;
 		this.state = state.copy();
+		this.sequenceNum = seqNum;
 		this.propReplicaName = propReplicaName;
 		taskTimer = new Timer();
 		taskTimer.schedule(new PeriodicTask(), 0, 1000);
 	}
 
+	public Prop(String propName, String propReplicaName, IPropState state){
+		this(propName, propReplicaName, state, 0);
+	}
+
 	public Prop(String propName, IPropState state){
-		this(propName, state, propName + "-replica" + UUID.randomUUID().toString());
+		this(propName, propName + "-replica" + UUID.randomUUID().toString(), state);
 	}
 
 
@@ -96,6 +100,10 @@ public abstract class Prop extends JunctionExtra {
 
 	public String stateToString(){
 		return state.toString();
+	}
+
+	public JSONObject stateToJSON(){
+		return state.toJSON();
 	}
 
 	public String getPropName(){
@@ -170,7 +178,6 @@ public abstract class Prop extends JunctionExtra {
 	 */
 	protected void handleReceivedOp(JSONObject opMsg){
 		boolean changed = false;
-		List<JSONObject> pendingLocals = new ArrayList<JSONObject>();
 		if(isSelfMsg(opMsg)){
 			this.staleness = this.sequenceNum - opMsg.optLong("localSeqNum");
 			this.cleanState.applyOperation(opMsg.optJSONObject("op"));
