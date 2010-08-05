@@ -18,12 +18,13 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import edu.stanford.junction.Junction;
 import edu.stanford.junction.JunctionMaker;
 import edu.stanford.junction.JunctionException;
+import edu.stanford.junction.SwitchboardConfig;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.activity.JunctionService;
-import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
@@ -39,9 +40,9 @@ import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
  *
  */
 public class JAVADirector extends JunctionActor {
-
-	// TODO: The maker is used (poorly) to look up an activity script.
-	private static JunctionMaker mMaker = null;
+	public static final String DIRECTOR_SESSION = "jxservice"; // null will auto-generate
+	private static final SwitchboardConfig mSbConfig = new XMPPSwitchboardConfig("prpl.stanford.edu");
+	private static final JunctionMaker mMaker = JunctionMaker.getInstance(mSbConfig);
 	private List<Activity>mActivities;
 
 	public JAVADirector() {
@@ -149,9 +150,11 @@ public class JAVADirector extends JunctionActor {
 						}
 					}
 					
-					else {
+					else if (message.has("serviceName")) {
 						String className = message.getString("serviceName");
-						launchService(activityURI,className);
+						launchService(activityURI, script, className);
+					} else {
+						System.out.println("No action taken for " + message);
 					}
 				}
 			}
@@ -218,7 +221,7 @@ public class JAVADirector extends JunctionActor {
 		return null;
 	}
 
-	private void launchService(URI activityURI, String className) {	
+	private void launchService(URI activityURI, ActivityScript script, String className) {	
 		Class c = null;
 		try {
 			c = Class.forName(className);
@@ -252,14 +255,15 @@ public class JAVADirector extends JunctionActor {
 		service.setRole(localRole);
 
 		System.out.println("service actorID is " + service.getActorID());
-		//JunctionMaker.getInstance().newJunction(activityURI,service);					
+		try {
+			mMaker.newJunction(activityURI, script, service);
+		} catch (JunctionException e) {
+			e.printStackTrace();
+		}
 	}
 
 
 	public static void main(String[] argv) {
-		String switchboard="prpl.stanford.edu";
-		String sessionID = "jxservice";
-		
 		ActivityScript script = new ActivityScript();
 		script.setActivityID(JunctionMaker.DIRECTOR_ACTIVITY);
 		//script.addRolePlatform("director", "java", null);
@@ -269,16 +273,12 @@ public class JAVADirector extends JunctionActor {
 		
 		// TODO: These should be in a "carrier" field
 		// ( carrier; implementation; provider; ... )
-		script.setSessionID(sessionID);
-		script.setHost(switchboard);
+		script.setSessionID(DIRECTOR_SESSION);
 
-		
-		XMPPSwitchboardConfig config = new XMPPSwitchboardConfig(switchboard);
-		mMaker = JunctionMaker.getInstance(config);
-		
 		JunctionActor director = new JAVADirector();
 		try{
-			mMaker.newJunction(script, director);
+			Junction jx = mMaker.newJunction(script, director);
+			System.out.println("Launched director on " + jx.getInvitationURI());
 			synchronized(director){
 				try {
 					director.wait();
