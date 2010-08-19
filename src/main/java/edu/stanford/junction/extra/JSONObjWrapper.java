@@ -26,24 +26,46 @@ public class JSONObjWrapper extends JSONObject{
 	}
 
 	public int hashCode(){
-		return this.optInt("id");
+		return (this.opt("id")).hashCode();
 	}
 
 	public boolean equals(Object other){
 		return other.hashCode() == this.hashCode();
 	}
 
+	// Do a deep copy of this object.
 	public Object clone(){
 		JSONObject copy = new JSONObject();
 		try{
 			Iterator it = this.keys();
 			while(it.hasNext()){
 				String key = (String)it.next();
-				copy.put(key, this.get(key));
+				copy.put(key, cloneValue(this.get(key)));
 			}
 		}
 		catch(JSONException e){}
 		return new JSONObjWrapper(copy);
+	}
+
+	public Object cloneValue(Object val){
+		try{
+			if(val instanceof JSONObject){
+				return ((JSONObjWrapper)val).clone();
+			}
+			else if(val instanceof JSONArray){
+				JSONArray newA = new JSONArray();
+				JSONArray oldA = (JSONArray)val;
+				for(int i = 0; i < oldA.length(); i++){
+					newA.put(i, cloneValue(oldA.get(i)));
+				}
+				return newA;
+			}
+			else return val;
+		}
+		catch(JSONException e){
+			e.printStackTrace(System.err);
+			return null;
+		}
 	}
 
 	/** 

@@ -5,7 +5,7 @@ import java.util.*;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
-public abstract class Prop extends JunctionExtra {
+public abstract class Prop extends JunctionExtra implements IProp{
 	private static final int MODE_NORM = 1;
 	private static final int MODE_SYNC = 2;
 
@@ -18,6 +18,7 @@ public abstract class Prop extends JunctionExtra {
 
 	public static final String EVT_CHANGE = "change";
 	public static final String EVT_SYNC = "sync";
+	public static final String EVT_ANY = "*";
 
 	private String uuid = UUID.randomUUID().toString();
 	private String propName;
@@ -141,9 +142,27 @@ public abstract class Prop extends JunctionExtra {
 		changeListeners.add(listener);
 	}
 
+	public void removeChangeListener(IPropChangeListener listener){
+		changeListeners.remove(listener);
+	}
+
+	public void removeChangeListenersOfType(String type){
+		Iterator<IPropChangeListener> it = changeListeners.iterator();
+		while(it.hasNext()){
+			IPropChangeListener l = it.next();
+			if(l.getType().equals(type)){
+				it.remove();
+			}
+		}
+	}
+
+	public void removeAllChangeListeners(){
+		changeListeners.clear();
+	}
+
 	protected void dispatchChangeNotification(String evtType, Object o){
 		for(IPropChangeListener l : changeListeners){
-			if(l.getType().equals(evtType)){
+			if(l.getType().equals(evtType) || l.getType().equals(EVT_ANY)){
 				l.onChange(o);
 			}
 		}
@@ -153,6 +172,7 @@ public abstract class Prop extends JunctionExtra {
 	 * Returns true if the normal event handling should proceed;
 	 * Return false to stop cascading.
 	 */
+	@Override
 	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject m) {
 		if(m.optString("propTarget").equals(this.getPropName())){
 			try{
@@ -407,6 +427,7 @@ public abstract class Prop extends JunctionExtra {
 		}
 	}
     
+	@Override
 	public void afterActivityJoin() {
 		this.active = true;
 	}

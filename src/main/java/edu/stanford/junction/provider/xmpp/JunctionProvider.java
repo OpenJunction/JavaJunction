@@ -125,7 +125,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	class ConnectionThread extends Thread{
 		public volatile XMPPConnection connection = null;
 		public volatile Throwable failureReason = null;
-		public volatile boolean stop = false;
+		public volatile boolean success = false;
 
 		private CountDownLatch waitForConnect;
 		private XMPPSwitchboardConfig config;
@@ -136,19 +136,35 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		}
 
 		public void run(){
-			while(connection == null && stop == false){
-				XMPPConnection conn = new XMPPConnection(config.host);
+			while(!isInterrupted()){
+
+				if(this.connection != null){
+					connection.disconnect();
+				}
+
+				connection = new XMPPConnection(config.host);
+
 				try {
-					conn.connect();
+					connection.connect();
 					if (config.user != null) {
-						conn.login(config.user, config.password);
+						connection.login(config.user, config.password);
 					} 
 					else {
-						conn.loginAnonymously();
+						connection.loginAnonymously();
 					}
-					failureReason = null;
-					connection = conn;
-					waitForConnect.countDown();
+
+					if(isInterrupted()){
+						success = false;
+						break;
+					}
+					else{ // All is good. Finish up. 
+						failureReason = null;
+						success = true;
+						waitForConnect.countDown();
+						System.out.println("Got connection, ending connection thread.");
+						break;
+					}
+
 				}
 				catch (XMPPException e) {
 					Throwable ex = e.getWrappedThrowable();
@@ -164,12 +180,14 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 						// Otherwise, we consider the exception
 						// unrecoverable.
 						failureReason = e;
+						this.connection.disconnect();
 						waitForConnect.countDown();
 						break;
 					}
 				}
 				catch (Exception e) {
 					failureReason = e;
+					this.connection.disconnect();
 					waitForConnect.countDown();
 					break;
 				}
@@ -184,35 +202,40 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		ConnectionThread t = new ConnectionThread(config, waitForConnect);
 		t.start();
 
-		boolean noTimeout = true;
+		boolean timedOut = false;
 		try{
-			noTimeout = waitForConnect.await(config.connectionTimeout, TimeUnit.MILLISECONDS);
+			timedOut = !(waitForConnect.await(config.connectionTimeout, TimeUnit.MILLISECONDS));
 		}
 		catch(InterruptedException e){
 			throw new JunctionException("Interrupted while waiting for connection.");
 		}
 
-		t.stop = true;
+		if(timedOut){ 
+			System.out.println("Connection timed out after " + 
+							   config.connectionTimeout + 
+							   " milliseconds.");
+			t.interrupt(); // Thread may still be looping...
 
-		if(noTimeout && t.connection != null && t.failureReason == null){
+			String msg = "Connection attempt failed to complete within provided timeout of " + 
+				config.connectionTimeout + " milliseconds.";
+			throw new JunctionException(msg, new ConnectionTimeoutException(msg));
+		}
+
+		if(t.success){
+			System.out.println("Connection succeeded.");
 			sConnections.add(t.connection);
 			HashSet<String> set = new HashSet<String>();
 			set.add(roomid);
 			sConnectionSessions.add(set);
 			return t.connection;
 		}
-		else if(noTimeout){
+		else{
 			if(t.failureReason != null){
 				throw new JunctionException("Connection attempt failed.", t.failureReason);
 			}
 			else{
 				throw new JunctionException("Connection attempt failed for unknown reason.", t.failureReason);
 			}
-		}
-		else{
-			String msg = "Connection attempt failed to complete within provided timeout of " + 
-				config.connectionTimeout + " milliseconds.";
-			throw new JunctionException(msg, new ConnectionTimeoutException(msg));
 		}
 	}
 	
