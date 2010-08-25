@@ -4,6 +4,7 @@ import org.json.JSONException;
 import java.util.*;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.extra.JSONObjWrapper;
 
 public abstract class Prop extends JunctionExtra implements IProp{
 	private static final int MODE_NORM = 1;
@@ -19,6 +20,10 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	public static final String EVT_CHANGE = "change";
 	public static final String EVT_SYNC = "sync";
 	public static final String EVT_ANY = "*";
+
+	// Temporarily disable change notifications
+	// for efficiency sometimes.
+	private boolean enableChangeEvents = true;
 
 	private String uuid = UUID.randomUUID().toString();
 	private String propName;
@@ -68,23 +73,43 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	class PeriodicTask extends TimerTask{
 		public void run(){
 			long t = (new Date()).getTime();
+
+			// Basic attempt to see if we're
+			// connected (checking for null actor and
+			// null junction).
 			if(active && getActor() != null && 
-			   
-			   // should be null if actor has 'left' the activity
-			   getActor().getJunction() != null 
-			   ){
-				if(mode == MODE_NORM){
-					if((t - timeOfLastHello) > 3000){
-						sendHello();
+			   getActor().getJunction() != null){
+
+				// Ignore failures. These are not time-criticial
+				// operations.
+				try{
+					if(mode == MODE_NORM){
+						if((t - timeOfLastHello) > 3000){
+							sendHello();
+						}
+					}
+					else if(mode == MODE_SYNC){
+						if((t - timeOfLastSyncRequest) > 5000){
+							broadcastSyncRequest();
+						}
 					}
 				}
-				else if(mode == MODE_SYNC){
-					if((t - timeOfLastSyncRequest) > 5000){
-						broadcastSyncRequest();
-					}
+				catch(Exception e){
+					e.printStackTrace(System.err);
 				}
 			}
 		}
+	}
+
+	abstract public IProp newFresh();
+
+	public IProp newKeepingListeners(){
+		Prop p = (Prop)newFresh();
+		Iterator<IPropChangeListener> it = changeListeners.iterator();
+		while(it.hasNext()){
+			p.addChangeListener(it.next());
+		}
+		return p;
 	}
 
 	public long getStaleness(){
@@ -109,6 +134,10 @@ public abstract class Prop extends JunctionExtra implements IProp{
 
 	public String getPropName(){
 		return propName;
+	}
+
+	public String getPropReplicaName(){
+		return propReplicaName;
 	}
 
 	protected void logInfo(String s){
@@ -161,9 +190,11 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 	protected void dispatchChangeNotification(String evtType, Object o){
-		for(IPropChangeListener l : changeListeners){
-			if(l.getType().equals(evtType) || l.getType().equals(EVT_ANY)){
-				l.onChange(o);
+		if(enableChangeEvents){
+			for(IPropChangeListener l : changeListeners){
+				if(l.getType().equals(evtType) || l.getType().equals(EVT_ANY)){
+					l.onChange(o);
+				}
 			}
 		}
 	}
@@ -192,26 +223,43 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
+	// A helper utility.
+	// TODO: Calling this over and over for long pendingLocals
+	// buffers is inefficient.
+	private void removePendingLocal(JSONObject opMsg){
+		Iterator<JSONObject> it = this.pendingLocals.iterator();
+		String uuid = opMsg.optString("uuid");
+		while(it.hasNext()){
+			JSONObject m = it.next();
+			if(m.optString("uuid").equals(uuid)){
+				it.remove();
+			}
+		}
+	}
+
 	/**
 	 * What to do with a newly arrived operation? Depends on mode of 
 	 * operation.
+	 *
+	 * Note, we must take care to make sure there is no sharing between
+	 * this.cleanState and this.state. This means copying operations 
+	 * that must be applied to both states!
 	 */
 	protected void handleReceivedOp(JSONObject opMsg){
 		boolean changed = false;
 		if(isSelfMsg(opMsg)){
+			// Received a confirmation of a message we already applied
+			// locally. Apply to clean state.
 			this.staleness = this.sequenceNum - opMsg.optLong("localSeqNum");
 			this.cleanState.applyOperation(opMsg.optJSONObject("op"));
-			Iterator<JSONObject> it = this.pendingLocals.iterator();
-			String uuid = opMsg.optString("uuid");
-			while(it.hasNext()){
-				JSONObject m = it.next();
-				if(m.optString("uuid").equals(uuid)){
-					it.remove();
-				}
-			}
+
+			// Get rid of the copy of the message in pending locals.
+			removePendingLocal(opMsg);
 		}
 		else{
 			if(this.pendingLocals.size() > 0){
+				// A remote message is received out-of-order with our predicted
+				// local operations. Fix up the order.
 				this.cleanState.applyOperation(opMsg.optJSONObject("op"));
 				this.state = this.cleanState.copy();
 				for(JSONObject msg : this.pendingLocals){
@@ -219,10 +267,13 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				}
 			}
 			else{
+				// We've no pending locals and we received a remote message.
+				// Just apply it. cleanState and state should be equivalent.
 				assertTrue("If pending locals is empty, state hash and cleanState hash should be equal.", 
 						   this.state.hashCode() == this.cleanState.hashCode());
-				this.cleanState.applyOperation(opMsg.optJSONObject("op"));
-				this.state.applyOperation(opMsg.optJSONObject("op"));
+				JSONObject op = opMsg.optJSONObject("op");
+				this.cleanState.applyOperation(op);
+				this.state.applyOperation(JSONObjWrapper.copyJSONObject(op));
 			}
 			changed = true;
 		}
@@ -283,10 +334,14 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				break;
 			}
 			case MSG_HELLO:{
-				logInfo("Got HELLO.");
-				if(!isSelfMsg(msg) && 
-				   msg.optLong("localSeqNum") > this.sequenceNum) {
-					enterSYNCMode();
+				if(!isSelfMsg(msg)){
+					logInfo("Got peer HELLO.");
+					if(msg.optLong("localSeqNum") > this.sequenceNum) {
+						enterSYNCMode();
+					}
+				}
+				else{
+					logInfo("Got self HELLO.");
 				}
 				break;
 			}
@@ -356,40 +411,71 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		logInfo("sequenceNum:" + this.sequenceNum);
 		logInfo("Now applying buffered things....");
 
-		// Forget all local predictions.
-		this.pendingLocals.clear();
-
-		// Apply any ops that we recieved while syncing,
-		// ignoring those that are already incorporated 
-		// into sync state.
+		//Scan the ops that we received while in SYNC mode.
 		boolean apply = false;
 		for(JSONObject m : this.opsSYNC){
+			if(isSelfMsg(m)){
+				/* If the op is a self op, we know it is incorporated
+				   into the sync state ( it was send _before SYNC mode,
+				   and it made it back to us, so the sync-supplier peer 
+				   must have got it before generating the sync state). 
+
+				   We use this op to clean up pending locals that were 
+				   successfully broadcast before SYNC, but not confirmed 
+				   before SYNC.*/
+				removePendingLocal(m);
+			}
+
 			if(!apply && m.optString("uuid").equals(this.lastOpUUID)){
 				apply = true;
 				continue;
 			}
-			else if(apply){
+			else if(apply && !isSelfMsg(m)){
+				/* If the op is a peer op, we apply it, under the 
+				   condition that it was _not_ already incorporated 
+				   into the sync state. */
 				handleReceivedOp(m);
 			}
 		}
 		this.opsSYNC.clear();
+
 		exitSYNCMode();
+
+
+		/* At this point, pendingLocals includes _unconfirmed_ ops 
+		   that were added locally _before_ entering sync mode 
+		   (since we block addOperation during SYNC mode). That is,
+		   ops that failed to propagate to the peers for some reason.
+		   Perhaps the network was down. 
+		   
+		   We re-try each of the associated operations on top 
+		   of the fresh sync state.
+		*/
+		enableChangeEvents = false;
+		for(JSONObject m : this.pendingLocals){
+			JSONObject op = m.optJSONObject("op");
+			addOperation(op);
+		}
+		this.pendingLocals.clear();
+		enableChangeEvents = true;
+
 		logState("Finished syncing.");
+
 		dispatchChangeNotification(EVT_SYNC, null);
 	}
 
 
-	/**
-	 * Add an operation to the state managed by this Prop, with prediction
-	 */
+/**
+ * Add an operation to the state managed by this Prop, with prediction
+ */
 	synchronized public void addOperation(JSONObject operation){
 		if(mode == MODE_NORM){
 			logInfo("Adding predicted operation.");
 			JSONObject msg = newStateOperationMsg(operation);
 			this.state.applyOperation(operation);
-			dispatchChangeNotification(EVT_CHANGE, operation);
 			this.pendingLocals.add(msg);
 			sendMessageToProp(msg);
+			dispatchChangeNotification(EVT_CHANGE, operation);
 		}
 	}
 
@@ -400,31 +486,48 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
-	/**
-	 * Send a message to all prop-replicas in this prop
-	 */
+/**
+ * Send a message to all prop-replicas in this prop
+ */
 	protected void sendMessageToProp(JSONObject m){
 		try{
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
-			getActor().sendMessageToSession(m);
-		}catch(JSONException e){
+		}
+		catch(JSONException e){
 			logErr("JSON Error: " + e);
+		}
+
+		try{
+			getActor().sendMessageToSession(m);
+		}
+		catch(Exception e){
+			logErr("Failed to send to Prop.");
+			e.printStackTrace(System.err);
 		}
 	}
 
 
-	/**
-	 * Send a message to the prop-replica hosted at the given actorId.
-	 */
+/**
+ * Send a message to the prop-replica hosted at the given actorId.
+ */
 	protected void sendMessageToPropReplica(String actorId, JSONObject m){
 		try{
 			m.put("propTarget", getPropName());
 			m.put("senderReplicaUUID", uuid);
-			getActor().sendMessageToActor(actorId, m);
-		}catch(JSONException e){
+		}
+		catch(JSONException e){
 			logErr("JSON Error: " + e);
 		}
+
+		try{
+			getActor().sendMessageToActor(actorId, m);
+		}
+		catch(Exception e){
+			logErr("Failed to send to Prop Replica.");
+			e.printStackTrace(System.err);
+		}
+
 	}
     
 	@Override

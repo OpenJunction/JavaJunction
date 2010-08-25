@@ -1,13 +1,25 @@
 package edu.stanford.junction.props2.sample;
+import edu.stanford.junction.props2.IPropState;
+import edu.stanford.junction.props2.IProp;
 import org.json.JSONObject;
 import java.util.*;
 
 public class SetProp extends CollectionProp {
+
 	public SetProp(String propName, String propReplicaName, Collection<JSONObject> items){
 		super(propName, propReplicaName, new SetState(items));
 	}
+
+	public SetProp(String propName, String propReplicaName, IPropState s){
+		super(propName, propReplicaName, s);
+	}
+
 	public SetProp(String propName, String propReplicaName){
 		this(propName, propReplicaName, new ArrayList<JSONObject>());
+	}
+
+	public IProp newFresh(){
+		return new SetProp(getPropName(), getPropReplicaName(), newState());
 	}
 }
 

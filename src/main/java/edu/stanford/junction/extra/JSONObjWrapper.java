@@ -34,29 +34,33 @@ public class JSONObjWrapper extends JSONObject{
 	}
 
 	// Do a deep copy of this object.
-	public Object clone(){
+	public static JSONObject copyJSONObject(JSONObject obj){
 		JSONObject copy = new JSONObject();
 		try{
-			Iterator it = this.keys();
+			Iterator it = obj.keys();
 			while(it.hasNext()){
 				String key = (String)it.next();
-				copy.put(key, cloneValue(this.get(key)));
+				copy.put(key, copyValue(obj.get(key)));
 			}
 		}
 		catch(JSONException e){}
-		return new JSONObjWrapper(copy);
+		return copy;
 	}
 
-	public Object cloneValue(Object val){
+	public Object clone(){
+		return new JSONObjWrapper(copyJSONObject(this));
+	}
+
+	protected static Object copyValue(Object val){
 		try{
 			if(val instanceof JSONObject){
-				return ((JSONObjWrapper)val).clone();
+				return copyJSONObject((JSONObject)val);
 			}
 			else if(val instanceof JSONArray){
 				JSONArray newA = new JSONArray();
 				JSONArray oldA = (JSONArray)val;
 				for(int i = 0; i < oldA.length(); i++){
-					newA.put(i, cloneValue(oldA.get(i)));
+					newA.put(i, copyValue(oldA.get(i)));
 				}
 				return newA;
 			}
@@ -136,8 +140,59 @@ public class JSONObjWrapper extends JSONObject{
 	public JSONObject put(String key, Object value) throws JSONException{
 		return self.put(key, value);
 	}
-	
-	
+
+	/**
+	 * Put a key/boolean pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A boolean which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, boolean value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/double pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A double which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null or if the number is invalid.
+	 */
+	public JSONObject put(String key, double value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/int pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value An int which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, int value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/long pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A long which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, long value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
 	/**
 	 * Remove a name and its value, if present.
 	 * @param key The name to be removed.
