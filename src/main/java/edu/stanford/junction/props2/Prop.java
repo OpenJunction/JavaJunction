@@ -6,6 +6,16 @@ import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.extra.JSONObjWrapper;
 
+
+/**
+ * Note: The use of 'synchronized' is very deliberate. 
+ * If you want to access the state of the prop, you must use
+ * the withState callback, which serializes your state read
+ * with respect to state changes resulting from addOperation or
+ * handleMessage.
+ *
+ */
+
 public abstract class Prop extends JunctionExtra implements IProp{
 	private static final int MODE_NORM = 1;
 	private static final int MODE_SYNC = 2;
@@ -120,8 +130,8 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		return sequenceNum;
 	}
 
-	protected IPropState getState(){
-		return state;
+	synchronized protected <T> T withState(IWithStateAction<T> action){
+		return action.run(state);
 	}
 
 	public String stateToString(){
@@ -167,15 +177,16 @@ public abstract class Prop extends JunctionExtra implements IProp{
 
 	abstract protected IPropState reifyState(JSONObject obj);
 
-	public void addChangeListener(IPropChangeListener listener){
+	
+	synchronized public void addChangeListener(IPropChangeListener listener){
 		changeListeners.add(listener);
 	}
 
-	public void removeChangeListener(IPropChangeListener listener){
+	synchronized public void removeChangeListener(IPropChangeListener listener){
 		changeListeners.remove(listener);
 	}
 
-	public void removeChangeListenersOfType(String type){
+	synchronized public void removeChangeListenersOfType(String type){
 		Iterator<IPropChangeListener> it = changeListeners.iterator();
 		while(it.hasNext()){
 			IPropChangeListener l = it.next();
@@ -185,11 +196,11 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		}
 	}
 
-	public void removeAllChangeListeners(){
+	synchronized public void removeAllChangeListeners(){
 		changeListeners.clear();
 	}
 
-	protected void dispatchChangeNotification(String evtType, Object o){
+	synchronized protected void dispatchChangeNotification(String evtType, Object o){
 		if(enableChangeEvents){
 			for(IPropChangeListener l : changeListeners){
 				if(l.getType().equals(evtType) || l.getType().equals(EVT_ANY)){
