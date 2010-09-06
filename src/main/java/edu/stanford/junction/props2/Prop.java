@@ -9,6 +9,7 @@ import edu.stanford.junction.extra.JSONObjWrapper;
 
 /**
  * Note: The use of 'synchronized' is very deliberate. 
+ *
  * If you want to access the state of the prop, you must use
  * the withState callback, which serializes your state read
  * with respect to state changes resulting from addOperation or
@@ -49,7 +50,13 @@ public abstract class Prop extends JunctionExtra implements IProp{
 
 	private int mode = MODE_NORM;
 	private String syncId = "";
-	private boolean waitingForIHaveState = false;
+
+	// In sync mode, between the time when we send
+	// WHO_HAS_STATE and when we exit sync mode, track
+	// the highest seqId so far received via a I_HAVE_STATE
+	// message. Send more than one SEND_ME_STATE message if 
+	// we get better offers.
+	private long bestSyncSeqNum = -1;
 
 	private Vector<JSONObject> opsSYNC = new Vector<JSONObject>();
 
@@ -304,7 +311,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		logInfo("Exiting SYNC mode");
 		this.mode = MODE_NORM;
 		this.syncId = "";
-		this.waitingForIHaveState = false;
+		this.bestSyncSeqNum = -1;
 	}
 
 	protected void enterSYNCMode(){
@@ -313,11 +320,12 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		this.syncId = UUID.randomUUID().toString();
 		this.sequenceNum = -1;
 		this.opsSYNC.clear();
-		this.waitingForIHaveState = true;
+		this.bestSyncSeqNum = -1;
 		broadcastSyncRequest();
 	}
 
 	synchronized protected void broadcastSyncRequest(){
+		this.bestSyncSeqNum = -1;
 		this.timeOfLastSyncRequest = (new Date()).getTime();
 		sendMessageToProp(newWhoHasStateMsg(this.syncId));
 	}
@@ -346,13 +354,13 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			}
 			case MSG_HELLO:{
 				if(!isSelfMsg(msg)){
-					logInfo("Got peer HELLO.");
+					logInfo(".");
 					if(msg.optLong("localSeqNum") > this.sequenceNum) {
 						enterSYNCMode();
 					}
 				}
 				else{
-					logInfo("Got self HELLO.");
+					logInfo("->.");
 				}
 				break;
 			}
@@ -377,10 +385,13 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			}
 			case MSG_I_HAVE_STATE:{
 				String syncId = msg.optString("syncId");
-				if(!isSelfMsg(msg) && this.waitingForIHaveState && syncId.equals(this.syncId)){
-					logInfo("Got I_HAVE_STATE.");
-					sendMessageToPropReplica(fromActor, newSendMeStateMsg(syncId));
-					this.waitingForIHaveState = false;
+				if(!isSelfMsg(msg) && syncId.equals(this.syncId)){
+					long remoteSeqNum = msg.optLong("localSeqNum");
+					if(remoteSeqNum > this.bestSyncSeqNum){
+						logInfo("Got a better I_HAVE_STATE.");
+						sendMessageToPropReplica(fromActor, newSendMeStateMsg(syncId));
+						this.bestSyncSeqNum = remoteSeqNum;
+					}
 				}
 				break;
 			}
@@ -393,7 +404,13 @@ public abstract class Prop extends JunctionExtra implements IProp{
 						logErr("Bogus sync id! ignoring StateSyncMsg");
 					}
 					else{
-						this.handleStateSyncMsg(msg);
+						// We may have send many SendMeState messages, so make sure we 
+						// only use the best one...
+						long remoteSeqNum = msg.optLong("seqNum");
+						if(remoteSeqNum >= this.bestSyncSeqNum){
+							logErr("Got desired state sync. Handling...");
+							this.handleStateSyncMsg(msg);
+						}
 					}
 				}
 				break;
@@ -562,6 +579,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		JSONObject m = new JSONObject();
 		try{
 			m.put("type", MSG_I_HAVE_STATE);
+			m.put("localSeqNum", this.sequenceNum);
 			m.put("syncId", syncId);
 		}catch(JSONException e){
 			logErr("JSON Error: " + e);

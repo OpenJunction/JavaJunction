@@ -237,7 +237,6 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	public void doSendMessageToSession(JSONObject message) {
 		try {
-			System.out.println("Sending message to room: " + mSessionChat.getRoom());
 			mSessionChat.sendMessage(message.toString());
 		} catch (XMPPException e) {
 			e.printStackTrace();
