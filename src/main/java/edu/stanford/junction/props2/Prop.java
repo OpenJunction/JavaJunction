@@ -32,6 +32,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	public static final String EVT_SYNC = "sync";
 	public static final String EVT_ANY = "*";
 
+	// Try to use Use zlib compression when sending/receiving state syncs
+	private static final boolean COMPRESS_STATE_SYNC = true;
+
 	// Temporarily disable change notifications
 	// for efficiency sometimes.
 	private boolean enableChangeEvents = true;
@@ -348,7 +351,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				if(!isSelfMsg(msg)){
 					logInfo("Got SEND_ME_STATE");
 					String syncId = msg.optString("syncId");
-					sendMessageToPropReplica(fromActor, newStateSyncMsg(syncId));
+					String compression = msg.optString("compression");
+					boolean compress = compression != null && compression.equals("zlib");
+					sendMessageToPropReplica(fromActor, newStateSyncMsg(syncId, compress));
 				}
 				break;
 			}
@@ -429,7 +434,19 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		logInfo("Got StateSyncMsg:" + msg);
 
 		logInfo("Reifying received state..");
-		this.cleanState = this.reifyState(msg.optJSONObject("state"));
+		String compression = msg.optString("compression");
+		boolean compressed = compression != null && compression.equals("zlib");
+		if(compressed){
+			logInfo("Decompressing zlib compression...");
+			String data = msg.optString("state");
+			JSONObject state = JSONObjWrapper.expandCompressedObj(data);
+			this.cleanState = this.reifyState(state);
+		}
+		else{
+			logInfo("No compression...");
+			JSONObject state = msg.optJSONObject("state");
+			this.cleanState = this.reifyState(state);
+		}
 		logInfo("Copying clean to predicted..");
 		this.state = this.cleanState.copy();
 		this.sequenceNum = msg.optLong("seqNum");
@@ -612,11 +629,18 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
-	protected JSONObject newStateSyncMsg(String syncId){
+	protected JSONObject newStateSyncMsg(String syncId, boolean compress){
 		JSONObject m = new JSONObject();
 		try{
+			JSONObject state = this.cleanState.toJSON();
+			if(compress){
+				m.put("compression", "zlib");
+				m.put("state", JSONObjWrapper.compressObj(state));
+			}
+			else{
+				m.put("state", state);
+			}
 			m.put("type", MSG_STATE_SYNC);
-			m.put("state", this.cleanState.toJSON());
 			m.put("seqNum", this.sequenceNum);
 			m.put("lastOpUUID", this.lastOpUUID);
 			m.put("syncId", syncId);
@@ -631,6 +655,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		try{
 			m.put("type", MSG_SEND_ME_STATE);
 			m.put("syncId", syncId);
+			if(COMPRESS_STATE_SYNC){
+				m.put("compression", "zlib");
+			}
 		}catch(JSONException e){
 			logErr("JSON Error: " + e);
 		}
