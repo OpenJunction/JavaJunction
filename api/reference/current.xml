@@ -1,0 +1,5163 @@
+<api>
+<package name="edu.stanford.junction"
+>
+<class name="Junction"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Junction"
+ type="edu.stanford.junction.Junction"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="doSendMessageToActor"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToRole"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToSession"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="getAcceptedInvitation"
+ return="java.net.URI"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActor"
+ return="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBaseInvitationURI"
+ return="java.net.URI"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getInvitationURI"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getInvitationURI"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+</method>
+<method name="getSessionID"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSwitchboard"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="public"
+>
+</method>
+<method name="registerExtra"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="extra" type="edu.stanford.junction.api.activity.JunctionExtra">
+</parameter>
+</method>
+<method name="sendMessageToActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToSession"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="triggerActorJoin"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="isCreator" type="boolean">
+</parameter>
+</method>
+<method name="triggerMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<field name="NS_JX"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="JunctionMaker"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionMaker"
+ type="edu.stanford.junction.JunctionMaker"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</constructor>
+<method name="castActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="directorURI" type="java.net.URI">
+</parameter>
+<parameter name="invitationURI" type="java.net.URI">
+</parameter>
+</method>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="getInstance"
+ return="edu.stanford.junction.JunctionMaker"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="switchboardConfig" type="edu.stanford.junction.SwitchboardConfig">
+</parameter>
+</method>
+<method name="getProvider"
+ return="edu.stanford.junction.provider.JunctionProvider"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="switchboardConfig" type="edu.stanford.junction.SwitchboardConfig">
+</parameter>
+</method>
+<method name="getRoleFromInvitation"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="getSessionIDFromURI"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="inviteActorByListenerService"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="public"
+>
+<parameter name="invitationURI" type="java.net.URI">
+</parameter>
+<parameter name="listenerServiceURI" type="java.net.URI">
+</parameter>
+</method>
+<method name="inviteActorService"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+<parameter name="role" type="java.lang.String">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+<parameter name="support" type="edu.stanford.junction.api.activity.Cast">
+</parameter>
+</method>
+<method name="sendMessageToActivity"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="activitySession" type="java.net.URI">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<field name="CASTING_DIRECTOR"
+ type="java.net.URI"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DIRECTOR_ACTIVITY"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;edu.stanford.junction.director&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="mProvider"
+ type="edu.stanford.junction.provider.JunctionProvider"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<interface name="SwitchboardConfig"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</interface>
+</package>
+<package name="edu.stanford.junction.api.activity"
+>
+<class name="ActivityScript"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ActivityScript"
+ type="edu.stanford.junction.api.activity.ActivityScript"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="ActivityScript"
+ type="edu.stanford.junction.api.activity.ActivityScript"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="json" type="org.json.JSONObject">
+</parameter>
+</constructor>
+<method name="addRoleHint"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="hint" type="java.lang.String">
+</parameter>
+</method>
+<method name="addRolePlatform"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="platform" type="java.lang.String">
+</parameter>
+<parameter name="platformSpec" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="getActivityID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getFriendlyName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getHost"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getJSON"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRolePlatform"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="platform" type="java.lang.String">
+</parameter>
+</method>
+<method name="getRoleSpec"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+</method>
+<method name="getRoles"
+ return="java.lang.String[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSessionID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isActivityCreator"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="isActivityCreator"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="is" type="boolean">
+</parameter>
+</method>
+<method name="setActivityID"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="activityID" type="java.lang.String">
+</parameter>
+</method>
+<method name="setFriendlyName"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="friendlyName" type="java.lang.String">
+</parameter>
+</method>
+<method name="setHost"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="host" type="java.lang.String">
+</parameter>
+</method>
+<method name="setRoles"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="roles" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="setSessionID"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="sessionID" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<class name="Cast"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Cast"
+ type="edu.stanford.junction.api.activity.Cast"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<constructor name="Cast"
+ type="edu.stanford.junction.api.activity.Cast"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="roles" type="java.util.List&lt;java.lang.String&gt;">
+</parameter>
+<parameter name="directors" type="java.util.List&lt;java.net.URI&gt;">
+</parameter>
+</constructor>
+<method name="add"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="castingDirector" type="java.net.URI">
+</parameter>
+</method>
+<method name="getDirector"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="i" type="int">
+</parameter>
+</method>
+<method name="getRole"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="i" type="int">
+</parameter>
+</method>
+<method name="remove"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="i" type="int">
+</parameter>
+</method>
+<method name="size"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="JunctionActor"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionActor"
+ type="edu.stanford.junction.api.activity.JunctionActor"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="JunctionActor"
+ type="edu.stanford.junction.api.activity.JunctionActor"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="roles" type="java.lang.String[]">
+</parameter>
+</constructor>
+<method name="getActorID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getInitialExtras"
+ return="java.util.List&lt;edu.stanford.junction.api.activity.JunctionExtra&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRoles"
+ return="java.lang.String[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="leave"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onActivityCreate"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onActivityJoin"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onActivityStart"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="registerExtra"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="extra" type="edu.stanford.junction.api.activity.JunctionExtra">
+</parameter>
+</method>
+<method name="sendMessageToActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToSession"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="setJunction"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="j" type="edu.stanford.junction.Junction">
+</parameter>
+</method>
+<field name="mJunction"
+ type="edu.stanford.junction.Junction"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="JunctionExtra"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionExtra"
+ type="edu.stanford.junction.api.activity.JunctionExtra"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="afterActivityCreate"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="afterActivityJoin"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="afterOnMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="h" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="beforeActivityCreate"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="beforeActivityJoin"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="beforeOnMessageReceived"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="h" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="beforeSendMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="beforeSendMessageToActor"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="beforeSendMessageToRole"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="beforeSendMessageToSession"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="getActor"
+ return="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getPriority"
+ return="java.lang.Integer"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="test"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="updateInvitationParameters"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="params" type="java.util.Map&lt;java.lang.String, java.lang.String&gt;">
+</parameter>
+</method>
+</class>
+<class name="JunctionService"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionService"
+ type="edu.stanford.junction.api.activity.JunctionService"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getServiceName"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="register"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="switchboard" type="java.lang.String">
+</parameter>
+</method>
+<method name="setRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+</method>
+<field name="SERVICE_CHANNEL"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.api.messaging"
+>
+<class name="MessageHandler"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MessageHandler"
+ type="edu.stanford.junction.api.messaging.MessageHandler"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onMessageReceived"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="supportedActors"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="supportedChannels"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="supportedRoles"
+ return="java.util.List&lt;java.lang.String&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="supportsMessage"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="MessageHeader"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MessageHeader"
+ type="edu.stanford.junction.api.messaging.MessageHeader"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+<parameter name="from" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="getJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getReplyTarget"
+ return="edu.stanford.junction.api.messaging.target.MessageTarget"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSender"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="from"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.api.messaging.target"
+>
+<class name="Actor"
+ extends="edu.stanford.junction.api.messaging.target.MessageTarget"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Actor"
+ type="edu.stanford.junction.api.messaging.target.Actor"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+<parameter name="actor" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="sendMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<field name="id"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="MessageTarget"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="MessageTarget"
+ type="edu.stanford.junction.api.messaging.target.MessageTarget"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="sendMessage"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="MessageTargetFactory"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getInstance"
+ return="edu.stanford.junction.api.messaging.target.MessageTargetFactory"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+</method>
+<method name="getTarget"
+ return="edu.stanford.junction.api.messaging.target.MessageTarget"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="target" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<class name="Role"
+ extends="edu.stanford.junction.api.messaging.target.MessageTarget"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Role"
+ type="edu.stanford.junction.api.messaging.target.Role"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+<parameter name="r" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="sendMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<field name="role"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Session"
+ extends="edu.stanford.junction.api.messaging.target.MessageTarget"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Session"
+ type="edu.stanford.junction.api.messaging.target.Session"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+</constructor>
+<method name="sendMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.director"
+>
+<class name="JAVADirector"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JAVADirector"
+ type="edu.stanford.junction.director.JAVADirector"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.extra"
+>
+<class name="HttpBridge"
+ extends="edu.stanford.junction.extra.HttpServlet"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="HttpBridge"
+ type="edu.stanford.junction.extra.HttpBridge"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="JunctionServiceFactory"
+ extends="edu.stanford.junction.api.activity.JunctionService"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionServiceFactory"
+ type="edu.stanford.junction.extra.JunctionServiceFactory"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getServiceName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.props"
+>
+<interface name="IPropChangeListener"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getType"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onChange"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="java.lang.Object">
+</parameter>
+</method>
+</interface>
+<interface name="IPropMsg"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getSenderActor"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSenderReplicaUUID"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getType"
+ return="int"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="toJSONObject"
+ return="org.json.JSONObject"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<interface name="IPropState"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IStringifiable">
+</implements>
+<method name="applyOperation"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="operation" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+</method>
+<method name="copy"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="hash"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<interface name="IPropStateOperation"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IStringifiable">
+</implements>
+</interface>
+<interface name="IStateOperationMsg"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IPropMsg">
+</implements>
+<method name="getOp"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSequenceNum"
+ return="long"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getUUID"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newWithOp"
+ return="edu.stanford.junction.props.IStateOperationMsg"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="op" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+</method>
+<method name="setSequenceNum"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="num" type="long">
+</parameter>
+</method>
+</interface>
+<interface name="IStringifiable"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="stringify"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<class name="NullOp"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IPropStateOperation">
+</implements>
+<constructor name="NullOp"
+ type="edu.stanford.junction.props.NullOp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="stringify"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="Prop"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Prop"
+ type="edu.stanford.junction.props.Prop"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="state" type="edu.stanford.junction.props.IPropState">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="Prop"
+ type="edu.stanford.junction.props.Prop"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="state" type="edu.stanford.junction.props.IPropState">
+</parameter>
+</constructor>
+<method name="addChangeListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="edu.stanford.junction.props.IPropChangeListener">
+</parameter>
+</method>
+<method name="addOperation"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="operation" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+</method>
+<method name="destringifyOperation"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="destringifyState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="die"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="dispatchChangeNotification"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="evtType" type="java.lang.String">
+</parameter>
+<parameter name="o" type="java.lang.Object">
+</parameter>
+</method>
+<method name="getPropName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSequenceNum"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStaleness"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="logErr"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="logInfo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="logState"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="stateToString"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="transposeForward"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="o1" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+<parameter name="o2" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+<exception name="UnexpectedOpPairException" type="edu.stanford.junction.props.UnexpectedOpPairException">
+</exception>
+</method>
+<field name="EVT_CHANGE"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;change&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EVT_SYNC"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;sync&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="Prop.Pair"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Prop.Pair"
+ type="edu.stanford.junction.props.Prop.Pair"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="f" type="T">
+</parameter>
+<parameter name="s" type="S">
+</parameter>
+</constructor>
+<method name="getFirst"
+ return="T"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSecond"
+ return="S"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="PropStateOperation"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IPropStateOperation">
+</implements>
+<constructor name="PropStateOperation"
+ type="edu.stanford.junction.props.PropStateOperation"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="UnexpectedOpPairException"
+ extends="java.lang.Exception"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="UnexpectedOpPairException"
+ type="edu.stanford.junction.props.UnexpectedOpPairException"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="o1" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+<parameter name="o2" type="edu.stanford.junction.props.IPropStateOperation">
+</parameter>
+</constructor>
+<field name="o1"
+ type="edu.stanford.junction.props.IPropStateOperation"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="o2"
+ type="edu.stanford.junction.props.IPropStateOperation"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.props.sample"
+>
+<class name="ListProp"
+ extends="edu.stanford.junction.props.Prop"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ListProp"
+ type="edu.stanford.junction.props.sample.ListProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="builder" type="edu.stanford.junction.props.sample.ListProp.IListItemBuilder">
+</parameter>
+<parameter name="items" type="java.util.List&lt;edu.stanford.junction.props.sample.ListProp.IListItem&gt;">
+</parameter>
+</constructor>
+<constructor name="ListProp"
+ type="edu.stanford.junction.props.sample.ListProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="builder" type="edu.stanford.junction.props.sample.ListProp.IListItemBuilder">
+</parameter>
+</constructor>
+<constructor name="ListProp"
+ type="edu.stanford.junction.props.sample.ListProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="add"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="edu.stanford.junction.props.sample.ListProp.IListItem">
+</parameter>
+</method>
+<method name="delete"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="edu.stanford.junction.props.sample.ListProp.IListItem">
+</parameter>
+</method>
+<method name="destringifyOperation"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="destringifyState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="doRandom"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="items"
+ return="java.util.List"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<interface name="ListProp.IListItem"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IStringifiable">
+</implements>
+<method name="copy"
+ return="edu.stanford.junction.props.sample.ListProp.IListItem"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<interface name="ListProp.IListItemBuilder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="destringify"
+ return="edu.stanford.junction.props.sample.ListProp.IListItem"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+</interface>
+<class name="SetProp"
+ extends="edu.stanford.junction.props.Prop"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SetProp"
+ type="edu.stanford.junction.props.sample.SetProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="builder" type="edu.stanford.junction.props.sample.SetProp.ISetItemBuilder">
+</parameter>
+<parameter name="items" type="java.util.Set&lt;edu.stanford.junction.props.sample.SetProp.ISetItem&gt;">
+</parameter>
+</constructor>
+<constructor name="SetProp"
+ type="edu.stanford.junction.props.sample.SetProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="builder" type="edu.stanford.junction.props.sample.SetProp.ISetItemBuilder">
+</parameter>
+</constructor>
+<constructor name="SetProp"
+ type="edu.stanford.junction.props.sample.SetProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="add"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="edu.stanford.junction.props.sample.SetProp.ISetItem">
+</parameter>
+</method>
+<method name="delete"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="edu.stanford.junction.props.sample.SetProp.ISetItem">
+</parameter>
+</method>
+<method name="destringifyOperation"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="destringifyState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="doRandom"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="items"
+ return="java.util.Set"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="replace"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item1" type="edu.stanford.junction.props.sample.SetProp.ISetItem">
+</parameter>
+<parameter name="item2" type="edu.stanford.junction.props.sample.SetProp.ISetItem">
+</parameter>
+</method>
+</class>
+<interface name="SetProp.ISetItem"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.props.IStringifiable">
+</implements>
+<method name="copy"
+ return="edu.stanford.junction.props.sample.SetProp.ISetItem"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<interface name="SetProp.ISetItemBuilder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="destringify"
+ return="edu.stanford.junction.props.sample.SetProp.ISetItem"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+</interface>
+<class name="TextProp"
+ extends="edu.stanford.junction.props.Prop"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="TextProp"
+ type="edu.stanford.junction.props.sample.TextProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="destringifyOperation"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="destringifyState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="insertChar"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="index" type="int">
+</parameter>
+<parameter name="charact" type="java.lang.String">
+</parameter>
+</method>
+<method name="insertRandomChar"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.props2"
+>
+<interface name="IPropChangeListener"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getType"
+ return="java.lang.String"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onChange"
+ return="void"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="data" type="java.lang.Object">
+</parameter>
+</method>
+</interface>
+<interface name="IPropState"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="applyOperation"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="operation" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="copy"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="toJSON"
+ return="org.json.JSONObject"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</interface>
+<class name="Prop"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Prop"
+ type="edu.stanford.junction.props2.Prop"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="state" type="edu.stanford.junction.props2.IPropState">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="Prop"
+ type="edu.stanford.junction.props2.Prop"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="state" type="edu.stanford.junction.props2.IPropState">
+</parameter>
+</constructor>
+<method name="addChangeListener"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="listener" type="edu.stanford.junction.props2.IPropChangeListener">
+</parameter>
+</method>
+<method name="addOperation"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="operation" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="assertTrue"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+<parameter name="cond" type="boolean">
+</parameter>
+</method>
+<method name="broadcastSyncRequest"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="dispatchChangeNotification"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="evtType" type="java.lang.String">
+</parameter>
+<parameter name="o" type="java.lang.Object">
+</parameter>
+</method>
+<method name="enterSYNCMode"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="exitSYNCMode"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="getPropName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSequenceNum"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStaleness"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getState"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="handleMessage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="handleReceivedOp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="opMsg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="handleStateSyncMsg"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="isSelfMsg"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="logErr"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="logInfo"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="logState"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="newHelloMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="newIHaveStateMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="syncId" type="java.lang.String">
+</parameter>
+</method>
+<method name="newSendMeStateMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="syncId" type="java.lang.String">
+</parameter>
+</method>
+<method name="newStateOperationMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="op" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="newStateSyncMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="syncId" type="java.lang.String">
+</parameter>
+</method>
+<method name="newWhoHasStateMsg"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="syncId" type="java.lang.String">
+</parameter>
+</method>
+<method name="reifyState"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="obj" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendHello"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="sendMessageToProp"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="m" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToPropReplica"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="actorId" type="java.lang.String">
+</parameter>
+<parameter name="m" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="stateToString"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="EVT_CHANGE"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;change&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="EVT_SYNC"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;sync&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.props2.sample"
+>
+<class name="CollectionProp"
+ extends="edu.stanford.junction.props2.Prop"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="CollectionProp"
+ type="edu.stanford.junction.props2.sample.CollectionProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="state" type="edu.stanford.junction.props2.IPropState">
+</parameter>
+</constructor>
+<method name="add"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="delete"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doRandom"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="items"
+ return="java.util.Collection&lt;org.json.JSONObject&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newAddOp"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="item" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="newDeleteOp"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="item" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="newReplaceOp"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="item1" type="org.json.JSONObject">
+</parameter>
+<parameter name="item2" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="newState"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="newStateWith"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="items" type="java.util.Collection&lt;org.json.JSONObject&gt;">
+</parameter>
+</method>
+<method name="reifyState"
+ return="edu.stanford.junction.props2.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="obj" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="replace"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="item1" type="org.json.JSONObject">
+</parameter>
+<parameter name="item2" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="ListProp"
+ extends="edu.stanford.junction.props2.sample.CollectionProp"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ListProp"
+ type="edu.stanford.junction.props2.sample.ListProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="items" type="java.util.Collection&lt;org.json.JSONObject&gt;">
+</parameter>
+</constructor>
+<constructor name="ListProp"
+ type="edu.stanford.junction.props2.sample.ListProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="SetProp"
+ extends="edu.stanford.junction.props2.sample.CollectionProp"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SetProp"
+ type="edu.stanford.junction.props2.sample.SetProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+<parameter name="items" type="java.util.Collection&lt;org.json.JSONObject&gt;">
+</parameter>
+</constructor>
+<constructor name="SetProp"
+ type="edu.stanford.junction.props2.sample.SetProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+</class>
+<class name="TextProp"
+ extends="edu.stanford.junction.props.Prop"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="TextProp"
+ type="edu.stanford.junction.props2.sample.TextProp"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="propName" type="java.lang.String">
+</parameter>
+<parameter name="propReplicaName" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="destringifyOperation"
+ return="edu.stanford.junction.props.IPropStateOperation"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="destringifyState"
+ return="edu.stanford.junction.props.IPropState"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="s" type="java.lang.String">
+</parameter>
+</method>
+<method name="insertChar"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="index" type="int">
+</parameter>
+<parameter name="charact" type="java.lang.String">
+</parameter>
+</method>
+<method name="insertRandomChar"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.provider"
+>
+<class name="ExtrasDirector"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ExtrasDirector"
+ type="edu.stanford.junction.provider.ExtrasDirector"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="registerExtra"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="extra" type="edu.stanford.junction.api.activity.JunctionExtra">
+</parameter>
+</method>
+</class>
+<class name="JunctionProvider"
+ extends="java.lang.Object"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionProvider"
+ type="edu.stanford.junction.provider.JunctionProvider"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="requestServices"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="protected"
+>
+<parameter name="jx" type="edu.stanford.junction.Junction">
+</parameter>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+</method>
+<method name="sendMessageToActivity"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="activitySession" type="java.net.URI">
+</parameter>
+<parameter name="msg" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="setJunctionMaker"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="maker" type="edu.stanford.junction.JunctionMaker">
+</parameter>
+</method>
+<field name="mJunctionMaker"
+ type="edu.stanford.junction.JunctionMaker"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.provider.jvm"
+>
+<class name="JVMSwitchboardConfig"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.SwitchboardConfig">
+</implements>
+<constructor name="JVMSwitchboardConfig"
+ type="edu.stanford.junction.provider.jvm.JVMSwitchboardConfig"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="Junction"
+ extends="edu.stanford.junction.Junction"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Junction"
+ type="edu.stanford.junction.provider.jvm.Junction"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="script" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="doSendMessageToActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToSession"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="getAcceptedInvitation"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActor"
+ return="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBaseInvitationURI"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSessionID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSwitchboard"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="JunctionProvider"
+ extends="edu.stanford.junction.provider.JunctionProvider"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionProvider"
+ type="edu.stanford.junction.provider.jvm.JunctionProvider"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="config" type="edu.stanford.junction.provider.jvm.JVMSwitchboardConfig">
+</parameter>
+</constructor>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+</class>
+<class name="MultiJunction"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="get"
+ return="edu.stanford.junction.provider.jvm.MultiJunction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="sendMessageToActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="from" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="from" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="sendMessageToSession"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="from" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.provider.xmpp"
+>
+<class name="Junction"
+ extends="edu.stanford.junction.Junction"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Junction"
+ type="edu.stanford.junction.provider.xmpp.Junction"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="xmppConnection" type="org.jivesoftware.smack.XMPPConnection">
+</parameter>
+<parameter name="xmppConfig" type="edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig">
+</parameter>
+<parameter name="prov" type="edu.stanford.junction.provider.xmpp.JunctionProvider">
+</parameter>
+</constructor>
+<method name="disconnect"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="doSendMessageToActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actorID" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToRole"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="role" type="java.lang.String">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="doSendMessageToSession"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="getAcceptedInvitation"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActivityID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getActor"
+ return="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getBaseInvitationURI"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getRoles"
+ return="java.lang.String[]"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSessionID"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getSwitchboard"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="registerActor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="registerMessageHandler"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="handler" type="edu.stanford.junction.api.messaging.MessageHandler">
+</parameter>
+</method>
+<method name="sendMessageToTarget"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="target" type="edu.stanford.junction.api.messaging.target.MessageTarget">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="start"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<field name="NS_JX"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="mAcceptedInvitation"
+ type="java.net.URI"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="mXMPPConnection"
+ type="org.jivesoftware.smack.XMPPConnection"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="JunctionProvider"
+ extends="edu.stanford.junction.provider.JunctionProvider"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionProvider"
+ type="edu.stanford.junction.provider.xmpp.JunctionProvider"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="config" type="edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig">
+</parameter>
+</constructor>
+<method name="getActivityScript"
+ return="edu.stanford.junction.api.activity.ActivityScript"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+</method>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="newJunction"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="desc" type="edu.stanford.junction.api.activity.ActivityScript">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</method>
+<method name="remove"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="jx" type="edu.stanford.junction.provider.xmpp.Junction">
+</parameter>
+</method>
+<field name="ONE_CONNECTION_PER_SESSION"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="mConfig"
+ type="edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="XMPPSwitchboardConfig"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="edu.stanford.junction.SwitchboardConfig">
+</implements>
+<constructor name="XMPPSwitchboardConfig"
+ type="edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="host" type="java.lang.String">
+</parameter>
+</constructor>
+<constructor name="XMPPSwitchboardConfig"
+ type="edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getChatService"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</method>
+<method name="setCredentials"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="username" type="java.lang.String">
+</parameter>
+<parameter name="password" type="java.lang.String">
+</parameter>
+</method>
+<method name="setHost"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="host" type="java.lang.String">
+</parameter>
+</method>
+<field name="host"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="password"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="user"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+</package>
+<package name="edu.stanford.junction.sample.extra"
+>
+<class name="Capsizer"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Capsizer"
+ type="edu.stanford.junction.sample.extra.Capsizer"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+</class>
+<class name="Encryption"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Encryption"
+ type="edu.stanford.junction.sample.extra.Encryption"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+<field name="FIELD_ENC"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;e&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FIELD_IV"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;iv&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="URL_KEY_PARAM"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;skey&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="mKey"
+ type="byte[]"
+ transient="false"
+ volatile="false"
+ value="null"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="JXSystem"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JXSystem"
+ type="edu.stanford.junction.sample.extra.JXSystem"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String...">
+</parameter>
+</method>
+<field name="JX_SYSTEM_NS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;JXSYSTEMMSG&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="Pulse"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Pulse"
+ type="edu.stanford.junction.sample.extra.Pulse"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="t" type="long">
+</parameter>
+</constructor>
+<constructor name="Pulse"
+ type="edu.stanford.junction.sample.extra.Pulse"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String...">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.sample.helloworld"
+>
+<class name="HelloWorld"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="HelloWorld"
+ type="edu.stanford.junction.sample.helloworld.HelloWorld"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+</class>
+<class name="Receiver"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Receiver"
+ type="edu.stanford.junction.sample.helloworld.Receiver"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="inbound" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="Sender"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Sender"
+ type="edu.stanford.junction.sample.helloworld.Sender"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.sample.sql"
+>
+<class name="QueryHandler"
+ extends="edu.stanford.junction.api.messaging.MessageHandler"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="QueryHandler"
+ type="edu.stanford.junction.sample.sql.QueryHandler"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+<exception name="JSONException" type="org.json.JSONException">
+</exception>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="SQLActor"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SQLActor"
+ type="edu.stanford.junction.sample.sql.SQLActor"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="SendQuery"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SendQuery"
+ type="edu.stanford.junction.sample.sql.SendQuery"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.simulator"
+>
+<class name="ForwardingService"
+ extends="edu.stanford.junction.api.activity.JunctionService"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="getServiceName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="newInstance"
+ return="edu.stanford.junction.api.activity.JunctionService"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="ResponseTimeSimulator"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ResponseTimeSimulator"
+ type="edu.stanford.junction.simulator.ResponseTimeSimulator"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+</class>
+<class name="Simulator"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Simulator"
+ type="edu.stanford.junction.simulator.Simulator"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+</class>
+</package>
+<package name="edu.stanford.junction.test.multiconnect"
+>
+<class name="BasicTest"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BasicTest"
+ type="edu.stanford.junction.test.multiconnect.BasicTest"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="multiconnectTest"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="Receiver"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Receiver"
+ type="edu.stanford.junction.test.multiconnect.Receiver"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="name" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="inbound" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+<class name="Sender"
+ extends="edu.stanford.junction.api.activity.JunctionActor"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Sender"
+ type="edu.stanford.junction.test.multiconnect.Sender"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="n" type="java.lang.String">
+</parameter>
+</constructor>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
+</package>
+</api>
