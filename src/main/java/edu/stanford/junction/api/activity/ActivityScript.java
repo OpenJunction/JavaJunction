@@ -22,7 +22,6 @@ import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import edu.stanford.junction.JunctionMaker;
 
 public class ActivityScript {
