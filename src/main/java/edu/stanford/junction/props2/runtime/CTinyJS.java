@@ -74,6 +74,11 @@ class CTinyJS {
 		}
 	}
 
+	public static CScriptVar back(ArrayList<CScriptVar> scopes){
+		if(scopes.isEmpty()) return null;
+		else return scopes.get(scopes.size() - 1);
+	}
+
 
     public void execute(String code){
 		CScriptLex oldLex = l;
@@ -643,7 +648,7 @@ class CTinyJS {
 			l.match(CScriptLex.LEX_R_VAR);
 			CScriptVarLink a = null;
 			if (execute)
-				a = scopes.get(scopes.size() - 1).findChildOrCreate(l.tkStr, CScriptVar.SCRIPTVAR_UNDEFINED);
+				a = back(scopes).findChildOrCreate(l.tkStr, CScriptVar.SCRIPTVAR_UNDEFINED);
 			l.match(CScriptLex.LEX_ID);
 			// now do stuff defined with dots
 			while (l.tk == '.') {
@@ -758,18 +763,18 @@ class CTinyJS {
 			forIter.delete();
 			forBody.delete();
 			if (loopCount<=0) {
-				root.trace();
-				System.err.println("FOR Loop exceeded " + TINYJS_LOOP_MAX_ITERATIONS + " iterations at " + l.getPosition());
+				root.trace("", "");
+				System.err.println("FOR Loop exceeded " + TINYJS_LOOP_MAX_ITERATIONS + " iterations at " + l.getPosition(-1));
 				throw new CScriptException("LOOP_ERROR");
 			}
 		} else if (l.tk==CScriptLex.LEX_R_RETURN) {
 			l.match(CScriptLex.LEX_R_RETURN);
-			CScriptVarLink result = 0;
+			CScriptVarLink result = null;
 			if (l.tk != ';')
 				result = base(execute);
 			if (execute) {
-				CScriptVarLink resultVar = scopes.back().findChild(TINYJS_RETURN_VAR);
-				if (resultVar)
+				CScriptVarLink resultVar = back(scopes).findChild(TINYJS_RETURN_VAR);
+				if (resultVar != null)
 					resultVar.replaceWith(result);
 				else
 					System.err.println("RETURN statement, but not in a function.\n");
@@ -782,7 +787,7 @@ class CTinyJS {
 				if (funcVar.name == TINYJS_TEMP_NAME)
 					System.err.println("Functions defined at statement-level are meant to have a name\n");
 				else
-					scopes.back().addChildNoDup(funcVar.name, funcVar.var);
+					back(scopes).addChildNoDup(funcVar.name, funcVar.var);
 			}
 		} else l.match(CScriptLex.LEX_EOF);
 	}
@@ -811,7 +816,7 @@ class CTinyJS {
     private void parseFunctionArguments(CScriptVar funcVar){
 		l.match('(');
 		while (l.tk!=')') {
-			funcVar.addChildNoDup(l.tkStr);
+			funcVar.addChildNoDup(l.tkStr, null);
 			l.match(CScriptLex.LEX_ID);
 			if (l.tk!=')') l.match(',');
 		}
