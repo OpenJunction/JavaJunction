@@ -25,20 +25,47 @@
 
 package edu.stanford.junction.props2.runtime;
 
-class CScriptVarLink
-{
-  public CScriptVarLink(CScriptVar var, String name);
-  public CScriptVarLink(CScriptVarLink link); ///< Copy constructor
+class CScriptVarLink {
 
-  public String name;
-  public CScriptVarLink nextSibling;
-  public CScriptVarLink prevSibling;
-  public CScriptVar var;
-  public bool owned;
+	public String name;
+	public CScriptVarLink nextSibling;
+	public CScriptVarLink prevSibling;
+	public CScriptVar var;
+	public boolean owned;
 
-  ///< Replace the Variable pointed to
-  public void replaceWith(CScriptVar newVar); 
+	public CScriptVarLink(CScriptVar var, String name){
+		this.name = name;
+		this.nextSibling = null;
+		this.prevSibling = null;
+		this.var = var.ref();
+		this.owned = false;
+	}
 
-  ///< Replace the Variable pointed to (just dereferences)
-  public void replaceWith(CScriptVarLink newVar); 
+	///< Copy constructor
+	public CScriptVarLink(CScriptVarLink link){
+		this.name = link.name;
+		this.nextSibling = null;
+		this.prevSibling = null;
+		this.var = link.var.ref();
+		this.owned = false;
+	}
+
+	///< Replace the Variable pointed to
+	public void replaceWith(CScriptVar newVar){
+		CScriptVar oldVar = var;
+		var = newVar.ref();
+		oldVar.unref();
+	}
+
+	///< Replace the Variable pointed to (just dereferences)
+	public void replaceWith(CScriptVarLink newVar){
+		if (newVar != null)
+			replaceWith(newVar.var);
+		else
+			replaceWith(new CScriptVar());
+	}
+
+	public void delete(){
+		var.unref();
+	}
 }

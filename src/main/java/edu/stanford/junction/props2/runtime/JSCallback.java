@@ -26,12 +26,8 @@
 package edu.stanford.junction.props2.runtime;
 
 
-class CScriptException extends Exception {
+abstract class JSCallback  {
 
-    public String text;
-
-    public CScriptException(String exceptionText){
-		this.text = exceptionText;
-	}
+    abstract public Object apply(CScriptVar var, Object userdata);
 
 }
