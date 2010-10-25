@@ -26,7 +26,7 @@
 package edu.stanford.junction.props2.runtime;
 
 
-class CScriptException extends Exception {
+public class CScriptException extends Exception {
 
     public String text;
 

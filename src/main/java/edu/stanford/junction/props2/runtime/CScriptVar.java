@@ -512,7 +512,7 @@ public class CScriptVar {
 			child = child.nextSibling;
 		}
 		return newVar;
-	} 
+	}
 
     ///< Dump out the contents of this using trace
     public void trace(String indentStr, String name){

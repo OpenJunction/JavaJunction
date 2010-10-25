@@ -27,7 +27,7 @@ package edu.stanford.junction.props2.runtime;
 
 import java.util.*;
 
-class CTinyJS {
+public class CTinyJS {
 
     public static final int TINYJS_LOOP_MAX_ITERATIONS = 8192;
     public static final String TINYJS_RETURN_VAR = "return";
@@ -45,6 +45,7 @@ class CTinyJS {
 
 
 	public CTinyJS(){
+		scopes = new ArrayList<CScriptVar>();
 		l = null;
 		root = (new CScriptVar(TINYJS_BLANK_DATA, CScriptVar.SCRIPTVAR_OBJECT)).ref();
 		// Add built-in classes
@@ -105,7 +106,7 @@ class CTinyJS {
      * 'undefined' variable type. CScriptVarLink is returned as this will
      * automatically unref the result as it goes out of scope. If you want to
      * keep it, you must use ref() and unref() */
-    CScriptVarLink evaluateComplex(String code) throws CScriptException{
+    public CScriptVarLink evaluateComplex(String code) throws CScriptException{
 		CScriptLex oldLex = l;
 		ArrayList<CScriptVar> oldScopes = new ArrayList<CScriptVar>(scopes);
 		l = new CScriptLex(code);
@@ -294,7 +295,7 @@ class CTinyJS {
 							a.var.getJSCallback().apply(functionRoot, a.var.jsCallbackUserData);
 						} else {
 							/* we just want to execute the block, but something could
-							 * have messed up and left us with the wrong ScriptLex, so
+							 * have messed up and left us with the wrong scriptlex, so
 							 * we want to be careful here... */
 							CScriptException exception = null;
 							CScriptLex oldLex = l;

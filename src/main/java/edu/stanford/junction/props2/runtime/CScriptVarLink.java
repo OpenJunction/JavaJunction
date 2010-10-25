@@ -25,7 +25,7 @@
 
 package edu.stanford.junction.props2.runtime;
 
-class CScriptVarLink {
+public class CScriptVarLink {
 
 	public String name;
 	public CScriptVarLink nextSibling;
@@ -63,6 +63,10 @@ class CScriptVarLink {
 			replaceWith(newVar.var);
 		else
 			replaceWith(new CScriptVar());
+	}
+
+    public void trace(){
+		var.trace("", "");
 	}
 
 	public void delete(){
