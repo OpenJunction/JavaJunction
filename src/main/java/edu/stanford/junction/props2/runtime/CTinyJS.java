@@ -80,7 +80,7 @@ class CTinyJS {
 	}
 
 
-    public void execute(String code){
+    public void execute(String code) throws CScriptException{
 		CScriptLex oldLex = l;
 		ArrayList<CScriptVar> oldScopes = new ArrayList<CScriptVar>(scopes);
 		l = new CScriptLex(code);
@@ -105,7 +105,7 @@ class CTinyJS {
      * 'undefined' variable type. CScriptVarLink is returned as this will
      * automatically unref the result as it goes out of scope. If you want to
      * keep it, you must use ref() and unref() */
-    CScriptVarLink evaluateComplex(String code){
+    CScriptVarLink evaluateComplex(String code) throws CScriptException{
 		CScriptLex oldLex = l;
 		ArrayList<CScriptVar> oldScopes = new ArrayList<CScriptVar>(scopes);
 		l = new CScriptLex(code);
@@ -140,7 +140,7 @@ class CTinyJS {
 
     /** Evaluate the given code and return a string. If nothing to return, will return
      * 'undefined' */
-    public String evaluate(String code){
+    public String evaluate(String code) throws CScriptException{
 		return evaluateComplex(code).var.getString();
 	}
 
@@ -159,7 +159,7 @@ class CTinyJS {
 		tinyJS.addNative("function String.substring(lo, hi)", scSubstring, 0);
 		\endcode
     */
-    public void addNative(String funcDesc, JSCallback ptr, Object userdata){
+    public void addNative(String funcDesc, JSCallback ptr, Object userdata) throws CScriptException {
 		CScriptLex oldLex = l;
 		l = new CScriptLex(funcDesc);
 
@@ -217,7 +217,7 @@ class CTinyJS {
 	}
 
     // parsing - in order of precedence
-    private CScriptVarLink factor(boolean execute){
+    private CScriptVarLink factor(boolean execute) throws CScriptException{
 		if (l.tk=='(') {
 			l.match('(');
 			CScriptVarLink a = base(execute);
@@ -460,7 +460,7 @@ class CTinyJS {
 	}
 
 
-    private CScriptVarLink unary(boolean execute){
+    private CScriptVarLink unary(boolean execute) throws CScriptException{
 		CScriptVarLink a;
 		if (l.tk=='!') {
 			l.match('!'); // binary not
@@ -475,7 +475,7 @@ class CTinyJS {
 		return a;
 	}
 
-    private CScriptVarLink term(boolean execute){
+    private CScriptVarLink term(boolean execute) throws CScriptException{
 		CScriptVarLink a = unary(execute);
 		while (l.tk=='*' || l.tk=='/' || l.tk=='%') {
 			int op = l.tk;
@@ -489,7 +489,7 @@ class CTinyJS {
 		return a;
 	}
 
-    private CScriptVarLink expression(boolean execute){
+    private CScriptVarLink expression(boolean execute) throws CScriptException{
 		boolean negate = false;
 		if (l.tk=='-') {
 			l.match('-');
@@ -525,7 +525,7 @@ class CTinyJS {
 		return a;
 	}
 
-    private CScriptVarLink condition(boolean execute){
+    private CScriptVarLink condition(boolean execute) throws CScriptException{
 		CScriptVarLink a = expression(execute);
 		CScriptVarLink b;
 		while (l.tk==CScriptLex.LEX_EQUAL || l.tk==CScriptLex.LEX_NEQUAL ||
@@ -543,7 +543,7 @@ class CTinyJS {
 		return a;
 	}
 
-    private CScriptVarLink logic(boolean execute){
+    private CScriptVarLink logic(boolean execute) throws CScriptException{
 		CScriptVarLink a = condition(execute);
 		CScriptVarLink b;
 		while (l.tk=='&' || l.tk=='|' || l.tk=='^' || l.tk==CScriptLex.LEX_ANDAND || l.tk==CScriptLex.LEX_OROR) {
@@ -579,7 +579,7 @@ class CTinyJS {
 		return a;
 	}
 
-    private CScriptVarLink base(boolean execute){
+    private CScriptVarLink base(boolean execute) throws CScriptException{
 		CScriptVarLink lhs = logic(execute);
 		if (l.tk=='=' || l.tk==CScriptLex.LEX_PLUSEQUAL || l.tk==CScriptLex.LEX_MINUSEQUAL) {
 			/* If we're assigning to this and we don't have a parent,
@@ -610,7 +610,7 @@ class CTinyJS {
 		return lhs;
 	}
 
-    private void block(boolean execute){
+    private void block(boolean execute) throws CScriptException{
 		l.match('{');
 		if (execute) {
 			while ((l.tk != 0) && l.tk!='}')
@@ -627,7 +627,7 @@ class CTinyJS {
 		}
 	}
 
-    private void statement(boolean execute){
+    private void statement(boolean execute) throws CScriptException{
 		if (l.tk==CScriptLex.LEX_ID ||
 			l.tk==CScriptLex.LEX_INT ||
 			l.tk==CScriptLex.LEX_FLOAT ||
@@ -793,7 +793,7 @@ class CTinyJS {
 	}
 
     // parsing utility functions
-    private CScriptVarLink parseFunctionDefinition(){
+    private CScriptVarLink parseFunctionDefinition() throws CScriptException{
 		// actually parse a function...
 		l.match(CScriptLex.LEX_R_FUNCTION);
 		String funcName = TINYJS_TEMP_NAME;
@@ -813,7 +813,7 @@ class CTinyJS {
 		return funcVar;
 	}
 
-    private void parseFunctionArguments(CScriptVar funcVar){
+    private void parseFunctionArguments(CScriptVar funcVar) throws CScriptException{
 		l.match('(');
 		while (l.tk!=')') {
 			funcVar.addChildNoDup(l.tkStr, null);
