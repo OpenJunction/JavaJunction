@@ -22,61 +22,103 @@ import java.io.*;
 
 public class Lisp{
 
-	public static class ReaderException extends Exception{
-		public ReaderException(String msg){
-			super(msg);
+
+	public static final LispNil nil = new LispNil();
+	public static final LispTruth truth = new LispTruth();
+	public static final LispSpecial LET_SPECIAL = new LetSpecial();
+	public static final LispSpecial IF_SPECIAL = new IfSpecial();
+
+	private Map<String,LispSymbol> symbols = new HashMap<String,LispSymbol>();
+	private Stack<Map<LispSymbol,LispObject>> bindings = new Stack<Map<LispSymbol,LispObject>>();
+
+	static class LetSpecial extends LispSpecial{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			Map<LispSymbol, LispObject> toBind = new HashMap<LispSymbol, LispObject>();
+			LispList binders = (LispList)args.car();
+			while(binders != nil){
+				LispList binder = (LispList)binders.car();
+				LispSymbol name = (LispSymbol)binder.car();
+				LispObject val = (binder.cdr().car()).eval(state);
+				toBind.put(name, val);
+				binders = binders.cdr();
+			}
+			state.pushBinding(toBind);
+			LispList body = args.cdr();
+			LispObject result = body.evalAsBlock(state);
+			state.popBinding();
+			return result;
 		}
 	}
-
-	public static abstract class LispObject{
-	}
-
-	public static class LispSymbol extends LispObject{
-		final String name;
-		public LispSymbol(final String str){
-			name = str;
+	static class IfSpecial extends LispSpecial{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispObject test = args.car();
+			LispObject thenForm = args.cdr().car();
+			LispObject elseForm = args.cdr().cdr().car();
+			LispObject testResult = test.eval(state);
+			if(testResult != nil){
+				return thenForm.eval(state);
+			}
+			else {
+				return elseForm.eval(state);
+			}
 		}
 	}
-
-	public static class LispString extends LispObject{
-		final String value;
-		public LispString(final String str){
-			value = str;
-		}
-	}
-
-	public static class LispNumber extends LispObject{
-		final Number value;
-		public LispNumber(final Number num){
-			value = num;
-		}
-	}
-
-	public static class LispCons extends LispObject{
-		final LispObject car;
-		final LispObject cdr;
-		public LispCons(final LispObject car, final LispObject cdr){
-			this.car = car;
-			this.cdr = cdr;
-		}
-	}
-
-	public static class LispNil extends LispObject{}
-
-	public static final LispObject nil = new LispNil();
-
-
-//	private Map<String,LispObject> symTable = new HashMap<String,LispObject>();
-//	private LispObject cons = new Cons();
-//	private LispFunction consFn = new FnCons();
 	
 	public Lisp(){
-//		symTable;
-//		symTable.put("cons", consFn);
+		Map<LispSymbol, LispObject> root = new HashMap<LispSymbol, LispObject>();
+		root.put(intern("let"), LET_SPECIAL);
+		root.put(intern("if"), IF_SPECIAL);
+		root.put(intern("t"), truth);
+		root.put(intern("nil"), nil);
+		pushBinding(root);
 	}
 
+	public LispSymbol intern(LispSymbol sym){
+		if(symbols.containsKey(sym.value)) return symbols.get(sym.value);
+		else{
+			symbols.put(sym.value, sym);
+			return sym;
+		}
+	}
 
-	public static LispObject read(Reader r) throws IOException, ReaderException{
+	public LispSymbol intern(String symName){
+		return intern(new LispSymbol(symName));
+	}
+
+	public void pushBinding(Map<LispSymbol,LispObject> binding){
+		bindings.push(binding);
+	}
+
+	public void pushBinding(LispSymbol name, LispObject val){
+		Map<LispSymbol,LispObject> binding = new HashMap<LispSymbol,LispObject>();
+		binding.put(name, val);
+		bindings.push(binding);
+	}
+
+	public void popBinding(){
+		bindings.pop();
+	}
+
+	public LispObject lookup(LispSymbol sym){
+		for(int i = bindings.size() - 1; i > -1; i--){
+			Map<LispSymbol, LispObject> b = bindings.get(i);
+			if(b.containsKey(sym)) return b.get(sym);
+		}
+		return null;
+	}
+
+	public LispObject eval(PushbackReader reader) throws LispException, IOException, ReaderException{
+		LispObject form = read(reader);
+		return form.eval(this);
+	}
+
+	public LispObject read(PushbackReader r) throws IOException, ReaderException{
+		return read(r, false);
+	}
+
+	private LispObject read(PushbackReader r, boolean readList) throws IOException, ReaderException{
+		ArrayList<LispObject> list = new ArrayList<LispObject>();
+		LispObject result = null;
 		for(; ;){
 			int ch = r.read();
 
@@ -84,20 +126,23 @@ public class Lisp{
 				ch = r.read();
 
 			if(Character.isDigit(ch)){
-				LispObject n = readNumber(r, (char)ch);
-				return n;
+				result = readNumber(r, (char)ch);
 			}
 			else if(ch == '"'){
-				return readString(r);
+				result = readString(r);
 			}
 			else if(Character.isLetter(ch)){
-				return readSymbol(r, (char)ch);
+				result = readSymbol(r, (char)ch);
 			}
 			else if(ch == '('){
-				return new LispCons(read(r), readTail(r));
+				result = read(r, true);
 			}
-			else if(ch == ')'){
-				return nil;
+			else if(readList && ch == ')'){
+				LispList ls = nil;
+				for(int i = list.size() - 1; i > -1; i--){
+					ls = new LispCons(list.get(i),ls);
+				}
+				return ls;
 			}
 			else if((int)ch == -1){
 				throw new ReaderException("EOF while reading");
@@ -105,49 +150,63 @@ public class Lisp{
 			else{
 				throw new ReaderException("Unrecognized character '" + ch + "'");
 			}
+
+			if(readList){
+				list.add(result);
+			}
+			else{
+				return result;
+			}
+
 		}
 	}
 
-	private static LispObject readTail(Reader r) throws IOException, ReaderException{
-		LispObject next = read(r);
-		if(next == nil) return nil;
-		else return new LispCons(next, readTail(r));
-	}
-
-	private static LispObject readString(Reader r) throws IOException, ReaderException{
+	private LispObject readString(PushbackReader r) throws IOException, ReaderException{
 		StringBuffer sb = new StringBuffer();
 		for( ; ; ){
 			int ch = r.read();
-			if(ch == -1 || ch == '"'){
+			if(ch == '"'){
 				return new LispString(sb.toString());
 			}
-			else sb.append(ch); 
+			else if(ch == -1){
+				throw new ReaderException("EOF while reading string");
+			}
+			else sb.append((char)ch); 
 		}
 	}
 
-	private static LispObject readSymbol(Reader r, char initial) throws IOException, ReaderException{
+	private LispObject readSymbol(PushbackReader r, char initial) throws IOException, ReaderException{
 		StringBuffer sb = new StringBuffer();
 		sb.append(initial);
 		for( ; ; ){
 			int ch = r.read();
-			if(ch == -1 || Character.isWhitespace(ch)){
-				return new LispSymbol(sb.toString());
+			if(Character.isLetter(ch) || Character.isDigit(ch)){
+				sb.append((char)ch);
 			}
-			else sb.append(ch);
+			else {
+				r.unread(ch);
+				break;
+			}
 		}
+		String str = sb.toString();
+		return intern(sb.toString());
 	}
 
-	private static LispObject readNumber(Reader r, char initial) throws IOException, ReaderException{
+	private LispObject readNumber(PushbackReader r, char initial) throws IOException, ReaderException{
 		StringBuffer sb = new StringBuffer();
 		sb.append(initial);
 		for( ; ; ){
 			int ch = r.read();
-			if(ch == -1 || Character.isWhitespace(ch)){
-				String str = sb.toString();
-				return new LispNumber(Integer.valueOf(str));
+			if(Character.isDigit(ch)){
+				sb.append((char)ch);
 			}
-			else sb.append(ch);
+			else {
+				r.unread(ch);
+				break;
+			}
 		}
+		String str = sb.toString();
+		return new LispNumber(Integer.valueOf(str));
 	}
 
 }
