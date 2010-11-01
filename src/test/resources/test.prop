@@ -1,0 +1,52 @@
+(
+  "initial"
+     (fn ()
+      (let ((state (new-obj)))
+        (put state "name" "unnamed")
+        (put state "objects" (new-obj))
+	state
+	))
+
+
+  "operations"
+   (
+     "addObj"
+     (fn (state op)
+      (let ((item (get op "item"))
+            (id (get item "id"))
+	    (objects (get state "objects")))
+        (put objects id item)
+	state
+	))
+
+     "deleteObj"
+     (fn (state op)
+      (let ((id (get op "itemId"))
+	    (objects (get state "objects")))
+        (del objects id)
+	state
+	))
+
+     "setName"
+     (fn (state op)
+      (let ((name (get op "name")))
+        (put state "name" name)
+	state
+	))
+
+     "resetVoteHistory"
+     (fn (state op)
+       (put state "voteHistory" (new-obj)))
+
+     "vote"
+     (fn (state op)
+      (let ((id (get op "itemId"))
+	    (count (get op "count"))
+	    (objects (get state "objects"))
+	    (obj (get objects id))
+	    (cur (get obj "votes")))
+	(put obj "votes" (+ cur count))
+	))
+
+   )
+)

@@ -21,7 +21,7 @@ import java.io.*;
 
 
 public class LispString extends LispObject{
-	final String value;
+	public final String value;
 
 	public LispString(final String str){
 		value = str;

@@ -24,6 +24,8 @@ abstract public class LispList extends LispObject{
 	public abstract LispObject car();
 	public abstract LispList cdr();
 
+	protected int length = 0;
+
 	public LispObject evalAsBlock(Lisp state) throws LispException{
 		LispList forms = this;
 		LispObject result = Lisp.nil;
@@ -33,5 +35,32 @@ abstract public class LispList extends LispObject{
 			forms = forms.cdr();
 		}
 		return result;
+	}
+
+	public int length(){
+		return length;
+	}
+
+	public LispList reverse(){
+		LispList ls = Lisp.nil;
+		LispList tmp = this;
+		while(tmp != Lisp.nil){
+			ls = new LispCons(tmp.car(), ls);
+			tmp = tmp.cdr();
+		}
+		return ls;
+	}
+
+	public LispObject proplistGet(String str){
+		LispList tmp = this;
+		while(tmp != Lisp.nil){
+			LispObject val = tmp.car();
+			if(val instanceof LispString && 
+			   ((LispString)val).value.equals(str)){
+				return tmp.cdr().car();
+			}
+			tmp = tmp.cdr();
+		}
+		return Lisp.nil;
 	}
 }

@@ -16,7 +16,8 @@
 
 
 package edu.stanford.junction.props2;
+import org.json.JSONObject;
 
 public interface IWithStateAction<T>{
-	T run(IPropState state);
+	T run(JSONObject state);
 }

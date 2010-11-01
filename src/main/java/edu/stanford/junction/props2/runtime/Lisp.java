@@ -17,38 +17,41 @@ package edu.stanford.junction.props2.runtime;
  */
 
 import java.util.*;
+import java.util.regex.*;
 import java.io.*;
 
 
 public class Lisp{
 
-
 	public static final LispNil nil = new LispNil();
 	public static final LispTruth truth = new LispTruth();
-	public static final LispSpecial LET_SPECIAL = new LetSpecial();
-	public static final LispSpecial IF_SPECIAL = new IfSpecial();
+
 
 	private Map<String,LispSymbol> symbols = new HashMap<String,LispSymbol>();
-	private Stack<Map<LispSymbol,LispObject>> bindings = new Stack<Map<LispSymbol,LispObject>>();
+	private Stack<Map<LispSymbol,LispObject>> bindings = 
+		new Stack<Map<LispSymbol,LispObject>>();
 
+	public static final LispSpecial LET_SPECIAL = new LetSpecial();
 	static class LetSpecial extends LispSpecial{
 		public LispObject apply(LispList args, Lisp state) throws LispException{
-			Map<LispSymbol, LispObject> toBind = new HashMap<LispSymbol, LispObject>();
 			LispList binders = (LispList)args.car();
+			int bindCount = 0;
 			while(binders != nil){
 				LispList binder = (LispList)binders.car();
 				LispSymbol name = (LispSymbol)binder.car();
 				LispObject val = (binder.cdr().car()).eval(state);
-				toBind.put(name, val);
+				state.pushBinding(name, val);
+				bindCount += 1;
 				binders = binders.cdr();
 			}
-			state.pushBinding(toBind);
 			LispList body = args.cdr();
 			LispObject result = body.evalAsBlock(state);
-			state.popBinding();
+			for(int i = 0; i < bindCount; i++) state.popBinding();
 			return result;
 		}
 	}
+
+	public static final LispSpecial IF_SPECIAL = new IfSpecial();
 	static class IfSpecial extends LispSpecial{
 		public LispObject apply(LispList args, Lisp state) throws LispException{
 			LispObject test = args.car();
@@ -63,13 +66,72 @@ public class Lisp{
 			}
 		}
 	}
+
+	public static final LispSpecial FN_SPECIAL = new FnSpecial();
+	static class FnSpecial extends LispSpecial{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispList params = (LispList)(args.car());
+			LispList body = args.cdr();
+			return new LispStdFunc(params, body);
+		}
+	}
+
+	public static final LispFunc PUT_FUNC = new PutFunc();
+	static class PutFunc extends LispFunc{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispJSONObject obj = (LispJSONObject)(args.car());
+			LispString name = (LispString)(args.cdr().car());
+			LispObject val = args.cdr().cdr().car();
+			return obj.put(name, val);
+		}
+	}
+
+	public static final LispFunc GET_FUNC = new GetFunc();
+	static class GetFunc extends LispFunc{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispJSONObject obj = (LispJSONObject)(args.car());
+			LispString name = (LispString)(args.cdr().car());
+			return obj.get(name);
+		}
+	}
+
+	public static final LispFunc DEL_FUNC = new DelFunc();
+	static class DelFunc extends LispFunc{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispJSONObject obj = (LispJSONObject)(args.car());
+			LispString name = (LispString)(args.cdr().car());
+			return obj.del(name);
+		}
+	}
 	
+	public static final LispFunc NEW_OBJ_FUNC = new NewObjFunc();
+	static class NewObjFunc extends LispFunc{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			return new LispJSONObject();
+		}
+	}
+
+	public static final LispFunc PLUS_FUNC = new PlusFunc();
+	static class PlusFunc extends LispFunc{
+		public LispObject apply(LispList args, Lisp state) throws LispException{
+			LispNumber a = (LispNumber)(args.car());
+			LispNumber b = (LispNumber)(args.cdr().car());
+			return new LispNumber(a.value.doubleValue() + b.value.doubleValue());
+		}
+	}
+
 	public Lisp(){
 		Map<LispSymbol, LispObject> root = new HashMap<LispSymbol, LispObject>();
 		root.put(intern("let"), LET_SPECIAL);
 		root.put(intern("if"), IF_SPECIAL);
+		root.put(intern("fn"), FN_SPECIAL);
 		root.put(intern("t"), truth);
 		root.put(intern("nil"), nil);
+		root.put(intern("put"), PUT_FUNC);
+		root.put(intern("get"), GET_FUNC);
+		root.put(intern("del"), DEL_FUNC);
+		root.put(intern("new-obj"), NEW_OBJ_FUNC);
+		root.put(intern("+"), PLUS_FUNC);
 		pushBinding(root);
 	}
 
@@ -131,7 +193,7 @@ public class Lisp{
 			else if(ch == '"'){
 				result = readString(r);
 			}
-			else if(Character.isLetter(ch)){
+			else if(isSymStart((char)ch)){
 				result = readSymbol(r, (char)ch);
 			}
 			else if(ch == '('){
@@ -161,6 +223,16 @@ public class Lisp{
 		}
 	}
 
+	private boolean isSymStart(char ch){
+		return Character.isLetter(ch) || ch == '+' || ch == '-' || 
+			ch == '*' || ch == '/';
+	}
+
+	private boolean isSymTail(char ch){
+		return Character.isLetter(ch) || Character.isDigit(ch) || 
+			ch == '+' || ch == '-' || ch == '*' || ch == '/';
+	}
+
 	private LispObject readString(PushbackReader r) throws IOException, ReaderException{
 		StringBuffer sb = new StringBuffer();
 		for( ; ; ){
@@ -180,7 +252,7 @@ public class Lisp{
 		sb.append(initial);
 		for( ; ; ){
 			int ch = r.read();
-			if(Character.isLetter(ch) || Character.isDigit(ch)){
+			if(isSymTail((char)ch)){
 				sb.append((char)ch);
 			}
 			else {

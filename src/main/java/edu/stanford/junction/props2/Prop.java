@@ -19,6 +19,7 @@ package edu.stanford.junction.props2;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.*;
+import java.io.Reader;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.extra.JSONObjWrapper;
@@ -34,7 +35,7 @@ import edu.stanford.junction.extra.JSONObjWrapper;
  *
  */
 
-public abstract class Prop extends JunctionExtra implements IProp{
+public class Prop extends JunctionExtra implements IProp{
 	private static final int MODE_NORM = 1;
 	private static final int MODE_SYNC = 2;
 
@@ -60,8 +61,10 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	private String propName;
 	private String propReplicaName = "";
 
-	private IPropState state;
-	private IPropState cleanState;
+	private JSONObject cleanState;
+	private JSONObject state;
+	
+	private StateEngine stateEngine;
 
 	private long sequenceNum = 0;
 	private String lastOpUUID = "";
@@ -86,22 +89,32 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	private Timer taskTimer;
 	private boolean active = false;
 
-	public Prop(String propName, String propReplicaName, IPropState state, long seqNum){
+	public Prop(String propName, String propReplicaName, 
+				JSONObject state, long seqNum, StateEngine e){
+
 		this.propName = propName;
-		this.cleanState = state;
-		this.state = state.copy();
+		stateEngine = e;
+
+		if(state != null){
+			this.cleanState = state;
+			this.state = state;
+		}
+		else{
+			state = stateEngine.initialState();
+		}
+
 		this.sequenceNum = seqNum;
 		this.propReplicaName = propReplicaName;
 		taskTimer = new Timer();
 		taskTimer.schedule(new PeriodicTask(), 0, 1000);
 	}
 
-	public Prop(String propName, String propReplicaName, IPropState state){
-		this(propName, propReplicaName, state, 0);
+	public Prop(String propName, String propReplicaName, Reader r){
+		this(propName, propReplicaName, null, 0, new StateEngine(r));
 	}
 
-	public Prop(String propName, IPropState state){
-		this(propName, propName + "-replica" + UUID.randomUUID().toString(), state);
+	public Prop(String propName, Reader r){
+		this(propName, propName + "-replica" + UUID.randomUUID().toString(), r);
 	}
 
 
@@ -138,7 +151,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		}
 	}
 
-	abstract public IProp newFresh();
+	public IProp newFresh(){
+		return new Prop(propName, propReplicaName, null, 0, stateEngine);
+	}
 
 	public IProp newKeepingListeners(){
 		Prop p = (Prop)newFresh();
@@ -157,16 +172,16 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		return sequenceNum;
 	}
 
-	synchronized protected <T> T withState(IWithStateAction<T> action){
-		return action.run(state);
+	public JSONObject getState(){
+		return state;
+	}
+
+	public JSONObject getConfirmedState(){
+		return cleanState;
 	}
 
 	public String stateToString(){
 		return state.toString();
-	}
-
-	public JSONObject stateToJSON(){
-		return state.toJSON();
 	}
 
 	public String getPropName(){
@@ -202,9 +217,6 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		System.out.println("");
 	}
 
-	abstract protected IPropState reifyState(JSONObject obj);
-
-	
 	synchronized public void addChangeListener(IPropChangeListener listener){
 		changeListeners.add(listener);
 	}
@@ -285,11 +297,12 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	 */
 	protected void handleReceivedOp(JSONObject opMsg){
 		boolean changed = false;
+		JSONObject op = opMsg.optJSONObject("op");
 		if(isSelfMsg(opMsg)){
 			// Received a confirmation of a message we already applied
 			// locally. Apply to clean state.
 			this.staleness = this.sequenceNum - opMsg.optLong("localSeqNum");
-			this.cleanState.applyOperation(opMsg.optJSONObject("op"));
+			this.cleanState = stateEngine.applyOperation(this.cleanState, op);
 
 			// Get rid of the copy of the message in pending locals.
 			removePendingLocal(opMsg);
@@ -298,10 +311,10 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			if(this.pendingLocals.size() > 0){
 				// A remote message is received out-of-order with our predicted
 				// local operations. Fix up the order.
-				this.cleanState.applyOperation(opMsg.optJSONObject("op"));
-				this.state = this.cleanState.copy();
+				this.cleanState = stateEngine.applyOperation(this.cleanState, op);
+				this.state = this.cleanState;
 				for(JSONObject msg : this.pendingLocals){
-					this.state.applyOperation(msg.optJSONObject("op"));
+					this.state = stateEngine.applyOperation(this.state, op); 
 				}
 			}
 			else{
@@ -309,9 +322,8 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				// Just apply it. cleanState and state should be equivalent.
 				assertTrue("If pending locals is empty, state hash and cleanState hash should be equal.", 
 						   this.state.hashCode() == this.cleanState.hashCode());
-				JSONObject op = opMsg.optJSONObject("op");
-				this.cleanState.applyOperation(op);
-				this.state.applyOperation(JSONObjWrapper.copyJSONObject(op));
+				this.cleanState = stateEngine.applyOperation(this.cleanState, op);
+				this.state = stateEngine.applyOperation(this.state, op);
 			}
 			changed = true;
 		}
@@ -457,15 +469,15 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			logInfo("Decompressing zlib compression...");
 			String data = msg.optString("state");
 			JSONObject state = JSONObjWrapper.expandCompressedObj(data);
-			this.cleanState = this.reifyState(state);
+			this.cleanState = state;
 		}
 		else{
 			logInfo("No compression...");
 			JSONObject state = msg.optJSONObject("state");
-			this.cleanState = this.reifyState(state);
+			this.cleanState = state;
 		}
 		logInfo("Copying clean to predicted..");
-		this.state = this.cleanState.copy();
+		this.state = this.cleanState;
 		this.sequenceNum = msg.optLong("seqNum");
 		this.lastOpUUID = msg.optString("lastOpUUID");
 
@@ -534,7 +546,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		if(mode == MODE_NORM){
 			logInfo("Adding predicted operation.");
 			JSONObject msg = newStateOperationMsg(operation);
-			this.state.applyOperation(operation);
+			this.state = stateEngine.applyOperation(this.state, operation);
 			this.pendingLocals.add(msg);
 			sendMessageToProp(msg);
 			dispatchChangeNotification(EVT_CHANGE, operation);
@@ -649,7 +661,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	protected JSONObject newStateSyncMsg(String syncId, boolean compress){
 		JSONObject m = new JSONObject();
 		try{
-			JSONObject state = this.cleanState.toJSON();
+			JSONObject state = this.cleanState;
 			if(compress){
 				m.put("compression", "zlib");
 				m.put("state", JSONObjWrapper.compressObj(state));

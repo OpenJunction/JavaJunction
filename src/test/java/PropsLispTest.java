@@ -2,6 +2,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.*;
 import java.io.*;
+import org.json.JSONObject;
 import edu.stanford.junction.props2.runtime.*;
  
 public class PropsLispTest {
@@ -97,6 +98,39 @@ public class PropsLispTest {
 					new StringReader("(let ((a t)) (if a 55 22))")));
 			assertTrue(o instanceof LispNumber);
 			assertTrue(((LispNumber)o).value.equals(new Integer(55)));
+		}
+		catch(Exception e){
+			e.printStackTrace(System.err);
+			fail();
+		}
+    }
+
+    @Test
+    public void testEvalFn() {
+		try{
+			LispObject o = (new Lisp()).eval(
+				new PushbackReader(
+					new StringReader("((fn (a) a) 23)")));
+			assertTrue(o instanceof LispNumber);
+			assertTrue(((LispNumber)o).value.equals(new Integer(23)));
+		}
+		catch(Exception e){
+			e.printStackTrace(System.err);
+			fail();
+		}
+    }
+
+    @Test
+    public void testJSONFuncs() {
+		try{
+			Lisp lisp = new Lisp();
+			LispObject f = lisp.eval(
+				new PushbackReader(
+					new StringReader("(fn (obj) (put obj \"name\" \"Joe\"))")));
+			assertTrue(f instanceof LispFunc);
+			JSONObject obj = new JSONObject();
+			((LispFunc)f).apply(new LispCons(new LispJSONObject(obj), Lisp.nil), lisp);
+			assertTrue(obj.optString("name").equals("Joe"));
 		}
 		catch(Exception e){
 			e.printStackTrace(System.err);
