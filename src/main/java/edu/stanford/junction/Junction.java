@@ -20,6 +20,7 @@ package edu.stanford.junction;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ import edu.stanford.junction.provider.ExtrasDirector;
  *    <actor> :: [JUNCTION] :: <junction provider>
  */
 public abstract class Junction {
+	protected JunctionActor mOwner;
 	public static String NS_JX = "jx";
 	
 	/**
@@ -67,6 +69,19 @@ public abstract class Junction {
 	/**
 	 * Activity Lifecycle
 	 */
+	// TODO: move to constructor?
+	protected void setActor(JunctionActor actor) {
+		mOwner = actor;
+		mOwner.setJunction(this);
+		
+		List<JunctionExtra> extras = actor.getInitialExtras();
+		if (extras != null){
+			for (int i=0;i<extras.size();i++) {
+				registerExtra(extras.get(i));
+			}
+		}
+	}
+	
 	//public abstract void start();
 	public abstract void disconnect();
 	// public abstract void onStart(); // or register handler?

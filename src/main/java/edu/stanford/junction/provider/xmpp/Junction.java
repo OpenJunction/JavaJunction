@@ -105,7 +105,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		return mActivityDescription;
 	}
 	
-	
+	// TODO: move to constructor?
 	public void registerActor(final JunctionActor actor) {
 		//System.out.print("adding actor for roles: ");
 		//String[] roles =  actor.getRoles();
@@ -113,16 +113,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		  System.out.print(roles[i] + " ");
 		  System.out.print("\n");*/
 		
-		mOwner = actor;
-		mOwner.setJunction(this);
-		
-		List<JunctionExtra> extras = actor.getInitialExtras();
-		if (extras != null){
-			for (int i=0;i<extras.size();i++) {
-				registerExtra(extras.get(i));
-			}
-		}
-		
+		setActor(actor);
 		try {
 			mSessionChat = joinSessionChat();
 		} catch (Exception e) {

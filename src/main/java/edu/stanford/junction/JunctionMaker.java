@@ -96,12 +96,14 @@ public class JunctionMaker {
 	 * {@link newJunction(URI, ActivityScript, JunctionActor)}
 	 */
 	@Deprecated
-	public Junction newJunction(URI uri, JunctionActor actor) throws JunctionException{
-		return mProvider.newJunction(uri, null, actor);
+	public Junction newJunction(URI uri, JunctionActor actor) throws JunctionException {
+		JunctionProvider provider = getProviderForUri(uri, mProvider);
+		return provider.newJunction(uri, null, actor);
 	}
 	
 	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException{
-		return mProvider.newJunction(uri, script, actor);
+		JunctionProvider provider = getProviderForUri(uri, mProvider);
+		return provider.newJunction(uri, script, actor);
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) throws JunctionException{
@@ -122,7 +124,8 @@ public class JunctionMaker {
 			}
 		}
 
-		return mProvider.newJunction(sessionUri, desc, actor);
+		JunctionProvider provider = getProviderForUri(sessionUri, mProvider);
+		return provider.newJunction(sessionUri, desc, actor);
 	}
 	
 	public URI generateSessionUri() {
@@ -321,5 +324,15 @@ public class JunctionMaker {
 			}
 			System.out.println("Inviting service at uri " + remoteServiceActivity);
 			JunctionMaker.this.newJunction(remoteServiceActivity, actor);
+	}
+	
+	protected JunctionProvider getProviderForUri(URI uri, JunctionProvider defaultProvider) {
+		String fragment = uri.getFragment();
+		if (fragment != null) {
+			if (fragment.equals("jvm")) {
+				return new edu.stanford.junction.provider.jvm.JunctionProvider(new JVMSwitchboardConfig());
+			}
+		}
+		return defaultProvider;
 	}
 }
