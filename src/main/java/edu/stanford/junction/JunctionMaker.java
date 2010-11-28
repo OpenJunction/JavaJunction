@@ -50,8 +50,6 @@ public class JunctionMaker {
 	protected JunctionProvider mProvider;
 	
 	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
-		// TODO: invitationURI to JunctionMaker method, supporting fragments (#jvm)
-		
 		// TODO: map config to maker?
 		JunctionMaker maker = new JunctionMaker();
 		maker.mProvider = maker.getProvider(switchboardConfig);
@@ -97,13 +95,11 @@ public class JunctionMaker {
 	 */
 	@Deprecated
 	public Junction newJunction(URI uri, JunctionActor actor) throws JunctionException {
-		JunctionProvider provider = getProviderForUri(uri, mProvider);
-		return provider.newJunction(uri, null, actor);
+		return mProvider.newJunction(uri, null, actor);
 	}
 	
 	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException{
-		JunctionProvider provider = getProviderForUri(uri, mProvider);
-		return provider.newJunction(uri, script, actor);
+		return mProvider.newJunction(uri, script, actor);
 	}
 	
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) throws JunctionException{
@@ -124,8 +120,7 @@ public class JunctionMaker {
 			}
 		}
 
-		JunctionProvider provider = getProviderForUri(sessionUri, mProvider);
-		return provider.newJunction(sessionUri, desc, actor);
+		return mProvider.newJunction(sessionUri, desc, actor);
 	}
 	
 	public URI generateSessionUri() {
@@ -325,14 +320,16 @@ public class JunctionMaker {
 			System.out.println("Inviting service at uri " + remoteServiceActivity);
 			JunctionMaker.this.newJunction(remoteServiceActivity, actor);
 	}
-	
-	protected JunctionProvider getProviderForUri(URI uri, JunctionProvider defaultProvider) {
+
+	public static SwitchboardConfig getDefaultSwitchboardConfig(URI uri) {
 		String fragment = uri.getFragment();
 		if (fragment != null) {
 			if (fragment.equals("jvm")) {
-				return new edu.stanford.junction.provider.jvm.JunctionProvider(new JVMSwitchboardConfig());
+				return new edu.stanford.junction.provider.jvm.JVMSwitchboardConfig();
 			}
 		}
-		return defaultProvider;
+		
+		// assume xmpp
+		return new edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig(uri);
 	}
 }

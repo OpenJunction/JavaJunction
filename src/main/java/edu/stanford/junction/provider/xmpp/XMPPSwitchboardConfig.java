@@ -17,6 +17,8 @@
 
 package edu.stanford.junction.provider.xmpp;
 
+import java.net.URI;
+
 import edu.stanford.junction.SwitchboardConfig;
 
 public class XMPPSwitchboardConfig implements SwitchboardConfig {
@@ -24,6 +26,10 @@ public class XMPPSwitchboardConfig implements SwitchboardConfig {
 	protected String user;
 	protected String password;
 	protected long connectionTimeout = 10000; // 10 seconds in milliseconds
+	
+	public XMPPSwitchboardConfig(URI uri) {
+		this.host = uri.getAuthority();
+	}
 	
 	public XMPPSwitchboardConfig(String host) {
 		this.host = host;
