@@ -32,6 +32,7 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.provider.JunctionProvider;
 import edu.stanford.junction.provider.jvm.JVMSwitchboardConfig;
+import edu.stanford.junction.provider.jx.JXSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 
 
@@ -75,6 +76,8 @@ public class JunctionMaker {
 			return new edu.stanford.junction.provider.xmpp.JunctionProvider((XMPPSwitchboardConfig)switchboardConfig);
 		} else if (switchboardConfig instanceof JVMSwitchboardConfig){
 			return new edu.stanford.junction.provider.jvm.JunctionProvider((JVMSwitchboardConfig)switchboardConfig);
+		} else if (switchboardConfig instanceof JXSwitchboardConfig) {
+			return new edu.stanford.junction.provider.jx.JunctionProvider((JXSwitchboardConfig)switchboardConfig);
 		} else {
 			// Unknown implementation;.
 			return null;
@@ -322,10 +325,12 @@ public class JunctionMaker {
 	}
 
 	public static SwitchboardConfig getDefaultSwitchboardConfig(URI uri) {
-		String fragment = uri.getFragment();
+		String fragment = uri.getFragment().toLowerCase();
 		if (fragment != null) {
 			if (fragment.equals("jvm")) {
 				return new edu.stanford.junction.provider.jvm.JVMSwitchboardConfig();
+			} else if (fragment.equals("jx")) {
+				return new edu.stanford.junction.provider.jx.JXSwitchboardConfig();
 			}
 		}
 		

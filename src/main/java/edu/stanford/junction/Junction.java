@@ -94,7 +94,9 @@ public abstract class Junction {
 	//public List<String> getActorsForRole(String role);
 	// getActorsForHuman(String id); // some way of getting actor(s) associated with a person
 	//public void onActorJoin(JunctionActor actor); // or do we want registerActorJoinHandler()
-	public abstract JunctionActor getActor();
+	public JunctionActor getActor() {
+		return mOwner;
+	}
 	
 	/**
 	 * Actor Invitation
