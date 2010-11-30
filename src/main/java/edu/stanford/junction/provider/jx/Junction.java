@@ -103,7 +103,27 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	@Override
 	public void doSendMessageToActor(String actorID, JSONObject message) {
-		
+		try {
+			JSONObject jx;
+			if (message.has(NS_JX)) {
+				jx = message.getJSONObject(NS_JX);
+			} else {
+				jx = new JSONObject();
+				message.put(NS_JX, jx);
+			}
+			
+			JSONObject send = new JSONObject();
+			send.put("action", "send_a");
+			send.put("session", mSession);
+			send.put("actor", actorID);
+			jx.put(JX_SYS_MSG, send);
+			byte[] bytes = message.toString().getBytes();
+			synchronized(Junction.this) {
+				mConnectedThread.write(bytes, bytes.length);
+			}
+		} catch (JSONException e) {
+			Log.e(TAG, "Failed to send message", e);
+		}
 	}
 
 	@Override
@@ -123,7 +143,8 @@ public class Junction extends edu.stanford.junction.Junction {
 			}
 			
 			JSONObject send = new JSONObject();
-			send.put("send_s", mSession);
+			send.put("action", "send_s");
+			send.put("session", mSession);
 			jx.put(JX_SYS_MSG, send);
 			byte[] bytes = message.toString().getBytes();
 			synchronized(Junction.this) {
@@ -170,7 +191,7 @@ public class Junction extends edu.stanford.junction.Junction {
         	try {
         		JSONObject greeting = new JSONObject();
         		greeting.put("join", mSession);
-        		greeting.put("actorId", getActor().getActorID());
+        		greeting.put("id", getActor().getActorID());
         		if (mActivityScript != null) {
         			greeting.put("script", mActivityScript.getJSON());
         		}

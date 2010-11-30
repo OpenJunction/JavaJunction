@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.SwitchboardConfig;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -27,7 +28,7 @@ public class JXServer {
 	
 	private Map<String,JSONObject> mActivityScripts;
 	private Set<ConnectedThread> mConnections;
-	private Map<String,Set<ConnectedThread>> mSubscriptions;
+	private Map<String, Map<String, ConnectedThread>> mSubscriptions;
 	private AcceptThread mAcceptThread;
 	
 	
@@ -54,16 +55,17 @@ public class JXServer {
 				super.onActivityJoin();
 				Log.d(TAG, "joined session!");
 				try {
-					sendMessageToSession(new JSONObject("{\"msg\":\"hello world!!\"}"));
+					sendMessageToActor(this.getActorID(), new JSONObject("{\"msg\":\"hello world!!\"}"));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
 		};
 		
-		JXSwitchboardConfig cfg = new JXSwitchboardConfig();
-		ActivityScript script = null;
 		URI uri = URI.create("junction://localhost/hoodat#jx");
+		SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
+		ActivityScript script = null;
+		
 		
 		try {
 			Log.d(TAG, "Attempting to join session");
@@ -80,7 +82,7 @@ public class JXServer {
 	
 	public void start() {
 		mConnections = new HashSet<ConnectedThread>();
-		mSubscriptions = new HashMap<String, Set<ConnectedThread>>();
+		mSubscriptions = new HashMap<String, Map<String, ConnectedThread>>();
 		mActivityScripts = new HashMap<String, JSONObject>();
 		mAcceptThread = new AcceptThread();
 		mAcceptThread.start();
@@ -171,11 +173,11 @@ public class JXServer {
         private final Socket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private Set<String> mmSubscriptions;
+        private Set<RoomId> mmSubscriptions;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
-            mmSubscriptions = new HashSet<String>();
+            mmSubscriptions = new HashSet<RoomId>();
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -215,32 +217,49 @@ public class JXServer {
 	                    	JSONObject jx = json.getJSONObject(Junction.NS_JX);
 	                    	if (jx.has(Junction.JX_SYS_MSG)) {
 	                        	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
-	                        	Log.d(TAG, "HAS SYS PIECE MORE");
 	                        	// Join
 	                        	if (sys.has("join")) {
 	                        		String room = sys.getString("join");
+	                        		String me = sys.getString("id");
 	                        		JSONObject script = sys.optJSONObject("script");
-	                        		mmSubscriptions.add(room);
+	                        		mmSubscriptions.add(new RoomId(room, me));
 	                        		
-	                        		Set<ConnectedThread> participants;
+	                        		Map<String, ConnectedThread> participants;
 	                        		if (mSubscriptions.containsKey(room)) {
 	                        			participants = mSubscriptions.get(room);
 	                        		} else {
-	                        			participants = new HashSet<ConnectedThread>();
+	                        			participants = new HashMap<String, ConnectedThread>();
 	                        			mSubscriptions.put(room, participants);
 	                        			mActivityScripts.put(room, script);
 	                        		}
-	                        		participants.add(this);
+	                        		participants.put(me, this);
 	                        	}
 	                        	
 	                        	// Send message to session
-	                        	if (sys.has("send_s")) {
-	                        		String session = sys.getString("send_s");
+	                        	String action = sys.optString("action");
+	                        	if ("send_s".equals(action)) {
+	                        		String session = sys.getString("session");
 	                        		jx.remove(Junction.JX_SYS_MSG);
 	                        		
 	                        		byte[] outbytes = json.toString().getBytes();
 	                        		synchronized(JXServer.this) {
-	                        			for (ConnectedThread conn : mSubscriptions.get(session)) {
+	                        			Map<String, ConnectedThread> peers = mSubscriptions.get(session);
+	                        			for (String u : peers.keySet()) {
+	                        				ConnectedThread conn = peers.get(u);
+	                        				conn.write(outbytes, outbytes.length);
+	                        			}
+	                        		}
+	                        	}
+	                        	
+	                        	if ("send_a".equals(action)) {
+	                        		String session = sys.getString("session");
+	                        		String actor = sys.getString("actor");
+	                        		jx.remove(Junction.JX_SYS_MSG);
+	                        		
+	                        		byte[] outbytes = json.toString().getBytes();
+	                        		synchronized(JXServer.this) {
+	                        			ConnectedThread conn = mSubscriptions.get(session).get(actor);
+	                        			if (conn != null) {
 	                        				conn.write(outbytes, outbytes.length);
 	                        			}
 	                        		}
@@ -277,11 +296,11 @@ public class JXServer {
             try {
             	synchronized(JXServer.this) {
 	            	mConnections.remove(this);
-	            	for (String channel : mmSubscriptions) {
-	            		Set<ConnectedThread> sub = mSubscriptions.get(channel);
-	            		sub.remove(this);
-	            		if (sub.size() == 0) {
-	            			mSubscriptions.remove(channel);
+	            	for (RoomId entry : mmSubscriptions) {
+	            		Map<String, ConnectedThread> users = mSubscriptions.get(entry.room);
+	            		users.remove(entry.id);
+	            		if (users.size() == 0) {
+	            			mSubscriptions.remove(entry.room);
 	            		}
 	            	}
 	            	mmSubscriptions.clear();
@@ -294,9 +313,15 @@ public class JXServer {
         }
     }
 	
-    
-    
-    
+    public class RoomId {
+    	public String room;
+    	public String id;
+    	
+    	public RoomId(String r, String me) {
+    		room = r;
+    		id = me;
+    	}
+    }
     
 	public static class Log {
 		public static void d(String tag, String msg) {
