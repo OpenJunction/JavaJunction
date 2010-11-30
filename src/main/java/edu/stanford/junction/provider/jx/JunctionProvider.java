@@ -21,9 +21,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
  * Implements Junction transport using a simple socket interface.
@@ -37,20 +40,41 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	
 	@Override
 	public ActivityScript getActivityScript(URI uri) {
-		// TODO Auto-generated method stub
-		return null;
+		JunctionActor actor = new JunctionActor("scriptpuller") {
+			@Override
+			public void onMessageReceived(MessageHeader header, JSONObject message) {
+				
+			}
+		};
+
+		Junction jx = new edu.stanford.junction.provider.jx.Junction(uri,null,actor);
+		ActivityScript script = null;
+		final int MAX_TIME = 10000; // ms
+		final int WAIT = 300; // ms
+		int total = 0;
+		
+		while (script == null && total < MAX_TIME) {
+			try {
+				Thread.sleep(WAIT);
+			} catch (InterruptedException e) {}
+			
+			script = jx.getActivityScript();
+			total += WAIT;
+		}
+		 
+		actor.leave();
+		return script;
 	}
 
 	@Override
 	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
-		return new edu.stanford.junction.provider.jvm.Junction(uri,null,actor);
+		return new edu.stanford.junction.provider.jx.Junction(uri,script,actor);
 	}
 
 	@Override
 	public URI generateSessionUri() {
 		try {
-			String session = UUID.randomUUID().toString();
-			return new URI("junction://" + session + "#jx");
+			return new URI("junction://sb/" + UUID.randomUUID() + "#jx");
 		} catch (URISyntaxException e) {
 			throw new AssertionError("Invalid URI");
 		}
