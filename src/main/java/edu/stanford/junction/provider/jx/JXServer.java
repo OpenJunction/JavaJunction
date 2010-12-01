@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,7 +63,9 @@ public class JXServer {
 		
 		URI uri = URI.create("junction://localhost/hoodat#jx");
 		SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
-		ActivityScript script = null;
+		ActivityScript script = new ActivityScript();
+		script.setFriendlyName("Test Session");
+		script.setActivityID("org.openjunction.test");
 		
 		
 		try {
@@ -202,6 +203,36 @@ public class JXServer {
             byte[] buffer = new byte[READ_BUFFER];
             int bytes;
 
+            // Read header information, determine connection type
+            try {
+            	bytes = mmInStream.read(buffer);
+            	String header = new String(buffer, 0, bytes);
+            	
+            	// determine request type
+            	if (header.startsWith("GET ")) {
+            		Log.d(TAG, "Found HTTP GET request");
+            		doHttpConnection();
+            	} else if (header.startsWith("JUNCTION")) {
+            		Log.d(TAG, "Found Junction connection");
+            		doJunctionConnection();
+            	}
+            } catch (IOException e) {
+            	Log.e(TAG, "Error reading connection header", e);
+            }
+            
+            // No longer listening.
+            cancel();
+        }
+        
+        private void doHttpConnection() {
+        	String response = "Coming soon: The Long Poll.";
+    		write(response.getBytes(), response.length());
+        }
+        
+        private void doJunctionConnection() {
+        	byte[] buffer = new byte[READ_BUFFER];
+        	int bytes;
+        	
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
@@ -216,60 +247,7 @@ public class JXServer {
 	                    String jsonStr = new String(buffer,0,bytes);
 	                    Log.d(TAG, "read: " + jsonStr);
 	                    JSONObject json = new JSONObject(jsonStr);
-	                    
-	                    if (json.has(Junction.NS_JX)) {
-	                    	JSONObject jx = json.getJSONObject(Junction.NS_JX);
-	                    	if (jx.has(Junction.JX_SYS_MSG)) {
-	                        	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
-	                        	// Join
-	                        	if (sys.has("join")) {
-	                        		String room = sys.getString("join");
-	                        		String me = sys.getString("id");
-	                        		JSONObject script = sys.optJSONObject("script");
-	                        		mmSubscriptions.add(new RoomId(room, me));
-	                        		
-	                        		Map<String, ConnectedThread> participants;
-	                        		if (mSubscriptions.containsKey(room)) {
-	                        			participants = mSubscriptions.get(room);
-	                        		} else {
-	                        			participants = new HashMap<String, ConnectedThread>();
-	                        			mSubscriptions.put(room, participants);
-	                        			mActivityScripts.put(room, script);
-	                        		}
-	                        		participants.put(me, this);
-	                        	}
-	                        	
-	                        	// Send message to session
-	                        	String action = sys.optString("action");
-	                        	if ("send_s".equals(action)) {
-	                        		String session = sys.getString("session");
-	                        		jx.remove(Junction.JX_SYS_MSG);
-	                        		
-	                        		byte[] outbytes = json.toString().getBytes();
-	                        		synchronized(JXServer.this) {
-	                        			Map<String, ConnectedThread> peers = mSubscriptions.get(session);
-	                        			for (String u : peers.keySet()) {
-	                        				ConnectedThread conn = peers.get(u);
-	                        				conn.write(outbytes, outbytes.length);
-	                        			}
-	                        		}
-	                        	}
-	                        	
-	                        	if ("send_a".equals(action)) {
-	                        		String session = sys.getString("session");
-	                        		String actor = sys.getString("actor");
-	                        		jx.remove(Junction.JX_SYS_MSG);
-	                        		
-	                        		byte[] outbytes = json.toString().getBytes();
-	                        		synchronized(JXServer.this) {
-	                        			ConnectedThread conn = mSubscriptions.get(session).get(actor);
-	                        			if (conn != null) {
-	                        				conn.write(outbytes, outbytes.length);
-	                        			}
-	                        		}
-	                        	}
-	                    	}
-	                    }
+	                    handleJson(json);
                     } catch (JSONException e) {
                     	// Log.e(TAG, "JSON error", e);
                     }
@@ -279,9 +257,80 @@ public class JXServer {
                     break;
                 }
             }
-            
-            // No longer listening.
-            cancel();
+        }
+        
+        private void handleJson(JSONObject json) {
+        	try {
+	        	if (json.has(Junction.NS_JX)) {
+	            	JSONObject jx = json.getJSONObject(Junction.NS_JX);
+	            	if (jx.has(Junction.JX_SYS_MSG)) {
+	                	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
+	                	// Join
+	                	if (sys.has("join")) {
+	                		String room = sys.getString("join");
+	                		String me = sys.getString("id");
+	                		mmSubscriptions.add(new RoomId(room, me));
+	                		
+	                		Map<String, ConnectedThread> participants;
+	                		if (mSubscriptions.containsKey(room)) {
+	                			participants = mSubscriptions.get(room);
+	                			JSONObject script = mActivityScripts.get(room);
+	                			if (script != null) {
+	                				JSONObject aScriptObj = new JSONObject();
+	        	                    JSONObject aScriptMsg = new JSONObject();
+	        	                    try {
+	        		                    aScriptObj.put(Junction.JX_SYS_MSG, true);
+	        		                    aScriptObj.put(Junction.JX_SCRIPT, script);
+	        		                    aScriptMsg.put(Junction.NS_JX, aScriptObj);
+	        	                    } catch (JSONException e) {}
+	        	                    
+	        	                    byte[] bts = aScriptMsg.toString().getBytes();
+	        	                    this.write(bts, bts.length);
+	                			}
+	                			
+	                		} else {
+	                			JSONObject script = sys.optJSONObject("script");
+	                			participants = new HashMap<String, ConnectedThread>();
+	                			mSubscriptions.put(room, participants);
+	                			mActivityScripts.put(room, script);
+	                		}
+	                		participants.put(me, this);
+	                	}
+	                	
+	                	// Send message to session
+	                	String action = sys.optString("action");
+	                	if ("send_s".equals(action)) {
+	                		String session = sys.getString("session");
+	                		jx.remove(Junction.JX_SYS_MSG);
+	                		
+	                		byte[] outbytes = json.toString().getBytes();
+	                		synchronized(JXServer.this) {
+	                			Map<String, ConnectedThread> peers = mSubscriptions.get(session);
+	                			for (String u : peers.keySet()) {
+	                				ConnectedThread conn = peers.get(u);
+	                				conn.write(outbytes, outbytes.length);
+	                			}
+	                		}
+	                	}
+	                	
+	                	if ("send_a".equals(action)) {
+	                		String session = sys.getString("session");
+	                		String actor = sys.getString("actor");
+	                		jx.remove(Junction.JX_SYS_MSG);
+	                		
+	                		byte[] outbytes = json.toString().getBytes();
+	                		synchronized(JXServer.this) {
+	                			ConnectedThread conn = mSubscriptions.get(session).get(actor);
+	                			if (conn != null) {
+	                				conn.write(outbytes, outbytes.length);
+	                			}
+	                		}
+	                	}
+	            	}
+	            }
+        	} catch (JSONException e) {
+        		Log.e(TAG, "Error building json object", e);
+        	}
         }
 
         /**

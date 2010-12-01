@@ -18,8 +18,11 @@
 package edu.stanford.junction.provider.jx;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Enumeration;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -28,6 +31,7 @@ import edu.stanford.junction.Junction;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.jx.JXServer.Log;
 
 /**
  * Implements Junction transport using a simple socket interface.
@@ -76,10 +80,27 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	public URI generateSessionUri() {
 		try {
 			// Use local address as switchboard
-			String sb = InetAddress.getLocalHost().getHostAddress();
+			String sb = getLocalIpAddress();
 			return new URI("junction://" + sb + "/" + UUID.randomUUID() + "#jx");
 		} catch (Exception e) {
 			throw new AssertionError("Invalid URI: " + e.getMessage());
 		}
+	}
+	
+	public static String getLocalIpAddress() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                if (!inetAddress.isLoopbackAddress()) {
+	                    return inetAddress.getHostAddress().toString();
+	                }
+	            }
+	        }
+	    } catch (SocketException ex) {
+	        Log.e("junction", ex.toString());
+	    }
+	    return null;
 	}
 }

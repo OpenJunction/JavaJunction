@@ -20,7 +20,6 @@ package edu.stanford.junction.provider.jx;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
 
@@ -35,6 +34,7 @@ import edu.stanford.junction.provider.jx.JXServer.Log;
 public class Junction extends edu.stanford.junction.Junction {
 	private static String TAG = "jx_client";
 	public static String JX_SYS_MSG = "jxsysmsg";
+	public static String JX_SCRIPT = "ascript";
 	public static String JX_NS = "jx";
 	
 	private final URI mAcceptedInvitation;
@@ -59,7 +59,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		// handle in Provider
 		try {
 			try {
-				String my_ip = InetAddress.getLocalHost().getHostAddress();
+				String my_ip = JunctionProvider.getLocalIpAddress();
 				if (my_ip.equals(host)) {
 					Log.d(TAG, "Starting local switchboard service");
 					mSwitchboardServer = new JXServer();
@@ -68,6 +68,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			} catch (Exception e) {
 				Log.e(TAG, "Could not start local switchboard service", e);
 			}
+			
 			Socket socket = new Socket(host, port);
 			mConnectedThread = new ConnectedThread(socket);
 			mConnectedThread.start();
@@ -174,8 +175,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 	
 	
-	
-	
     /**
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
@@ -206,6 +205,12 @@ public class Junction extends edu.stanford.junction.Junction {
         
         public void connect() {
         	JSONObject join = new JSONObject();
+        	
+        	// Header info
+        	byte[] header = "JUNCTION".getBytes();
+        	write(header, header.length);
+        	
+        	// Join request
         	try {
         		JSONObject greeting = new JSONObject();
         		greeting.put("join", mSession);
@@ -243,11 +248,13 @@ public class Junction extends edu.stanford.junction.Junction {
                     try {
 	                    String jsonStr = new String(buffer,0,bytes);
 	                    JSONObject json = new JSONObject(jsonStr);
-	                    
+	                    Log.d(TAG, "read msg" + jsonStr);
 	                    if (json.has(NS_JX)) {
 	                    	JSONObject sys = json.getJSONObject(NS_JX);
 	                    	if (sys.has(JX_SYS_MSG)) {
-	                        	JSONObject msg = json.getJSONObject(NS_JX);
+	                    		if (sys.has(JX_SCRIPT)) {
+	                    			mActivityScript = new ActivityScript(sys.getJSONObject(JX_SCRIPT));
+	                    		}
 	                        	return;
 	                    	}
 	                    }
