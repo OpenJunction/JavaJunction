@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +31,6 @@ public class JXServer {
 	private Set<ConnectedThread> mConnections;
 	private Map<String, Map<String, ConnectedThread>> mSubscriptions;
 	private AcceptThread mAcceptThread;
-	
 	
 	public static void main(String[] argv) {
 		final String TAG = "test";
@@ -76,10 +76,14 @@ public class JXServer {
 	}
 	
 	
-	private JXServer() {
+	public JXServer() {
 		
 	}
 	
+	/**
+	 * Starts a simple chat server, allowing users to
+	 * connect to an arbitrary chat room.
+	 */
 	public void start() {
 		mConnections = new HashSet<ConnectedThread>();
 		mSubscriptions = new HashMap<String, Map<String, ConnectedThread>>();

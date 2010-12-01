@@ -17,6 +17,7 @@
 
 package edu.stanford.junction.provider.jx;
 
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
@@ -74,9 +75,11 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	@Override
 	public URI generateSessionUri() {
 		try {
-			return new URI("junction://sb/" + UUID.randomUUID() + "#jx");
-		} catch (URISyntaxException e) {
-			throw new AssertionError("Invalid URI");
+			// Use local address as switchboard
+			String sb = InetAddress.getLocalHost().getHostAddress();
+			return new URI("junction://" + sb + "/" + UUID.randomUUID() + "#jx");
+		} catch (Exception e) {
+			throw new AssertionError("Invalid URI: " + e.getMessage());
 		}
 	}
 }

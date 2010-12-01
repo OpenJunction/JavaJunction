@@ -20,6 +20,7 @@ package edu.stanford.junction.provider.jx;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
 
@@ -42,6 +43,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	private static final int READ_BUFFER = 2048;
 	
 	private ConnectedThread mConnectedThread;
+	private JXServer mSwitchboardServer = null;
 	
 	public Junction(URI uri, ActivityScript script, final JunctionActor actor) {
 		this.setActor(actor);
@@ -56,6 +58,16 @@ public class Junction extends edu.stanford.junction.Junction {
 		// TODO: one connection per host (multiple subscriptions through one socket)
 		// handle in Provider
 		try {
+			try {
+				String my_ip = InetAddress.getLocalHost().getHostAddress();
+				if (my_ip.equals(host)) {
+					Log.d(TAG, "Starting local switchboard service");
+					mSwitchboardServer = new JXServer();
+					mSwitchboardServer.start();
+				}
+			} catch (Exception e) {
+				Log.e(TAG, "Could not start local switchboard service", e);
+			}
 			Socket socket = new Socket(host, port);
 			mConnectedThread = new ConnectedThread(socket);
 			mConnectedThread.start();
@@ -68,8 +80,13 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
+		if (mConnectedThread != null) {
+			mConnectedThread.cancel();
+		}
 		
+		if (mSwitchboardServer != null) {
+			mSwitchboardServer.stop();
+		}
 	}
 
 	@Override
@@ -128,7 +145,8 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	@Override
 	public void doSendMessageToRole(String role, JSONObject message) {
-		
+		// TODO
+		doSendMessageToSession(message);
 	}
 
 	@Override
