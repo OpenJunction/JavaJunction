@@ -71,7 +71,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		String user = "jxuser";
 		String name = "jxuser";
 
-		mFullNick = new FullNick(mNickname + "!" + user + "@128.0.0.1");
+		mFullNick = new FullNick(mNickname + "!" + user + "@127.0.0.1");
 		
 		mAcceptedInvitation = uri;
 		mActivityScript = script;
