@@ -24,6 +24,9 @@ import java.net.Socket;
 import java.net.URI;
 import java.util.Observer;
 import java.util.Observable;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.UUID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,17 +124,25 @@ public class Junction extends edu.stanford.junction.Junction {
 			else if(cmd instanceof MessageCommand){
 				MessageCommand c = (MessageCommand)cmd;
 				String src = c.getMessage();
-				System.out.println("Got msg: " + src);
 				try {
+					String from = c.getSource().getNick();
 					JSONObject obj = new JSONObject(src);
-					if (obj.has(NS_JX)) {
+					if(obj.optBoolean("scriptRequest")){
+						handleScriptRequest(from, obj);
+						return;
+					}
+					else if(obj.optBoolean("scriptResponse")){
+						scriptQ.put(obj);
+						return;
+					}
+					else if (obj.has(NS_JX)) {
 						JSONObject header = obj.optJSONObject(NS_JX);
 						if (header.has("targetRole")) {
 							String target = header.optString("targetRole");
 							if(!inLocalRoles(target)) return;
 						}
 					}
-					String from = c.getSource().getNick();
+
 					MessageHeader header = new MessageHeader(Junction.this, obj, from);
 					triggerMessageReceived(header, obj);
 				} catch (Exception e) {
@@ -148,6 +159,20 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 	}
 
+	protected void handleScriptRequest(String from, JSONObject req){
+		if(mActivityScript == null) return;
+		try{
+			JSONObject response = new JSONObject();
+			response.put("scriptResponse", true);
+			response.put("requestId", req.optString("requestId"));
+			response.put("script", mActivityScript.getJSON());
+			sendMessageToActor(from, response);
+		}
+		catch(JSONException e){
+			e.printStackTrace(System.err);
+		}
+	}
+
 	private Boolean inLocalRoles(String target){
 		String[] roles = getActor().getRoles();
 		for (int i = 0; i < roles.length; i++) {
@@ -161,7 +186,7 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
+		mConnection.disconnect();
 	}
 
 	@Override
@@ -169,9 +194,41 @@ public class Junction extends edu.stanford.junction.Junction {
 		return mAcceptedInvitation;
 	}
 
+	private LinkedBlockingQueue<JSONObject> scriptQ = new LinkedBlockingQueue<JSONObject>();
+
 	@Override
 	public ActivityScript getActivityScript() {
-		return mActivityScript;
+		scriptQ.clear();
+		JSONObject req = new JSONObject();
+		String requestId = UUID.randomUUID().toString();
+		try{
+			req.put("scriptRequest", "true");
+			req.put("requestId", requestId);
+			sendMessageToSession(req);
+		}
+		catch(JSONException e){
+			e.printStackTrace(System.err);
+			return null;
+		}
+		try{
+			int maxTries = 5;
+			long maxWaitPerTry = 2000L;
+			for(int i = 0; i < maxTries; i++){
+				JSONObject response = scriptQ.poll(
+					maxWaitPerTry, TimeUnit.MILLISECONDS);
+				if(response == null) {
+					return null;
+				}
+				else if(response.optString("requestId").equals(requestId)){
+					JSONObject script = response.optJSONObject("script");
+					return new ActivityScript(script);
+				}
+			}
+		}
+		catch(InterruptedException e){
+			return null;
+		}
+		return null;
 	}
 
 	@Override

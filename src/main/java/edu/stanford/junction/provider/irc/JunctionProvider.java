@@ -33,12 +33,22 @@ import edu.stanford.junction.api.messaging.MessageHeader;
  *
  */
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
+
+	
 	
 	public JunctionProvider(IRCSwitchboardConfig config) {}
 	
+
+
 	@Override
 	public ActivityScript getActivityScript(URI uri) {
-		return new ActivityScript(new JSONObject());
+		JunctionActor actor = new JunctionActor("scriptpuller") {
+			public void onMessageReceived(MessageHeader header, JSONObject message) {}
+		};
+		Junction jx = new edu.stanford.junction.provider.irc.Junction(uri, null, actor);
+		ActivityScript script = jx.getActivityScript();
+		actor.leave();
+		return script;
 	}
 
 	@Override
