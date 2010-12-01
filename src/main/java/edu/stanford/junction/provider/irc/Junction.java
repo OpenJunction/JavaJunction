@@ -68,6 +68,9 @@ public class Junction extends edu.stanford.junction.Junction {
 		this.setActor(actor);
 
 		mNickname = makeIRCName(actor.getActorID());
+
+		// User & name are not important for 
+		// our needs. 
 		String user = "jxuser";
 		String name = "jxuser";
 
@@ -94,13 +97,25 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 
+	//   This observer is updated whenever a command
+	// is received by the irc connection. 'update' is 
+	// called from the irc thread. Therefore junction
+	// is 'driven' (by way of triggerActorJoin 
+	// and triggerMessageReceived) from the irc thread.
+	//
+	//   This is safe as long the irc thread is the ONLY 
+	// thread sending updates into junction. Additionally,
+	// the client must be aware that JunctionActor's methods
+	// will be called on the irc thread.
+	// 
 	class JXCommandObserver implements Observer{
 		public void update(Observable o, Object arg) {
 			InCommand cmd = (InCommand)arg;
 			if(cmd instanceof JoinCommand){
 				JoinCommand c = (JoinCommand)cmd;
 				if(c.weJoined(mClientState)){
-					triggerActorJoin(mActivityScript == null || mActivityScript.isActivityCreator());
+					triggerActorJoin(mActivityScript == null || 
+									 mActivityScript.isActivityCreator());
 				}
 			}
 			else if(cmd instanceof MessageCommand){
