@@ -19,9 +19,15 @@ public class Test {
  
     public static void main(String args[]) {
 		try{
-			JunctionActor jxActor = new JunctionActor("participant") {
+			final JunctionActor jxActor = new JunctionActor("participant") {
 					public void onActivityJoin() {
 						System.out.println("Actor: Joined.");
+						try{
+							JSONObject msg = new JSONObject();
+							msg.put("saying", "hello world");
+							this.sendMessageToSession(msg);
+						}
+						catch(Exception e){}
 					}
 					public void onActivityCreate() {
 						System.out.println("Actor: Activity created.");
@@ -30,7 +36,7 @@ public class Test {
 						System.out.println("Actor: Message received - '" + msg.toString() + "'");
 					}
 				};
-			URI url = new URI("junction://chat.freenode.net:6667/jxtestsession#irc");
+			URI url = new URI("junction://127.0.0.1:6667/jxtestsession#irc");
 			IRCSwitchboardConfig config = new IRCSwitchboardConfig();
 			JunctionMaker jxMaker = JunctionMaker.getInstance(config);
 			Junction jx = jxMaker.newJunction(url, jxActor);
