@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URI;
 import java.util.Observer;
+import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -57,8 +58,14 @@ public class Junction extends edu.stanford.junction.Junction {
 	private FullNick mFullNick;
 	private String mNickname;
 	private ClientState mClientState;
+	private MessageMultiplexer mMultiplex = new MessageMultiplexer();
+	private MessageDemultiplexer mDemultiplex = new MessageDemultiplexer();
+
 	public static String JX_NS = "jx";
 	public static String JX_SYS_MSG = "jxsysmsg";
+
+	// Stores responses to distributed activity script requests.
+	private LinkedBlockingQueue<JSONObject> scriptQ = new LinkedBlockingQueue<JSONObject>();
 
 	public static String makeIRCName(String name){
 		String s = String.valueOf(name.hashCode());
@@ -123,31 +130,33 @@ public class Junction extends edu.stanford.junction.Junction {
 			}
 			else if(cmd instanceof MessageCommand){
 				MessageCommand c = (MessageCommand)cmd;
-				String src = c.getMessage();
-				try {
-					String from = c.getSource().getNick();
-					JSONObject obj = new JSONObject(src);
-					if(obj.optBoolean("scriptRequest")){
-						handleScriptRequest(from, obj);
-						return;
-					}
-					else if(obj.optBoolean("scriptResponse")){
-						scriptQ.put(obj);
-						return;
-					}
-					else if (obj.has(NS_JX)) {
-						JSONObject header = obj.optJSONObject(NS_JX);
-						if (header.has("targetRole")) {
-							String target = header.optString("targetRole");
-							if(!inLocalRoles(target)) return;
+				mDemultiplex.addFragment(c.getMessage(),c.getSource().getNick());
+				List<MessageDemultiplexer.CompleteMessage> msgs = mDemultiplex.drainCompleteMessages();
+				for(MessageDemultiplexer.CompleteMessage each : msgs){
+					String from = each.from;
+					String src = each.msg;
+					try {
+						JSONObject obj = new JSONObject(src);
+						if(obj.optBoolean("scriptRequest")){
+							handleScriptRequest(from, obj);
+							return;
 						}
+						else if(obj.optBoolean("scriptResponse")){
+							scriptQ.put(obj);
+							return;
+						}
+						else if (obj.has(NS_JX)) {
+							JSONObject header = obj.optJSONObject(NS_JX);
+							if (header.has("targetRole")) {
+								String target = header.optString("targetRole");
+								if(!inLocalRoles(target)) return;
+							}
+						}
+						MessageHeader header = new MessageHeader(Junction.this, obj, from);
+						triggerMessageReceived(header, obj);
+					} catch (Exception e) {
+						System.err.println("Could not handle incoming message: " + src);
 					}
-
-					MessageHeader header = new MessageHeader(Junction.this, obj, from);
-					triggerMessageReceived(header, obj);
-				} catch (Exception e) {
-					System.err.println("Could not handle incoming message: " + src);
-					return;
 				}
 			}
 		}
@@ -193,8 +202,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	public URI getAcceptedInvitation() {
 		return mAcceptedInvitation;
 	}
-
-	private LinkedBlockingQueue<JSONObject> scriptQ = new LinkedBlockingQueue<JSONObject>();
 
 	@Override
 	public ActivityScript getActivityScript() {
@@ -251,8 +258,11 @@ public class Junction extends edu.stanford.junction.Junction {
 	}
 
 	private void sendMsgTo(String msg, String to){
-		MessageCommand cmd = new MessageCommand(mFullNick, to, msg);
-		mConnection.sendCommand(cmd);
+		List<String> fragments = mMultiplex.divide(msg);
+		for(String frag : fragments){
+			MessageCommand cmd = new MessageCommand(mFullNick, to, frag);
+			mConnection.sendCommand(cmd);
+		}
 	}
 
 	@Override
@@ -262,7 +272,6 @@ public class Junction extends edu.stanford.junction.Junction {
 
 	@Override
 	public void doSendMessageToRole(String role, JSONObject message) {
-
 		JSONObject jx;
 		if (message.has(NS_JX)) {
 			jx = message.optJSONObject(NS_JX);
