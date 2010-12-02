@@ -28,7 +28,7 @@ public class JXServer {
 	
 	private Map<String,JSONObject> mActivityScripts;
 	private Set<ConnectedThread> mConnections;
-	private Map<String, Map<String, ConnectedThread>> mSubscriptions;
+	private Map<RoomId, Map<String, ConnectedThread>> mSubscriptions;
 	private AcceptThread mAcceptThread;
 	
 	public static void main(String[] argv) {
@@ -87,7 +87,7 @@ public class JXServer {
 	 */
 	public void start() {
 		mConnections = new HashSet<ConnectedThread>();
-		mSubscriptions = new HashMap<String, Map<String, ConnectedThread>>();
+		mSubscriptions = new HashMap<RoomId, Map<String, ConnectedThread>>();
 		mActivityScripts = new HashMap<String, JSONObject>();
 		mAcceptThread = new AcceptThread();
 		mAcceptThread.start();
@@ -178,11 +178,11 @@ public class JXServer {
         private final Socket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private Set<RoomId> mmSubscriptions;
+        private Set<RoomOccupancy> mmSubscriptions;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
-            mmSubscriptions = new HashSet<RoomId>();
+            mmSubscriptions = new HashSet<RoomOccupancy>();
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -225,7 +225,7 @@ public class JXServer {
         }
         
         private void doHttpConnection() {
-        	String response = "Coming soon: The Long Poll.";
+        	String response = "<html><em>Coming soon: The Long Poll.</em></html>";
     		write(response.getBytes(), response.length());
         }
         
@@ -267,45 +267,48 @@ public class JXServer {
 	                	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
 	                	// Join
 	                	if (sys.has("join")) {
-	                		String room = sys.getString("join");
-	                		String me = sys.getString("id");
-	                		mmSubscriptions.add(new RoomId(room, me));
-	                		
-	                		Map<String, ConnectedThread> participants;
-	                		if (mSubscriptions.containsKey(room)) {
-	                			participants = mSubscriptions.get(room);
-	                			JSONObject script = mActivityScripts.get(room);
-	                			if (script != null) {
-	                				JSONObject aScriptObj = new JSONObject();
-	        	                    JSONObject aScriptMsg = new JSONObject();
-	        	                    try {
-	        		                    aScriptObj.put(Junction.JX_SYS_MSG, true);
-	        		                    aScriptObj.put(Junction.JX_SCRIPT, script);
-	        		                    aScriptMsg.put(Junction.NS_JX, aScriptObj);
-	        	                    } catch (JSONException e) {}
-	        	                    
-	        	                    byte[] bts = aScriptMsg.toString().getBytes();
-	        	                    this.write(bts, bts.length);
-	                			}
-	                			
-	                		} else {
-	                			JSONObject script = sys.optJSONObject("script");
-	                			participants = new HashMap<String, ConnectedThread>();
-	                			mSubscriptions.put(room, participants);
-	                			mActivityScripts.put(room, script);
+	                		synchronized (JXServer.this) {
+		                		String room = sys.getString("join");
+		                		String me = sys.getString("id");
+		                		mmSubscriptions.add(new RoomOccupancy(getRoomId(room), me));
+		                		
+		                		Map<String, ConnectedThread> participants;
+		                		if (mSubscriptions.containsKey(room)) {
+		                			participants = mSubscriptions.get(room);
+		                			JSONObject script = mActivityScripts.get(room);
+		                			if (script != null) {
+		                				JSONObject aScriptObj = new JSONObject();
+		        	                    JSONObject aScriptMsg = new JSONObject();
+		        	                    try {
+		        		                    aScriptObj.put(Junction.JX_SYS_MSG, true);
+		        		                    aScriptObj.put(Junction.JX_SCRIPT, script);
+		        		                    aScriptMsg.put(Junction.NS_JX, aScriptObj);
+		        	                    } catch (JSONException e) {}
+		        	                    
+		        	                    byte[] bts = aScriptMsg.toString().getBytes();
+		        	                    this.write(bts, bts.length);
+		                			}
+		                			
+		                		} else {
+		                			JSONObject script = sys.optJSONObject("script");
+		                			participants = new HashMap<String, ConnectedThread>();
+		                			mSubscriptions.put(getRoomId(room), participants);
+		                			mActivityScripts.put(room, script);
+		                		}
+		                		participants.put(me, this);
 	                		}
-	                		participants.put(me, this);
 	                	}
 	                	
 	                	// Send message to session
 	                	String action = sys.optString("action");
 	                	if ("send_s".equals(action)) {
 	                		String session = sys.getString("session");
+	                		RoomId room = getRoomId(session);
 	                		jx.remove(Junction.JX_SYS_MSG);
 	                		
 	                		byte[] outbytes = json.toString().getBytes();
-	                		synchronized(JXServer.this) {
-	                			Map<String, ConnectedThread> peers = mSubscriptions.get(session);
+	                		synchronized(room) {
+	                			Map<String, ConnectedThread> peers = mSubscriptions.get(room);
 	                			for (String u : peers.keySet()) {
 	                				ConnectedThread conn = peers.get(u);
 	                				conn.write(outbytes, outbytes.length);
@@ -315,12 +318,13 @@ public class JXServer {
 	                	
 	                	if ("send_a".equals(action)) {
 	                		String session = sys.getString("session");
+	                		RoomId room = getRoomId(session);
 	                		String actor = sys.getString("actor");
 	                		jx.remove(Junction.JX_SYS_MSG);
 	                		
 	                		byte[] outbytes = json.toString().getBytes();
-	                		synchronized(JXServer.this) {
-	                			ConnectedThread conn = mSubscriptions.get(session).get(actor);
+	                		synchronized(room) {
+	                			ConnectedThread conn = mSubscriptions.get(room).get(actor);
 	                			if (conn != null) {
 	                				conn.write(outbytes, outbytes.length);
 	                			}
@@ -349,11 +353,13 @@ public class JXServer {
             try {
             	synchronized(JXServer.this) {
 	            	mConnections.remove(this);
-	            	for (RoomId entry : mmSubscriptions) {
-	            		Map<String, ConnectedThread> users = mSubscriptions.get(entry.room);
-	            		users.remove(entry.id);
-	            		if (users.size() == 0) {
-	            			mSubscriptions.remove(entry.room);
+	            	for (RoomOccupancy entry : mmSubscriptions) {
+	            		synchronized(entry.room) {
+		            		Map<String, ConnectedThread> users = mSubscriptions.get(entry.room);
+		            		users.remove(entry.id);
+		            		if (users.size() == 0) {
+		            			mSubscriptions.remove(entry.room);
+		            		}
 	            		}
 	            	}
 	            	mmSubscriptions.clear();
@@ -366,14 +372,33 @@ public class JXServer {
         }
     }
 	
-    public class RoomId {
-    	public String room;
+    public class RoomOccupancy {
+    	public RoomId room;
     	public String id;
     	
-    	public RoomId(String r, String me) {
+    	public RoomOccupancy(RoomId r, String me) {
     		room = r;
     		id = me;
     	}
+    }
+    
+    /**
+     * Use a wrapper class so we can better trust locks
+     */
+    public class RoomId {
+    	public String name;
+    	
+    	private RoomId(String name) {
+    		this.name = name;
+    	}
+    }
+    
+    Map<String,RoomId> mRoomMap = new HashMap<String,RoomId>();
+    public RoomId getRoomId(String name) {
+    	if (!mRoomMap.containsKey(name)) {
+    		mRoomMap.put(name, new RoomId(name));
+    	}
+    	return mRoomMap.get(name);
     }
     
 	public static class Log {
