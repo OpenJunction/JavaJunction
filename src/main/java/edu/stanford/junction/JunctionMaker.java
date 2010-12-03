@@ -34,6 +34,7 @@ import edu.stanford.junction.provider.JunctionProvider;
 import edu.stanford.junction.provider.jvm.JVMSwitchboardConfig;
 import edu.stanford.junction.provider.jx.JXSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
+import edu.stanford.junction.provider.irc.IRCSwitchboardConfig;
 
 
 public class JunctionMaker {
@@ -78,6 +79,8 @@ public class JunctionMaker {
 			return new edu.stanford.junction.provider.jvm.JunctionProvider((JVMSwitchboardConfig)switchboardConfig);
 		} else if (switchboardConfig instanceof JXSwitchboardConfig) {
 			return new edu.stanford.junction.provider.jx.JunctionProvider((JXSwitchboardConfig)switchboardConfig);
+		} else if (switchboardConfig instanceof IRCSwitchboardConfig) {
+			return new edu.stanford.junction.provider.irc.JunctionProvider((IRCSwitchboardConfig)switchboardConfig);
 		} else {
 			// Unknown implementation;.
 			return null;
@@ -182,26 +185,26 @@ public class JunctionMaker {
 	 */
 	public void castActor(final URI directorURI, final URI invitationURI) throws JunctionException{
 		JunctionActor actor = new JunctionActor("inviter") {
-			@Override
-			public void onActivityJoin() {
-				JSONObject invitation = new JSONObject();
-				try {
-					invitation.put("action","cast");
-					invitation.put("activity", invitationURI.toString());
-					getJunction().sendMessageToSession(invitation);
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
+				@Override
+				public void onActivityJoin() {
+					JSONObject invitation = new JSONObject();
+					try {
+						invitation.put("action","cast");
+						invitation.put("activity", invitationURI.toString());
+						getJunction().sendMessageToSession(invitation);
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
 
-				leave();
-			}
+					leave();
+				}
 			
-			@Override
-			public void onMessageReceived(MessageHeader header,
-					JSONObject message) {
+				@Override
+				public void onMessageReceived(MessageHeader header,
+											  JSONObject message) {
 				
-			}
-		};
+				}
+			};
 		
 		JunctionMaker.this.newJunction(directorURI, actor);
 	}
@@ -231,25 +234,25 @@ public class JunctionMaker {
 	@Deprecated
 	public void inviteActorByListenerService(final URI invitationURI, URI listenerServiceURI) throws JunctionException {
 		JunctionActor actor = new JunctionActor("inviter") {
-			@Override
-			public void onActivityJoin() {
-				JSONObject invitation = new JSONObject();
-				try {
-					invitation.put("activity", invitationURI.toString());
-					getJunction().sendMessageToSession(invitation);
-				} 
-				catch (Exception e) {
-					e.printStackTrace(System.err);
+				@Override
+				public void onActivityJoin() {
+					JSONObject invitation = new JSONObject();
+					try {
+						invitation.put("activity", invitationURI.toString());
+						getJunction().sendMessageToSession(invitation);
+					} 
+					catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+					leave();
 				}
-				leave();
-			}
 			
-			@Override
-			public void onMessageReceived(MessageHeader header,
-					JSONObject message) {
+				@Override
+				public void onMessageReceived(MessageHeader header,
+											  JSONObject message) {
 				
-			}
-		};
+				}
+			};
 		
 		JunctionMaker.this.newJunction(listenerServiceURI, actor);
 	}
@@ -274,26 +277,26 @@ public class JunctionMaker {
 	 */
 	@Deprecated
 	public void inviteActorService(final Junction jx, final String role)  throws JunctionException{
-	ActivityScript desc = jx.getActivityScript();
+		ActivityScript desc = jx.getActivityScript();
 		System.out.println("Desc: " + desc.getJSON().toString());
 		// find service platform spec
 		
-			System.out.println("inviting service for role " + role);
+		System.out.println("inviting service for role " + role);
 			
-			JSONObject platform = desc.getRolePlatform(role, "jxservice");
-			System.out.println("got platform " + platform);
-			if (platform == null) return;
+		JSONObject platform = desc.getRolePlatform(role, "jxservice");
+		System.out.println("got platform " + platform);
+		if (platform == null) return;
 			
-			String switchboard = platform.optString("switchboard");
-			System.out.println("switchboard: " + switchboard);
-			if (switchboard == null || switchboard.length() == 0) {
-				switchboard = jx.getSwitchboard();
-				System.out.println("switchboard is null, new: " + switchboard);
-			}
-			final String serviceName = platform.optString("serviceName");
+		String switchboard = platform.optString("switchboard");
+		System.out.println("switchboard: " + switchboard);
+		if (switchboard == null || switchboard.length() == 0) {
+			switchboard = jx.getSwitchboard();
+			System.out.println("switchboard is null, new: " + switchboard);
+		}
+		final String serviceName = platform.optString("serviceName");
 			
-			// // // // // // // // // // // // // // // // 
-			JunctionActor actor = new JunctionActor("inviter") {
+		// // // // // // // // // // // // // // // // 
+		JunctionActor actor = new JunctionActor("inviter") {
 				@Override
 				public void onActivityJoin() {
 					JSONObject invitation = new JSONObject();
@@ -307,21 +310,21 @@ public class JunctionMaker {
 				
 				@Override
 				public void onMessageReceived(MessageHeader header,
-						JSONObject message) {
+											  JSONObject message) {
 					
 				}
 			};
 			
-			// remote jxservice activity:
-			URI remoteServiceActivity=null;
-			try {
-				remoteServiceActivity = new URI("junction://"+switchboard+"/jxservice");
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-				return;
-			}
-			System.out.println("Inviting service at uri " + remoteServiceActivity);
-			JunctionMaker.this.newJunction(remoteServiceActivity, actor);
+		// remote jxservice activity:
+		URI remoteServiceActivity=null;
+		try {
+			remoteServiceActivity = new URI("junction://"+switchboard+"/jxservice");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Inviting service at uri " + remoteServiceActivity);
+		JunctionMaker.this.newJunction(remoteServiceActivity, actor);
 	}
 
 	public static SwitchboardConfig getDefaultSwitchboardConfig(URI uri) {
@@ -334,8 +337,12 @@ public class JunctionMaker {
 			return new edu.stanford.junction.provider.jvm.JVMSwitchboardConfig();
 		} else if (fragment.equals("jx")) {
 			return new edu.stanford.junction.provider.jx.JXSwitchboardConfig();
+		} else if (fragment.equals("jx")) {
+			return new edu.stanford.junction.provider.jx.JXSwitchboardConfig();
+		} else if (fragment.equals("irc")) {
+			return new edu.stanford.junction.provider.irc.IRCSwitchboardConfig();
 		}
-		
+
 		// assume xmpp
 		return new edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig(uri);
 	}
