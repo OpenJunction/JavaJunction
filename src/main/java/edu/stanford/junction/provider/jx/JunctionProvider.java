@@ -72,7 +72,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	}
 
 	@Override
-	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
+	public synchronized Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
 		return new edu.stanford.junction.provider.jx.Junction(uri,script,actor);
 	}
 

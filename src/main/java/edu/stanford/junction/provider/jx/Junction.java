@@ -40,7 +40,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	private final URI mAcceptedInvitation;
 	private final String mSession;
 	private ActivityScript mActivityScript;
-	private static final int READ_BUFFER = 2048;
 	
 	private ConnectedThread mConnectedThread;
 	private JXServer mSwitchboardServer = null;
@@ -135,11 +134,8 @@ public class Junction extends edu.stanford.junction.Junction {
 			send.put("session", mSession);
 			send.put("actor", actorID);
 			jx.put(JX_SYS_MSG, send);
-			byte[] bytes = message.toString().getBytes();
-			synchronized(Junction.this) {
-				mConnectedThread.write(bytes, bytes.length);
-			}
-		} catch (JSONException e) {
+			mConnectedThread.sendJson(message);
+		} catch (Exception e) {
 			Log.e(TAG, "Failed to send message", e);
 		}
 	}
@@ -165,11 +161,8 @@ public class Junction extends edu.stanford.junction.Junction {
 			send.put("action", "send_s");
 			send.put("session", mSession);
 			jx.put(JX_SYS_MSG, send);
-			byte[] bytes = message.toString().getBytes();
-			synchronized(Junction.this) {
-				mConnectedThread.write(bytes, bytes.length);
-			}
-		} catch (JSONException e) {
+			mConnectedThread.sendJson(message);
+		} catch (Exception e) {
 			Log.e(TAG, "Failed to send message", e);
 		}
 	}
@@ -183,9 +176,11 @@ public class Junction extends edu.stanford.junction.Junction {
         private final Socket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        private final JsonHelper mJsonHelper;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
+            
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -199,6 +194,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            mJsonHelper = new JsonHelper(mmInStream, mmOutStream);
             
             connect();
         }
@@ -207,8 +203,19 @@ public class Junction extends edu.stanford.junction.Junction {
         	JSONObject join = new JSONObject();
         	
         	// Header info
-        	byte[] header = "JUNCTION".getBytes();
-        	write(header, header.length);
+        	try {
+	        	byte[] header = "JUNCTION".getBytes();
+	        	mmOutStream.write(header, 0, header.length);
+	        	mmOutStream.flush();
+	        	
+	        	// TODO: fix socket timing issues and remove me
+	        	try {
+	        		Thread.sleep(800);
+	        	}catch (Exception e) {}
+        	} catch (IOException e) {
+        		Log.e(TAG, "Error writing connection header");
+        		return;
+        	}
         	
         	// Join request
         	try {
@@ -226,49 +233,42 @@ public class Junction extends edu.stanford.junction.Junction {
 				throw new AssertionError("Bad JSON");
 			}
         	
-        	byte[] out = join.toString().getBytes();
-        	write(out,out.length);
+        	try {
+        		mJsonHelper.sendJson(join);
+        	} catch (IOException e) {
+        		Log.e(TAG, "Error writing activity script", e);
+        	}
         }
 
         public void run() {
             Log.d(TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[READ_BUFFER];
-            int bytes;
-
+            
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-                    if (bytes < 0) {
+                    JSONObject json = mJsonHelper.jsonFromStream();
+                    if (json == null) {
                     	break;
                     }
 
-                    // TODO: won't work with something larger than READ_BUFFER.
-                    try {
-	                    String jsonStr = new String(buffer,0,bytes);
-	                    JSONObject json = new JSONObject(jsonStr);
-	                    Log.d(TAG, "read msg" + jsonStr);
-	                    if (json.has(NS_JX)) {
-	                    	JSONObject sys = json.getJSONObject(NS_JX);
-	                    	if (sys.has(JX_SYS_MSG)) {
-	                    		if (sys.has(JX_SCRIPT)) {
-	                    			mActivityScript = new ActivityScript(sys.getJSONObject(JX_SCRIPT));
-	                    		}
-	                        	return;
-	                    	}
-	                    }
-	                    
-	                    String from = "me";
-	                    MessageHeader header = new MessageHeader(Junction.this, json, from);
-	                    triggerMessageReceived(header, json);
-                    } catch (JSONException e) {
-                    	// Log.e(TAG, "JSON error", e);
+                    if (json.has(NS_JX)) {
+                    	JSONObject sys = json.getJSONObject(NS_JX);
+                    	if (sys.has(JX_SYS_MSG)) {
+                    		if (sys.has(JX_SCRIPT)) {
+                    			mActivityScript = new ActivityScript(sys.getJSONObject(JX_SCRIPT));
+                    		}
+                    	}
                     }
+                    
+                    String from = "me";
+                    MessageHeader header = new MessageHeader(Junction.this, json, from);
+                    triggerMessageReceived(header, json);
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     //connectionLost();
                     break;
+                } catch (JSONException e) {
+                     	Log.e(TAG, "JSON error", e);
                 }
             }
             
@@ -276,18 +276,14 @@ public class Junction extends edu.stanford.junction.Junction {
             cancel();
         }
 
-        /**
-         * Write to the connected OutStream.
-         * @param buffer  The bytes to write
-         */
-        public void write(byte[] buffer, int bytes) {
-            try {
-                mmOutStream.write(buffer, 0, bytes);
-            } catch (IOException e) {
-                Log.e(TAG, "Exception during write", e);
-            }
+        public void sendJson(JSONObject json) {
+        	try {
+        		mJsonHelper.sendJson(json);
+        	} catch (IOException e) {
+        		Log.e(TAG, "Error sending json", e);
+        	}
         }
-
+        
         public void cancel() {
             try {
                 mmSocket.close();

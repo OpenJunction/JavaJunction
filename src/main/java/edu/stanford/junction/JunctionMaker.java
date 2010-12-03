@@ -325,13 +325,15 @@ public class JunctionMaker {
 	}
 
 	public static SwitchboardConfig getDefaultSwitchboardConfig(URI uri) {
-		String fragment = uri.getFragment().toLowerCase();
-		if (fragment != null) {
-			if (fragment.equals("jvm")) {
-				return new edu.stanford.junction.provider.jvm.JVMSwitchboardConfig();
-			} else if (fragment.equals("jx")) {
-				return new edu.stanford.junction.provider.jx.JXSwitchboardConfig();
-			}
+		String fragment = uri.getFragment();
+		if (fragment == null) {
+			fragment = "xmpp";
+		}
+		fragment = fragment.toLowerCase();
+		if (fragment.equals("jvm")) {
+			return new edu.stanford.junction.provider.jvm.JVMSwitchboardConfig();
+		} else if (fragment.equals("jx")) {
+			return new edu.stanford.junction.provider.jx.JXSwitchboardConfig();
 		}
 		
 		// assume xmpp

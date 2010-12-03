@@ -87,7 +87,7 @@ public abstract class JunctionActor {
 	}
 
 	/**
-	 * Send a message to an individual actor, idenfified by actorID
+	 * Send a message to an individual actor, identified by actorID
 	 */
 	public void sendMessageToActor(String actorID, JSONObject message) {
 		mJunction.sendMessageToActor(actorID, message);

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +25,9 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 public class JXServer {
 	public static final int SERVER_PORT = 8283;
 	private static final String TAG = "jx_server";
-	private static final int READ_BUFFER = 2048;
+	private static final int BUFFER_LENGTH = 1024;
 	
-	private Map<String,JSONObject> mActivityScripts;
+	private Map<RoomId, JSONObject> mActivityScripts;
 	private Set<ConnectedThread> mConnections;
 	private Map<RoomId, Map<String, ConnectedThread>> mSubscriptions;
 	private AcceptThread mAcceptThread;
@@ -42,39 +43,56 @@ public class JXServer {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 		
-		JunctionActor actor = new JunctionActor("tester") {
-			
-			@Override
-			public void onMessageReceived(MessageHeader header, JSONObject message) {
-				Log.d(TAG, "got: " + message.toString() + " !");
-			}
-			
-			@Override
-			public void onActivityJoin() {
-				super.onActivityJoin();
-				Log.d(TAG, "joined session!");
-				try {
-					sendMessageToActor(this.getActorID(), new JSONObject("{\"msg\":\"hello world!!\"}"));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		};
+		final JunctionActor a1 = server.new TestActor("a1");
+		final JunctionActor a2 = server.new TestActor("a2");
+		final JunctionActor a3 = server.new TestActor("a3");
 		
-		URI uri = URI.create("junction://localhost/hoodat#jx");
-		SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
-		ActivityScript script = new ActivityScript();
+		
+		final URI uri = URI.create("junction://localhost/hoodat#jx");
+		final SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
+		final ActivityScript script = new ActivityScript();
 		script.setFriendlyName("Test Session");
 		script.setActivityID("org.openjunction.test");
 		
-		
-		try {
-			Log.d(TAG, "Attempting to join session");
-			JunctionMaker.getInstance(cfg).newJunction(uri, script, actor);
-		} catch (JunctionException e) {
-			Log.e(TAG, "error joining juction", e);
+		boolean TEST_CLIENTS = false;
+		if (TEST_CLIENTS) {
+			try {
+				Log.d(TAG, "Attempting to join session");
+				JunctionMaker.getInstance(cfg).newJunction(uri, script, a1);
+				JunctionMaker.getInstance(cfg).newJunction(uri, script, a2);
+				JunctionMaker.getInstance(cfg).newJunction(uri, script, a3);
+			} catch (JunctionException e) {
+				Log.e(TAG, "error joining juction", e);
+			}
 		}
 	}
+	
+	
+	class TestActor extends JunctionActor {
+		final String name;
+		public TestActor(String name) {
+			super("test");
+			this.name = name;
+		}
+		
+		@Override
+		public void onMessageReceived(MessageHeader header, JSONObject message) {
+			Log.d(TAG, name + " got: " + message.toString() + " !" + " from " + header.from);
+		}
+		
+		@Override
+		public void onActivityJoin() {
+			super.onActivityJoin();
+			Log.d(TAG, name + " joined session!");
+			try {
+				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!! from: " + name + "\"}"));
+				Log.d(TAG, name + " sent a message.");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	};
+	
 	
 	
 	public JXServer() {
@@ -87,8 +105,8 @@ public class JXServer {
 	 */
 	public void start() {
 		mConnections = new HashSet<ConnectedThread>();
-		mSubscriptions = new HashMap<RoomId, Map<String, ConnectedThread>>();
-		mActivityScripts = new HashMap<String, JSONObject>();
+		mSubscriptions = new ConcurrentHashMap<RoomId, Map<String, ConnectedThread>>();
+		mActivityScripts = new ConcurrentHashMap<RoomId, JSONObject>();
 		mAcceptThread = new AcceptThread();
 		mAcceptThread.start();
 	}
@@ -147,11 +165,11 @@ public class JXServer {
                 	break;
                 }
                 
-                synchronized (JXServer.this) {
+                //synchronized (JXServer.this) {
                     ConnectedThread conThread = new ConnectedThread(socket);
                     conThread.start();
                     mConnections.add(conThread);
-                }
+                //}
             }
             Log.d(TAG, "END mAcceptThread");
         }
@@ -179,9 +197,11 @@ public class JXServer {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Set<RoomOccupancy> mmSubscriptions;
+        private final JsonHelper mmJsonHelper;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
+
             mmSubscriptions = new HashSet<RoomOccupancy>();
             mmSocket = socket;
             InputStream tmpIn = null;
@@ -196,11 +216,12 @@ public class JXServer {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            mmJsonHelper = new JsonHelper(mmInStream, mmOutStream);
         }
 
         public void run() {
             Log.d(TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[READ_BUFFER];
+            byte[] buffer = new byte[BUFFER_LENGTH];
             int bytes;
 
             // Read header information, determine connection type
@@ -230,27 +251,14 @@ public class JXServer {
         }
         
         private void doJunctionConnection() {
-        	byte[] buffer = new byte[READ_BUFFER];
-        	int bytes;
-        	
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-                    if (bytes < 0) {
+                    JSONObject json = mmJsonHelper.jsonFromStream();
+                    if (json == null) {
                     	break;
                     }
-
-                    // TODO: won't work with something larger than READ_BUFFER.
-                    try {
-	                    String jsonStr = new String(buffer,0,bytes);
-	                    Log.d(TAG, "read: " + jsonStr);
-	                    JSONObject json = new JSONObject(jsonStr);
-	                    handleJson(json);
-                    } catch (JSONException e) {
-                    	// Log.e(TAG, "JSON error", e);
-                    }
+                    handleJson(json);
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     //connectionLost();
@@ -258,7 +266,7 @@ public class JXServer {
                 }
             }
         }
-        
+                
         private void handleJson(JSONObject json) {
         	try {
 	        	if (json.has(Junction.NS_JX)) {
@@ -267,15 +275,17 @@ public class JXServer {
 	                	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
 	                	// Join
 	                	if (sys.has("join")) {
-	                		synchronized (JXServer.this) {
-		                		String room = sys.getString("join");
-		                		String me = sys.getString("id");
-		                		mmSubscriptions.add(new RoomOccupancy(getRoomId(room), me));
+	                		String roomName = sys.getString("join");
+	                		RoomId joinRoom = getRoomId(roomName);
+	                		String me = sys.getString("id");
+	                		synchronized (joinRoom) {
+		                		//Log.d(TAG, "Adding " + me.substring(0,6) + " to " + room);
+		                		mmSubscriptions.add(new RoomOccupancy(joinRoom, me));
 		                		
 		                		Map<String, ConnectedThread> participants;
-		                		if (mSubscriptions.containsKey(room)) {
-		                			participants = mSubscriptions.get(room);
-		                			JSONObject script = mActivityScripts.get(room);
+		                		if (mSubscriptions.containsKey(joinRoom)) {
+		                			participants = mSubscriptions.get(joinRoom);
+		                			JSONObject script = mActivityScripts.get(joinRoom);
 		                			if (script != null) {
 		                				JSONObject aScriptObj = new JSONObject();
 		        	                    JSONObject aScriptMsg = new JSONObject();
@@ -283,18 +293,20 @@ public class JXServer {
 		        		                    aScriptObj.put(Junction.JX_SYS_MSG, true);
 		        		                    aScriptObj.put(Junction.JX_SCRIPT, script);
 		        		                    aScriptMsg.put(Junction.NS_JX, aScriptObj);
-		        	                    } catch (JSONException e) {}
-		        	                    
-		        	                    byte[] bts = aScriptMsg.toString().getBytes();
-		        	                    this.write(bts, bts.length);
+
+		        		                    mmJsonHelper.sendJson(aScriptMsg);
+		        	                    } catch (Exception e) {
+		        	                    	Log.e(TAG, "Error sending script", e);
+		        	                    }
 		                			}
 		                			
 		                		} else {
 		                			JSONObject script = sys.optJSONObject("script");
 		                			participants = new HashMap<String, ConnectedThread>();
-		                			mSubscriptions.put(getRoomId(room), participants);
-		                			mActivityScripts.put(room, script);
+		                			mSubscriptions.put(joinRoom, participants);
+		                			mActivityScripts.put(joinRoom, script);
 		                		}
+		                		
 		                		participants.put(me, this);
 	                		}
 	                	}
@@ -306,12 +318,12 @@ public class JXServer {
 	                		RoomId room = getRoomId(session);
 	                		jx.remove(Junction.JX_SYS_MSG);
 	                		
-	                		byte[] outbytes = json.toString().getBytes();
 	                		synchronized(room) {
 	                			Map<String, ConnectedThread> peers = mSubscriptions.get(room);
+	                			Log.d(TAG, "room size " + peers.size());
 	                			for (String u : peers.keySet()) {
 	                				ConnectedThread conn = peers.get(u);
-	                				conn.write(outbytes, outbytes.length);
+	                				conn.sendJson(json);
 	                			}
 	                		}
 	                	}
@@ -322,21 +334,28 @@ public class JXServer {
 	                		String actor = sys.getString("actor");
 	                		jx.remove(Junction.JX_SYS_MSG);
 	                		
-	                		byte[] outbytes = json.toString().getBytes();
 	                		synchronized(room) {
 	                			ConnectedThread conn = mSubscriptions.get(room).get(actor);
 	                			if (conn != null) {
-	                				conn.write(outbytes, outbytes.length);
+	                				conn.sendJson(json);
 	                			}
 	                		}
 	                	}
 	            	}
-	            }
+	        	}
         	} catch (JSONException e) {
         		Log.e(TAG, "Error building json object", e);
         	}
         }
 
+        public void sendJson(JSONObject json) {
+        	try {
+        		mmJsonHelper.sendJson(json);
+        	} catch (Exception e) {
+        		Log.e(TAG, "Error writing JSON", e);
+        	}
+        }
+        
         /**
          * Write to the connected OutStream.
          * @param buffer  The bytes to write
@@ -351,7 +370,7 @@ public class JXServer {
 
         public void cancel() {
             try {
-            	synchronized(JXServer.this) {
+            	//synchronized(JXServer.this) {
 	            	mConnections.remove(this);
 	            	for (RoomOccupancy entry : mmSubscriptions) {
 	            		synchronized(entry.room) {
@@ -364,7 +383,7 @@ public class JXServer {
 	            	}
 	            	mmSubscriptions.clear();
 	            	mmSubscriptions = null;
-            	}
+            	//}
                 mmSocket.close();
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
