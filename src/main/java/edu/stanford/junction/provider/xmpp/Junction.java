@@ -82,9 +82,9 @@ public class Junction extends edu.stanford.junction.Junction {
 		PacketFilter typeFilter = new OrFilter(new MessageTypeFilter(Message.Type.chat), 
 											   new MessageTypeFilter(Message.Type.groupchat));
 
-		PacketFilter addrFilter = new FromContainsFilter("@"+xmppConfig.getChatService());
+//		PacketFilter addrFilter = new FromContainsFilter("@"+xmppConfig.getChatService());
 		
-		mMessageFilter = new AndFilter(typeFilter,addrFilter);
+		mMessageFilter = typeFilter;//new AndFilter(typeFilter,addrFilter);
 		
 		if (xmppConnection == null) {
 			throw new IllegalArgumentException("XMPPConnection must not be null.");
