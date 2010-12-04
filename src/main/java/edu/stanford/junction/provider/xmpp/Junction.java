@@ -62,7 +62,6 @@ public class Junction extends edu.stanford.junction.Junction {
 	
 	public static String NS_JX = "jx";
 	private ActivityScript mActivityDescription;
-	private JunctionActor mOwner;
 	private JunctionProvider mProvider;
 	
 	protected XMPPConnection mXMPPConnection;
