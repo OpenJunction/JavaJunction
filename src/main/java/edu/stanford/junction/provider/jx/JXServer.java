@@ -54,7 +54,7 @@ public class JXServer {
 		script.setFriendlyName("Test Session");
 		script.setActivityID("org.openjunction.test");
 		
-		boolean TEST_CLIENTS = false;
+		boolean TEST_CLIENTS = true;
 		if (TEST_CLIENTS) {
 			try {
 				Log.d(TAG, "Attempting to join session");
@@ -85,7 +85,7 @@ public class JXServer {
 			super.onActivityJoin();
 			Log.d(TAG, name + " joined session!");
 			try {
-				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!! from: " + name + "\"}"));
+				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! from: " + name + "\"}"));
 				Log.d(TAG, name + " sent a message.");
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -301,10 +301,13 @@ public class JXServer {
 		                			}
 		                			
 		                		} else {
-		                			JSONObject script = sys.optJSONObject("script");
 		                			participants = new HashMap<String, ConnectedThread>();
 		                			mSubscriptions.put(joinRoom, participants);
-		                			mActivityScripts.put(joinRoom, script);
+		                			
+		                			JSONObject script = sys.optJSONObject("script");
+		                			if (script != null) {
+			                			mActivityScripts.put(joinRoom, script);
+		                			}
 		                		}
 		                		
 		                		participants.put(me, this);
@@ -320,7 +323,6 @@ public class JXServer {
 	                		
 	                		synchronized(room) {
 	                			Map<String, ConnectedThread> peers = mSubscriptions.get(room);
-	                			Log.d(TAG, "room size " + peers.size());
 	                			for (String u : peers.keySet()) {
 	                				ConnectedThread conn = peers.get(u);
 	                				conn.sendJson(json);
