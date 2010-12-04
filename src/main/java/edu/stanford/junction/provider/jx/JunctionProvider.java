@@ -94,7 +94,10 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
 	                InetAddress inetAddress = enumIpAddr.nextElement();
 	                if (!inetAddress.isLoopbackAddress()) {
-	                    return inetAddress.getHostAddress().toString();
+	                	// not ready for IPv6, apparently.
+	                	if (!inetAddress.getHostAddress().contains(":")) {
+	                		return inetAddress.getHostAddress().toString();
+	                	}
 	                }
 	            }
 	        }
