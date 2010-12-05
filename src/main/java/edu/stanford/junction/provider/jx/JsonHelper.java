@@ -3,6 +3,8 @@ package edu.stanford.junction.provider.jx;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
+import java.nio.channels.SocketChannel;
 import java.util.Arrays;
 
 import javax.naming.OperationNotSupportedException;
@@ -84,70 +86,74 @@ public class JsonHelper {
     	int inboundCount;
     	int inboundOffset = 0;
     	
-    	if (leftovers != null) {
-    		inbound = leftovers;
-    		inboundOffset = leftoversOffset;
-    		inboundCount = leftoversCount;
-    	} else {
-    		inboundCount = in.read(buffer);
-    		inboundOffset = 0;
-    		inbound = buffer;
-    	}
+    	try {
+	    	if (leftovers != null) {
+	    		inbound = leftovers;
+	    		inboundOffset = leftoversOffset;
+	    		inboundCount = leftoversCount;
+	    	} else {
+	    		inboundCount = in.read(buffer);
+	    		inboundOffset = 0;
+	    		inbound = buffer;
+	    	}
     	
-    	do {
-    		if (mMessageLength == 0) {
-    			if (inboundCount - inboundOffset < 5) { // header length
-    				continue;
-    			}
-    			if (inbound[inboundOffset] != 'c') {
-    				throw new IllegalStateException("No length prefix found. Offset: " + inboundOffset + ", count: " + inboundCount +", leftovers: " + (leftovers == inbound));
-    			}
-    			
-    			int size = 0;
-        		size |= 0xFF000000 & (inbound[inboundOffset+1] << 24);
-        		size |= 0x00FF0000 & (inbound[inboundOffset+2] << 16);
-        		size |= 0x0000FF00 & (inbound[inboundOffset+3] << 8);
-        		size |= 0x000000FF & inbound[inboundOffset+4];
-        		mMessageLength = size;
-
-        		inboundOffset += 5;
-        		byteCount = 0;
-        		if (mMessageLength > byteBuffer.length) {
-        			byteBuffer = new byte[mMessageLength];
-        		}
-    		}
-    		
-    		int readLength = Math.min(mMessageLength - byteCount,
-    									inboundCount - inboundOffset);
-    		
-    		System.arraycopy(inbound, inboundOffset, byteBuffer, byteCount, readLength);
-    		byteCount += readLength;
-    		
-    		if (byteCount == mMessageLength) {
-    			try {
-    				String stringRep = new String(byteBuffer, 0, byteCount);
-    				
-    				/* reset state */
-    				mMessageLength = 0;
-    				if (inboundOffset + readLength != inboundCount) {
-	    				leftovers = inbound;
-	    				leftoversOffset = inboundOffset +  readLength;
-	    				leftoversCount = inboundCount;
-    				} else {
-    					leftovers = null;
-    				}
+	    	do {
+	    		if (mMessageLength == 0) {
+	    			if (inboundCount - inboundOffset < 5) { // header length
+	    				continue;
+	    			}
 	    			
-    				return new JSONObject(stringRep);
-    			} catch (JSONException e) {
-    				Log.e(TAG, "Error reading json", e);
-    				return null;
-    			}
-    		} else {
-    			leftovers = null;
-    			inboundOffset = 0;
-    		}
-    		
-    	} while ((inboundCount = in.read(buffer)) > 0);
+	    			if (inbound[inboundOffset] != 'c') {
+	    				throw new IllegalStateException("No length prefix found. Offset: " + inboundOffset + ", count: " + inboundCount +", leftovers: " + (leftovers == inbound));
+	    			}
+	    			
+	    			int size = 0;
+	        		size |= 0xFF000000 & (inbound[inboundOffset+1] << 24);
+	        		size |= 0x00FF0000 & (inbound[inboundOffset+2] << 16);
+	        		size |= 0x0000FF00 & (inbound[inboundOffset+3] << 8);
+	        		size |= 0x000000FF & inbound[inboundOffset+4];
+	        		mMessageLength = size;
+	
+	        		inboundOffset += 5;
+	        		byteCount = 0;
+	        		if (mMessageLength > byteBuffer.length) {
+	        			byteBuffer = new byte[mMessageLength];
+	        		}
+	    		}
+	    		
+	    		int readLength = Math.min(mMessageLength - byteCount,
+	    									inboundCount - inboundOffset);
+	
+	    		System.arraycopy(inbound, inboundOffset, byteBuffer, byteCount, readLength);
+	    		byteCount += readLength;
+	    		if (byteCount == mMessageLength) {
+	    			try {
+	    				String stringRep = new String(byteBuffer, 0, byteCount);
+	    				
+	    				/* reset state */
+	    				mMessageLength = 0;
+	    				if (inboundOffset + readLength != inboundCount) {
+		    				leftovers = inbound;
+		    				leftoversOffset = inboundOffset +  readLength;
+		    				leftoversCount = inboundCount;
+	    				} else {
+	    					leftovers = null;
+	    				}
+		    			
+	    				return new JSONObject(stringRep);
+	    			} catch (JSONException e) {
+	    				Log.e(TAG, "Error reading json", e);
+	    				return null;
+	    			}
+	    		} else {
+	    			leftovers = null;
+	    			inbound = buffer;
+	    			inboundOffset = 0;
+	    		}
+	    	} while ((inboundCount = in.read(buffer)) > 0);
+    	} catch (SocketException e) {
+ 			Log.d(TAG, "Socket closed.");
+    	}
     	return null;
     }
 }
