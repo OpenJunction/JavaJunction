@@ -92,7 +92,12 @@ public class JsonHelper {
 	    		inboundOffset = leftoversOffset;
 	    		inboundCount = leftoversCount;
 	    	} else {
-	    		inboundCount = in.read(buffer);
+	    		int available = Math.min(buffer.length, in.available());
+	    		if (available > 0) {
+	    			inboundCount = in.read(buffer, 0, available);
+	    		} else {
+	    			inboundCount = in.read(buffer);
+	    		}
 	    		inboundOffset = 0;
 	    		inbound = buffer;
 	    	}
@@ -150,7 +155,14 @@ public class JsonHelper {
 	    			inbound = buffer;
 	    			inboundOffset = 0;
 	    		}
-	    	} while ((inboundCount = in.read(buffer)) > 0);
+	    		
+	    		int available = Math.min(buffer.length, in.available());
+	    		if (available > 0) {
+	    			inboundCount = in.read(buffer, 0, available);
+	    		} else {
+	    			inboundCount = in.read(buffer);
+	    		}
+	    	} while (inboundCount > 0);
     	} catch (SocketException e) {
  			Log.d(TAG, "Socket closed.");
     	}
