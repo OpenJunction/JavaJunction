@@ -1,5 +1,6 @@
 package edu.stanford.junction.provider.jx;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,7 +31,7 @@ public class JsonHelper {
 	public JsonHelper(InputStream in, OutputStream out) {
 		TAG = "json-"+(count++);
 		this.in = in;
-		this.out = out;
+		this.out = new BufferedOutputStream(out);
 	}
 	
 	/*
