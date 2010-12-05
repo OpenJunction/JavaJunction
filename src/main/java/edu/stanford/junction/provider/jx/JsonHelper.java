@@ -55,7 +55,8 @@ public class JsonHelper {
 		header[4] = (byte) ((length << 24) >>> 24);
 		
 		out.write(header);
-		out.write(bytes, 0, bytes.length);		
+		out.write(bytes, 0, bytes.length);
+		out.flush();
     }
 	
 	/*

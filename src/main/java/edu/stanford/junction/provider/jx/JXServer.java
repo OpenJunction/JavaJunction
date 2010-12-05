@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -153,6 +154,8 @@ public class JXServer {
                 	Log.d(TAG, "waiting for client...");
                     socket = mmServerSocket.accept();
                     Log.d(TAG, "Client connected!");
+                } catch (SocketException e) {
+                	
                 } catch (IOException e) {
                     Log.e(TAG, "accept() failed", e);
                     break;
