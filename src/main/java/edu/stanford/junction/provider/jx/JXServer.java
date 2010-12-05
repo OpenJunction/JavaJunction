@@ -114,8 +114,6 @@ public class JXServer {
 	public void stop() {
 		mAcceptThread.cancel();
 		mAcceptThread = null;
-		
-		mConnections.clear();
 		mConnections = null;
 		
 		mSubscriptions.clear();
@@ -185,6 +183,7 @@ public class JXServer {
             for (ConnectedThread conn : mConnections) {
         		conn.cancel();
             }
+            mConnections.clear();
         }
     }
 	
@@ -373,7 +372,6 @@ public class JXServer {
         public void cancel() {
             try {
             	//synchronized(JXServer.this) {
-	            	mConnections.remove(this);
 	            	for (RoomOccupancy entry : mmSubscriptions) {
 	            		synchronized(entry.room) {
 		            		Map<String, ConnectedThread> users = mSubscriptions.get(entry.room);
