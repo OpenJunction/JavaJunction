@@ -112,6 +112,9 @@ public class JXServer {
 	}
 	
 	public void stop() {
+		mAcceptThread.cancel();
+		mAcceptThread = null;
+		
 		mConnections.clear();
 		mConnections = null;
 		
@@ -120,9 +123,6 @@ public class JXServer {
 		
 		mActivityScripts.clear();
 		mActivityScripts = null;
-		
-		mAcceptThread.cancel();
-		mAcceptThread = null;
 	}
 	
 	private class AcceptThread extends Thread {
