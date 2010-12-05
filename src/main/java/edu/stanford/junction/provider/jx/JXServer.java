@@ -48,7 +48,7 @@ public class JXServer {
 		final JunctionActor a3 = server.new TestActor("a3");
 		
 		
-		final URI uri = URI.create("junction://localhost/hoodat#jx");
+		final URI uri = URI.create("junction://10.33.0.208/hoodat#jx");
 		final SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
 		final ActivityScript script = new ActivityScript();
 		script.setFriendlyName("Test Session");

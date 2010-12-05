@@ -44,8 +44,7 @@ public class JsonHelper {
 	public void sendJson(JSONObject message) throws IOException {
     	byte[] bytes = message.toString().getBytes();
     	int length = bytes.length;
-		Log.d(TAG, "sending msg as " + length);
-		Log.d(TAG, "" + message);
+    	
 		byte[] header = new byte[5];
 		header[0] = 'c';
 		header[1] = (byte) (length >>> 24);
