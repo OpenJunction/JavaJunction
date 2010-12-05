@@ -21,7 +21,7 @@ import edu.stanford.junction.provider.jx.JXServer.Log;
  */
 public class JsonHelper {
 	final String TAG;
-	private static final int BUFFER_SIZE = 1024;
+	private static final int BUFFER_SIZE = 256;
 	static int count = 0;
 	
 	private final OutputStream out;
