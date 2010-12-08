@@ -28,6 +28,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 import edu.stanford.junction.Junction;
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -38,6 +39,7 @@ import edu.stanford.junction.provider.jx.JXServer.Log;
  *
  */
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
+	private static final String TAG = "junction";
 	
 	public JunctionProvider(JXSwitchboardConfig config) {
 		
@@ -52,27 +54,22 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 			}
 		};
 
-		Junction jx = new edu.stanford.junction.provider.jx.Junction(uri,null,actor);
-		ActivityScript script = null;
-		final int MAX_TIME = 10000; // ms
-		final int WAIT = 300; // ms
-		int total = 0;
-		
-		while (script == null && total < MAX_TIME) {
-			try {
-				Thread.sleep(WAIT);
-			} catch (InterruptedException e) {}
+		try {
+			Junction jx = new edu.stanford.junction.provider.jx.Junction(uri,null,actor);
+			ActivityScript script = null;
 			
+			// Constructor blocks until connection is made.
 			script = jx.getActivityScript();
-			total += WAIT;
+			actor.leave();
+			return script;
+		} catch (Exception e) {
+			Log.e(TAG, "Could not get activity script");
+			return null;
 		}
-		 
-		actor.leave();
-		return script;
 	}
 
 	@Override
-	public synchronized Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) {
+	public synchronized Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException {
 		return new edu.stanford.junction.provider.jx.Junction(uri,script,actor);
 	}
 

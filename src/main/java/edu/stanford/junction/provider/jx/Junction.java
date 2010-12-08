@@ -26,6 +26,7 @@ import java.net.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
@@ -35,16 +36,21 @@ public class Junction extends edu.stanford.junction.Junction {
 	private static String TAG = "jx_client";
 	public static String JX_SYS_MSG = "jxsysmsg";
 	public static String JX_SCRIPT = "ascript";
+	public static String JX_JOINED = "joined";
+	public static String JX_CREATOR = "creator";
 	public static String JX_NS = "jx";
 	
 	private final URI mAcceptedInvitation;
 	private final String mSession;
 	private ActivityScript mActivityScript;
+	private Object mJoinLock = new Object();
+	private boolean mJoinComplete = false;
+	private boolean mActivityCreator = false;
 	
 	private ConnectedThread mConnectedThread;
 	private JXServer mSwitchboardServer = null;
 	
-	public Junction(URI uri, ActivityScript script, final JunctionActor actor) {
+	public Junction(URI uri, ActivityScript script, final JunctionActor actor) throws JunctionException {
 		this.setActor(actor);
 		
 		mAcceptedInvitation = uri;
@@ -75,7 +81,21 @@ public class Junction extends edu.stanford.junction.Junction {
 			Log.e(TAG, "Error connecting to socket", e);
 		}
 		
-		triggerActorJoin(script == null || script.isActivityCreator());
+		int MAX_TIME = 20000;
+		if (!mJoinComplete) {
+			try {
+				synchronized(mJoinLock) {
+					mJoinLock.wait(MAX_TIME);
+				}
+			} catch (InterruptedException e) {
+				// Ignored
+			}
+		}
+		if (!mJoinComplete) {
+			throw new JunctionException("Timeout while joining Junction session.");
+		}
+		
+		triggerActorJoin(mActivityCreator);
 	}
 	
 	@Override
@@ -254,8 +274,19 @@ public class Junction extends edu.stanford.junction.Junction {
                     if (json.has(NS_JX)) {
                     	JSONObject sys = json.getJSONObject(NS_JX);
                     	if (sys.has(JX_SYS_MSG)) {
-                    		if (sys.has(JX_SCRIPT)) {
-                    			mActivityScript = new ActivityScript(sys.getJSONObject(JX_SCRIPT));
+                    		if (sys.has(JX_JOINED)) {
+                    			if (sys.has(JX_SCRIPT)) {
+                    				mActivityScript = new ActivityScript(sys.getJSONObject(JX_SCRIPT));
+                    			}
+                    			if (sys.has(JX_CREATOR) && sys.getBoolean(JX_CREATOR)) {
+                    				mActivityCreator = true;
+                    			} else {
+                    				mActivityCreator = false;
+                    			}
+                    		}
+                    		mJoinComplete = true;
+                    		synchronized (mJoinLock) {
+                    			mJoinLock.notify();
                     		}
                     	}
                     }
