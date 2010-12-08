@@ -92,6 +92,11 @@ public class JXServer {
 				e.printStackTrace();
 			}
 		}
+		
+		@Override
+		public void onActivityCreate() {
+			Log.d(TAG, "CREATED the session!!!");
+		}
 	};
 	
 	
@@ -277,6 +282,8 @@ public class JXServer {
 	                	JSONObject sys = jx.getJSONObject(Junction.JX_SYS_MSG);
 	                	// Join
 	                	if (sys.has("join")) {
+	                		boolean isCreator = false;
+	                		
 	                		String roomName = sys.getString("join");
 	                		RoomId joinRoom = getRoomId(roomName);
 	                		String me = sys.getString("id");
@@ -286,23 +293,12 @@ public class JXServer {
 		                		
 		                		Map<String, ConnectedThread> participants;
 		                		if (mSubscriptions.containsKey(joinRoom)) {
+		                			// Joining existing session
 		                			participants = mSubscriptions.get(joinRoom);
-		                			JSONObject script = mActivityScripts.get(joinRoom);
-		                			if (script != null) {
-		                				JSONObject aScriptObj = new JSONObject();
-		        	                    JSONObject aScriptMsg = new JSONObject();
-		        	                    try {
-		        		                    aScriptObj.put(Junction.JX_SYS_MSG, true);
-		        		                    aScriptObj.put(Junction.JX_SCRIPT, script);
-		        		                    aScriptMsg.put(Junction.NS_JX, aScriptObj);
-
-		        		                    mmJsonHelper.sendJson(aScriptMsg);
-		        	                    } catch (Exception e) {
-		        	                    	Log.e(TAG, "Error sending script", e);
-		        	                    }
-		                			}
-		                			
+		                			isCreator = false;
 		                		} else {
+		                			// New session
+		                			isCreator = true;
 		                			participants = new HashMap<String, ConnectedThread>();
 		                			mSubscriptions.put(joinRoom, participants);
 		                			
@@ -313,6 +309,26 @@ public class JXServer {
 		                		}
 		                		
 		                		participants.put(me, this);
+		                		
+		                		// Response
+		                		JSONObject script = null;
+                				JSONObject joinedObj = new JSONObject();
+        	                    JSONObject joinedMsg = new JSONObject();
+        	                    try {
+        		                    joinedObj.put(Junction.JX_SYS_MSG, true);
+        		                    joinedObj.put(Junction.JX_JOINED, true);
+        		                    joinedObj.put(Junction.JX_CREATOR, isCreator);
+        		                    if (isCreator) {
+        		                    	script = mActivityScripts.get(joinRoom);
+        		                    	if (script != null) {
+        		                    		joinedObj.put(Junction.JX_SCRIPT, script);
+        		                    	}
+        		                    }
+        		                    joinedMsg.put(Junction.NS_JX, joinedObj);
+        		                    mmJsonHelper.sendJson(joinedMsg);
+        	                    } catch (Exception e) {
+        	                    	Log.e(TAG, "Error sending join response",e);
+        	                    }
 	                		}
 	                	}
 	                	
