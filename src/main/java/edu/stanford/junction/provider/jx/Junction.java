@@ -82,13 +82,13 @@ public class Junction extends edu.stanford.junction.Junction {
 		}
 		
 		int MAX_TIME = 20000;
-		if (!mJoinComplete) {
-			try {
-				synchronized(mJoinLock) {
+		synchronized(mJoinLock) {
+			if (!mJoinComplete) {
+				try {
 					mJoinLock.wait(MAX_TIME);
+				} catch (InterruptedException e) {
+					// Ignored
 				}
-			} catch (InterruptedException e) {
-				// Ignored
 			}
 		}
 		if (!mJoinComplete) {
@@ -154,6 +154,7 @@ public class Junction extends edu.stanford.junction.Junction {
 			send.put("session", mSession);
 			send.put("actor", actorID);
 			jx.put(JX_SYS_MSG, send);
+			jx.put("from", getActor().getActorID());
 			mConnectedThread.sendJson(message);
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to send message", e);
@@ -180,7 +181,9 @@ public class Junction extends edu.stanford.junction.Junction {
 			JSONObject send = new JSONObject();
 			send.put("action", "send_s");
 			send.put("session", mSession);
+			
 			jx.put(JX_SYS_MSG, send);
+			jx.put("from", getActor().getActorID());
 			mConnectedThread.sendJson(message);
 		} catch (Exception e) {
 			Log.e(TAG, "Failed to send message", e);
@@ -284,16 +287,23 @@ public class Junction extends edu.stanford.junction.Junction {
                     				mActivityCreator = false;
                     			}
                     		}
-                    		mJoinComplete = true;
+                    		
                     		synchronized (mJoinLock) {
+                    			mJoinComplete = true;
                     			mJoinLock.notify();
                     		}
+                    		json = null;
                     	}
                     }
                     
-                    String from = "me";
-                    MessageHeader header = new MessageHeader(Junction.this, json, from);
-                    triggerMessageReceived(header, json);
+                    if (json != null) {
+                    	String from = "[Unknown]";
+	                    if (json.has(NS_JX) && json.optJSONObject(NS_JX).has("from")) {
+	                    	from = json.optJSONObject(NS_JX).optString("from");
+	                    }
+	                    MessageHeader header = new MessageHeader(Junction.this, json, from);
+	                    triggerMessageReceived(header, json);
+                    }
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     //connectionLost();

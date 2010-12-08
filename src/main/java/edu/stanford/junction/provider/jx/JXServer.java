@@ -44,9 +44,10 @@ public class JXServer {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 		
-		final JunctionActor a1 = server.new TestActor("a1");
-		final JunctionActor a2 = server.new TestActor("a2");
-		final JunctionActor a3 = server.new TestActor("a3");
+		final TestActor a1 = server.new TestActor("a1");
+		final TestActor a2 = server.new TestActor("a2");
+		final TestActor a3 = server.new TestActor("a3");
+		a3.buddy = a2;
 		
 		
 		final URI uri = URI.create("junction://localhost/hoodat#jx");
@@ -70,6 +71,7 @@ public class JXServer {
 	
 	
 	class TestActor extends JunctionActor {
+		JunctionActor buddy;
 		final String name;
 		public TestActor(String name) {
 			super("test");
@@ -88,6 +90,11 @@ public class JXServer {
 			try {
 				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! from: " + name + "\"}"));
 				Log.d(TAG, name + " sent a message.");
+				
+				if ("a3".equals(name)) {
+					sendMessageToActor(buddy.getActorID(), new JSONObject("{\"psst\":\"hi\"}"));
+					Log.d(TAG, name + " sent a secret message to " );
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -98,7 +105,6 @@ public class JXServer {
 			Log.d(TAG, "CREATED the session!!!");
 		}
 	};
-	
 	
 	
 	public JXServer() {
