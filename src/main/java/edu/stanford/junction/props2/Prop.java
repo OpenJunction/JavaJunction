@@ -249,8 +249,8 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				handleMessage(m);
 				return false;
 			}
-			catch(JSONException e){
-				logErr("JSON Error: " + e);
+			catch(Exception e){
+				logErr("Error handling message: " + e);
 			}
 			return true;
 		}
