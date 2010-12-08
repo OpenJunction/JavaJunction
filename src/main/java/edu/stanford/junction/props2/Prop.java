@@ -83,6 +83,8 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	private Vector<JSONObject> pendingLocals = new Vector<JSONObject>();
 	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
 
+	private PropStats propStats = null;
+
 	private Timer taskTimer;
 	private boolean active = false;
 
@@ -155,6 +157,16 @@ public abstract class Prop extends JunctionExtra implements IProp{
 
 	public long getSequenceNum(){
 		return sequenceNum;
+	}
+
+	public PropStats getAndDisableStats(){
+		PropStats tmp = propStats;
+		propStats = null;
+		return tmp;
+	}
+
+	public void startCollectingStats(){
+		propStats = new PropStats();
 	}
 
 	synchronized protected <T> T withState(IWithStateAction<T> action){
@@ -271,6 +283,14 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			JSONObject m = it.next();
 			if(m.optString("uuid").equals(uuid)){
 				it.remove();
+
+				/*** STATS INSTRUMENTATION ****/
+				if(propStats != null){
+					long t = System.nanoTime();
+					long rttElapsed =  t - m.optLong("nanoTime");
+					propStats.addMessageRTT(t, rttElapsed);
+				}
+
 			}
 		}
 	}
@@ -285,6 +305,12 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	 */
 	protected void handleReceivedOp(JSONObject opMsg){
 		boolean changed = false;
+
+		/*** STATS INSTRUMENTATION ****/
+		if(propStats != null){
+			propStats.addPredictionQLength(System.nanoTime(), this.pendingLocals.size());
+		}
+
 		if(isSelfMsg(opMsg)){
 			// Received a confirmation of a message we already applied
 			// locally. Apply to clean state.
@@ -296,6 +322,12 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		}
 		else{
 			if(this.pendingLocals.size() > 0){
+
+				/*** STATS INSTRUMENTATION ****/
+				if(propStats != null){
+					propStats.addConflict(System.nanoTime(), this.pendingLocals.size());
+				}
+
 				// A remote message is received out-of-order with our predicted
 				// local operations. Fix up the order.
 				this.cleanState.applyOperation(opMsg.optJSONObject("op"));
@@ -410,7 +442,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				if(!isSelfMsg(msg) && syncId.equals(this.syncId)){
 					long remoteSeqNum = msg.optLong("localSeqNum");
 					if(remoteSeqNum > this.bestSyncSeqNum){
-						logInfo("Got a better I_HAVE_STATE.");
+						logInfo("Best I_HAVE_STATE so far..");
 						sendMessageToPropReplica(fromActor, newSendMeStateMsg(syncId));
 						this.bestSyncSeqNum = remoteSeqNum;
 					}
@@ -527,16 +559,25 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
-/**
- * Add an operation to the state managed by this Prop, with prediction
- */
+	/**
+	 * Add an operation to the state managed by this Prop, with prediction
+	 */
 	synchronized public void addOperation(JSONObject operation){
 		if(mode == MODE_NORM){
 			logInfo("Adding predicted operation.");
 			JSONObject msg = newStateOperationMsg(operation);
-			this.state.applyOperation(operation);
-			this.pendingLocals.add(msg);
 			sendMessageToProp(msg);
+			this.state.applyOperation(operation);
+
+			/*** STATS INSTRUMENTATION ****/
+			if(propStats != null){
+				try{
+				msg.put("nanoTime", System.nanoTime());
+				}catch(JSONException e){}
+			}
+
+			this.pendingLocals.add(msg);
+			
 			dispatchChangeNotification(EVT_CHANGE, operation);
 		}
 	}
@@ -548,9 +589,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
-/**
- * Send a message to all prop-replicas in this prop
- */
+	/**
+	 * Send a message to all prop-replicas in this prop
+	 */
 	protected void sendMessageToProp(JSONObject m){
 		try{
 			m.put("propTarget", getPropName());
@@ -570,9 +611,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 
-/**
- * Send a message to the prop-replica hosted at the given actorId.
- */
+	/**
+	 * Send a message to the prop-replica hosted at the given actorId.
+	 */
 	protected void sendMessageToPropReplica(String actorId, JSONObject m){
 		try{
 			m.put("propTarget", getPropName());
