@@ -23,6 +23,9 @@ import edu.stanford.junction.SwitchboardConfig;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.jx.json.JsonHandler;
+import edu.stanford.junction.provider.jx.json.JsonSocketHandler;
+import edu.stanford.junction.provider.jx.json.JsonWebSocketHandler;
 
 public class JXServer {
 	public static final int SERVER_PORT = 8283;
@@ -51,7 +54,7 @@ public class JXServer {
 		a3.buddy = a2;
 		
 		
-		final URI uri = URI.create("junction://localhost/hoodat#jx");
+		final URI uri = URI.create("junction://localhost/jxserver#jx");
 		final SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
 		final ActivityScript script = new ActivityScript();
 		script.setFriendlyName("Test Session");
@@ -211,7 +214,7 @@ public class JXServer {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Set<RoomOccupancy> mmSubscriptions;
-        private final JsonHelper mmJsonHelper;
+        private JsonHandler mmJsonHelper;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -230,7 +233,6 @@ public class JXServer {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            mmJsonHelper = new JsonHelper(mmInStream, mmOutStream);
         }
 
         public void run() {
@@ -249,6 +251,7 @@ public class JXServer {
             		doHttpConnection(header);
             	} else if (header.startsWith("JUNCTION")) {
             		Log.d(TAG, "Found Junction connection");
+            		mmJsonHelper = new JsonSocketHandler(mmInStream, mmOutStream);
             		doJunctionConnection();
             	}
             } catch (IOException e) {
@@ -324,44 +327,8 @@ public class JXServer {
 			}
 
 			// TODO: support length prefixed data?
-			// doJunctionConnection();
-			
-			byte[] buffer = new byte[BUFFER_LENGTH];
-			int bytes = 0;
-			while (true) {
-                try {
-                	bytes = mmInStream.read(buffer);
-                	if (bytes == -1) {
-                		break;
-                	}
-                	
-                	if (buffer[0] != 0x00) {
-                		Log.e(TAG, "Bad frame header found in WebSocket connection");
-                		continue;
-                	}
-                	
-                	if (buffer[bytes-1] != (byte)0x000000FF) {
-                		Log.e(TAG, "Bad frame footer found in WebSocket connection");
-                		continue;
-                	}
-                	
-                	String str = new String(buffer, 1, bytes - 2);
-                	Log.d(TAG, "read " + str);
-                    JSONObject json = new JSONObject(str);
-                    
-                    if (json == null) {
-                    	continue; // break?
-                    }
-                    
-                    handleJson(json);
-                } catch (IOException e) {
-                    Log.e(TAG, "disconnected", e);
-                    //connectionLost();
-                    break;
-                } catch (JSONException e) {
-					Log.e(TAG, "Not a JSON message." + e);
-				}
-            }
+			mmJsonHelper = new JsonWebSocketHandler(mmInStream, mmOutStream);
+			doJunctionConnection();
         }
         
         private byte[] webSocketResponse(long p1, long p2, String p3) {
@@ -409,6 +376,7 @@ public class JXServer {
         }
         
         private void doJunctionConnection() {
+        	
             // Keep listening to the InputStream while connected
             while (true) {
                 try {

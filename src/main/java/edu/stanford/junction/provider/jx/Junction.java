@@ -31,6 +31,8 @@ import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.jx.JXServer.Log;
+import edu.stanford.junction.provider.jx.json.JsonHandler;
+import edu.stanford.junction.provider.jx.json.JsonSocketHandler;
 
 public class Junction extends edu.stanford.junction.Junction {
 	private static String TAG = "jx_client";
@@ -199,7 +201,7 @@ public class Junction extends edu.stanford.junction.Junction {
         private final Socket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private final JsonHelper mJsonHelper;
+        private final JsonHandler mJsonHelper;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -217,7 +219,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            mJsonHelper = new JsonHelper(mmInStream, mmOutStream);
+            mJsonHelper = new JsonSocketHandler(mmInStream, mmOutStream);
             
             connect();
         }
