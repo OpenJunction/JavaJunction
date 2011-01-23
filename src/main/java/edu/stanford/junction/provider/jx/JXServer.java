@@ -92,8 +92,19 @@ public class JXServer {
 			super.onActivityJoin();
 			Log.d(TAG, name + " joined session!");
 			try {
-				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! from: " + name + "\"}"));
-				Log.d(TAG, name + " sent a message.");
+				new Thread() {
+					boolean loop = false;
+					JSONObject hello = new JSONObject("{\"msg\":\"hello world! from: " + name + "\"}");
+					public void run() {
+						do {
+							sendMessageToSession(hello);
+							Log.d(TAG, name + " sent a message.");
+							try {
+								Thread.sleep(5000);
+							} catch (Exception e) {}
+						} while (loop);
+					};
+				}.start();
 				
 				if ("a3".equals(name)) {
 					sendMessageToActor(buddy.getActorID(), new JSONObject("{\"psst\":\"hi\"}"));
