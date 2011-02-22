@@ -82,17 +82,18 @@ public class PropDaemon extends Prop{
 		return 10000;
 	}
 
-
-
-
-
 	/**
 	 * Conveniance runner for PropDaemon
 	 * Expects two arguments: junction-url propName
 	 */
 	public static void main(String[] args){
+		if(args.length != 2){
+			System.out.println("Usage: PROGRAM junction-url propName");
+			System.exit(0);
+		}
+		String urlStr = args[0];
+		String propName = args[1];
 		
 	}
-
 
 }
