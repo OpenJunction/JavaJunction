@@ -35,17 +35,17 @@ public class PropStats{
 
 
 	public void addMessageRTT(long when, long elapsed){
-		messageRTTTimes.add(when);
+		messageRTTTimes.add(when - startTime);
 		messageRTTs.add(elapsed);
 	}
 
 	public void addPredictionQLength(long when, int len){
-		predictionQLengthTimes.add(when);
+		predictionQLengthTimes.add(when - startTime);
 		predictionQLengths.add(len);
 	}
 
 	public void addConflict(long when, int len){
-		conflictTimes.add(when);
+		conflictTimes.add(when - startTime);
 		conflictLengths.add(len);
 	}
 
