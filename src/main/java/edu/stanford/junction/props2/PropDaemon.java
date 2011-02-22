@@ -19,9 +19,17 @@ package edu.stanford.junction.props2;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.*;
+import java.net.*;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.extra.JSONObjWrapper;
+
+import edu.stanford.junction.JunctionException;
+import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.Junction;
+import edu.stanford.junction.SwitchboardConfig;
+import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.activity.JunctionExtra;
 
 public class PropDaemon extends Prop{
 	
@@ -91,9 +99,44 @@ public class PropDaemon extends Prop{
 			System.out.println("Usage: PROGRAM junction-url propName");
 			System.exit(0);
 		}
-		String urlStr = args[0];
-		String propName = args[1];
-		
+		final String urlStr = args[0];
+		final String propName = args[1];
+
+		JunctionActor actor = new JunctionActor("prop-daemon") {
+				public void onActivityJoin() {
+					System.out.println("Joined activity!");
+				}
+				public void onActivityCreate(){
+					System.out.println("Created activity!");
+				}
+				public void onMessageReceived(MessageHeader header, JSONObject msg){
+					System.out.println("Got message!");
+				}
+				public List<JunctionExtra> getInitialExtras(){
+					ArrayList<JunctionExtra> l = new ArrayList<JunctionExtra>();
+					l.add(new PropDaemon(propName));
+					return l;
+				}
+			};
+
+		try{
+			URI uri = new URI(urlStr);
+			SwitchboardConfig sb = JunctionMaker.getDefaultSwitchboardConfig(uri);
+			JunctionMaker jxMaker = JunctionMaker.getInstance(sb);
+			Junction jx = jxMaker.newJunction(uri, actor);
+		}
+		catch(URISyntaxException e){
+			System.err.println("Failed to parse url!");
+			e.printStackTrace(System.err);
+		}
+		catch(JunctionException e){
+			System.err.println("Failed to connect to junction activity!");
+			e.printStackTrace(System.err);
+		}
+		catch(Exception e){
+			System.err.println("Failed to connect to junction activity!");
+			e.printStackTrace(System.err);
+		}
 	}
 
 }
