@@ -1,4 +1,4 @@
-package edu.stanford.junction.provider.jx;
+package edu.stanford.junction.provider.jx.json;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import javax.naming.OperationNotSupportedException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import edu.stanford.junction.provider.jx.JXServer;
 import edu.stanford.junction.provider.jx.JXServer.Log;
 
 /**
@@ -20,16 +21,14 @@ import edu.stanford.junction.provider.jx.JXServer.Log;
  * by handling chunking for both reads and writes.
  *
  */
-public class JsonHelper {
-	final String TAG;
+public class JsonSocketHandler extends JsonHandler {
 	private static final int BUFFER_SIZE = 1024;
 	static int count = 0;
 	
 	private final OutputStream out;
 	private final InputStream in;
 	
-	public JsonHelper(InputStream in, OutputStream out) {
-		TAG = "json-"+(count++);
+	public JsonSocketHandler(InputStream in, OutputStream out) {
 		this.in = in;
 		this.out = new BufferedOutputStream(out);
 	}

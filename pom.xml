@@ -53,11 +53,23 @@
       <artifactId>martyr</artifactId>
       <version>0.4</version>
     </dependency>
-    
+    <!--
     <dependency>
       <groupId>org.jivesoftware</groupId>
       <artifactId>asmack-level7</artifactId>
       <version>3.1.1</version>
+    </dependency>
+    -->
+    
+    <dependency>
+      <groupId>org.jivesoftware</groupId>
+      <artifactId>smack</artifactId>
+      <version>3.0.4-android</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.jivesoftware</groupId>
+    	<artifactId>smackx</artifactId>
+        <version>3.0.4-android</version>
     </dependency>
     
     <dependency>

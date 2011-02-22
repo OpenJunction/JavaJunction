@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.URI;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,11 +23,14 @@ import edu.stanford.junction.SwitchboardConfig;
 import edu.stanford.junction.api.activity.ActivityScript;
 import edu.stanford.junction.api.activity.JunctionActor;
 import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.jx.json.JsonHandler;
+import edu.stanford.junction.provider.jx.json.JsonSocketHandler;
+import edu.stanford.junction.provider.jx.json.JsonWebSocketHandler;
 
 public class JXServer {
 	public static final int SERVER_PORT = 8283;
 	private static final String TAG = "jx_server";
-	private static final int BUFFER_LENGTH = 1024;
+	private static final int BUFFER_LENGTH = 2048;
 	
 	private Map<RoomId, JSONObject> mActivityScripts;
 	private Set<ConnectedThread> mConnections;
@@ -50,7 +54,7 @@ public class JXServer {
 		a3.buddy = a2;
 		
 		
-		final URI uri = URI.create("junction://localhost/hoodat#jx");
+		final URI uri = URI.create("junction://localhost/jxserver#jx");
 		final SwitchboardConfig cfg = JunctionMaker.getDefaultSwitchboardConfig(uri); 
 		final ActivityScript script = new ActivityScript();
 		script.setFriendlyName("Test Session");
@@ -88,8 +92,19 @@ public class JXServer {
 			super.onActivityJoin();
 			Log.d(TAG, name + " joined session!");
 			try {
-				sendMessageToSession(new JSONObject("{\"msg\":\"hello world!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! from: " + name + "\"}"));
-				Log.d(TAG, name + " sent a message.");
+				new Thread() {
+					boolean loop = false;
+					JSONObject hello = new JSONObject("{\"msg\":\"hello world! from: " + name + "\"}");
+					public void run() {
+						do {
+							sendMessageToSession(hello);
+							Log.d(TAG, name + " sent a message.");
+							try {
+								Thread.sleep(5000);
+							} catch (Exception e) {}
+						} while (loop);
+					};
+				}.start();
 				
 				if ("a3".equals(name)) {
 					sendMessageToActor(buddy.getActorID(), new JSONObject("{\"psst\":\"hi\"}"));
@@ -210,7 +225,7 @@ public class JXServer {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Set<RoomOccupancy> mmSubscriptions;
-        private final JsonHelper mmJsonHelper;
+        private JsonHandler mmJsonHelper;
 
         public ConnectedThread(Socket socket) {
             Log.d(TAG, "create ConnectedThread");
@@ -229,7 +244,6 @@ public class JXServer {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            mmJsonHelper = new JsonHelper(mmInStream, mmOutStream);
         }
 
         public void run() {
@@ -245,9 +259,10 @@ public class JXServer {
             	// determine request type
             	if (header.startsWith("GET ")) {
             		Log.d(TAG, "Found HTTP GET request");
-            		doHttpConnection();
+            		doHttpConnection(header);
             	} else if (header.startsWith("JUNCTION")) {
             		Log.d(TAG, "Found Junction connection");
+            		mmJsonHelper = new JsonSocketHandler(mmInStream, mmOutStream);
             		doJunctionConnection();
             	}
             } catch (IOException e) {
@@ -258,12 +273,121 @@ public class JXServer {
             cancel();
         }
         
-        private void doHttpConnection() {
-        	String response = "<html><em>Coming soon: The Long Poll.</em></html>";
-    		write(response.getBytes(), response.length());
+        private void doHttpConnection(String header) {
+        	Log.d(TAG, "HTTP header:\n" + header);
+        	String[] lines = header.split("\r\n");
+        	boolean isWebSocket = false;
+        	String origin = null;
+        	String host = null;
+        	String webSocketKey1 = null;
+        	String webSocketKey2 = null;
+
+        	for (String l : lines) {
+        		if (l.startsWith("Upgrade: WebSocket")) {
+        			isWebSocket = true;
+        		}
+        		if (l.startsWith("Sec-WebSocket-Key1: ")) {
+        			webSocketKey1 = l.substring(20);
+        		}
+        		if (l.startsWith("Sec-WebSocket-Key2: ")) {
+        			webSocketKey2 = l.substring(20);
+        		}
+        		
+        		if (l.startsWith("Origin: ")) {
+        			origin = l.substring(8);
+        		}
+        		
+        		if (l.startsWith("Host: ")) {
+        			host = l.substring(6);
+        		}
+        	}
+        	
+			if (!isWebSocket) {
+				Log.e(TAG, "Not a websocket request");
+				return;
+			}
+
+			long v1 = getKeyNumber(webSocketKey1);
+			long v2 = getKeyNumber(webSocketKey2);
+
+			int s1 = countSpaces(webSocketKey1);
+			int s2 = countSpaces(webSocketKey2);
+
+			if (v1 % s1 != 0 || v2 % s2 != 0) {
+				Log.e(TAG, "WebSocket failed handshake");
+			}
+			
+			long p1 = v1 / s1;
+			long p2 = v2 / s2;
+			String p3 = header.substring(header.length()-8);
+			byte[] response = webSocketResponse(p1, p2, p3);
+			String endpoint = "ws://" + host + "/"; // TODO
+			
+			this.write("HTTP/1.1 101 Web Socket Protocol Handshake\r\n");
+			this.write("Upgrade: WebSocket\r\n");
+			this.write("Connection: Upgrade\r\n");
+			this.write("Sec-WebSocket-Origin: " + origin + "\r\n");
+			this.write("Sec-WebSocket-Location: " + endpoint + "\r\n");
+			this.write("\r\n");
+			this.write(response, response.length);
+			try {
+				mmOutStream.flush();
+			} catch (IOException e) {
+				Log.e(TAG, "Error completing handshake", e);
+				return;
+			}
+
+			// TODO: support length prefixed data?
+			mmJsonHelper = new JsonWebSocketHandler(mmInStream, mmOutStream);
+			doJunctionConnection();
+        }
+        
+        private byte[] webSocketResponse(long p1, long p2, String p3) {
+        	try {
+        		byte[] challenge = new byte[16];
+        		challenge[0] = (byte)( p1 >>> 24 );
+        		challenge[1] = (byte)( (p1 << 8) >>> 24 );
+        		challenge[2] = (byte)( (p1 << 16) >>> 24 );
+        		challenge[3] = (byte)( (p1 << 24) >>> 24 );
+        		
+        		challenge[4] = (byte)( p2 >>> 24 );
+        		challenge[5] = (byte)( (p2 << 8) >>> 24 );
+        		challenge[6] = (byte)( (p2 << 16) >>> 24 );
+        		challenge[7] = (byte)( (p2 << 24) >>> 24 );
+        		
+        		System.arraycopy(p3.getBytes(), 0, challenge, 8, 8);
+        		
+        		MessageDigest md = MessageDigest.getInstance("MD5");
+        		byte[] resp = md.digest(challenge);
+        		return resp;
+        	} catch (Exception e) {
+        		Log.e(TAG, "Error computing response to websocket challenge", e);
+        		return null;
+        	}
+        }
+        
+        private long getKeyNumber(String key) {
+        	long n = 0;
+        	for (int i = 0; i < key.length(); i++) {
+        		char c = key.charAt(i);
+        		if ('0' <= c && c <= '9') {
+        			n = 10*n + (c-'0'); 
+        		}
+        	}
+        	return n;
+        }
+        
+        private int countSpaces(String key) {
+        	int n = 0;
+        	for (int i = 0; i < key.length(); i++) {
+        		char c = key.charAt(i);
+        		if (c == ' ') n++;
+        	}
+        	return n;
         }
         
         private void doJunctionConnection() {
+        	
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
@@ -282,6 +406,8 @@ public class JXServer {
                 
         private void handleJson(JSONObject json) {
         	try {
+        		Log.d(TAG, json.toString());
+        		
 	        	if (json.has(Junction.NS_JX)) {
 	            	JSONObject jx = json.getJSONObject(Junction.NS_JX);
 	            	if (jx.has(Junction.JX_SYS_MSG)) {
@@ -389,6 +515,15 @@ public class JXServer {
         public void write(byte[] buffer, int bytes) {
             try {
                 mmOutStream.write(buffer, 0, bytes);
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
+        }
+        
+        public void write(String buffer) {
+        	try {
+        		byte[] b = buffer.getBytes();
+                mmOutStream.write(b, 0, b.length);
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
