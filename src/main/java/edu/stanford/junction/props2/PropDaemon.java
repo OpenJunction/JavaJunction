@@ -81,12 +81,12 @@ public class PropDaemon extends Prop{
 	protected void handleReceivedOp(JSONObject opMsg){}
 
 	@Override
-	protected int helloInterval(){
+	protected long helloInterval(){
 		return 5000;
 	}
 
 	@Override
-	protected int syncRequestInterval(){
+	protected long syncRequestInterval(){
 		return 10000;
 	}
 

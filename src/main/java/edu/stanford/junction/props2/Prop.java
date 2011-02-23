@@ -120,8 +120,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			// Basic attempt to see if we're
 			// connected (checking for null actor and
 			// null junction).
-			if(active && getActor() != null && 
-			   getActor().getJunction() != null){
+			if(isActive()){
 
 				// Ignore failures. These are not time-criticial
 				// operations.
@@ -144,11 +143,15 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		}
 	}
 
-	protected int helloInterval(){
+	protected boolean isActive(){
+		return active && getActor() != null && getActor().getJunction() != null;
+	}
+
+	protected long helloInterval(){
 		return 3000;
 	}
 
-	protected int syncRequestInterval(){
+	protected long syncRequestInterval(){
 		return 5000;
 	}
 
