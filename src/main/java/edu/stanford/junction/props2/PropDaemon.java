@@ -54,6 +54,9 @@ public class PropDaemon extends Prop{
 			}
 		}
 		public IPropState copy(){ return new AnyState(this.state); }
+
+		public String toString(){ return state; }
+
 	}
 
 	public PropDaemon(String propName, IPropState state, long seqNum){
@@ -78,7 +81,35 @@ public class PropDaemon extends Prop{
 	 * Ignore state operations.
 	 */
 	@Override
-	protected void handleReceivedOp(JSONObject opMsg){}
+	protected void handleReceivedOp(JSONObject opMsg){
+		logInfo("Ignoring operation.");
+	}
+
+	protected long syncInterval = 10000;
+	private long lastSyncTime = 0;
+
+
+	/**
+	 * Slightly modify the behaviour of handleHello so that we 
+	 * don't request sync on every hello message we receive.
+	 *
+	 */
+	@Override
+	protected void handleHello(JSONObject msg){
+		if(!isSelfMsg(msg)){
+			long t = (new Date()).getTime();
+			long elapsedSinceLastSync = t - lastSyncTime;
+			long seqNum = msg.optLong("localSeqNum");
+			logInfo("Peer HELLO @ seqNum: " + seqNum);
+			if(seqNum > this.sequenceNum && (elapsedSinceLastSync > syncInterval)) {
+				enterSYNCMode();
+				lastSyncTime = t;
+			}
+		}
+		else{
+			logInfo("Self HELLO");
+		}
+	}
 
 	@Override
 	protected long helloInterval(){

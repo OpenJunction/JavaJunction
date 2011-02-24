@@ -422,15 +422,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				break;
 			}
 			case MSG_HELLO:{
-				if(!isSelfMsg(msg)){
-					logInfo(".");
-					if(msg.optLong("localSeqNum") > this.sequenceNum) {
-						enterSYNCMode();
-					}
-				}
-				else{
-					logInfo("->.");
-				}
+				handleHello(msg);
 				break;
 			}
 			case MSG_WHO_HAS_STATE:{
@@ -487,6 +479,20 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			default:
 				logInfo("SYNC mode: Ignoring message, "  + msg);
 			}
+		}
+	}
+
+
+	protected void handleHello(JSONObject msg){
+		if(!isSelfMsg(msg)){
+			long seqNum = msg.optLong("localSeqNum");
+			logInfo("Peer HELLO @ seqNum: " + seqNum);
+			if(seqNum > this.sequenceNum) {
+				enterSYNCMode();
+			}
+		}
+		else{
+			logInfo("Self HELLO");
 		}
 	}
 
