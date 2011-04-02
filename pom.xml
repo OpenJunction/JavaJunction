@@ -132,8 +132,7 @@
           <doclet>com.google.doclava.Doclava</doclet>
           <additionalparam>
 	  -quiet
-	  -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
-	  -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml
+	  -federate JDK http://srcrr.com/java/oracle/openjdk/6
 	  -hdf project.name "Junction for Java"
           -d ${project.build.directory}/doclava
 	  </additionalparam>
