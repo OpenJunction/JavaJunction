@@ -24,7 +24,6 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 import edu.stanford.junction.Junction;
-import edu.stanford.junction.api.messaging.MessageHandler;
 import edu.stanford.junction.api.messaging.MessageHeader;
 
 /**
@@ -44,6 +43,11 @@ public abstract class JunctionActor {
 		return mRoles;
 	}
 	
+	public JunctionActor() {
+		actorID = UUID.randomUUID().toString();
+		mRoles = new String[]{};
+	}
+
 	public JunctionActor(String role) {
 		actorID = UUID.randomUUID().toString();
 		mRoles = new String[]{role};
