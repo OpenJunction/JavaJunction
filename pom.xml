@@ -132,9 +132,11 @@
           <doclet>com.google.doclava.Doclava</doclet>
           <additionalparam>
 	  -quiet
-	  -federate JDK http://srcrr.com/java/oracle/openjdk/6
+	  -federate JDK http://srcrr.com/java/oracle/openjdk/6/reference
+	  -federate JSON http://srcrr.com/java/json/2011-02-02/reference
 	  -hdf project.name "Junction for Java"
           -d ${project.build.directory}/doclava
+          -overview ${project.build.directory}/../res/overview.html
 	  </additionalparam>
           <useStandardDocletOptions>false</useStandardDocletOptions>
 	  </configuration>
