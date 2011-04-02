@@ -1,6 +1,36 @@
 <api>
 <package name="edu.stanford.junction"
 >
+<class name="Basic"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Basic"
+ type="edu.stanford.junction.Basic"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String...">
+</parameter>
+</method>
+</class>
 <class name="Junction"
  extends="java.lang.Object"
  abstract="true"
@@ -986,6 +1016,14 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<constructor name="JunctionActor"
+ type="edu.stanford.junction.api.activity.JunctionActor"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
 <constructor name="JunctionActor"
  type="edu.stanford.junction.api.activity.JunctionActor"
  static="false"

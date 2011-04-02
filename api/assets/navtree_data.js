@@ -1,6 +1,6 @@
 var NAVTREE_DATA =
 [ [ "edu.stanford.junction", "edu/stanford/junction/package-summary.html", [ [ "Interfaces", null, [ [ "SwitchboardConfig", "edu/stanford/junction/SwitchboardConfig.html", null, "" ] ]
-, "" ], [ "Classes", null, [ [ "Junction", "edu/stanford/junction/Junction.html", null, "" ], [ "JunctionMaker", "edu/stanford/junction/JunctionMaker.html", null, "" ] ]
+, "" ], [ "Classes", null, [ [ "Basic", "edu/stanford/junction/Basic.html", null, "" ], [ "Junction", "edu/stanford/junction/Junction.html", null, "" ], [ "JunctionMaker", "edu/stanford/junction/JunctionMaker.html", null, "" ] ]
 , "" ], [ "Exceptions", null, [ [ "JunctionException", "edu/stanford/junction/JunctionException.html", null, "" ] ]
 , "" ] ]
 , "" ], [ "edu.stanford.junction.api.activity", "edu/stanford/junction/api/activity/package-summary.html", [ [ "Classes", null, [ [ "ActivityScript", "edu/stanford/junction/api/activity/ActivityScript.html", null, "" ], [ "Cast", "edu/stanford/junction/api/activity/Cast.html", null, "" ], [ "JunctionActor", "edu/stanford/junction/api/activity/JunctionActor.html", null, "" ], [ "JunctionExtra", "edu/stanford/junction/api/activity/JunctionExtra.html", null, "" ], [ "JunctionService", "edu/stanford/junction/api/activity/JunctionService.html", null, "" ] ]
