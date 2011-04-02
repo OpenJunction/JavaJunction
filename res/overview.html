@@ -1,0 +1,68 @@
+<body>
+<p>Junction is a library for creating device-spanning, cross-platform applications. 
+Junction provides an abstraction layer so that an application can easily communicate
+across devices. To get started, see the following classes:
+<ul>
+  <li>{@link edu.stanford.junction.Junction}, an object binding your application to the network.
+  <li>{@link edu.stanford.junction.api.activity.JunctionActor}, implement this class to hook into a session.
+  <li>{@link edu.stanford.junction.JunctionMaker}, 
+  creates the binding between the {@link edu.stanford.junction.Junction} and
+  {@link edu.stanford.junction.api.activity.JunctionActor}.
+</ul>
+</p>
+<p>The following is a basic Junction application. The code joins a freshly generated Junction session,
+sends a message, and prints the message to screen upon receiving it:
+<pre class="prettyprint">
+package edu.stanford.junction.demo;
+
+import java.net.URI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.stanford.junction.JunctionException;
+import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
+
+public class JunctionDemo {
+  public static void main(String... args) {
+    SwitchboardConfig config = new XMPPSwitchboardConfig("sb.openjunction.org");
+    JunctionMaker junctionMaker = JunctionMaker.getInstance(config);
+    JunctionActor actor = new MyActor();
+    URI uri = junctionMaker.generateSessionUri();
+    try {
+      junctionMaker.newJunction(uri, actor);
+    } catch (JunctionException e) {
+      e.printStackTrace();
+    }
+    // Junction runs off of this thread.
+    synchronized(actor) {
+    try {
+      actor.wait();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+}
+	
+static class MyActor extends JunctionActor {
+  public void onMessageReceived(MessageHeader header, JSONObject message) {
+    System.out.println("Got " + message);
+    // We're done here, let the main thread exit.
+    synchronized (this) {
+      this.notify();
+    }
+  }
+
+  public void onActivityJoin() {
+    JSONObject message = null;
+    try {
+      message = new JSONObject("{\"text\":\"hello world!\"}");
+    } catch (JSONException e) {}
+      this.sendMessageToSession(message);
+    };
+  };
+}
+</pre>
+</body>
