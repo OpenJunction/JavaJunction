@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import edu.stanford.junction.JunctionMaker;
 
+@Deprecated
 public class ActivityScript {
 	
 	/**

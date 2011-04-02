@@ -36,7 +36,10 @@ import edu.stanford.junction.provider.jx.JXSwitchboardConfig;
 import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
 import edu.stanford.junction.provider.irc.IRCSwitchboardConfig;
 
-
+/**
+ * This class creates {@link Junction} objects, binding {@link JunctionActor}
+ * objects to an activity.
+ */
 public class JunctionMaker {
 	public static final String DIRECTOR_ACTIVITY = "edu.stanford.junction.director";
 	public static final URI  CASTING_DIRECTOR;
@@ -50,7 +53,11 @@ public class JunctionMaker {
 		CASTING_DIRECTOR = dumbWayToAssignStaticFinalURI;
 	}
 	protected JunctionProvider mProvider;
-	
+
+        /**
+         * Returns a new {@link JunctionMaker} object with the type specified
+         * by the given {@link SwitchboardConfig} object.
+         */
 	public static JunctionMaker getInstance(SwitchboardConfig switchboardConfig) {
 		// TODO: map config to maker?
 		JunctionMaker maker = new JunctionMaker();
@@ -99,15 +106,16 @@ public class JunctionMaker {
 	 * This method has been deprecated. Please see 
 	 * {@link newJunction(URI, ActivityScript, JunctionActor)}
 	 */
-	@Deprecated
 	public Junction newJunction(URI uri, JunctionActor actor) throws JunctionException {
 		return mProvider.newJunction(uri, null, actor);
 	}
 	
+	@Deprecated
 	public Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException{
 		return mProvider.newJunction(uri, script, actor);
 	}
 	
+	@Deprecated
 	public Junction newJunction(ActivityScript desc, JunctionActor actor) throws JunctionException{
 		URI sessionUri;
 		if (desc == null) {

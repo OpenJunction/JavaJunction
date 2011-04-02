@@ -33,11 +33,8 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 import edu.stanford.junction.provider.ExtrasDirector;
 
 /**
- *  This class is the glue between an
- * app-developer's actor and the service
- * provider's junction implementation.
- * 
- *    <actor> :: [JUNCTION] :: <junction provider>
+ * This class is the glue between an application developer's actor
+ * and the service provider's junction implementation.
  */
 public abstract class Junction {
 	protected JunctionActor mOwner;
