@@ -137,6 +137,7 @@
 	  -hdf project.name "Junction for Java"
           -d ${project.build.directory}/doclava
           -overview ${project.build.directory}/../res/overview.html
+          -generatesources
 	  </additionalparam>
           <useStandardDocletOptions>false</useStandardDocletOptions>
 	  </configuration>
