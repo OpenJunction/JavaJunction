@@ -35,58 +35,58 @@ import edu.stanford.junction.extra.JSONObjWrapper;
  */
 
 public abstract class Prop extends JunctionExtra implements IProp{
-	private static final int MODE_NORM = 1;
-	private static final int MODE_SYNC = 2;
+	protected static final int MODE_NORM = 1;
+	protected static final int MODE_SYNC = 2;
 
-	private static final int MSG_STATE_OPERATION = 1;
-	private static final int MSG_WHO_HAS_STATE = 2;
-	private static final int MSG_I_HAVE_STATE = 3;
-	private static final int MSG_SEND_ME_STATE = 4;
-	private static final int MSG_STATE_SYNC = 5;
-	private static final int MSG_HELLO = 6;
+	public static final int MSG_STATE_OPERATION = 1;
+	public static final int MSG_WHO_HAS_STATE = 2;
+	public static final int MSG_I_HAVE_STATE = 3;
+	public static final int MSG_SEND_ME_STATE = 4;
+	public static final int MSG_STATE_SYNC = 5;
+	public static final int MSG_HELLO = 6;
 
 	public static final String EVT_CHANGE = "change";
 	public static final String EVT_SYNC = "sync";
 	public static final String EVT_ANY = "*";
 
 	// Try to use Use zlib compression when sending/receiving state syncs
-	private static final boolean COMPRESS_STATE_SYNC = true;
+	protected static final boolean COMPRESS_STATE_SYNC = true;
 
 	// Temporarily disable change notifications
 	// for efficiency sometimes.
-	private boolean enableChangeEvents = true;
+	protected boolean enableChangeEvents = true;
 
-	private String uuid = UUID.randomUUID().toString();
-	private String propName;
-	private String propReplicaName = "";
+	protected String uuid = UUID.randomUUID().toString();
+	protected String propName;
+	protected String propReplicaName = "";
 
-	private IPropState state;
-	private IPropState cleanState;
+	protected IPropState state;
+	protected IPropState cleanState;
 
-	private long sequenceNum = 0;
-	private String lastOpUUID = "";
+	protected long sequenceNum = 0;
+	protected String lastOpUUID = "";
 
-	private long staleness = 0;
+	protected long staleness = 0;
 
-	private int mode = MODE_NORM;
-	private String syncId = "";
+	protected int mode = MODE_NORM;
+	protected String syncId = "";
 
 	// In sync mode, between the time when we send
 	// WHO_HAS_STATE and when we exit sync mode, track
 	// the highest seqId so far received via a I_HAVE_STATE
 	// message. Send more than one SEND_ME_STATE message if 
 	// we get better offers.
-	private long bestSyncSeqNum = -1;
+	protected long bestSyncSeqNum = -1;
 
-	private Vector<JSONObject> opsSYNC = new Vector<JSONObject>();
+	protected Vector<JSONObject> opsSYNC = new Vector<JSONObject>();
 
-	private Vector<JSONObject> pendingLocals = new Vector<JSONObject>();
-	private Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
+	protected Vector<JSONObject> pendingLocals = new Vector<JSONObject>();
+	protected Vector<IPropChangeListener> changeListeners = new Vector<IPropChangeListener>();
 
-	private PropStats propStats = null;
+	protected PropStats propStats = null;
 
-	private Timer taskTimer;
-	private boolean active = false;
+	protected Timer taskTimer;
+	protected boolean active = false;
 
 	public Prop(String propName, String propReplicaName, IPropState state, long seqNum){
 		this.propName = propName;
@@ -102,13 +102,17 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		this(propName, propReplicaName, state, 0);
 	}
 
+	public Prop(String propName, IPropState state, long seqNum){
+		this(propName, propName + "-replica" + UUID.randomUUID().toString(), state, seqNum);
+	}
+
 	public Prop(String propName, IPropState state){
 		this(propName, propName + "-replica" + UUID.randomUUID().toString(), state);
 	}
 
 
-	private long timeOfLastSyncRequest = 0;
-	private long timeOfLastHello = 0;
+	protected long timeOfLastSyncRequest = 0;
+	protected long timeOfLastHello = 0;
 	class PeriodicTask extends TimerTask{
 		public void run(){
 			long t = (new Date()).getTime();
@@ -116,19 +120,18 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			// Basic attempt to see if we're
 			// connected (checking for null actor and
 			// null junction).
-			if(active && getActor() != null && 
-			   getActor().getJunction() != null){
+			if(isActive()){
 
 				// Ignore failures. These are not time-criticial
 				// operations.
 				try{
 					if(mode == MODE_NORM){
-						if((t - timeOfLastHello) > 3000){
+						if((t - timeOfLastHello) > helloInterval()){
 							sendHello();
 						}
 					}
 					else if(mode == MODE_SYNC){
-						if((t - timeOfLastSyncRequest) > 5000){
+						if((t - timeOfLastSyncRequest) > syncRequestInterval()){
 							broadcastSyncRequest();
 						}
 					}
@@ -138,6 +141,18 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				}
 			}
 		}
+	}
+
+	protected boolean isActive(){
+		return active && getActor() != null && getActor().getJunction() != null;
+	}
+
+	protected long helloInterval(){
+		return 3000;
+	}
+
+	protected long syncRequestInterval(){
+		return 5000;
 	}
 
 	abstract public IProp newFresh();
@@ -276,7 +291,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	// A helper utility.
 	// TODO: Calling this over and over for long pendingLocals
 	// buffers is inefficient.
-	private void removePendingLocal(JSONObject opMsg){
+	protected void removePendingLocal(JSONObject opMsg){
 		Iterator<JSONObject> it = this.pendingLocals.iterator();
 		String uuid = opMsg.optString("uuid");
 		while(it.hasNext()){
@@ -407,15 +422,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 				break;
 			}
 			case MSG_HELLO:{
-				if(!isSelfMsg(msg)){
-					logInfo(".");
-					if(msg.optLong("localSeqNum") > this.sequenceNum) {
-						enterSYNCMode();
-					}
-				}
-				else{
-					logInfo("->.");
-				}
+				handleHello(msg);
 				break;
 			}
 			case MSG_WHO_HAS_STATE:{
@@ -472,6 +479,20 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			default:
 				logInfo("SYNC mode: Ignoring message, "  + msg);
 			}
+		}
+	}
+
+
+	protected void handleHello(JSONObject msg){
+		if(!isSelfMsg(msg)){
+			long seqNum = msg.optLong("localSeqNum");
+			logInfo("Peer HELLO @ seqNum: " + seqNum);
+			if(seqNum > this.sequenceNum) {
+				enterSYNCMode();
+			}
+		}
+		else{
+			logInfo("Self HELLO");
 		}
 	}
 
@@ -572,7 +593,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 			/*** STATS INSTRUMENTATION ****/
 			if(propStats != null){
 				try{
-				msg.put("nanoTime", System.nanoTime());
+					msg.put("nanoTime", System.nanoTime());
 				}catch(JSONException e){}
 			}
 
