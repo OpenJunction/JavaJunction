@@ -4,12 +4,13 @@ edu.stanford.junction.api.messaging
 edu.stanford.junction.api.messaging.target
 edu.stanford.junction.director
 edu.stanford.junction.extra
-edu.stanford.junction.props
-edu.stanford.junction.props.sample
 edu.stanford.junction.props2
 edu.stanford.junction.props2.sample
 edu.stanford.junction.provider
+edu.stanford.junction.provider.irc
 edu.stanford.junction.provider.jvm
+edu.stanford.junction.provider.jx
+edu.stanford.junction.provider.jx.json
 edu.stanford.junction.provider.xmpp
 edu.stanford.junction.sample.extra
 edu.stanford.junction.sample.helloworld

@@ -48,10 +48,12 @@
 
 
 
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for Junction for Java." />
+
 <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.ico" />
 <title>
 
@@ -61,16 +63,16 @@
 | Junction for Java
 
 </title>
-<link href="../../../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
 <link href="../../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
 <script src="../../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
 <script src="../../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
-<script src="../../../../../../assets/android-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
 <script src="../../../../../../assets/prettify.js" type="text/javascript"></script>
 <script type="text/javascript">
   setToRoot("../../../../../", "../../../../../../assets/");
 </script>
-<script src="../../../../../../assets/android-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
 <script src="../../../../../../assets/navtree_data.js" type="text/javascript"></script>
 <script src="../../../../../../assets/customizations.js" type="text/javascript"></script>
 <noscript>
@@ -155,17 +157,19 @@
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
     <li class="api apilevel-">
-  <a href="../../../../../edu/stanford/junction/props/package-summary.html">edu.stanford.junction.props</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../../edu/stanford/junction/props/sample/package-summary.html">edu.stanford.junction.props.sample</a></li>
-    <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/props2/sample/package-summary.html">edu.stanford.junction.props2.sample</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/package-summary.html">edu.stanford.junction.provider</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/irc/package-summary.html">edu.stanford.junction.provider.irc</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/jvm/package-summary.html">edu.stanford.junction.provider.jvm</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/jx/package-summary.html">edu.stanford.junction.provider.jx</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
@@ -187,6 +191,7 @@
               
     <li><h2>Classes</h2>
       <ul>
+          <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/provider/xmpp/ConnectionTimeoutException.html">ConnectionTimeoutException</a></li>
           <li class="selected api apilevel-"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html">Junction</a></li>
           <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/provider/xmpp/JunctionProvider.html">JunctionProvider</a></li>
           <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/provider/xmpp/XMPPSwitchboardConfig.html">XMPPSwitchboardConfig</a></li>
@@ -251,6 +256,11 @@
 
 
 <div class="sum-details-links">
+
+<div>
+<a href="Junction-source.html">View Source</a>
+</div>
+
 
 Summary:
 
@@ -331,7 +341,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell">java.lang.Object</td>
     </tr>
     
 
@@ -417,7 +427,7 @@ Summary:
           public
           static
           
-          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr></td>
+          String</nobr></td>
           <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#NS_JX">NS_JX</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
@@ -428,7 +438,7 @@ Summary:
           protected
           
           
-          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr></td>
+          URI</nobr></td>
           <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#mAcceptedInvitation">mAcceptedInvitation</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
@@ -480,8 +490,19 @@ Summary:
           public
           static
           
-          <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr></td>
+          String</nobr></td>
           <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/Junction.html#NS_JX">NS_JX</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="../../../../../edu/stanford/junction/api/activity/JunctionActor.html">JunctionActor</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/Junction.html#mOwner">mOwner</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
@@ -549,9 +570,6 @@ Summary:
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#disconnect()">disconnect</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Activity Lifecycle
-</div>
-  
   </td></tr>
 
 
@@ -566,7 +584,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#doSendMessageToActor(java.lang.String, org.json.JSONObject)">doSendMessageToActor</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorID, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#doSendMessageToActor(java.lang.String, org.json.JSONObject)">doSendMessageToActor</a></span>(String actorID, JSONObject message)</nobr>
         
   </td></tr>
 
@@ -582,7 +600,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#doSendMessageToRole(java.lang.String, org.json.JSONObject)">doSendMessageToRole</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#doSendMessageToRole(java.lang.String, org.json.JSONObject)">doSendMessageToRole</a></span>(String role, JSONObject message)</nobr>
         
         <div class="jd-descrdiv">Messaging
 </div>
@@ -614,7 +632,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getAcceptedInvitation()">getAcceptedInvitation</a></span>()</nobr>
@@ -630,7 +648,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getActivityID()">getActivityID</a></span>()</nobr>
@@ -684,7 +702,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getBaseInvitationURI()">getBaseInvitationURI</a></span>()</nobr>
@@ -703,7 +721,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a></nobr>
+            String[]</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getRoles()">getRoles</a></span>()</nobr>
@@ -719,7 +737,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getSessionID()">getSessionID</a></span>()</nobr>
@@ -735,7 +753,7 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/provider/xmpp/Junction.html#getSwitchboard()">getSwitchboard</a></span>()</nobr>
@@ -854,9 +872,6 @@ From class
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#disconnect()">disconnect</a></span>()</nobr>
         
-        <div class="jd-descrdiv">Activity Lifecycle
-</div>
-  
   </td></tr>
 
 
@@ -871,7 +886,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#doSendMessageToActor(java.lang.String, org.json.JSONObject)">doSendMessageToActor</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorID, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#doSendMessageToActor(java.lang.String, org.json.JSONObject)">doSendMessageToActor</a></span>(String actorID, JSONObject message)</nobr>
         
   </td></tr>
 
@@ -887,7 +902,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#doSendMessageToRole(java.lang.String, org.json.JSONObject)">doSendMessageToRole</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#doSendMessageToRole(java.lang.String, org.json.JSONObject)">doSendMessageToRole</a></span>(String role, JSONObject message)</nobr>
         
         <div class="jd-descrdiv">Messaging
 </div>
@@ -919,7 +934,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getAcceptedInvitation()">getAcceptedInvitation</a></span>()</nobr>
@@ -949,7 +964,7 @@ From class
 	 
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
-            abstract
+            
             
             
             
@@ -973,7 +988,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getBaseInvitationURI()">getBaseInvitationURI</a></span>()</nobr>
@@ -992,7 +1007,7 @@ From class
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getInvitationURI()">getInvitationURI</a></span>()</nobr>
@@ -1008,10 +1023,10 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a></nobr>
+            URI</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getInvitationURI(java.lang.String)">getInvitationURI</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getInvitationURI(java.lang.String)">getInvitationURI</a></span>(String role)</nobr>
         
   </td></tr>
 
@@ -1024,7 +1039,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getSessionID()">getSessionID</a></span>()</nobr>
@@ -1040,7 +1055,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#getSwitchboard()">getSwitchboard</a></span>()</nobr>
@@ -1075,7 +1090,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#sendMessageToActor(java.lang.String, org.json.JSONObject)">sendMessageToActor</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorID, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#sendMessageToActor(java.lang.String, org.json.JSONObject)">sendMessageToActor</a></span>(String actorID, JSONObject message)</nobr>
         
   </td></tr>
 
@@ -1091,7 +1106,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#sendMessageToRole(java.lang.String, org.json.JSONObject)">sendMessageToRole</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role, JSONObject message)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#sendMessageToRole(java.lang.String, org.json.JSONObject)">sendMessageToRole</a></span>(String role, JSONObject message)</nobr>
         
   </td></tr>
 
@@ -1123,13 +1138,32 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#setActor(edu.stanford.junction.api.activity.JunctionActor)">setActor</a></span>(<a href="../../../../../edu/stanford/junction/api/activity/JunctionActor.html">JunctionActor</a> actor)</nobr>
+        
+        <div class="jd-descrdiv">Activity Lifecycle
+</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/Junction.html#triggerActorJoin(boolean)">triggerActorJoin</a></span>(boolean isCreator)</nobr>
         
   </td></tr>
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1159,7 +1193,7 @@ From class
           class="jd-expando-trigger-img" /></a>
 From class
 
-  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a>
+  java.lang.Object
 
 <div id="inherited-methods-java.lang.Object">
   <div id="inherited-methods-java.lang.Object-list"
@@ -1178,7 +1212,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            Object</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">clone</span>()</nobr>
@@ -1197,7 +1231,7 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <span class="sympad">equals</span>(Object arg0)</nobr>
         
   </td></tr>
 
@@ -1226,7 +1260,7 @@ From class
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            Class&lt;?&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">getClass</span>()</nobr>
@@ -1290,7 +1324,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">toString</span>()</nobr>
@@ -1392,7 +1426,7 @@ From class
         public 
         static 
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        String
       </span>
         NS_JX
     </h4>
@@ -1422,7 +1456,7 @@ From class
         protected 
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a>
+        URI
       </span>
         mAcceptedInvitation
     </h4>
@@ -1556,8 +1590,7 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>Activity Lifecycle
-</p></div>
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
 
     </div>
 </div>
@@ -1576,7 +1609,7 @@ From class
         void
       </span>
       <span class="sympad">doSendMessageToActor</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorID, JSONObject message)</span>
+      <span class="normal">(String actorID, JSONObject message)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1607,7 +1640,7 @@ From class
         void
       </span>
       <span class="sympad">doSendMessageToRole</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role, JSONObject message)</span>
+      <span class="normal">(String role, JSONObject message)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1667,7 +1700,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a>
+        URI
       </span>
       <span class="sympad">getAcceptedInvitation</span>
       <span class="normal">()</span>
@@ -1698,7 +1731,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        String
       </span>
       <span class="sympad">getActivityID</span>
       <span class="normal">()</span>
@@ -1793,7 +1826,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/net/URI.html">URI</a>
+        URI
       </span>
       <span class="sympad">getBaseInvitationURI</span>
       <span class="normal">()</span>
@@ -1825,7 +1858,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String[]</a>
+        String[]
       </span>
       <span class="sympad">getRoles</span>
       <span class="normal">()</span>
@@ -1856,7 +1889,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        String
       </span>
       <span class="sympad">getSessionID</span>
       <span class="normal">()</span>
@@ -1887,7 +1920,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        String
       </span>
       <span class="sympad">getSwitchboard</span>
       <span class="normal">()</span>
@@ -2053,7 +2086,7 @@ Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end body-content --> 
 
 <script type="text/javascript">
-init(); /* initialize android-developer-docs.js */
+init(); /* initialize doclava-developer-docs.js */
 </script>
 
 </body>

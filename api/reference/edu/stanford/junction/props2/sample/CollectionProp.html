@@ -48,10 +48,12 @@
 
 
 
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for Junction for Java." />
+
 <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.ico" />
 <title>
 
@@ -61,16 +63,16 @@
 | Junction for Java
 
 </title>
-<link href="../../../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
 <link href="../../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
 <script src="../../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
 <script src="../../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
-<script src="../../../../../../assets/android-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
 <script src="../../../../../../assets/prettify.js" type="text/javascript"></script>
 <script type="text/javascript">
   setToRoot("../../../../../", "../../../../../../assets/");
 </script>
-<script src="../../../../../../assets/android-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
 <script src="../../../../../../assets/navtree_data.js" type="text/javascript"></script>
 <script src="../../../../../../assets/customizations.js" type="text/javascript"></script>
 <noscript>
@@ -155,17 +157,19 @@
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
     <li class="api apilevel-">
-  <a href="../../../../../edu/stanford/junction/props/package-summary.html">edu.stanford.junction.props</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../../edu/stanford/junction/props/sample/package-summary.html">edu.stanford.junction.props.sample</a></li>
-    <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../edu/stanford/junction/props2/sample/package-summary.html">edu.stanford.junction.props2.sample</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/package-summary.html">edu.stanford.junction.provider</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/irc/package-summary.html">edu.stanford.junction.provider.irc</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/jvm/package-summary.html">edu.stanford.junction.provider.jvm</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/jx/package-summary.html">edu.stanford.junction.provider.jx</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
@@ -189,8 +193,8 @@
       <ul>
           <li class="selected api apilevel-"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html">CollectionProp</a></li>
           <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/props2/sample/ListProp.html">ListProp</a></li>
+          <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/props2/sample/ListState.html">ListState</a></li>
           <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/props2/sample/SetProp.html">SetProp</a></li>
-          <li class="api apilevel-"><a href="../../../../../edu/stanford/junction/props2/sample/TextProp.html">TextProp</a></li>
       </ul>
     </li>
               
@@ -241,6 +245,15 @@
    
   
   
+   
+  
+  
+
+  
+   
+  
+  
+  
   
 
   
@@ -260,6 +273,11 @@
 
 <div class="sum-details-links">
 
+<div>
+<a href="CollectionProp-source.html">View Source</a>
+</div>
+
+
 Summary:
 
 
@@ -271,6 +289,9 @@ Summary:
   
 
 
+
+  &#124; <a href="#inhfields">Inherited Fields</a>
+  
 
 
   &#124; <a href="#pubctors">Ctors</a>
@@ -343,7 +364,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="4" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="4" class="jd-inheritance-class-cell">java.lang.Object</td>
     </tr>
     
 
@@ -490,15 +511,85 @@ Summary:
 
     
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-typecol">boolean</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#COMPRESS_STATE_SYNC">COMPRESS_STATE_SYNC</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">String</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#EVT_ANY">EVT_ANY</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">String</td>
         <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#EVT_CHANGE">EVT_CHANGE</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class=" api apilevel-" >
-        <td class="jd-typecol"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></td>
+        <td class="jd-typecol">String</td>
         <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#EVT_SYNC">EVT_SYNC</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MODE_NORM">MODE_NORM</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MODE_SYNC">MODE_SYNC</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_HELLO">MSG_HELLO</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_I_HAVE_STATE">MSG_I_HAVE_STATE</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_SEND_ME_STATE">MSG_SEND_ME_STATE</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_STATE_OPERATION">MSG_STATE_OPERATION</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_STATE_SYNC">MSG_STATE_SYNC</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#MSG_WHO_HAS_STATE">MSG_WHO_HAS_STATE</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
@@ -513,12 +604,272 @@ Summary:
 
 
 
+
+
 </table>
 
 
 
 
 
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-edu.stanford.junction.props2.Prop" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-edu.stanford.junction.props2.Prop-trigger"
+          src="../../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../../edu/stanford/junction/props2/Prop.html">edu.stanford.junction.props2.Prop</a>
+<div id="inherited-fields-edu.stanford.junction.props2.Prop">
+  <div id="inherited-fields-edu.stanford.junction.props2.Prop-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-edu.stanford.junction.props2.Prop-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          boolean</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#active">active</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          long</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#bestSyncSeqNum">bestSyncSeqNum</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          Vector&lt;<a href="../../../../../edu/stanford/junction/props2/IPropChangeListener.html">IPropChangeListener</a>&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#changeListeners">changeListeners</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#cleanState">cleanState</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          boolean</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#enableChangeEvents">enableChangeEvents</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#lastOpUUID">lastOpUUID</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          int</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#mode">mode</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          Vector&lt;JSONObject&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#opsSYNC">opsSYNC</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          Vector&lt;JSONObject&gt;</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#pendingLocals">pendingLocals</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#propName">propName</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#propReplicaName">propReplicaName</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="../../../../../edu/stanford/junction/props2/PropStats.html">PropStats</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#propStats">propStats</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          long</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#sequenceNum">sequenceNum</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          long</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#staleness">staleness</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#state">state</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#syncId">syncId</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          Timer</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#taskTimer">taskTimer</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          long</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#timeOfLastHello">timeOfLastHello</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          long</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#timeOfLastSyncRequest">timeOfLastSyncRequest</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          String</nobr></td>
+          <td class="jd-linkcol"><a href="../../../../../edu/stanford/junction/props2/Prop.html#uuid">uuid</a></td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+
+</table>
 
 
 
@@ -539,7 +890,23 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#CollectionProp(java.lang.String, java.lang.String, edu.stanford.junction.props2.IPropState)">CollectionProp</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> propName, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#CollectionProp(java.lang.String, java.lang.String, edu.stanford.junction.props2.IPropState, long)">CollectionProp</a></span>(String propName, String propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state, long seqNum)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#CollectionProp(java.lang.String, java.lang.String, edu.stanford.junction.props2.IPropState)">CollectionProp</a></span>(String propName, String propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state)</nobr>
         
   </td></tr>
 
@@ -584,7 +951,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#delete(org.json.JSONObject)">delete</a></span>(JSONObject item)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#clear()">clear</a></span>()</nobr>
         
   </td></tr>
 
@@ -600,7 +967,7 @@ Summary:
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#doRandom()">doRandom</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#delete(org.json.JSONObject)">delete</a></span>(JSONObject item)</nobr>
         
   </td></tr>
 
@@ -613,7 +980,23 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;JSONObject&gt;</nobr>
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#doRandom()">doRandom</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            Collection&lt;JSONObject&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#items()">items</a></span>()</nobr>
@@ -622,7 +1005,7 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -675,7 +1058,7 @@ Summary:
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newDeleteOp(org.json.JSONObject)">newDeleteOp</a></span>(JSONObject item)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newClearOp()">newClearOp</a></span>()</nobr>
         
   </td></tr>
 
@@ -691,7 +1074,7 @@ Summary:
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newReplaceOp(org.json.JSONObject, org.json.JSONObject)">newReplaceOp</a></span>(JSONObject item1, JSONObject item2)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newDeleteOp(org.json.JSONObject)">newDeleteOp</a></span>(JSONObject item)</nobr>
         
   </td></tr>
 
@@ -704,10 +1087,10 @@ Summary:
             
             
             
-            <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr>
+            JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newState()">newState</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newReplaceOp(org.json.JSONObject, org.json.JSONObject)">newReplaceOp</a></span>(JSONObject item1, JSONObject item2)</nobr>
         
   </td></tr>
 
@@ -723,13 +1106,29 @@ Summary:
             <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newStateWith(java.util.Collection<org.json.JSONObject>)">newStateWith</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;JSONObject&gt; items)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newState()">newState</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/sample/CollectionProp.html#newStateWith(java.util.Collection<org.json.JSONObject>)">newStateWith</a></span>(Collection&lt;JSONObject&gt; items)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -780,7 +1179,7 @@ From class
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            
+            synchronized
             
             
             
@@ -838,7 +1237,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#assertTrue(java.lang.String, boolean)">assertTrue</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> s, boolean cond)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#assertTrue(java.lang.String, boolean)">assertTrue</a></span>(String s, boolean cond)</nobr>
         
   </td></tr>
 
@@ -882,14 +1281,14 @@ From class
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            
+            synchronized
             
             
             
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#dispatchChangeNotification(java.lang.String, java.lang.Object)">dispatchChangeNotification</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> evtType, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> o)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#dispatchChangeNotification(java.lang.String, java.lang.Object)">dispatchChangeNotification</a></span>(String evtType, Object o)</nobr>
         
   </td></tr>
 
@@ -934,10 +1333,44 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="../../../../../edu/stanford/junction/props2/PropStats.html">PropStats</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#getAndDisableStats()">getAndDisableStats</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#getPropName()">getPropName</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">The name of the prop at large.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#getPropReplicaName()">getPropReplicaName</a></span>()</nobr>
         
   </td></tr>
 
@@ -955,6 +1388,9 @@ From class
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#getSequenceNum()">getSequenceNum</a></span>()</nobr>
         
+        <div class="jd-descrdiv">The internal counter that tracks how many operations 
+ have been executed on this prop's state.</div>
+  
   </td></tr>
 
 
@@ -982,10 +1418,10 @@ From class
             
             
             
-            <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a></nobr>
+            void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#getState()">getState</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#handleHello(org.json.JSONObject)">handleHello</a></span>(JSONObject msg)</nobr>
         
   </td></tr>
 
@@ -1051,6 +1487,38 @@ From class
             
             
             
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#helloInterval()">helloInterval</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#isActive()">isActive</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
@@ -1070,7 +1538,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logErr(java.lang.String)">logErr</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> s)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logErr(java.lang.String)">logErr</a></span>(String s)</nobr>
         
   </td></tr>
 
@@ -1086,7 +1554,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logInfo(java.lang.String)">logInfo</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> s)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logInfo(java.lang.String)">logInfo</a></span>(String s)</nobr>
         
   </td></tr>
 
@@ -1102,13 +1570,29 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logState(java.lang.String)">logState</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> s)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#logState(java.lang.String)">logState</a></span>(String s)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="../../../../../edu/stanford/junction/props2/IProp.html">IProp</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newFresh()">newFresh</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1124,7 +1608,7 @@ From class
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1134,7 +1618,23 @@ From class
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newIHaveStateMsg(java.lang.String)">newIHaveStateMsg</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> syncId)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newIHaveStateMsg(java.lang.String)">newIHaveStateMsg</a></span>(String syncId)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../../../edu/stanford/junction/props2/IProp.html">IProp</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newKeepingListeners()">newKeepingListeners</a></span>()</nobr>
         
   </td></tr>
 
@@ -1150,7 +1650,7 @@ From class
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newSendMeStateMsg(java.lang.String)">newSendMeStateMsg</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> syncId)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newSendMeStateMsg(java.lang.String)">newSendMeStateMsg</a></span>(String syncId)</nobr>
         
   </td></tr>
 
@@ -1182,7 +1682,7 @@ From class
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newStateSyncMsg(java.lang.String)">newStateSyncMsg</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> syncId)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newStateSyncMsg(java.lang.String, boolean)">newStateSyncMsg</a></span>(String syncId, boolean compress)</nobr>
         
   </td></tr>
 
@@ -1198,7 +1698,7 @@ From class
             JSONObject</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newWhoHasStateMsg(java.lang.String)">newWhoHasStateMsg</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> syncId)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#newWhoHasStateMsg(java.lang.String)">newWhoHasStateMsg</a></span>(String syncId)</nobr>
         
   </td></tr>
 
@@ -1215,6 +1715,70 @@ From class
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#reifyState(org.json.JSONObject)">reifyState</a></span>(JSONObject obj)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#removeAllChangeListeners()">removeAllChangeListeners</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#removeChangeListener(edu.stanford.junction.props2.IPropChangeListener)">removeChangeListener</a></span>(<a href="../../../../../edu/stanford/junction/props2/IPropChangeListener.html">IPropChangeListener</a> listener)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#removeChangeListenersOfType(java.lang.String)">removeChangeListenersOfType</a></span>(String type)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#removePendingLocal(org.json.JSONObject)">removePendingLocal</a></span>(JSONObject opMsg)</nobr>
         
   </td></tr>
 
@@ -1265,7 +1829,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#sendMessageToPropReplica(java.lang.String, org.json.JSONObject)">sendMessageToPropReplica</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorId, JSONObject m)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#sendMessageToPropReplica(java.lang.String, org.json.JSONObject)">sendMessageToPropReplica</a></span>(String actorId, JSONObject m)</nobr>
         
         <div class="jd-descrdiv">Send a message to the prop-replica hosted at the given actorId.</div>
   
@@ -1280,10 +1844,74 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#startCollectingStats()">startCollectingStats</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            JSONObject</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#stateToJSON()">stateToJSON</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#stateToString()">stateToString</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#syncRequestInterval()">syncRequestInterval</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            synchronized
+            
+            
+            &lt;T&gt;
+            T</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/Prop.html#withState(edu.stanford.junction.props2.IWithStateAction<T>)">withState</a></span>(<a href="../../../../../edu/stanford/junction/props2/IWithStateAction.html">IWithStateAction</a>&lt;T&gt; action)</nobr>
         
   </td></tr>
 
@@ -1446,7 +2074,7 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#beforeSendMessageToActor(java.lang.String, org.json.JSONObject)">beforeSendMessageToActor</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> actorID, JSONObject msg)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#beforeSendMessageToActor(java.lang.String, org.json.JSONObject)">beforeSendMessageToActor</a></span>(String actorID, JSONObject msg)</nobr>
         
   </td></tr>
 
@@ -1462,7 +2090,7 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#beforeSendMessageToRole(java.lang.String, org.json.JSONObject)">beforeSendMessageToRole</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> role, JSONObject msg)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#beforeSendMessageToRole(java.lang.String, org.json.JSONObject)">beforeSendMessageToRole</a></span>(String role, JSONObject msg)</nobr>
         
   </td></tr>
 
@@ -1509,7 +2137,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Integer.html">Integer</a></nobr>
+            Integer</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#getPriority()">getPriority</a></span>()</nobr>
@@ -1564,7 +2192,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#updateInvitationParameters(java.util.Map<java.lang.String, java.lang.String>)">updateInvitationParameters</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Map.html">Map</a>&lt;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>,&nbsp;<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>&gt; params)</nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/api/activity/JunctionExtra.html#updateInvitationParameters(java.util.Map<java.lang.String, java.lang.String>)">updateInvitationParameters</a></span>(Map&lt;String,&nbsp;String&gt; params)</nobr>
         
         <div class="jd-descrdiv">Update the parameters that will be sent in an invitation
 </div>
@@ -1587,7 +2215,7 @@ From class
           class="jd-expando-trigger-img" /></a>
 From class
 
-  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a>
+  java.lang.Object
 
 <div id="inherited-methods-java.lang.Object">
   <div id="inherited-methods-java.lang.Object-list"
@@ -1606,7 +2234,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            Object</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">clone</span>()</nobr>
@@ -1625,7 +2253,7 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <span class="sympad">equals</span>(Object arg0)</nobr>
         
   </td></tr>
 
@@ -1654,7 +2282,7 @@ From class
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            Class&lt;?&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">getClass</span>()</nobr>
@@ -1718,7 +2346,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            String</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">toString</span>()</nobr>
@@ -1780,6 +2408,181 @@ From class
 </td></tr>
 
 
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-edu.stanford.junction.props2.IProp" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-edu.stanford.junction.props2.IProp-trigger"
+          src="../../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="../../../../../edu/stanford/junction/props2/IProp.html">edu.stanford.junction.props2.IProp</a>
+
+<div id="inherited-methods-edu.stanford.junction.props2.IProp">
+  <div id="inherited-methods-edu.stanford.junction.props2.IProp-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-edu.stanford.junction.props2.IProp-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#addChangeListener(edu.stanford.junction.props2.IPropChangeListener)">addChangeListener</a></span>(<a href="../../../../../edu/stanford/junction/props2/IPropChangeListener.html">IPropChangeListener</a> listener)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#addOperation(org.json.JSONObject)">addOperation</a></span>(JSONObject operation)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#getPropName()">getPropName</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">The name of the prop at large.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            String</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#getPropReplicaName()">getPropReplicaName</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#getSequenceNum()">getSequenceNum</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">The internal counter that tracks how many operations 
+ have been executed on this prop's state.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="../../../../../edu/stanford/junction/props2/IProp.html">IProp</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#newFresh()">newFresh</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#removeAllChangeListeners()">removeAllChangeListeners</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#removeChangeListener(edu.stanford.junction.props2.IPropChangeListener)">removeChangeListener</a></span>(<a href="../../../../../edu/stanford/junction/props2/IPropChangeListener.html">IPropChangeListener</a> listener)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../../edu/stanford/junction/props2/IProp.html#removeChangeListenersOfType(java.lang.String)">removeChangeListenersOfType</a></span>(String type)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
 </table>
 
 
@@ -1814,6 +2617,37 @@ From class
 
 
 
+<A NAME="CollectionProp(java.lang.String, java.lang.String, edu.stanford.junction.props2.IPropState, long)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">CollectionProp</span>
+      <span class="normal">(String propName, String propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state, long seqNum)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
 <A NAME="CollectionProp(java.lang.String, java.lang.String, edu.stanford.junction.props2.IPropState)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -1827,7 +2661,7 @@ From class
         
       </span>
       <span class="sympad">CollectionProp</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> propName, <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a> propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state)</span>
+      <span class="normal">(String propName, String propReplicaName, <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a> state)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1874,6 +2708,37 @@ From class
       </span>
       <span class="sympad">add</span>
       <span class="normal">(JSONObject item)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="clear()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">clear</span>
+      <span class="normal">()</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1963,7 +2828,7 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;JSONObject&gt;
+        Collection&lt;JSONObject&gt;
       </span>
       <span class="sympad">items</span>
       <span class="normal">()</span>
@@ -2038,6 +2903,37 @@ From class
       </span>
       <span class="sympad">newAddOp</span>
       <span class="normal">(JSONObject item)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="newClearOp()"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        protected 
+         
+         
+         
+         
+        JSONObject
+      </span>
+      <span class="sympad">newClearOp</span>
+      <span class="normal">()</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2161,7 +3057,7 @@ From class
         <a href="../../../../../edu/stanford/junction/props2/IPropState.html">IPropState</a>
       </span>
       <span class="sympad">newStateWith</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/util/Collection.html">Collection</a>&lt;JSONObject&gt; items)</span>
+      <span class="normal">(Collection&lt;JSONObject&gt; items)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2227,7 +3123,7 @@ Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end body-content --> 
 
 <script type="text/javascript">
-init(); /* initialize android-developer-docs.js */
+init(); /* initialize doclava-developer-docs.js */
 </script>
 
 </body>
