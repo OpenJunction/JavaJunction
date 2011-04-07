@@ -49,6 +49,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	public static final String EVT_SYNC = "sync";
 	public static final String EVT_ANY = "*";
 
+	private static boolean LOG_INFO = false;
+	private static boolean LOG_ERROR = false;
+
 	// Try to use Use zlib compression when sending/receiving state syncs
 	protected static final boolean COMPRESS_STATE_SYNC = true;
 
@@ -205,11 +208,15 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 	protected void logInfo(String s){
-		System.out.println("prop@" + propReplicaName + ": " + s);
+		if (LOG_INFO) {
+			System.out.println("prop@" + propReplicaName + ": " + s);
+		}
 	}
 
 	protected void logErr(String s){
-		System.err.println("prop@" + propReplicaName + ": " + s);
+		if (LOG_ERROR) {
+			System.err.println("prop@" + propReplicaName + ": " + s);
+		}
 	}
 
 	protected void assertTrue(String s, boolean cond){
@@ -219,6 +226,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 	protected void logState(String s){
+		if (!LOG_INFO) {
+			return;
+		}
 		System.out.println("");
 		System.out.println("--------");
 		logInfo(s);
