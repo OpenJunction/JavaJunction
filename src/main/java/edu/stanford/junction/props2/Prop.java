@@ -187,7 +187,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		propStats = new PropStats();
 	}
 
-	synchronized protected <T> T withState(IWithStateAction<T> action){
+	synchronized public <T> T withState(IWithStateAction<T> action){
 		return action.run(state);
 	}
 
