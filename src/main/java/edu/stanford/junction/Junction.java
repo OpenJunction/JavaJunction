@@ -18,6 +18,7 @@
 package edu.stanford.junction;
 
 import java.net.URI;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -195,5 +196,14 @@ public abstract class Junction {
 	final public void registerExtra(JunctionExtra extra) {
 		extra.setActor(getActor());
 		mExtrasDirector.registerExtra(extra);
+	}
+	
+	public static String toWebInvite(String web, String invite) {
+		// TODO: Improve me.
+		// TODO: Fix Javascript.
+		//return web + "?jxuri=" + URLEncoder.encode(invite);
+		URI uri = URI.create(invite);
+		return web + "?jxsessionid=" + URLEncoder.encode(uri.getPath().substring(1)) + 
+		"&jxswitchboard=" + URLEncoder.encode(uri.getHost());
 	}
 }
