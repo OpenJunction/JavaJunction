@@ -42,17 +42,11 @@ import edu.stanford.junction.provider.irc.IRCSwitchboardConfig;
  */
 public class JunctionMaker {
 	public static final String DIRECTOR_ACTIVITY = "edu.stanford.junction.director";
-	public static final URI  CASTING_DIRECTOR;
-	static {
-		URI dumbWayToAssignStaticFinalURI;
-		try {
-			dumbWayToAssignStaticFinalURI = new URI("junction://jx-director-local/cast");
-		} catch (Exception e ) {
-			dumbWayToAssignStaticFinalURI = null;
-		}
-		CASTING_DIRECTOR = dumbWayToAssignStaticFinalURI;
-	}
+	public static final URI  CASTING_DIRECTOR = URI.create("junction://jx-director-local/cast");
 	protected JunctionProvider mProvider;
+
+	public static final URI SWITCHBOARD_ACTIVITY = URI.create("junction://sb.openjunction.org/switchboard");
+	
 
         /**
          * Returns a new {@link JunctionMaker} object with the type specified
@@ -74,10 +68,13 @@ public class JunctionMaker {
 		}
 	}
 	
-	protected JunctionMaker() {
-		
+	public JunctionMaker() {
+
 	}
-	
+
+	public Junction bind(URI uri, JunctionActor actor) throws JunctionException {
+		return JunctionMaker.getInstance(JunctionMaker.getDefaultSwitchboardConfig(uri)).newJunction(uri, actor);
+	}
 	
 	protected JunctionProvider getProvider(SwitchboardConfig switchboardConfig) {
 		if (switchboardConfig instanceof XMPPSwitchboardConfig) {
