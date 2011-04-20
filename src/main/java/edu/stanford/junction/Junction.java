@@ -198,12 +198,8 @@ public abstract class Junction {
 		mExtrasDirector.registerExtra(extra);
 	}
 	
-	public static String toWebInvite(String web, String invite) {
-		// TODO: Improve me.
-		// TODO: Fix Javascript.
-		//return web + "?jxuri=" + URLEncoder.encode(invite);
-		URI uri = URI.create(invite);
-		return web + "?jxsessionid=" + URLEncoder.encode(uri.getPath().substring(1)) + 
-		"&jxswitchboard=" + URLEncoder.encode(uri.getHost());
+	public static String getWebInvitation(String webUrl, String inviteUri) {
+		// TODO: Improve me; look for query parameters etc.
+		return webUrl + "?jxuri=" + URLEncoder.encode(inviteUri);
 	}
 }
