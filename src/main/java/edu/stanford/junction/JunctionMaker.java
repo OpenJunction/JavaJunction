@@ -72,7 +72,11 @@ public class JunctionMaker {
 
 	}
 
-	public Junction bind(URI uri, JunctionActor actor) throws JunctionException {
+	/**
+	 * Binds a {@link JunctionActor} to a session URI, using the default
+	 * switchboard for that URI.
+	 */
+	public static Junction bind(URI uri, JunctionActor actor) throws JunctionException {
 		return JunctionMaker.getInstance(JunctionMaker.getDefaultSwitchboardConfig(uri)).newJunction(uri, actor);
 	}
 	
