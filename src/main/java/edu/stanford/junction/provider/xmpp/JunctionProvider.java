@@ -51,7 +51,8 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
-	protected static boolean ONE_CONNECTION_PER_SESSION=false;
+	protected static final boolean ONE_CONNECTION_PER_SESSION=false;
+	protected static final int XMPP_PORT=5222;
 	
 	// TODO: Can't use a single connection right now-
 	// must support multiple actors in the same activity
@@ -159,7 +160,10 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 					connection.disconnect();
 				}
 
-				connection = new XMPPConnection(config.host);
+
+                ConnectionConfiguration conf = new ConnectionConfiguration(config.host, XMPP_PORT);
+                conf.setReconnectionAllowed(false);
+				connection = new XMPPConnection(conf);
 
 				try {
 					connection.connect();
