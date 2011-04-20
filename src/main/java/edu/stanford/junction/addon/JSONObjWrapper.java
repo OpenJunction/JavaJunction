@@ -15,7 +15,7 @@
  */
 
 
-package edu.stanford.junction.extra;
+package edu.stanford.junction.addon;
 import org.json.*;
 import java.util.*;
 import java.util.zip.*;

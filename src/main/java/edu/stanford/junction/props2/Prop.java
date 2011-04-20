@@ -19,9 +19,10 @@ package edu.stanford.junction.props2;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.*;
+
+import edu.stanford.junction.addon.JSONObjWrapper;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.extra.JSONObjWrapper;
 
 
 /**

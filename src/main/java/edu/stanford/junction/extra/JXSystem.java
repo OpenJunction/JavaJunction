@@ -15,7 +15,7 @@
  */
 
 
-package edu.stanford.junction.sample.extra;
+package edu.stanford.junction.extra;
 
 import org.json.JSONObject;
 

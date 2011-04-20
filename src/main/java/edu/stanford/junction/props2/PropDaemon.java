@@ -20,9 +20,10 @@ import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.*;
 import java.net.*;
+
+import edu.stanford.junction.addon.JSONObjWrapper;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.extra.JSONObjWrapper;
 
 import edu.stanford.junction.JunctionException;
 import edu.stanford.junction.JunctionMaker;

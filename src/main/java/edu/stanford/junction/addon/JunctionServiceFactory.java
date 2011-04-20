@@ -15,7 +15,7 @@
  */
 
 
-package edu.stanford.junction.extra;
+package edu.stanford.junction.addon;
 
 import java.lang.reflect.Method;
 import java.net.URI;

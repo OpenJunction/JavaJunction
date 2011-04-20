@@ -22,7 +22,7 @@ import org.json.JSONException;
 import java.util.*;
 import edu.stanford.junction.props2.Prop;
 import edu.stanford.junction.props2.IPropState;
-import edu.stanford.junction.extra.JSONObjWrapper;
+import edu.stanford.junction.addon.JSONObjWrapper;
 
 abstract class CollectionState implements IPropState{
 

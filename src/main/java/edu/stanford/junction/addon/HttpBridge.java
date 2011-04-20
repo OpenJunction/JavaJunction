@@ -15,7 +15,7 @@
  */
 
 
-package edu.stanford.junction.extra;
+package edu.stanford.junction.addon;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
