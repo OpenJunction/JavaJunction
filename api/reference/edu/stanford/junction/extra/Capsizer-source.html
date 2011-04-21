@@ -48,29 +48,31 @@
 
 
 
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for Junction for Java." />
+
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  IPropChangeListener
+  Capsizer
 
 
 | Junction for Java
 
 </title>
-<link href="../../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
 <link href="../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
 <script src="../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
 <script src="../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
-<script src="../../../../../assets/android-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
 <script src="../../../../../assets/prettify.js" type="text/javascript"></script>
 <script type="text/javascript">
   setToRoot("../../../../", "../../../../../assets/");
 </script>
-<script src="../../../../../assets/android-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
 <script src="../../../../../assets/navtree_data.js" type="text/javascript"></script>
 <script src="../../../../../assets/customizations.js" type="text/javascript"></script>
 <noscript>
@@ -145,6 +147,8 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
     <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/messaging/package-summary.html">edu.stanford.junction.api.messaging</a></li>
@@ -152,12 +156,8 @@
   <a href="../../../../edu/stanford/junction/api/messaging/target/package-summary.html">edu.stanford.junction.api.messaging.target</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/director/package-summary.html">edu.stanford.junction.director</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
     <li class="selected api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/package-summary.html">edu.stanford.junction.props</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/sample/package-summary.html">edu.stanford.junction.props.sample</a></li>
+  <a href="../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
     <li class="api apilevel-">
@@ -165,11 +165,15 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/package-summary.html">edu.stanford.junction.provider</a></li>
     <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/irc/package-summary.html">edu.stanford.junction.provider.irc</a></li>
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/jvm/package-summary.html">edu.stanford.junction.provider.jvm</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/package-summary.html">edu.stanford.junction.provider.jx</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
@@ -184,33 +188,18 @@
           <div id="classes-nav">
             <ul>
               
-    <li><h2>Interfaces</h2>
-      <ul>
-          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropChangeListener.html">IPropChangeListener</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropMsg.html">IPropMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropState.html">IPropState</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStateOperationMsg.html">IStateOperationMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStringifiable.html">IStringifiable</a></li>
-      </ul>
-    </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/NullOp.html">NullOp</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.html">Prop</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.Pair.html">Prop.Pair</a>&lt;T,&nbsp;S&gt;</li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/PropStateOperation.html">PropStateOperation</a></li>
+          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/extra/Capsizer.html">Capsizer</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/extra/Encryption.html">Encryption</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/extra/JXSystem.html">JXSystem</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/extra/Pulse.html">Pulse</a></li>
       </ul>
     </li>
               
               
               
-    <li><h2>Exceptions</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html">UnexpectedOpPairException</a></li>
-      </ul>
-    </li>
               
             </ul><br/>
           </div><!-- end classes -->
@@ -249,8 +238,20 @@
 
 
 
+  
+   
+  
+  
+  
+  
+
 
 <div class="sum-details-links">
+
+<div>
+<a href="Capsizer.html">View Documentation</a>
+</div>
+
 
 </div><!-- end sum-details-links -->
 <div class="api-level">
@@ -271,10 +272,16 @@
      
      
     
-    interface
-<h1>IPropChangeListener</h1>
+    class
+<h1>Capsizer</h1>
 
 
+
+  
+    extends <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Object.html">Object</a><br/>
+  
+  
+  
 
   
   
@@ -282,239 +289,199 @@
 
 
 </div><!-- end header -->
-
-<div id="naMessage"></div>
-
-<div id="jd-content" class="api apilevel-">
-<table class="jd-inheritance-table">
-
-
-    <tr>
-         	
-        <td colspan="1" class="jd-inheritance-class-cell">edu.stanford.junction.props.IPropChangeListener</td>
-    </tr>
-    
-
-</table>
-
-
-
-
-
-
-
-<div class="jd-descr">
-
-
-
-
-
-
-</div><!-- jd-descr -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="jd-descr">
-
-
-<h2>Summary</h2>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="pubmethods" class="jd-sumtable"><tr><th colspan="12">Public Methods</th></tr>
-
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../edu/stanford/junction/props/IPropChangeListener.html#getType()">getType</a></span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            void</nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../edu/stanford/junction/props/IPropChangeListener.html#onChange(java.lang.Object)">onChange</a></span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> data)</nobr>
-        
-  </td></tr>
-
-
-
-</table>
-
-
-
-
-
-
-
-</div><!-- jd-descr (summary) -->
-
-<!-- Details -->
-
-
-
-
-
-
-
-
-<!-- XML Attributes -->
-
-
-<!-- Enum Values -->
-
-
-<!-- Constants -->
-
-
-<!-- Fields -->
-
-
-<!-- Public ctors -->
-
-
-
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<!-- Protected ctors -->
-
-
-
-<!-- ========= METHOD DETAIL ======== -->
-<!-- Public methdos -->
-
-<h2>Public Methods</h2>
-
-
-
-<A NAME="getType()"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-        abstract 
-         
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
-      </span>
-      <span class="sympad">getType</span>
-      <span class="normal">()</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
+<div id="jd-content">
+  <pre class="prettyprint">
+/*
+ * Copyright (C) 2010 Stanford University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package edu.stanford.junction.extra;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.SwitchboardConfig;
+import edu.stanford.junction.api.activity.JunctionActor;
+import edu.stanford.junction.api.activity.JunctionExtra;
+import edu.stanford.junction.api.messaging.MessageHeader;
+import edu.stanford.junction.provider.xmpp.XMPPSwitchboardConfig;
+
+public class Capsizer {
+	
+	static JunctionActor mActor = new JunctionActor("capsizer") {
+		
+		@Override
+		public void onMessageReceived(MessageHeader header, JSONObject message) {
+			// TODO Auto-generated method stub
+			System.out.println("got: " + message.toString());
+		}
+		
+		@Override
+		public List&lt;JunctionExtra&gt; getInitialExtras() {
+			ArrayList&lt;JunctionExtra&gt; extras = new ArrayList&lt;JunctionExtra&gt;();
+			extras.add(new OutboundUpperCapsizer());
+			extras.add(new OutboundLowerCapsizer());
+			extras.add(new LogExtra());
+			return extras;
+		}
+		
+		@Override
+		public void onActivityJoin() {
+			JSONObject msg = new JSONObject();
+			try {
+				msg.put("msg","SOOO... This Is Cool");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			sendMessageToSession(msg);
+		}
+	};
+	
+	
+	
+	public static void main(String[] args) {
+		try {
+			SwitchboardConfig switchboardConfig = new XMPPSwitchboardConfig("prpl.stanford.edu");
+			JunctionMaker maker = JunctionMaker.getInstance(switchboardConfig);
+			URI uri = new URI("junction://prpl.stanford.edu/capsizer");
+			
+			
+			maker.newJunction(uri, mActor);
+			
+			synchronized(mActor){
+				mActor.wait();
+			}
+			System.out.println("Exiting.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+
+
+class OutboundUpperCapsizer extends JunctionExtra {
+	@Override
+	public boolean beforeSendMessage(JSONObject msg) {
+		Iterator&lt;String&gt; keys = msg.keys();
+		
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toUpperCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	@Override
+	public Integer getPriority() {
+		return 30;
+	}
+}
+
+
+class OutboundLowerCapsizer extends JunctionExtra {
+	@Override
+	public boolean beforeSendMessage(JSONObject msg) {
+		Iterator&lt;String&gt; keys = msg.keys();
+		
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toLowerCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	@Override
+	public Integer getPriority() {
+		return 10;
+	}
+}
+
+class InboundLowerCapsizer extends JunctionExtra {
+	@Override
+	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject msg) {
+		Iterator&lt;String&gt; keys = msg.keys();
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toLowerCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+}
+
+class InboundUpperCapsizer extends JunctionExtra {
+	@Override
+	public boolean beforeOnMessageReceived(MessageHeader h, JSONObject msg) {
+		Iterator&lt;String&gt; keys = msg.keys();
+		try {
+			while (keys.hasNext()) {
+				String k = keys.next();
+				if (msg.get(k) instanceof String) {
+					String s = msg.getString(k);
+					msg.remove(k);
+					msg.put(k, s.toUpperCase());
+				}
+			}
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+}
+
+class LogExtra extends JunctionExtra {
+	@Override
+	public void afterOnMessageReceived(MessageHeader h, JSONObject msg) {
+		System.out.println("logger received " + msg.toString());
+	}
+}
+
+  </pre>
 </div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-<A NAME="onChange(java.lang.Object)"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-        abstract 
-         
-        void
-      </span>
-      <span class="sympad">onChange</span>
-      <span class="normal">(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> data)</span>
-    </h4>
-      <div class="api-level">
-        <div>
-
-</div>
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    </div>
-</div>
-
-
-
-
-
-<!-- ========= METHOD DETAIL ======== -->
-
-
-
-<!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
-
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end footer -->
@@ -526,7 +493,7 @@ Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end body-content --> 
 
 <script type="text/javascript">
-init(); /* initialize android-developer-docs.js */
+init(); /* initialize doclava-developer-docs.js */
 </script>
 
 </body>

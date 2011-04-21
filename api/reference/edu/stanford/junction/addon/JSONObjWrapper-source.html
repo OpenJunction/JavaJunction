@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  JunctionServiceFactory
+  JSONObjWrapper
 
 
 | Junction for Java
@@ -146,6 +146,8 @@
                 
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
@@ -154,7 +156,7 @@
   <a href="../../../../edu/stanford/junction/api/messaging/target/package-summary.html">edu.stanford.junction.api.messaging.target</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/director/package-summary.html">edu.stanford.junction.director</a></li>
-    <li class="selected api apilevel-">
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
@@ -173,8 +175,6 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
-    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/sql/package-summary.html">edu.stanford.junction.sample.sql</a></li>
@@ -191,9 +191,9 @@
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/extra/HttpBridge.html">HttpBridge</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/extra/JSONObjWrapper.html">JSONObjWrapper</a></li>
-          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/extra/JunctionServiceFactory.html">JunctionServiceFactory</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/HttpBridge.html">HttpBridge</a></li>
+          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/addon/JSONObjWrapper.html">JSONObjWrapper</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html">JunctionServiceFactory</a></li>
       </ul>
     </li>
               
@@ -251,22 +251,13 @@
   
   
   
-   
-  
-  
-
-  
-   
-  
-  
-  
   
 
 
 <div class="sum-details-links">
 
 <div>
-<a href="JunctionServiceFactory.html">View Documentation</a>
+<a href="JSONObjWrapper.html">View Documentation</a>
 </div>
 
 
@@ -290,7 +281,7 @@
      
     
     class
-<h1>JunctionServiceFactory</h1>
+<h1>JSONObjWrapper</h1>
 
 
 
@@ -299,11 +290,7 @@
   
 
   
-  
-  
-
-  
-    extends <a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">JunctionService</a><br/>
+    extends <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a><br/>
   
   
   
@@ -333,103 +320,311 @@
  */
 
 
-package edu.stanford.junction.extra;
+package edu.stanford.junction.addon;
+import org.json.*;
+import java.util.*;
+import java.util.zip.*;
+import org.jivesoftware.smack.util.Base64;
+import java.io.*;
 
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
-import java.util.Map;
-
-import org.json.JSONObject;
-
-import edu.stanford.junction.JunctionMaker;
-import edu.stanford.junction.api.activity.JunctionService;
-import edu.stanford.junction.api.messaging.MessageHandler;
-import edu.stanford.junction.api.messaging.MessageHeader;
-
-/**
- * TODO: This class is temporarily broken. It requires switchboard information,
- * and so is XMPP specific for now.
+/** 
+ * A wrapper for JSONObjects that provides hashCode and equals
+ * methods based on the underlying JSONObject's 'id' property.
  * 
- * Line 71 has been commented out, resulting in nothing working here.
+ * Useful when you want a HashSet/HashMap of JSONObjects, and 
+ * each object has a unique 'id'.
  *
+ * Also provides deep copy and compression routines.
  */
-public class JunctionServiceFactory extends JunctionService {
-
-	@Override
-	public void onMessageReceived(MessageHeader header, JSONObject message) {
-			// TODO: verify you got an activity request
-			// somehow get the Activity object
-			// that means the request needs
-			// * a host
-			// * an activity descriptor
-			
-			
-			try {
-				
-				URI activityURI = new URI(message.getString("activity"));
-				
-				// TODO: support a factory mapping from serviceName =&gt; class
-				String className = message.getString("serviceName");
-				
-				Class c = null;
-				try {
-					c = Class.forName(className);
-				} catch (Exception e) {
-					System.out.println("Could not find class for service " + className + ".");
-				}
-				
-				JunctionService service = null;
-				Method method = null;
-				try {
-					method = c.getMethod("newInstance");
-				} catch (Exception e) {
-					System.out.println("No newInstance method found for " + c + ".");
-				}
-				service = (JunctionService)method.invoke(null);
-				
-				String queryPart = activityURI.getQuery(); 
-				System.out.println("query part is " + queryPart);
-				String localRole = "Unknown";
-				int i;
-				if ((i = queryPart.indexOf("role=")) &gt;= 0) {
-					localRole = queryPart.substring(i+14);
-					if ((i = localRole.indexOf("&amp;"))&gt;0) {
-						localRole = localRole.substring(0,i);
-					}
-				}
-				
-				System.out.println("Setting service role to " + localRole);
-				service.setRole(localRole);
-				
-				System.out.println("service actorID is " + service.getActorID());
-				//JunctionMaker.getInstance().newJunction(activityURI,service);					
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	}
-
-
-
-	@Override
-	public String getServiceName() {
-		return "ServiceFactory";
-	}
-
+public class JSONObjWrapper extends JSONObject{
 	
-	public static void main(String[] argv) {
-		String switchboard="prpl.stanford.edu";
-		
-		
-		JunctionService waiter = new JunctionServiceFactory();
-		waiter.register(switchboard);
-		while(true) {
-			try {
-				Thread.sleep(500000);
-			} catch (Exception e) {}
+
+	private JSONObject self;
+
+
+	public JSONObjWrapper(JSONObject obj){
+		this.self = obj;
+	}
+
+	public JSONObject getRaw(){
+		return self;
+	}
+
+	public int hashCode(){
+		return (this.opt("id")).hashCode();
+	}
+
+	public boolean equals(Object other){
+		return other.hashCode() == this.hashCode();
+	}
+
+	// Do a deep copy of this object.
+	public static JSONObject copyJSONObject(JSONObject obj){
+		JSONObject copy = new JSONObject();
+		try{
+			Iterator it = obj.keys();
+			while(it.hasNext()){
+				String key = (String)it.next();
+				copy.put(key, copyValue(obj.get(key)));
+			}
 		}
-	}	
+		catch(JSONException e){}
+		return copy;
+	}
+
+	public Object clone(){
+		return new JSONObjWrapper(copyJSONObject(this));
+	}
+
+	protected static Object copyValue(Object val){
+		try{
+			if(val instanceof JSONObject){
+				return copyJSONObject((JSONObject)val);
+			}
+			else if(val instanceof JSONArray){
+				JSONArray newA = new JSONArray();
+				JSONArray oldA = (JSONArray)val;
+				for(int i = 0; i &lt; oldA.length(); i++){
+					newA.put(i, copyValue(oldA.get(i)));
+				}
+				return newA;
+			}
+			else return val;
+		}
+		catch(JSONException e){
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
+	/** 
+	 * Get the value object associated with a key.
+	 *
+	 * @param key   A key string.
+	 * @return      The object associated with the key.
+	 * @throws   JSONException if the key is not found.
+	 */
+	public Object get(String key) throws JSONException {
+		return self.get(key);
+	}
+	
+	
+	/**
+	 * Determine if the JSONObject contains a specific key.
+	 * @param key   A key string.
+	 * @return      true if the key exists in the JSONObject.
+	 */
+	public boolean has(String key) {
+		return self.has(key);
+	}
+	
+	
+	/**
+	 * Get an enumeration of the keys of the JSONObject.
+	 *
+	 * @return An iterator of the keys.
+	 */
+	public Iterator keys() {
+		return self.keys();
+	}
+	
+	
+	/**
+	 * Get the number of keys stored in the JSONObject.
+	 *
+	 * @return The number of keys in the JSONObject.
+	 */
+	public int length() {
+		return self.length();
+	}
+	
+	
+	
+	/**
+	 * Get an optional value associated with a key.
+	 * @param key   A key string.
+	 * @return      An object which is the value, or null if there is no value.
+	 */
+	public Object opt(String key) {
+		return self.opt(key);
+	}
+	
+	
+	
+	/**
+	 * Put a key/value pair in the JSONObject. If the value is null,
+	 * then the key will be removed from the JSONObject if it is present.
+	 * @param key   A key string.
+	 * @param value An object which is the value. It should be of one of these
+	 *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+	 *  or the JSONObject.NULL object.
+	 * @return this.
+	 * @throws JSONException If the value is non-finite number
+	 *  or if the key is null.
+	 */
+	public JSONObject put(String key, Object value) throws JSONException{
+		return self.put(key, value);
+	}
+
+	/**
+	 * Put a key/boolean pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A boolean which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, boolean value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/double pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A double which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null or if the number is invalid.
+	 */
+	public JSONObject put(String key, double value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/int pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value An int which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, int value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Put a key/long pair in the JSONObject.
+	 *
+	 * @param key   A key string.
+	 * @param value A long which is the value.
+	 * @return this.
+	 * @throws JSONException If the key is null.
+	 */
+	public JSONObject put(String key, long value) throws JSONException {
+		return self.put(key, value);
+	}
+ 	
+ 	
+	/**
+	 * Remove a name and its value, if present.
+	 * @param key The name to be removed.
+	 * @return The value that was associated with the name,
+	 * or null if there was no value.
+	 */
+	public Object remove(String key) {
+		return self.remove(key);
+	}
+
+	public String toString() {
+		return self.toString();
+	}
+
+	public String toString(int indentFactor) throws JSONException {
+		return self.toString(indentFactor);
+	}
+
+	public static String compressObj(JSONObject obj){
+		String str = obj.toString();
+		String result = compressString(str);
+		System.out.println("Compressed " + 
+						   str.length() + " chars to " + 
+						   result.length() + " chars.");
+		return result;
+	}
+
+	public static JSONObject expandCompressedObj(String compressed){
+		String json = decompressString(compressed);
+		JSONObject obj = null;
+		try{
+			obj = new JSONObject(json);
+		}
+		catch(JSONException e){}
+		return  obj;
+	}
+
+
+	private static String decompressString(String str){
+		byte[] compressedData = Base64.decode(str);
+		// Create the decompressor and give it the data to compress 
+		Inflater decompressor = new Inflater(); 
+		decompressor.setInput(compressedData); 
+		// Create an expandable byte array to hold the decompressed data 
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(compressedData.length); 
+		// Decompress the data 
+		byte[] buf = new byte[1024]; 
+		while (!decompressor.finished()) { 
+			try { 
+				int count = decompressor.inflate(buf); 
+				bos.write(buf, 0, count); 
+			} catch (DataFormatException e) { 
+			} 
+		} 
+		
+		try { 
+			bos.close(); 
+		} catch (IOException e) { } 
+
+		// Get the decompressed data 
+		byte[] decompressedData = bos.toByteArray(); 
+		try{
+			return new String(decompressedData, "UTF-8");
+		}
+		catch(UnsupportedEncodingException e){ 
+			return new String(decompressedData);
+		}
+	}
+
+
+	private static String compressString(String str){
+		byte[] input;
+		try{
+			input = str.getBytes("UTF-8"); 
+		}
+		catch(UnsupportedEncodingException e){
+			input = str.getBytes();
+		}
+		// Create the compressor with highest level of compression 
+		Deflater compressor = new Deflater(); 
+		compressor.setLevel(Deflater.BEST_COMPRESSION); 
+		// Give the compressor the data to compress 
+		compressor.setInput(input); 
+		compressor.finish(); 
+ 
+		// Create an expandable byte array to hold the compressed data. 
+		// You cannot use an array that's the same size as the orginal because 
+		// there is no guarantee that the compressed data will be smaller than 
+		// the uncompressed data. 
+		ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length); 
+		// Compress the data 
+		byte[] buf = new byte[1024];
+		while (!compressor.finished()) { 
+			int count = compressor.deflate(buf); 
+			bos.write(buf, 0, count); 
+		} 
+		try { 
+			bos.close(); 
+		} 
+		catch (IOException e) { } 
+		// Get the compressed data 
+		byte[] compressedData = bos.toByteArray(); 
+		return Base64.encodeBytes(compressedData);
+	}
+	
 }
+
 
   </pre>
 </div>

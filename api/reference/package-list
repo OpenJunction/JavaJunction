@@ -1,4 +1,5 @@
 edu.stanford.junction
+edu.stanford.junction.addon
 edu.stanford.junction.api.activity
 edu.stanford.junction.api.messaging
 edu.stanford.junction.api.messaging.target
@@ -12,7 +13,6 @@ edu.stanford.junction.provider.jvm
 edu.stanford.junction.provider.jx
 edu.stanford.junction.provider.jx.json
 edu.stanford.junction.provider.xmpp
-edu.stanford.junction.sample.extra
 edu.stanford.junction.sample.helloworld
 edu.stanford.junction.sample.sql
 edu.stanford.junction.simulator

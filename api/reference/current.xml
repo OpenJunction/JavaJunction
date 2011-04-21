@@ -1,36 +1,6 @@
 <api>
 <package name="edu.stanford.junction"
 >
-<class name="Basic"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="Basic"
- type="edu.stanford.junction.Basic"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="main"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="args" type="java.lang.String...">
-</parameter>
-</method>
-</class>
 <class name="Junction"
  extends="java.lang.Object"
  abstract="true"
@@ -190,6 +160,21 @@
  deprecated="deprecated"
  visibility="public"
 >
+</method>
+<method name="getWebInvitation"
+ return="java.net.URI"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="webUrl" type="java.lang.String">
+</parameter>
+<parameter name="inviteUri" type="java.net.URI">
+</parameter>
 </method>
 <method name="registerExtra"
  return="void"
@@ -382,9 +367,26 @@
  static="false"
  final="false"
  deprecated="not deprecated"
- visibility="protected"
+ visibility="public"
 >
 </constructor>
+<method name="bind"
+ return="edu.stanford.junction.Junction"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="uri" type="java.net.URI">
+</parameter>
+<parameter name="actor" type="edu.stanford.junction.api.activity.JunctionActor">
+</parameter>
+<exception name="JunctionException" type="edu.stanford.junction.JunctionException">
+</exception>
+</method>
 <method name="castActor"
  return="void"
  abstract="false"
@@ -637,6 +639,16 @@
  visibility="public"
 >
 </field>
+<field name="SWITCHBOARD_ACTIVITY"
+ type="java.net.URI"
+ transient="false"
+ volatile="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="mProvider"
  type="edu.stanford.junction.provider.JunctionProvider"
  transient="false"
@@ -656,6 +668,175 @@
  visibility="public"
 >
 </interface>
+</package>
+<package name="edu.stanford.junction.addon"
+>
+<class name="HttpBridge"
+ extends="edu.stanford.junction.addon.HttpServlet"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="HttpBridge"
+ type="edu.stanford.junction.addon.HttpBridge"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="JSONObjWrapper"
+ extends="org.json.JSONObject"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JSONObjWrapper"
+ type="edu.stanford.junction.addon.JSONObjWrapper"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="org.json.JSONObject">
+</parameter>
+</constructor>
+<method name="clone"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="compressObj"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="copyJSONObject"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="obj" type="org.json.JSONObject">
+</parameter>
+</method>
+<method name="copyValue"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="val" type="java.lang.Object">
+</parameter>
+</method>
+<method name="expandCompressedObj"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="compressed" type="java.lang.String">
+</parameter>
+</method>
+<method name="getRaw"
+ return="org.json.JSONObject"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+</class>
+<class name="JunctionServiceFactory"
+ extends="edu.stanford.junction.api.activity.JunctionService"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JunctionServiceFactory"
+ type="edu.stanford.junction.addon.JunctionServiceFactory"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="getServiceName"
+ return="java.lang.String"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="argv" type="java.lang.String[]">
+</parameter>
+</method>
+<method name="onMessageReceived"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+</parameter>
+<parameter name="message" type="org.json.JSONObject">
+</parameter>
+</method>
+</class>
 </package>
 <package name="edu.stanford.junction.api.activity"
 >
@@ -1894,143 +2075,22 @@
 </package>
 <package name="edu.stanford.junction.extra"
 >
-<class name="HttpBridge"
- extends="edu.stanford.junction.extra.HttpServlet"
+<class name="Capsizer"
+ extends="java.lang.Object"
  abstract="false"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<constructor name="HttpBridge"
- type="edu.stanford.junction.extra.HttpBridge"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-</class>
-<class name="JSONObjWrapper"
- extends="org.json.JSONObject"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="JSONObjWrapper"
- type="edu.stanford.junction.extra.JSONObjWrapper"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="org.json.JSONObject">
-</parameter>
-</constructor>
-<method name="clone"
- return="java.lang.Object"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-<method name="compressObj"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="org.json.JSONObject">
-</parameter>
-</method>
-<method name="copyJSONObject"
- return="org.json.JSONObject"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="obj" type="org.json.JSONObject">
-</parameter>
-</method>
-<method name="copyValue"
- return="java.lang.Object"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<parameter name="val" type="java.lang.Object">
-</parameter>
-</method>
-<method name="expandCompressedObj"
- return="org.json.JSONObject"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="compressed" type="java.lang.String">
-</parameter>
-</method>
-<method name="getRaw"
- return="org.json.JSONObject"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
-</class>
-<class name="JunctionServiceFactory"
- extends="edu.stanford.junction.api.activity.JunctionService"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="JunctionServiceFactory"
- type="edu.stanford.junction.extra.JunctionServiceFactory"
+<constructor name="Capsizer"
+ type="edu.stanford.junction.extra.Capsizer"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
 </constructor>
-<method name="getServiceName"
- return="java.lang.String"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 <method name="main"
  return="void"
  abstract="false"
@@ -2041,22 +2101,162 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="argv" type="java.lang.String[]">
+<parameter name="args" type="java.lang.String[]">
 </parameter>
 </method>
-<method name="onMessageReceived"
- return="void"
+</class>
+<class name="Encryption"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
  abstract="false"
- native="false"
- synchronized="false"
  static="false"
  final="false"
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="header" type="edu.stanford.junction.api.messaging.MessageHeader">
+<constructor name="Encryption"
+ type="edu.stanford.junction.extra.Encryption"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String[]">
 </parameter>
-<parameter name="message" type="org.json.JSONObject">
+</method>
+<field name="FIELD_ENC"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;e&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="FIELD_IV"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;iv&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="URL_KEY_PARAM"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;skey&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="mKey"
+ type="byte[]"
+ transient="false"
+ volatile="false"
+ value="null"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="JXSystem"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="JXSystem"
+ type="edu.stanford.junction.extra.JXSystem"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String...">
+</parameter>
+</method>
+<field name="JX_SYSTEM_NS"
+ type="java.lang.String"
+ transient="false"
+ volatile="false"
+ value="&quot;JXSYSTEMMSG&quot;"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+</class>
+<class name="Pulse"
+ extends="edu.stanford.junction.api.activity.JunctionExtra"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="Pulse"
+ type="edu.stanford.junction.extra.Pulse"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="t" type="long">
+</parameter>
+</constructor>
+<constructor name="Pulse"
+ type="edu.stanford.junction.extra.Pulse"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<method name="main"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="args" type="java.lang.String...">
 </parameter>
 </method>
 </class>
@@ -2864,7 +3064,7 @@
  static="false"
  final="false"
  deprecated="not deprecated"
- visibility="protected"
+ visibility="public"
 >
 <parameter name="action" type="edu.stanford.junction.props2.IWithStateAction&lt;T&gt;">
 </parameter>
@@ -5697,8 +5897,20 @@
  type="boolean"
  transient="false"
  volatile="false"
+ value="false"
  static="true"
- final="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+</field>
+<field name="XMPP_PORT"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5222"
+ static="true"
+ final="true"
  deprecated="not deprecated"
  visibility="protected"
 >
@@ -5844,194 +6056,6 @@
  visibility="protected"
 >
 </field>
-</class>
-</package>
-<package name="edu.stanford.junction.sample.extra"
->
-<class name="Capsizer"
- extends="java.lang.Object"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="Capsizer"
- type="edu.stanford.junction.sample.extra.Capsizer"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="main"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="args" type="java.lang.String[]">
-</parameter>
-</method>
-</class>
-<class name="Encryption"
- extends="edu.stanford.junction.api.activity.JunctionExtra"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="Encryption"
- type="edu.stanford.junction.sample.extra.Encryption"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="main"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="args" type="java.lang.String[]">
-</parameter>
-</method>
-<field name="FIELD_ENC"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;e&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="FIELD_IV"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;iv&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="URL_KEY_PARAM"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;skey&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="mKey"
- type="byte[]"
- transient="false"
- volatile="false"
- value="null"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-</field>
-</class>
-<class name="JXSystem"
- extends="edu.stanford.junction.api.activity.JunctionExtra"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="JXSystem"
- type="edu.stanford.junction.sample.extra.JXSystem"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="main"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="args" type="java.lang.String...">
-</parameter>
-</method>
-<field name="JX_SYSTEM_NS"
- type="java.lang.String"
- transient="false"
- volatile="false"
- value="&quot;JXSYSTEMMSG&quot;"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="protected"
->
-</field>
-</class>
-<class name="Pulse"
- extends="edu.stanford.junction.api.activity.JunctionExtra"
- abstract="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<constructor name="Pulse"
- type="edu.stanford.junction.sample.extra.Pulse"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="t" type="long">
-</parameter>
-</constructor>
-<constructor name="Pulse"
- type="edu.stanford.junction.sample.extra.Pulse"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</constructor>
-<method name="main"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="true"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="args" type="java.lang.String...">
-</parameter>
-</method>
 </class>
 </package>
 <package name="edu.stanford.junction.sample.helloworld"

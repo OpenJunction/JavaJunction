@@ -147,6 +147,8 @@
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
     <li class="api apilevel-">
+  <a href="../../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
+    <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/api/messaging/package-summary.html">edu.stanford.junction.api.messaging</a></li>
@@ -172,8 +174,6 @@
   <a href="../../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
     <li class="selected api apilevel-">
   <a href="../../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
     <li class="api apilevel-">
   <a href="../../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
@@ -357,7 +357,8 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 public class JunctionProvider extends edu.stanford.junction.provider.JunctionProvider {
 	protected XMPPSwitchboardConfig mConfig;
-	protected static boolean ONE_CONNECTION_PER_SESSION=false;
+	protected static final boolean ONE_CONNECTION_PER_SESSION=false;
+	protected static final int XMPP_PORT=5222;
 	
 	// TODO: Can't use a single connection right now-
 	// must support multiple actors in the same activity
@@ -465,7 +466,10 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 					connection.disconnect();
 				}
 
-				connection = new XMPPConnection(config.host);
+
+                ConnectionConfiguration conf = new ConnectionConfiguration(config.host, XMPP_PORT);
+                conf.setReconnectionAllowed(false);
+				connection = new XMPPConnection(conf);
 
 				try {
 					connection.connect();

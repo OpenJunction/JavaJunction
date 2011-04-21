@@ -147,6 +147,8 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
     <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/messaging/package-summary.html">edu.stanford.junction.api.messaging</a></li>
@@ -172,8 +174,6 @@
   <a href="../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
@@ -342,9 +342,10 @@ package edu.stanford.junction.props2;
 import org.json.JSONObject;
 import org.json.JSONException;
 import java.util.*;
+
+import edu.stanford.junction.addon.JSONObjWrapper;
 import edu.stanford.junction.api.activity.JunctionExtra;
 import edu.stanford.junction.api.messaging.MessageHeader;
-import edu.stanford.junction.extra.JSONObjWrapper;
 
 
 /**
@@ -371,6 +372,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	public static final String EVT_CHANGE = "change";
 	public static final String EVT_SYNC = "sync";
 	public static final String EVT_ANY = "*";
+
+	private static boolean LOG_INFO = false;
+	private static boolean LOG_ERROR = false;
 
 	// Try to use Use zlib compression when sending/receiving state syncs
 	protected static final boolean COMPRESS_STATE_SYNC = true;
@@ -507,7 +511,7 @@ public abstract class Prop extends JunctionExtra implements IProp{
 		propStats = new PropStats();
 	}
 
-	synchronized protected &lt;T&gt; T withState(IWithStateAction&lt;T&gt; action){
+	synchronized public &lt;T&gt; T withState(IWithStateAction&lt;T&gt; action){
 		return action.run(state);
 	}
 
@@ -528,11 +532,15 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 	protected void logInfo(String s){
-		System.out.println("prop@" + propReplicaName + ": " + s);
+		if (LOG_INFO) {
+			System.out.println("prop@" + propReplicaName + ": " + s);
+		}
 	}
 
 	protected void logErr(String s){
-		System.err.println("prop@" + propReplicaName + ": " + s);
+		if (LOG_ERROR) {
+			System.err.println("prop@" + propReplicaName + ": " + s);
+		}
 	}
 
 	protected void assertTrue(String s, boolean cond){
@@ -542,6 +550,9 @@ public abstract class Prop extends JunctionExtra implements IProp{
 	}
 
 	protected void logState(String s){
+		if (!LOG_INFO) {
+			return;
+		}
 		System.out.println("");
 		System.out.println("--------");
 		logInfo(s);

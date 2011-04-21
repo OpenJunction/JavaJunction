@@ -48,29 +48,31 @@
 
 
 
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for Junction for Java." />
+
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  UnexpectedOpPairException
+  JunctionServiceFactory
 
 
 | Junction for Java
 
 </title>
-<link href="../../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
 <link href="../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
 <script src="../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
 <script src="../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
-<script src="../../../../../assets/android-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
 <script src="../../../../../assets/prettify.js" type="text/javascript"></script>
 <script type="text/javascript">
   setToRoot("../../../../", "../../../../../assets/");
 </script>
-<script src="../../../../../assets/android-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
 <script src="../../../../../assets/navtree_data.js" type="text/javascript"></script>
 <script src="../../../../../assets/customizations.js" type="text/javascript"></script>
 <noscript>
@@ -144,6 +146,8 @@
                 
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
@@ -154,10 +158,6 @@
   <a href="../../../../edu/stanford/junction/director/package-summary.html">edu.stanford.junction.director</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/package-summary.html">edu.stanford.junction.props</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/sample/package-summary.html">edu.stanford.junction.props.sample</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
     <li class="api apilevel-">
@@ -165,11 +165,15 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/package-summary.html">edu.stanford.junction.provider</a></li>
     <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/irc/package-summary.html">edu.stanford.junction.provider.irc</a></li>
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/jvm/package-summary.html">edu.stanford.junction.provider.jvm</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/package-summary.html">edu.stanford.junction.provider.jx</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
@@ -184,33 +188,17 @@
           <div id="classes-nav">
             <ul>
               
-    <li><h2>Interfaces</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropChangeListener.html">IPropChangeListener</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropMsg.html">IPropMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropState.html">IPropState</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStateOperationMsg.html">IStateOperationMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStringifiable.html">IStringifiable</a></li>
-      </ul>
-    </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/NullOp.html">NullOp</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.html">Prop</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.Pair.html">Prop.Pair</a>&lt;T,&nbsp;S&gt;</li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/PropStateOperation.html">PropStateOperation</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/HttpBridge.html">HttpBridge</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/JSONObjWrapper.html">JSONObjWrapper</a></li>
+          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html">JunctionServiceFactory</a></li>
       </ul>
     </li>
               
               
               
-    <li><h2>Exceptions</h2>
-      <ul>
-          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html">UnexpectedOpPairException</a></li>
-      </ul>
-    </li>
               
             </ul><br/>
           </div><!-- end classes -->
@@ -250,7 +238,11 @@
 
 
   
+   
   
+  
+  
+   
   
   
 
@@ -259,15 +251,12 @@
   
   
   
+   
+  
   
 
   
    
-  
-  
-  
-  
-
   
   
   
@@ -275,6 +264,11 @@
 
 
 <div class="sum-details-links">
+
+<div>
+<a href="JunctionServiceFactory-source.html">View Source</a>
+</div>
+
 
 Summary:
 
@@ -284,9 +278,9 @@ Summary:
 
 
 
-  <a href="#lfields">Fields</a>
-  
 
+  <a href="#inhfields">Inherited Fields</a>
+  
 
 
   &#124; <a href="#pubctors">Ctors</a>
@@ -323,7 +317,7 @@ Summary:
      
     
     class
-<h1>UnexpectedOpPairException</h1>
+<h1>JunctionServiceFactory</h1>
 
 
 
@@ -336,7 +330,7 @@ Summary:
   
 
   
-    extends <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Exception.html">Exception</a><br/>
+    extends <a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">JunctionService</a><br/>
   
   
   
@@ -356,7 +350,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="4" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a></td>
+        <td colspan="4" class="jd-inheritance-class-cell"><a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -364,7 +358,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">java.lang.Throwable</a></td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html">edu.stanford.junction.api.activity.JunctionActor</a></td>
     </tr>
     
 
@@ -374,7 +368,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="2" class="jd-inheritance-class-cell"><a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Exception.html">java.lang.Exception</a></td>
+        <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">edu.stanford.junction.api.activity.JunctionService</a></td>
     </tr>
     
 
@@ -386,7 +380,7 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">edu.stanford.junction.props.UnexpectedOpPairException</td>
+        <td colspan="1" class="jd-inheritance-class-cell">edu.stanford.junction.addon.JunctionServiceFactory</td>
     </tr>
     
 
@@ -400,6 +394,14 @@ Summary:
 
 <div class="jd-descr">
 
+
+<h2>Class Overview</h2>
+<p>TODO: This class is temporarily broken. It requires switchboard information,
+ and so is XMPP specific for now.
+ 
+ Line 71 has been commented out, resulting in nothing working here.
+
+</p>
 
 
 
@@ -444,38 +446,87 @@ Summary:
 
 
 
-<!-- =========== FIELD SUMMARY =========== -->
-<table id="lfields" class="jd-sumtable"><tr><th colspan="12">Fields</th></tr>
 
+
+
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-edu.stanford.junction.api.activity.JunctionService" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-edu.stanford.junction.api.activity.JunctionService-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">edu.stanford.junction.api.activity.JunctionService</a>
+<div id="inherited-fields-edu.stanford.junction.api.activity.JunctionService">
+  <div id="inherited-fields-edu.stanford.junction.api.activity.JunctionService-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-edu.stanford.junction.api.activity.JunctionService-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
 
     
       <tr class="alt-color api apilevel-" >
           <td class="jd-typecol"><nobr>
           public
+          static
           
-          
-          <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a></nobr></td>
-          <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html#o1">o1</a></td>
+          <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#SERVICE_CHANNEL">SERVICE_CHANNEL</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
     
-      <tr class=" api apilevel-" >
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-edu.stanford.junction.api.activity.JunctionActor" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-edu.stanford.junction.api.activity.JunctionActor-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+<a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html">edu.stanford.junction.api.activity.JunctionActor</a>
+<div id="inherited-fields-edu.stanford.junction.api.activity.JunctionActor">
+  <div id="inherited-fields-edu.stanford.junction.api.activity.JunctionActor-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-edu.stanford.junction.api.activity.JunctionActor-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+      <tr class="alt-color api apilevel-" >
           <td class="jd-typecol"><nobr>
-          public
+          protected
           
           
-          <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a></nobr></td>
-          <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html#o2">o2</a></td>
+          <a href="../../../../edu/stanford/junction/Junction.html">Junction</a></nobr></td>
+          <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#mJunction">mJunction</a></td>
           <td class="jd-descrcol" width="100%"></td>
       </tr>
       
     
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
 
 </table>
-
-
-
 
 
 
@@ -496,7 +547,7 @@ Summary:
             </nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html#UnexpectedOpPairException(edu.stanford.junction.props.IPropStateOperation, edu.stanford.junction.props.IPropStateOperation)">UnexpectedOpPairException</a></span>(<a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a> o1, <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a> o2)</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html#JunctionServiceFactory()">JunctionServiceFactory</a></span>()</nobr>
         
   </td></tr>
 
@@ -522,11 +573,45 @@ Summary:
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html#toString()">toString</a></span>()</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html#getServiceName()">getServiceName</a></span>()</nobr>
         
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            static
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html#main(java.lang.String[])">main</a></span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String[]</a> argv)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html#onMessageReceived(edu.stanford.junction.api.messaging.MessageHeader, org.json.JSONObject)">onMessageReceived</a></span>(<a href="../../../../edu/stanford/junction/api/messaging/MessageHeader.html">MessageHeader</a> header, <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</nobr>
+        
+        <div class="jd-descrdiv">Asynchronously handle an inbound message.</div>
+  
   </td></tr>
 
 
@@ -545,23 +630,21 @@ Summary:
   <div style="clear:left;">Inherited Methods</div></th></tr>
 
 
-
-
 <tr class="api apilevel-" >
 <td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-java.lang.Throwable" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-java.lang.Throwable-trigger"
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-edu.stanford.junction.api.activity.JunctionService" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-edu.stanford.junction.api.activity.JunctionService-trigger"
           src="../../../../../assets/images/triangle-closed.png"
           class="jd-expando-trigger-img" /></a>
 From class
 
-  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">java.lang.Throwable</a>
+  <a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">edu.stanford.junction.api.activity.JunctionService</a>
 
-<div id="inherited-methods-java.lang.Throwable">
-  <div id="inherited-methods-java.lang.Throwable-list"
+<div id="inherited-methods-edu.stanford.junction.api.activity.JunctionService">
+  <div id="inherited-methods-edu.stanford.junction.api.activity.JunctionService-list"
         class="jd-inheritedlinks">
   </div>
-  <div id="inherited-methods-java.lang.Throwable-summary" style="display: none;">
+  <div id="inherited-methods-edu.stanford.junction.api.activity.JunctionService-summary" style="display: none;">
     <table class="jd-sumtable-expando">
     
 
@@ -570,14 +653,14 @@ From class
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
-            synchronized
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">Throwable</a></nobr>
+            
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String[]</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">fillInStackTrace</span>()</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#getRoles()">getRoles</a></span>()</nobr>
         
   </td></tr>
 
@@ -585,79 +668,15 @@ From class
 	 
     <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
+            abstract
             
             
             
             
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">Throwable</a></nobr>
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getCause</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getLocalizedMessage</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getMessage</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/StackTraceElement.html">StackTraceElement[]</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">getStackTrace</span>()</nobr>
-        
-  </td></tr>
-
-
-	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            
-            synchronized
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">Throwable</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">initCause</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Throwable.html">Throwable</a> arg0)</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#getServiceName()">getServiceName</a></span>()</nobr>
         
   </td></tr>
 
@@ -673,7 +692,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">printStackTrace</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/PrintWriter.html">PrintWriter</a> arg0)</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#onActivityStart()">onActivityStart</a></span>()</nobr>
         
   </td></tr>
 
@@ -683,13 +702,13 @@ From class
         <td class="jd-typecol"><nobr>
             
             
-            
+            final
             
             
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">printStackTrace</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/io/PrintStream.html">PrintStream</a> arg0)</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#register(java.lang.String)">register</a></span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a> switchboard)</nobr>
         
   </td></tr>
 
@@ -705,7 +724,116 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">printStackTrace</span>()</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionService.html#setRole(java.lang.String)">setRole</a></span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a> role)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-edu.stanford.junction.api.activity.JunctionActor" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-edu.stanford.junction.api.activity.JunctionActor-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html">edu.stanford.junction.api.activity.JunctionActor</a>
+
+<div id="inherited-methods-edu.stanford.junction.api.activity.JunctionActor">
+  <div id="inherited-methods-edu.stanford.junction.api.activity.JunctionActor-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-edu.stanford.junction.api.activity.JunctionActor-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#getActorID()">getActorID</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/util/List.html">List</a>&lt;<a href="../../../../edu/stanford/junction/api/activity/JunctionExtra.html">JunctionExtra</a>&gt;</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#getInitialExtras()">getInitialExtras</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Returns a list of JunctionExtras that should be loaded
+ when the actor joins an activity</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="../../../../edu/stanford/junction/Junction.html">Junction</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#getJunction()">getJunction</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String[]</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#getRoles()">getRoles</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            final
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#leave()">leave</a></span>()</nobr>
         
   </td></tr>
 
@@ -721,7 +849,7 @@ From class
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">setStackTrace</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/StackTraceElement.html">StackTraceElement[]</a> arg0)</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#onActivityCreate()">onActivityCreate</a></span>()</nobr>
         
   </td></tr>
 
@@ -734,10 +862,131 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">toString</span>()</nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#onActivityJoin()">onActivityJoin</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#onActivityStart()">onActivityStart</a></span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#onMessageReceived(edu.stanford.junction.api.messaging.MessageHeader, org.json.JSONObject)">onMessageReceived</a></span>(<a href="../../../../edu/stanford/junction/api/messaging/MessageHeader.html">MessageHeader</a> header, <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</nobr>
+        
+        <div class="jd-descrdiv">Asynchronously handle an inbound message.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#registerExtra(edu.stanford.junction.api.activity.JunctionExtra)">registerExtra</a></span>(<a href="../../../../edu/stanford/junction/api/activity/JunctionExtra.html">JunctionExtra</a> extra)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#sendMessageToActor(java.lang.String, org.json.JSONObject)">sendMessageToActor</a></span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a> actorID, <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</nobr>
+        
+        <div class="jd-descrdiv">Send a message to an individual actor, identified by actorID
+</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#sendMessageToRole(java.lang.String, org.json.JSONObject)">sendMessageToRole</a></span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a> role, <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</nobr>
+        
+        <div class="jd-descrdiv">Send a message to an actor claiming a certain role.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#sendMessageToSession(org.json.JSONObject)">sendMessageToSession</a></span>(<a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</nobr>
+        
+        <div class="jd-descrdiv">Send a message for anyone in the Junction session.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../edu/stanford/junction/api/activity/JunctionActor.html#setJunction(edu.stanford.junction.Junction)">setJunction</a></span>(<a href="../../../../edu/stanford/junction/Junction.html">Junction</a> j)</nobr>
         
   </td></tr>
 
@@ -757,7 +1006,7 @@ From class
           class="jd-expando-trigger-img" /></a>
 From class
 
-  <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">java.lang.Object</a>
+  <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Object.html">java.lang.Object</a>
 
 <div id="inherited-methods-java.lang.Object">
   <div id="inherited-methods-java.lang.Object-list"
@@ -776,7 +1025,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a></nobr>
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Object.html">Object</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">clone</span>()</nobr>
@@ -795,7 +1044,7 @@ From class
             boolean</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad">equals</span>(<a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Object.html">Object</a> arg0)</nobr>
+        <span class="sympad">equals</span>(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Object.html">Object</a> arg0)</nobr>
         
   </td></tr>
 
@@ -824,7 +1073,7 @@ From class
             final
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">getClass</span>()</nobr>
@@ -888,7 +1137,7 @@ From class
             
             
             
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
+            <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a></nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad">toString</span>()</nobr>
@@ -950,8 +1199,6 @@ From class
 </td></tr>
 
 
-
-
 </table>
 
 
@@ -978,73 +1225,6 @@ From class
 <!-- Fields -->
 
 
-<!-- ========= FIELD DETAIL ======== -->
-<h2>Fields</h2>
-
-
-
-
-<A NAME="o1"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-        <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a>
-      </span>
-        o1
-    </h4>
-      <div class="api-level">
-        
-
-
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    
-    </div>
-</div>
-
-
-
-<A NAME="o2"></A>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-         
-         
-        <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a>
-      </span>
-        o2
-    </h4>
-      <div class="api-level">
-        
-
-
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    
-    </div>
-</div>
-
-
-
-
 <!-- Public ctors -->
 
 
@@ -1053,7 +1233,7 @@ From class
 
 
 
-<A NAME="UnexpectedOpPairException(edu.stanford.junction.props.IPropStateOperation, edu.stanford.junction.props.IPropStateOperation)"></A>
+<A NAME="JunctionServiceFactory()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1065,8 +1245,8 @@ From class
          
         
       </span>
-      <span class="sympad">UnexpectedOpPairException</span>
-      <span class="normal">(<a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a> o1, <a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a> o2)</span>
+      <span class="sympad">JunctionServiceFactory</span>
+      <span class="normal">()</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1099,7 +1279,7 @@ From class
 
 
 
-<A NAME="toString()"></A>
+<A NAME="getServiceName()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1109,9 +1289,9 @@ From class
          
          
          
-        <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a>
+        <a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String</a>
       </span>
-      <span class="sympad">toString</span>
+      <span class="sympad">getServiceName</span>
       <span class="normal">()</span>
     </h4>
       <div class="api-level">
@@ -1125,6 +1305,69 @@ From class
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="main(java.lang.String[])"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">main</span>
+      <span class="normal">(<a href="http://srcrr.com/java/oracle/openjdk/6/reference/java/lang/String.html">String[]</a> argv)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="onMessageReceived(edu.stanford.junction.api.messaging.MessageHeader, org.json.JSONObject)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">onMessageReceived</span>
+      <span class="normal">(<a href="../../../../edu/stanford/junction/api/messaging/MessageHeader.html">MessageHeader</a> header, <a href="http://srcrr.com/java/json/2011-02-02/reference/org/json/JSONObject.html">JSONObject</a> message)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Asynchronously handle an inbound message.
+</p></div>
 
     </div>
 </div>
@@ -1151,7 +1394,7 @@ Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end body-content --> 
 
 <script type="text/javascript">
-init(); /* initialize android-developer-docs.js */
+init(); /* initialize doclava-developer-docs.js */
 </script>
 
 </body>

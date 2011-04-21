@@ -48,29 +48,31 @@
 
 
 
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <meta name="description" content="Javadoc API documentation for Junction for Java." />
+
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  IPropStateOperation
+  JunctionServiceFactory
 
 
 | Junction for Java
 
 </title>
-<link href="../../../../../assets/android-developer-docs.css" rel="stylesheet" type="text/css" />
+<link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
 <link href="../../../../../assets/customizations.css" rel="stylesheet" type="text/css" />
 <script src="../../../../../assets/search_autocomplete.js" type="text/javascript"></script>
 <script src="../../../../../assets/jquery-resizable.min.js" type="text/javascript"></script>
-<script src="../../../../../assets/android-developer-docs.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-docs.js" type="text/javascript"></script>
 <script src="../../../../../assets/prettify.js" type="text/javascript"></script>
 <script type="text/javascript">
   setToRoot("../../../../", "../../../../../assets/");
 </script>
-<script src="../../../../../assets/android-developer-reference.js" type="text/javascript"></script>
+<script src="../../../../../assets/doclava-developer-reference.js" type="text/javascript"></script>
 <script src="../../../../../assets/navtree_data.js" type="text/javascript"></script>
 <script src="../../../../../assets/customizations.js" type="text/javascript"></script>
 <noscript>
@@ -144,6 +146,8 @@
                 
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/package-summary.html">edu.stanford.junction</a></li>
+    <li class="selected api apilevel-">
+  <a href="../../../../edu/stanford/junction/addon/package-summary.html">edu.stanford.junction.addon</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/api/activity/package-summary.html">edu.stanford.junction.api.activity</a></li>
     <li class="api apilevel-">
@@ -154,10 +158,6 @@
   <a href="../../../../edu/stanford/junction/director/package-summary.html">edu.stanford.junction.director</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/extra/package-summary.html">edu.stanford.junction.extra</a></li>
-    <li class="selected api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/package-summary.html">edu.stanford.junction.props</a></li>
-    <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/props/sample/package-summary.html">edu.stanford.junction.props.sample</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/props2/package-summary.html">edu.stanford.junction.props2</a></li>
     <li class="api apilevel-">
@@ -165,11 +165,15 @@
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/package-summary.html">edu.stanford.junction.provider</a></li>
     <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/irc/package-summary.html">edu.stanford.junction.provider.irc</a></li>
+    <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/provider/jvm/package-summary.html">edu.stanford.junction.provider.jvm</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/package-summary.html">edu.stanford.junction.provider.jx</a></li>
     <li class="api apilevel-">
-  <a href="../../../../edu/stanford/junction/sample/extra/package-summary.html">edu.stanford.junction.sample.extra</a></li>
+  <a href="../../../../edu/stanford/junction/provider/jx/json/package-summary.html">edu.stanford.junction.provider.jx.json</a></li>
+    <li class="api apilevel-">
+  <a href="../../../../edu/stanford/junction/provider/xmpp/package-summary.html">edu.stanford.junction.provider.xmpp</a></li>
     <li class="api apilevel-">
   <a href="../../../../edu/stanford/junction/sample/helloworld/package-summary.html">edu.stanford.junction.sample.helloworld</a></li>
     <li class="api apilevel-">
@@ -184,33 +188,17 @@
           <div id="classes-nav">
             <ul>
               
-    <li><h2>Interfaces</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropChangeListener.html">IPropChangeListener</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropMsg.html">IPropMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropState.html">IPropState</a></li>
-          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/props/IPropStateOperation.html">IPropStateOperation</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStateOperationMsg.html">IStateOperationMsg</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/IStringifiable.html">IStringifiable</a></li>
-      </ul>
-    </li>
               
     <li><h2>Classes</h2>
       <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/NullOp.html">NullOp</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.html">Prop</a></li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/Prop.Pair.html">Prop.Pair</a>&lt;T,&nbsp;S&gt;</li>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/PropStateOperation.html">PropStateOperation</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/HttpBridge.html">HttpBridge</a></li>
+          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/addon/JSONObjWrapper.html">JSONObjWrapper</a></li>
+          <li class="selected api apilevel-"><a href="../../../../edu/stanford/junction/addon/JunctionServiceFactory.html">JunctionServiceFactory</a></li>
       </ul>
     </li>
               
               
               
-    <li><h2>Exceptions</h2>
-      <ul>
-          <li class="api apilevel-"><a href="../../../../edu/stanford/junction/props/UnexpectedOpPairException.html">UnexpectedOpPairException</a></li>
-      </ul>
-    </li>
               
             </ul><br/>
           </div><!-- end classes -->
@@ -254,28 +242,33 @@
   
   
   
+   
+  
+  
+
+  
+   
+  
+  
+  
+   
+  
+  
+
+  
+   
+  
+  
+  
   
 
 
 <div class="sum-details-links">
 
-Summary:
+<div>
+<a href="JunctionServiceFactory.html">View Documentation</a>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-  <a href="#inhmethods">Inherited Methods</a>
-
-&#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
 
 </div><!-- end sum-details-links -->
 <div class="api-level">
@@ -296,234 +289,150 @@ Summary:
      
      
     
-    interface
-<h1>IPropStateOperation</h1>
+    class
+<h1>JunctionServiceFactory</h1>
 
 
 
   
   
-      implements 
-      
-        <a href="../../../../edu/stanford/junction/props/IStringifiable.html">IStringifiable</a> 
-      
+  
+
+  
+  
+  
+
+  
+    extends <a href="../../../../edu/stanford/junction/api/activity/JunctionService.html">JunctionService</a><br/>
+  
+  
+  
+
+  
   
   
 
 
 </div><!-- end header -->
-
-<div id="naMessage"></div>
-
-<div id="jd-content" class="api apilevel-">
-<table class="jd-inheritance-table">
-
-
-    <tr>
-         	
-        <td colspan="1" class="jd-inheritance-class-cell">edu.stanford.junction.props.IPropStateOperation</td>
-    </tr>
-    
-
-</table>
-
-
-
-
-
-
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
-
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
-          ><img id="subclasses-indirect-trigger"
-          src="../../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
-
-  <div id="subclasses-indirect">
-      <div id="subclasses-indirect-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../../edu/stanford/junction/props/NullOp.html">NullOp</a>,
-            
-              <a href="../../../../edu/stanford/junction/props/PropStateOperation.html">PropStateOperation</a>
-            
-          
-      </div>
-      <div id="subclasses-indirect-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/props/NullOp.html">NullOp</a></td>
-              <td class="jd-descrcol" width="100%">&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../edu/stanford/junction/props/PropStateOperation.html">PropStateOperation</a></td>
-              <td class="jd-descrcol" width="100%">&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
-
-
-<div class="jd-descr">
-
-
-
-
-
-
-</div><!-- jd-descr -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="jd-descr">
-
-
-<h2>Summary</h2>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- ========== METHOD SUMMARY =========== -->
-<table id="inhmethods" class="jd-sumtable"><tr><th>
-  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
-  <div style="clear:left;">Inherited Methods</div></th></tr>
-
-
-<tr class="api apilevel-" >
-<td colspan="12">
-  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-edu.stanford.junction.props.IStringifiable" class="jd-expando-trigger closed"
-          ><img id="inherited-methods-edu.stanford.junction.props.IStringifiable-trigger"
-          src="../../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>
-From interface
-
-  <a href="../../../../edu/stanford/junction/props/IStringifiable.html">edu.stanford.junction.props.IStringifiable</a>
-
-<div id="inherited-methods-edu.stanford.junction.props.IStringifiable">
-  <div id="inherited-methods-edu.stanford.junction.props.IStringifiable-list"
-        class="jd-inheritedlinks">
-  </div>
-  <div id="inherited-methods-edu.stanford.junction.props.IStringifiable-summary" style="display: none;">
-    <table class="jd-sumtable-expando">
-    
-
-
-	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol"><nobr>
-            abstract
-            
-            
-            
-            
-            <a href="http://download.oracle.com/javase/6/docs/api/index.html?java/lang/String.html">String</a></nobr>
-        </td>
-        <td class="jd-linkcol" width="100%"><nobr>
-        <span class="sympad"><a href="../../../../edu/stanford/junction/props/IStringifiable.html#stringify()">stringify</a></span>()</nobr>
-        
-  </td></tr>
-
-
-</table>
-  </div>
+<div id="jd-content">
+  <pre class="prettyprint">
+/*
+ * Copyright (C) 2010 Stanford University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package edu.stanford.junction.addon;
+
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import edu.stanford.junction.JunctionMaker;
+import edu.stanford.junction.api.activity.JunctionService;
+import edu.stanford.junction.api.messaging.MessageHandler;
+import edu.stanford.junction.api.messaging.MessageHeader;
+
+/**
+ * TODO: This class is temporarily broken. It requires switchboard information,
+ * and so is XMPP specific for now.
+ * 
+ * Line 71 has been commented out, resulting in nothing working here.
+ *
+ */
+public class JunctionServiceFactory extends JunctionService {
+
+	@Override
+	public void onMessageReceived(MessageHeader header, JSONObject message) {
+			// TODO: verify you got an activity request
+			// somehow get the Activity object
+			// that means the request needs
+			// * a host
+			// * an activity descriptor
+			
+			
+			try {
+				
+				URI activityURI = new URI(message.getString("activity"));
+				
+				// TODO: support a factory mapping from serviceName =&gt; class
+				String className = message.getString("serviceName");
+				
+				Class c = null;
+				try {
+					c = Class.forName(className);
+				} catch (Exception e) {
+					System.out.println("Could not find class for service " + className + ".");
+				}
+				
+				JunctionService service = null;
+				Method method = null;
+				try {
+					method = c.getMethod("newInstance");
+				} catch (Exception e) {
+					System.out.println("No newInstance method found for " + c + ".");
+				}
+				service = (JunctionService)method.invoke(null);
+				
+				String queryPart = activityURI.getQuery(); 
+				System.out.println("query part is " + queryPart);
+				String localRole = "Unknown";
+				int i;
+				if ((i = queryPart.indexOf("role=")) &gt;= 0) {
+					localRole = queryPart.substring(i+14);
+					if ((i = localRole.indexOf("&amp;"))&gt;0) {
+						localRole = localRole.substring(0,i);
+					}
+				}
+				
+				System.out.println("Setting service role to " + localRole);
+				service.setRole(localRole);
+				
+				System.out.println("service actorID is " + service.getActorID());
+				//JunctionMaker.getInstance().newJunction(activityURI,service);					
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	}
+
+
+
+	@Override
+	public String getServiceName() {
+		return "ServiceFactory";
+	}
+
+	
+	public static void main(String[] argv) {
+		String switchboard="prpl.stanford.edu";
+		
+		
+		JunctionService waiter = new JunctionServiceFactory();
+		waiter.register(switchboard);
+		while(true) {
+			try {
+				Thread.sleep(500000);
+			} catch (Exception e) {}
+		}
+	}	
+}
+
+  </pre>
 </div>
-</td></tr>
-
-
-</table>
-
-
-</div><!-- jd-descr (summary) -->
-
-<!-- Details -->
-
-
-
-
-
-
-
-
-<!-- XML Attributes -->
-
-
-<!-- Enum Values -->
-
-
-<!-- Constants -->
-
-
-<!-- Fields -->
-
-
-<!-- Public ctors -->
-
-
-
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<!-- Protected ctors -->
-
-
-
-<!-- ========= METHOD DETAIL ======== -->
-<!-- Public methdos -->
-
-
-
-<!-- ========= METHOD DETAIL ======== -->
-
-
-
-<!-- ========= END OF CLASS DATA ========= -->
-<A NAME="navbar_top"></A>
-
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end footer -->
@@ -535,7 +444,7 @@ Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.
 </div> <!-- end body-content --> 
 
 <script type="text/javascript">
-init(); /* initialize android-developer-docs.js */
+init(); /* initialize doclava-developer-docs.js */
 </script>
 
 </body>
