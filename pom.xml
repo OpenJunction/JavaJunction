@@ -134,7 +134,7 @@
 	  -quiet
 	  -federate JDK http://srcrr.com/java/oracle/openjdk/6/reference
 	  -federate JSON http://srcrr.com/java/json/2011-02-02/reference
-	  -hdf project.name "Junction for Java"
+	  -hdf project.name "Junction for Java 0.6.7"
           -d ${project.build.directory}/doclava
           -overview ${project.build.directory}/../res/overview.html
           -generatesources

@@ -79,7 +79,18 @@ public class JunctionMaker {
 	public static Junction bind(URI uri, JunctionActor actor) throws JunctionException {
 		return JunctionMaker.getInstance(JunctionMaker.getDefaultSwitchboardConfig(uri)).newJunction(uri, actor);
 	}
-	
+
+	/**
+	 * Binds a {@link JunctionActor} to a randomly generated sesssion, using the default
+	 * switchboard.
+	 */
+	public static Junction bind(JunctionActor actor) throws JunctionException {
+		// default
+		SwitchboardConfig config = new XMPPSwitchboardConfig("prpl.stanford.edu");
+		JunctionMaker maker = JunctionMaker.getInstance(config);
+		return maker.newJunction(maker.generateSessionUri(), actor);
+	}
+
 	protected JunctionProvider getProvider(SwitchboardConfig switchboardConfig) {
 		if (switchboardConfig instanceof XMPPSwitchboardConfig) {
 			return new edu.stanford.junction.provider.xmpp.JunctionProvider((XMPPSwitchboardConfig)switchboardConfig);
