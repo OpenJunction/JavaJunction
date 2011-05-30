@@ -11,7 +11,7 @@
 
   <groupId>edu.stanford.prpl.junction</groupId>
   <artifactId>JAVAJunction</artifactId>
-  <version>0.6.7-SNAPSHOT</version>
+  <version>0.7.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Junction</name>
   <description>JAVA Junction Manager</description>
@@ -134,7 +134,7 @@
 	  -quiet
 	  -federate JDK http://srcrr.com/java/oracle/openjdk/6/reference
 	  -federate JSON http://srcrr.com/java/json/2011-02-02/reference
-	  -hdf project.name "Junction for Java 0.6.7"
+	  -hdf project.name "Junction for Java 0.7.0"
           -d ${project.build.directory}/doclava
           -overview ${project.build.directory}/../res/overview.html
           -generatesources

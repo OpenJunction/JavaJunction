@@ -294,7 +294,7 @@ public class JAVADirector extends JunctionActor {
 
 		JunctionActor director = new JAVADirector();
 		try{
-			Junction jx = mMaker.newJunction(script, director);
+			Junction jx = mMaker.newJunction(URI.create("junction://prpl.stanford.edu/jxservice"), director);
 			System.out.println("Launched director on " + jx.getInvitationURI());
 			synchronized(director){
 				try {
