@@ -100,12 +100,15 @@ abstract class CollectionState implements IPropState{
 			JSONArray a = new JSONArray();
 			for(JSONObject o : this.items){
 				JSONObjWrapper item = (JSONObjWrapper)o;
-				a.put(item.getRaw());
+				JSONObject raw = item.getRaw();
+				// TODO:  Horribly inefficient, but fixes a bug associated with stored state.
+				a.put(new JSONObject(raw.toString()));
 			}
 			obj.put("items", a);
-			System.out.println("ARRAY: " + a.toString());
 		}
-		catch(JSONException e){}
+		catch(JSONException e){
+		    e.printStackTrace();
+		}
 		return obj;
 	}
 
