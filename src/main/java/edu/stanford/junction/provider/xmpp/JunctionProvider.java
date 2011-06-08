@@ -53,7 +53,8 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	protected XMPPSwitchboardConfig mConfig;
 	protected static final boolean ONE_CONNECTION_PER_SESSION=false;
 	protected static final int XMPP_PORT=5222;
-	
+	private static boolean DBG = false;
+
 	// TODO: Can't use a single connection right now-
 	// must support multiple actors in the same activity
 	// and this can't be done over a single XMPP connection now.
@@ -182,7 +183,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 						failureReason = null;
 						success = true;
 						waitForConnect.countDown();
-						System.out.println("Got connection, ending connection thread.");
+						if (DBG) System.out.println("Got connection, ending connection thread.");
 						break;
 					}
 
@@ -243,7 +244,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 		}
 
 		if(t.success){
-			System.out.println("Connection succeeded.");
+			if (DBG) System.out.println("Connection succeeded.");
 			sConnections.add(t.connection);
 			HashSet<String> set = new HashSet<String>();
 			set.add(roomid);
@@ -278,7 +279,7 @@ public class JunctionProvider extends edu.stanford.junction.provider.JunctionPro
 	
 		try {
 			con.connect();
-			System.out.println("Connected.");
+			if (DBG) System.out.println("Connected.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

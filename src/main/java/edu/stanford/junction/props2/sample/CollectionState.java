@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.*;
-import edu.stanford.junction.props2.Prop;
 import edu.stanford.junction.props2.IPropState;
 import edu.stanford.junction.addon.JSONObjWrapper;
 
@@ -99,10 +98,8 @@ abstract class CollectionState implements IPropState{
 		try{
 			JSONArray a = new JSONArray();
 			for(JSONObject o : this.items){
-				JSONObjWrapper item = (JSONObjWrapper)o;
-				JSONObject raw = item.getRaw();
-				// TODO:  Horribly inefficient, but fixes a bug associated with stored state.
-				a.put(new JSONObject(raw.toString()));
+				// Copy the objects
+				a.put(new JSONObject(o.toString()));
 			}
 			obj.put("items", a);
 		}

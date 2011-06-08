@@ -55,13 +55,9 @@ public class JSONObjWrapper extends JSONObject{
 
 	// Do a deep copy of this object.
 	public static JSONObject copyJSONObject(JSONObject obj){
-		JSONObject copy = new JSONObject();
+		JSONObject copy = null;
 		try{
-			Iterator it = obj.keys();
-			while(it.hasNext()){
-				String key = (String)it.next();
-				copy.put(key, copyValue(obj.get(key)));
-			}
+			copy = new JSONObject(obj.toString());
 		}
 		catch(JSONException e){}
 		return copy;
@@ -69,27 +65,6 @@ public class JSONObjWrapper extends JSONObject{
 
 	public Object clone(){
 		return new JSONObjWrapper(copyJSONObject(this));
-	}
-
-	protected static Object copyValue(Object val){
-		try{
-			if(val instanceof JSONObject){
-				return copyJSONObject((JSONObject)val);
-			}
-			else if(val instanceof JSONArray){
-				JSONArray newA = new JSONArray();
-				JSONArray oldA = (JSONArray)val;
-				for(int i = 0; i < oldA.length(); i++){
-					newA.put(i, copyValue(oldA.get(i)));
-				}
-				return newA;
-			}
-			else return val;
-		}
-		catch(JSONException e){
-			e.printStackTrace(System.err);
-			return null;
-		}
 	}
 
 	/** 
