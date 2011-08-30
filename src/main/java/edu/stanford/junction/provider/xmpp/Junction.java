@@ -59,7 +59,8 @@ public class Junction extends edu.stanford.junction.Junction {
 	// Update getActivityScript() to join the room and get info.
 	// or break the spec...
 	private boolean PUBLIC_ROOM = true;
-	
+	private static boolean DBG = false;
+
 	public static String NS_JX = "jx";
 	private ActivityScript mActivityDescription;
 	private JunctionProvider mProvider;
@@ -174,7 +175,7 @@ public class Junction extends edu.stanford.junction.Junction {
 					try {
 						obj = new JSONObject(message.getBody());
 					} catch (Exception e) {
-						System.out.println("Could not convert to json: " + message.getBody());
+						if (DBG) System.out.println("Could not convert to json: " + message.getBody());
 						//e.printStackTrace();
 						return;
 					}
@@ -273,7 +274,7 @@ public class Junction extends edu.stanford.junction.Junction {
 		history.setMaxChars(0);
 		MultiUserChat chat = new MultiUserChat(mXMPPConnection, room);
 
-		System.out.println("Joining " + room);
+		if (DBG) System.out.println("Joining " + room);
 		//if (mActivityDescription.isActivityOwner()) {
 		try {
 			try {
@@ -283,7 +284,7 @@ public class Junction extends edu.stanford.junction.Junction {
 				return chat;
 			} catch (Exception e) { /*e.printStackTrace();*/ }
 				
-			System.out.println("Trying to create room");
+			if (DBG) System.out.println("Trying to create room");
 				
 				
 			// TODO: is this an error? is there really a notion of ownership?
@@ -292,7 +293,7 @@ public class Junction extends edu.stanford.junction.Junction {
 
 			//mSessionChat.sendConfigurationForm(new Form(Form.TYPE_SUBMIT));
 				
-			System.out.println("sending config form");
+			if (DBG) System.out.println("sending config form");
 			Form form = chat.getConfigurationForm();
 			// Create a new form to submit based on the original form
 			Form submitForm = form.createAnswerForm();
@@ -317,7 +318,7 @@ public class Junction extends edu.stanford.junction.Junction {
 				
 				
 		} catch (XMPPException e) {
-			System.out.println("Could not create room");
+			if (DBG) System.out.println("Could not create room");
 			e.printStackTrace();
 			try {
 				chat.join(mOwner.getActorID(),null,history,10000);

@@ -31,7 +31,8 @@ import edu.stanford.junction.api.messaging.MessageHeader;
 
 public abstract class JunctionProvider {
 	protected JunctionMaker mJunctionMaker;
-	
+	private static boolean DBG = false;
+
 	public abstract Junction newJunction(URI uri, ActivityScript script, JunctionActor actor) throws JunctionException;
 
 	/**
@@ -70,12 +71,12 @@ public abstract class JunctionProvider {
 		if (desc.isActivityCreator()) {
 			String[] roles = desc.getRoles();
 			for (String role : roles) {
-				System.out.println("roles:" + role);
+				if (DBG) System.out.println("roles:" + role);
 				JSONObject plat = desc.getRolePlatform(role, "jxservice");
-				System.out.println("plat:" + plat);
+				if (DBG) System.out.println("plat:" + plat);
 				if (plat != null) {
 					// Auto-invite the service via the service factory
-					System.out.println("Auto-requesting service for " + role);
+					if (DBG) System.out.println("Auto-requesting service for " + role);
 					mJunctionMaker.inviteActorService(jx,role);
 					// TODO: add a method that takes in a Junction
 					// so we don't have to do an extra lookup
