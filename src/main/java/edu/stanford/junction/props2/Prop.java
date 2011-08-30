@@ -617,7 +617,12 @@ public abstract class Prop extends JunctionExtra implements IProp{
 
 	synchronized protected void sendHello(){
 		this.timeOfLastHello = (new Date()).getTime();
-		sendMessageToProp(newHelloMsg());
+		try {
+		    sendMessageToProp(newHelloMsg());
+		} catch (IllegalStateException e) {
+		    System.out.println("Not connected to Junction.");
+		    active = false;
+		}
 	}
 
 
