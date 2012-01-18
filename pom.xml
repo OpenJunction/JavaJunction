@@ -80,9 +80,9 @@
     </dependency>
     
     <dependency>
-      <groupId>json</groupId>
+      <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>1.0</version>
+      <version>20080701</version>
     </dependency>
   </dependencies>
   <build>
@@ -149,12 +149,24 @@
   </build>
   <repositories>
     <repository>
-      <id>prpl-public</id>
+      <id>mobisocial-public</id>
       <name>PrPl Public Repository</name>
-      <url>http://prpl.stanford.edu:8081/nexus/content/groups/public</url>
+      <url>http://mobisocial.stanford.edu:8081/nexus/content/groups/public</url>
       <releases> <enabled>true</enabled> </releases>
       <snapshots> <enabled>true</enabled> </snapshots>
       <layout>default</layout>
     </repository>
   </repositories>
+  <distributionManagement>
+    <repository>
+      <id>mobisocial-releases</id>
+      <name>Internal Releases</name>
+      <url>http://mobisocial.stanford.edu:8081/nexus/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>mobisocial-snapshots</id>
+      <name>Internal Snapshots</name>
+      <url>http://mobisocial.stanford.edu:8081/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
